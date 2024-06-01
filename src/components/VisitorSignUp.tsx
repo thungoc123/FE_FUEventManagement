@@ -158,7 +158,7 @@ export const Signup7Defaults: Signup7Props = {
   },
   
   image: {
-    src: "https://relume-assets.s3.amazonaws.com/placeholder-image.svg",
+    src: "src/assets/3.jpg",
     alt: "Placeholder image",
   },
   logInText: "Already have an account?",

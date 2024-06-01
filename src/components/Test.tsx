@@ -137,7 +137,7 @@ export const Login1 = (props: Login1Props) => {
 
 export const Login1Defaults: Login1Props = {
   logo: {
-    src: "https://relume-assets.s3.amazonaws.com/logo-image.svg",
+    src: "src/assets/react.svg",
     alt: "Logo text",
   },
   signUpText: "Don't have an account?",
