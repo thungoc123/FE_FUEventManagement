@@ -1,5 +1,8 @@
 # FE_FUEventManagement
 it works for SWP which is a subject in FPT University. 
+
+# FE_FUEventManagement
+it works for SWP which is a subject in FPT University. 
 # Technologies 🔥
 - Vite : is used for supporting. 
 - React 
