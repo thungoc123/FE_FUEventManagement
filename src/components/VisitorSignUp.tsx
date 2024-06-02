@@ -78,7 +78,7 @@ export const VisitorSignUp = (props: Signup7Props) => {
               </div>
               <div className="grid w-full items-center">
                 <Label htmlFor="name" className="mb-2">
-                  Company Name/FullName*
+                  Fullname*
                 </Label>
                 <Input
                   type="text"
