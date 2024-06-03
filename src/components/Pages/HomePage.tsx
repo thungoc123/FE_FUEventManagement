@@ -6,13 +6,15 @@ import { Logo1 } from "../Organisms/Guest/Logo1";
 import { Footer1 } from "../Organisms/Guest/Footer";
 import { EventBlog } from "../Organisms/Guest/UpcommingEvent";
 import SearchBar from "../Atoms/SearchBar";
+
 function HomePage() {
   return (
     <>
       <Navbar2 />
       <Header9 />
-      <Blog33 />
+      {/* <Blog33 /> */}
       <EventBlog />
+
       <Logo1 />
       <Footer1 />
     </>
