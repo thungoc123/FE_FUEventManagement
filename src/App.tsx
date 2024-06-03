@@ -1,20 +1,24 @@
 import { useState } from 'react'
+import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-router-dom";
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import './index.css'
+import HomePage from './components/Pages/HomePage'
+import DesignTesting from './components/Pages/DesignTesting';
 
 // import * as React from 'react';
-import { Button } from '@relume_io/relume-ui';
-import { Login1 } from './components/Test'
-
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <>
-   {/* <Button>Buy Now</Button> */}
-    <Login1 />
+    <Router>
+      <Routes>
+        <Route path="/home" element={<HomePage /> } />
+        {/* <Route path="/test" element={<DesignTesting /> } /> */}
+      </Routes>
+    </Router>
     </>
   )
 }
