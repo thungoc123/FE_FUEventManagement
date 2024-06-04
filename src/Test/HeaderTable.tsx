@@ -49,12 +49,11 @@ const HeaderTable: React.FC = () => {
             varius enim in eros.
           </p>
         </div>
-        <button
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
-          onClick={openModal}
-        >
-          Check out
-        </button>
+    <Button onClick={openModal}>
+       
+          Check out</Button>
+         
+      
       </div>
       <table className="min-w-full bg-white border border-gray-200">
         <thead>

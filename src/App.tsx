@@ -16,8 +16,7 @@ import EventDetail from "./components/Pages/EventDetail";
 import { Layout28 } from "./components/Organisms/Guest/EventScheduleDetail";
 
 // import * as React from 'react';
-function App() {
-  const [count, setCount] = useState(0);
+
 
 import "./App.css";
 import "./index.css";
