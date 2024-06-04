@@ -91,7 +91,7 @@ export const Login1 = (props: Login1Props) => {
                 Password*
               </Label>
               <Input
-                type="password"
+                type="password" 
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
