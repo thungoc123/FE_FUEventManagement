@@ -12,7 +12,7 @@ function HomePage() {
     <>
       <Navbar2 />
       <Header9 />
-      {/* <Blog33 /> */}
+      <Blog33 />
       <EventBlog />
 
       <Logo1 />

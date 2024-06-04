@@ -12,6 +12,7 @@ import "./index.css";
 import HomePage from "./components/Pages/HomePage";
 import DesignTesting from "./components/Pages/DesignTesting";
 import EventDetail from "./components/Pages/EventDetail";
+import { Layout28 } from "./components/Organisms/Guest/EventScheduleDetail";
 
 // import * as React from 'react';
 function App() {
@@ -22,8 +23,8 @@ function App() {
       <Router>
         <Routes>
           <Route path="/EventDetail" element={<EventDetail />} />
-          <Route path="/home" element={<HomePage />} />
-          <Route path="/test" element={<DesignTesting /> } />
+          <Route path="/" element={<HomePage />} />
+          <Route path="/EventScheduleDetail" element={<Layout28 /> } />
         </Routes>
       </Router>
     </>
