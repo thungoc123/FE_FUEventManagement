@@ -8,6 +8,8 @@ import { Gallery3 } from "../Organisms/Guest/EventGallery";
 import { Testimonial1 } from "../Organisms/Guest/Testimonial";
 import Schedule from "../Organisms/Guest/Schedule";
 import { Header80 } from "../Molecules/EventHeader";
+import { Cta7 } from "../Molecules/CTA";
+
 function EventDetail() {
     const eventData = [
         {
@@ -62,7 +64,9 @@ function EventDetail() {
       />
       <Schedule days={eventData}/>
     <Gallery3 />
+    <Cta7 />
       <Contact1 />
+
 <Testimonial1 />
       <Footer1 />
     </>

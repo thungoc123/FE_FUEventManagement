@@ -12,8 +12,9 @@ interface EventItemProps {
 const EventItem: React.FC<EventItemProps> = ({ time, title, tags, speaker, location }) => {
   return (
     <div className="flex items-center border-b border-gray-300 py-4 w-full">
-      <div className="w-1/6 text-gray-700">{time}</div>
-      <div className="w-1/3">
+      <div className="w-1/6 md:w-1/6 text-gray-700 mb-2 md:mb-0">{time}</div>
+      <div className="md:w-1/3 mb-2 md:mb-0">
+        {/* w-1/3  */}
         <h2 className="font-bold">{title}</h2>
         {/* <div className="flex"> */}
           {tags.map((tag, index) => (
@@ -21,10 +22,10 @@ const EventItem: React.FC<EventItemProps> = ({ time, title, tags, speaker, locat
           ))}
         {/* </div> */}
       </div>
-      <div className="w-1/4">{speaker}</div>
-      <div className="w-1/6">{location}</div>
-      <div className="w-1/6">
-          <Button variant = "secondary" size="sm">View Detail</Button>
+      <div className="md:w-1/4 mb-2 md:mb-0">{speaker}</div>
+      <div className="md:w-1/6 mb-2 md:mb-0">{location}</div>
+      <div className="md:w-1/6">
+          <Button variant = "secondary" size="sm" >View Detail</Button>
       </div>
     </div>
   );
