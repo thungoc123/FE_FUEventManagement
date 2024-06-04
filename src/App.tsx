@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 // App.tsx
 import {
   BrowserRouter as Router,
@@ -5,6 +7,17 @@ import {
   Route,
   useNavigate,
 } from "react-router-dom";
+import reactLogo from "./assets/react.svg";
+import viteLogo from "/vite.svg";
+
+import HomePage from "./components/Pages/HomePage";
+import DesignTesting from "./components/Pages/DesignTesting";
+import EventDetail from "./components/Pages/EventDetail";
+import { Layout28 } from "./components/Organisms/Guest/EventScheduleDetail";
+
+// import * as React from 'react';
+function App() {
+  const [count, setCount] = useState(0);
 
 import "./App.css";
 import "./index.css";
@@ -17,16 +30,19 @@ import { Test } from "./Test/DesignTest";
 const Home = () => <h1>Home Page</h1>;
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Login1 />} />
-        <Route path="/role-choosing" element={<RoleChoosing />} />
-        <Route path="/home" element={<Home />} />
+    <>
+      <Router>
+        <Routes>
+          <Route path="/EventDetail" element={<EventDetail />} />
+          <Route path="/" element={<HomePage />} />
+          <Route path="/EventScheduleDetail" element={<Layout28 /> } />
+           <Route path="/role-choosing" element={<RoleChoosing />} />
         <Route path="/sponsor" element={<SponsorSignUp />} />
         <Route path="/visitor" element={<VisitorSignUp />} />
         <Route path="/test" element={<Test />} />
-      </Routes>
-    </Router>
+        </Routes>
+      </Router>
+    </>
   );
 }
 

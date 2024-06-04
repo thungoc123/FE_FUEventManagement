@@ -1,3 +1,6 @@
+"use client";
+
+=======
 // Login1.tsx
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -60,6 +63,7 @@ export const Login1 = (props: Login1Props) => {
           </div>
           <div className="inline-flex gap-x-1">
             <p className="hidden md:block">{signUpText}</p>
+
             <button
               onClick={() => navigate(signUpLink.url)}
               className="underline ring-offset-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-primary focus-visible:ring-offset-2"
@@ -91,6 +95,7 @@ export const Login1 = (props: Login1Props) => {
                 Password*
               </Label>
               <Input
+
                 type="password" 
                 id="password"
                 value={password}
@@ -137,12 +142,14 @@ export const Login1 = (props: Login1Props) => {
 
 export const Login1Defaults: Login1Props = {
   logo: {
-    src: "src/assets/react.svg",
+    src: "https://relume-assets.s3.amazonaws.com/logo-image.svg",
+
     alt: "Logo text",
   },
   signUpText: "Don't have an account?",
   signUpLink: {
     text: "Sign up",
+
     url: "/role-choosing",
   },
   title: "Log In",
