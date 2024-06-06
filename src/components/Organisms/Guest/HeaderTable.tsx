@@ -43,17 +43,13 @@ const HeaderTable: React.FC = () => {
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h2 className="text-xl font-bold">Heading goes here</h2>
+          <h2 className="text-xl font-bold text-left" >Heading goes here</h2>
           <p className="text-sm text-gray-600">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
             varius enim in eros.
           </p>
         </div>
-    <Button onClick={openModal}>
-       
-          Check out</Button>
-         
-      
+        <Button onClick={openModal}>Check out</Button>
       </div>
       <table className="min-w-full bg-white border border-gray-200">
         <thead>
@@ -70,10 +66,10 @@ const HeaderTable: React.FC = () => {
         <tbody>
           {quantities.map((quantity, index) => (
             <tr key={index}>
-              <td className="px-4 py-2 border-b">123456</td>
-              <td className="px-4 py-2 border-b">Company name</td>
-              <td className="px-4 py-2 border-b">1/11/2050</td>
-              <td className="px-4 py-2 border-b">$55.00</td>
+              <td className="px-4 py-2 border-b"></td>
+              <td className="px-4 py-2 border-b"></td>
+              <td className="px-4 py-2 border-b"></td>
+              <td className="px-4 py-2 border-b"></td>
               <td className="px-4 py-2 border-b">
                 <input
                   className="w-16 px-2 py-1 border border-gray-300 rounded"
@@ -85,7 +81,7 @@ const HeaderTable: React.FC = () => {
                   min="0"
                 />
               </td>
-              <td className="px-4 py-2 border-b text-red-500">Not complete</td>
+              <td className="px-4 py-2 border-b text-500">Not complete</td>
               <td className="px-4 py-2 border-b">
                 <div className="relative">
                   <button
@@ -142,7 +138,7 @@ const HeaderTable: React.FC = () => {
             </label> */}
           </div>
           <button
-            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
+            className="mt-4 px-4 py-2 bg-black text-white rounded hover:bg-gray-800"
             onClick={closeModal}
           >
             Close

@@ -1,10 +1,11 @@
-"use client";
-
 import { useState } from "react";
 import { Button } from "@relume_io/relume-ui";
 import type { ImageProps, ButtonProps } from "@relume_io/relume-ui";
 import { AnimatePresence, motion } from "framer-motion";
 import { RxChevronDown } from "react-icons/rx";
+import Modal from './Modal'; // Import the Modal component
+import RoleChoosing from "../../Pages/RoleChosing";
+import { Login1 } from "../../Pages/Test";
 
 type LinkProps = {
   title?: string;
@@ -83,6 +84,9 @@ export const Navbar2 = (props: Navbar2Props) => {
     ...props,
   } as Props;
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [loginModalOpen, setLoginModalOpen] = useState(false);
+  const [signUpModalOpen, setSignUpModalOpen] = useState(false);
+
   return (
     <nav className="flex w-full items-center border-b border-border-primary bg-white lg:min-h-18 lg:px-[5%]">
       <div className="mx-auto size-full lg:grid lg:grid-cols-[0.375fr_1fr_0.375fr] lg:items-center lg:justify-between lg:gap-4">
@@ -92,11 +96,14 @@ export const Navbar2 = (props: Navbar2Props) => {
             <div>
               {buttons.map((button, index) => (
                 <Button
-                  key={`${button.title}-${index}
-              `}
+                  key={`${button.title}-${index}`}
                   className="w-full px-4 py-1"
                   variant={button.variant}
                   size={button.size}
+                  onClick={() => {
+                    if (button.title === 'Login') setLoginModalOpen(true);
+                    if (button.title === 'Sign Up') setSignUpModalOpen(true);
+                  }}
                 >
                   {button.title}
                 </Button>
@@ -148,19 +155,26 @@ export const Navbar2 = (props: Navbar2Props) => {
         <div className="hidden justify-self-end lg:block">
           {buttons.map((button, index) => (
             <Button
-              key={`${button.title}-${index}
-              `}
+              key={`${button.title}-${index}`}
               className="px-6 py-2 mx-2"
               variant={button.variant}
               size={button.size}
+              onClick={() => {
+                if (button.title === 'Login') setLoginModalOpen(true);
+                if (button.title === 'Sign Up') setSignUpModalOpen(true);
+              }}
             >
               {button.title}
             </Button>
           ))}
         </div>
-
-        
       </div>
+      <Modal isOpen={loginModalOpen} onClose={() => setLoginModalOpen(false)}>
+        <Login1/>
+      </Modal>
+      <Modal isOpen={signUpModalOpen} onClose={() => setSignUpModalOpen(false)}>
+        <RoleChoosing />
+      </Modal>
     </nav>
   );
 };

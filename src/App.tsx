@@ -17,16 +17,15 @@ import { Layout28 } from "./components/Organisms/Guest/EventScheduleDetail";
 
 // import * as React from 'react';
 
-
 import "./App.css";
 import "./index.css";
-import { Login1 } from "./components/Test";
-import RoleChoosing from "./components/RoleChosing";
-import { SponsorSignUp } from "./components/SponsorSignUp";
-import { VisitorSignUp } from "./components/VisitorSignUp";
-import { Test } from "./Test/DesignTest";
+import { Login1 } from "./components/Pages/Test";
+import RoleChoosing from "./components/Pages/RoleChosing";
+import { SponsorSignUp } from "./components/Pages/SponsorSignUp";
+import { VisitorSignUp } from "./components/Pages/VisitorSignUp";
+import { Payment } from "./components/Pages/Payment";
+import { OrderHistory } from "./components/Pages/OrderHistory";
 
-const Home = () => <h1>Home Page</h1>;
 function App() {
   return (
     <>
@@ -34,11 +33,14 @@ function App() {
         <Routes>
           <Route path="/EventDetail" element={<EventDetail />} />
           <Route path="/" element={<HomePage />} />
-          <Route path="/EventScheduleDetail" element={<Layout28 /> } />
-           <Route path="/role-choosing" element={<RoleChoosing />} />
-        <Route path="/sponsor" element={<SponsorSignUp />} />
-        <Route path="/visitor" element={<VisitorSignUp />} />
-        <Route path="/test" element={<Test />} />
+          <Route path="/login" element={<Login1 />} />
+
+          <Route path="/EventScheduleDetail" element={<Layout28 />} />
+          <Route path="/role-choosing" element={<RoleChoosing />} />
+          <Route path="/sponsor" element={<SponsorSignUp />} />
+          <Route path="/visitor" element={<VisitorSignUp />} />
+          <Route path="/payment" element={<Payment />} />
+          <Route path="/order-history" element={<OrderHistory />} />
         </Routes>
       </Router>
     </>
