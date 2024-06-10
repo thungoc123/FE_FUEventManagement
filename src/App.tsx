@@ -25,6 +25,9 @@ import { SponsorSignUp } from "./components/Pages/SponsorSignUp";
 import { VisitorSignUp } from "./components/Pages/VisitorSignUp";
 import { Payment } from "./components/Pages/Payment";
 import { OrderHistory } from "./components/Pages/OrderHistory";
+import HomePageLogout from "./components/Pages/HomePageLogout";
+import SurveyForm from "./components/Pages/TestforCreateSurvey";
+import QuestionForm from "./components/Pages/Question";
 
 function App() {
   return (
@@ -33,6 +36,8 @@ function App() {
         <Routes>
           <Route path="/EventDetail" element={<EventDetail />} />
           <Route path="/" element={<HomePage />} />
+          <Route path="/homepage" element={<HomePageLogout />} />
+
           <Route path="/login" element={<Login1 />} />
 
           <Route path="/EventScheduleDetail" element={<Layout28 />} />
@@ -41,6 +46,9 @@ function App() {
           <Route path="/visitor" element={<VisitorSignUp />} />
           <Route path="/payment" element={<Payment />} />
           <Route path="/order-history" element={<OrderHistory />} />
+          <Route path="/survey" element={<SurveyForm />} />
+          <Route path="/question" element={<QuestionForm />} />
+
         </Routes>
       </Router>
     </>

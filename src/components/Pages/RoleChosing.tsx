@@ -1,7 +1,8 @@
 import { RiCloseCircleLine } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@relume_io/relume-ui";
-
+import { PiStudentBold } from "react-icons/pi";
+import { GiTeacher } from "react-icons/gi";
 interface RoleChoosingProps {
   onClose: () => void;
 }
@@ -29,11 +30,12 @@ const RoleChoosing: React.FC<RoleChoosingProps> = ({ onClose }) => {
               <p className="md:text-md">Please select your role:</p>
             </div>
             <div className="grid grid-cols-1 items-start justify-center gap-6 md:grid-cols-2 md:gap-8">
-              <Button variant="primary" onClick={() => handleRoleSelect("Visitor")}>
-                Visitor
-              </Button>
+            <Button variant="primary" onClick={() => handleRoleSelect("Visitor")}>
+            <PiStudentBold style={{ fontSize: '24px' }} />  {/* Adjust the size as needed */}
+            </Button>
               <Button variant="primary" onClick={() => handleRoleSelect("Sponsor")}>
-                Sponsor
+              <GiTeacher style={{ fontSize: '24px' }}/>
+
               </Button>
             </div>
           </div>

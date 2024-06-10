@@ -45,7 +45,7 @@ export const VisitorSignUp = (props: Signup7Props) => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     console.log({ name:email, FullName, password });
-    navigate("/home"); // Navigate to homepage
+    navigate("/homepage"); // Navigate to homepage
   };
  
 
@@ -64,7 +64,7 @@ export const VisitorSignUp = (props: Signup7Props) => {
               <p className="md:text-md">{description}</p>
             </div>
             <form className="grid grid-cols-1 gap-6" onSubmit={handleSubmit}>
-              <div className="grid w-full items-center">
+              <div className="grid w-full items-center text-left">
                 <Label htmlFor="email" className="mb-2">
                   Gmail*
                 </Label>
@@ -76,7 +76,7 @@ export const VisitorSignUp = (props: Signup7Props) => {
                   required
                 />
               </div>
-              <div className="grid w-full items-center">
+              <div className="grid w-full items-center text-left">
                 <Label htmlFor="name" className="mb-2">
                   Company Name/FullName*
                 </Label>
@@ -90,7 +90,7 @@ export const VisitorSignUp = (props: Signup7Props) => {
               </div>
               
 
-              <div className="grid w-full items-center">
+              <div className="grid w-full items-center text-left">
                 <Label htmlFor="password" className="mb-2">
                   Password*
                 </Label>
@@ -102,7 +102,7 @@ export const VisitorSignUp = (props: Signup7Props) => {
                   required
                 />
               </div>
-              <div className="grid w-full items-center">
+              <div className="grid w-full items-center text-left">
                 <Label htmlFor="password" className="mb-2">
                   Confirm Password*
                 </Label>
@@ -158,7 +158,7 @@ export const Signup7Defaults: Signup7Props = {
   },
   
   image: {
-    src: "src/assets/3.jpg",
+    src: "src/assets/7.jpg",
     alt: "Placeholder image",
   },
   logInText: "Already have an account?",
