@@ -2,15 +2,15 @@ import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 import { useState } from "react";
 import { Button, Input, Label } from "@relume_io/relume-ui";
-import type { ImageProps, ButtonProps } from "@relume_io/relume-ui";
+import type { ImgProps, ButtonProps } from "@relume_io/relume-ui";
 
 type Props = {
-  logo: ImageProps;
+  logo: ImgProps;
   logoLink: string;
   title: string;
   description: string;
   signUpButton: ButtonProps;
-  image: ImageProps;
+  image: ImgProps;
   logInText: string;
   logInLink: {
     text: string;
@@ -158,7 +158,7 @@ export const Signup7Defaults: Signup7Props = {
   },
   
   image: {
-    src: "src/assets/7.jpg",
+    src: "",
     alt: "Placeholder image",
   },
   logInText: "Already have an account?",

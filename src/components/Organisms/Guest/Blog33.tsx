@@ -1,17 +1,18 @@
 "use client";
 
-import { Button } from "@relume_io/relume-ui";
-import type { ImageProps, ButtonProps } from "@relume_io/relume-ui";
+import { Button, Input } from "@relume_io/relume-ui";
+import type { ImgProps, ButtonProps } from "@relume_io/relume-ui";
 import SearchBar from "../../Atoms/SearchBar";
+import { BiSearch } from "react-icons/bi";
 
 type BlogPost = {
   url?: string;
-  image?: ImageProps;
+  image?: ImgProps;
   category?: string;
   readTime?: string;
   title?: string;
   description?: string;
-  avatar?: ImageProps;
+  avatar?: ImgProps;
   fullName?: string;
   date?: string;
 };
@@ -35,10 +36,14 @@ export const Blog33 = (props: Blog33Props) => {
     <section className="px-[5%] py-16 md:py-24 lg:py-28">
       <div className="container">
         <div className="container mb-12 max-w-lg text-center md:mb-18 lg:mb-20">
-        {/* <SearchBar /> */}
+          {/* <SearchBar /> */}
+          <Input id="search" placeholder="Search" icon={<BiSearch className="size-6" />} />
+
 
           <p className="mb-3 font-semibold md:mb-4">{tagline}</p>
-          <h2 className="mb-5 text-5xl font-bold md:mb-6 md:text-7xl lg:text-8xl">{heading}</h2>
+          <h2 className="mb-5 text-5xl font-bold md:mb-6 md:text-7xl lg:text-8xl">
+            {heading}
+          </h2>
           <p className="md:text-md">{description}</p>
         </div>
         <div className="grid grid-cols-1 gap-x-8 gap-y-16 md:grid-cols-2 md:gap-y-12 lg:grid-cols-3">
@@ -63,7 +68,10 @@ export const Blog33 = (props: Blog33Props) => {
                 {post.category}
               </a>
 
-              <a href={post.url} className="mb-2 block max-w-full focus-visible:outline-none">
+              <a
+                href={post.url}
+                className="mb-2 block max-w-full focus-visible:outline-none"
+              >
                 <h5 className="text-xl font-bold md:text-2xl">{post.title}</h5>
               </a>
               <p>{post.description}</p>

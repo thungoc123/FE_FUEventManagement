@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { Button } from "@relume_io/relume-ui";
-import type { ImageProps, ButtonProps } from "@relume_io/relume-ui";
+import type { ImgProps, ButtonProps } from "@relume_io/relume-ui";
 import { AnimatePresence, motion } from "framer-motion";
 import { RxChevronDown } from "react-icons/rx";
 import {
@@ -14,10 +14,11 @@ import {
   DialogDescription,
   DialogFooter,
   Label,
-  Input
+  Input,
 } from "@relume_io/relume-ui";
 import { BiLogoGoogle } from "react-icons/bi";
-import RoleChoosing from '../../Pages/RoleChosing';
+import RoleChoosing from "../../Pages/RoleChosing";
+import RoleChoosingwithDialog from "../../Molecules/RoleChoosingWithDialog";
 
 type LinkProps = {
   title?: string;
@@ -29,7 +30,7 @@ type MenuLinkProps = LinkProps & {
 };
 
 type Props = {
-  logo?: ImageProps;
+  logo?: ImgProps;
   links?: MenuLinkProps[];
   buttons?: ButtonProps[];
 };
@@ -126,7 +127,9 @@ export const Navbar2 = (props: Navbar2Props) => {
                   className="w-full px-4 py-1"
                   variant={button.variant}
                   size={button.size}
-                  onClick={() => handleAuthButtonClick(button.title === 'Login')}
+                  onClick={() =>
+                    handleAuthButtonClick(button.title === "Login")
+                  }
                 >
                   {button.title}
                 </Button>
@@ -161,7 +164,10 @@ export const Navbar2 = (props: Navbar2Props) => {
           className="overflow-hidden px-[5%] text-center lg:flex lg:items-center lg:justify-center lg:px-0 lg:[--height-closed:auto] lg:[--height-open:auto]"
         >
           {links.map((link, index) => (
-            <div key={`${link.title}-${index}`} className="first:pt-4 lg:first:pt-0">
+            <div
+              key={`${link.title}-${index}`}
+              className="first:pt-4 lg:first:pt-0"
+            >
               {link.subLinks && link.subLinks.length > 0 ? (
                 <NavItemDropdown subLinks={link.subLinks} title={link.title} />
               ) : (
@@ -182,7 +188,7 @@ export const Navbar2 = (props: Navbar2Props) => {
               className="px-6 py-2 mx-2"
               variant={button.variant}
               size={button.size}
-              onClick={() => handleAuthButtonClick(button.title === 'Login')}
+              onClick={() => handleAuthButtonClick(button.title === "Login")}
             >
               {button.title}
             </Button>
@@ -190,8 +196,8 @@ export const Navbar2 = (props: Navbar2Props) => {
         </div>
       </div>
 
-       {/* Auth Modal */}
-       <Dialog open={authModalOpen} onOpenChange={setAuthModalOpen}>
+      {/* Auth Modal */}
+      <Dialog open={authModalOpen} onOpenChange={setAuthModalOpen}>
         <DialogTrigger asChild>
           <div></div>
         </DialogTrigger>
@@ -199,14 +205,23 @@ export const Navbar2 = (props: Navbar2Props) => {
           <DialogOverlay className="bg-black/25" />
           <DialogContent className="w-full max-w-md bg-white px-10 py-14 md:py-16 md:px-12 md:data-[state=open]:duration-300 md:data-[state=open]:animate-in md:data-[state=closed]:animate-out md:data-[state=closed]:fade-out-0 md:data-[state=open]:fade-in-0 md:data-[state=closed]:slide-out-to-left-1/2 md:data-[state=open]:slide-in-from-left-1/2">
             <DialogHeader>
-              <DialogTitle className="mb-2">{isLoginForm ? 'Log In' : 'Sign Up'}</DialogTitle>
-              <DialogDescription>{isLoginForm ? 'Log in to your account' : 'Create an account to get started'}</DialogDescription>
+              <DialogTitle className="mb-2">
+                {isLoginForm ? "Log In" : "Sign Up"}
+              </DialogTitle>
+              <DialogDescription>
+                {isLoginForm
+                  ? "Log in to your account"
+                  : "Create an account to get started"}
+              </DialogDescription>
             </DialogHeader>
-            <form className="grid gap-4 py-4" onSubmit={(e) => {
-              e.preventDefault();
-              console.log(isLoginForm ? 'Logging in' : 'Signing up');
-              setAuthModalOpen(false);
-            }}>
+            <form
+              className="grid gap-4 py-4"
+              onSubmit={(e) => {
+                e.preventDefault();
+                console.log(isLoginForm ? "Logging in" : "Signing up");
+                setAuthModalOpen(false);
+              }}
+            >
               <div className="grid items-center gap-2">
                 <Label htmlFor="email">Email</Label>
                 <Input id="email" type="email" required />
@@ -216,24 +231,30 @@ export const Navbar2 = (props: Navbar2Props) => {
                 <Input id="password" type="password" required />
               </div>
               <div className="mt-6 flex w-full flex-col gap-4 md:mt-8">
-                <Button type="submit">{isLoginForm ? 'Log in' : 'Sign up'}</Button>
-                <Button variant="secondary" iconLeft={<BiLogoGoogle className="size-6" />} className="gap-x-3">
-                  {isLoginForm ? 'Log in with Google' : 'Sign up with Google'}
+                <Button type="submit">
+                  {isLoginForm ? "Log in" : "Sign up"}
                 </Button>
+                {/* <Button variant="secondary" iconLeft={<BiLogoGoogle className="size-6" />} className="gap-x-3">
+                  {isLoginForm ? 'Log in with Google' : 'Sign up with Google'}
+                </Button> */}
               </div>
               <DialogFooter className="mt-6">
                 {isLoginForm ? (
                   <>
-                    <span>Don't have an account?</span>
+                    {/* <span>Don't have an account?</span>
                     <Button asChild variant="link" size="link" onClick={() => handleAuthButtonClick(false)}>
                     <a className="underline">Sign up</a>
-                    </Button>
-
+                    </Button> */}
                   </>
                 ) : (
                   <>
                     <span>Already have an account?</span>
-                    <Button asChild variant="link" size="link" onClick={() => setIsLoginForm(true)}>
+                    <Button
+                      asChild
+                      variant="link"
+                      size="link"
+                      onClick={() => setIsLoginForm(true)}
+                    >
                       <a className="underline">Log in</a>
                     </Button>
                   </>
@@ -244,14 +265,28 @@ export const Navbar2 = (props: Navbar2Props) => {
         </DialogPortal>
       </Dialog>
 
+      {/* Role Choosing with DialogContent  */}
+      <RoleChoosingwithDialog roleChoosingOpen={roleChoosingOpen} setRoleChoosingOpen={setRoleChoosingOpen} />   
+
       {/* Role Choosing Modal */}
-      {roleChoosingOpen && <RoleChoosing onClose={handleRoleChoosingClose} />}
+
+
+
+      {/* {roleChoosingOpen && (
+        <RoleChoosingwithDialog onClose={handleRoleChoosingClose} />
+      )} */}
     </nav>
   );
 };
 
 // This component will render your dropdown links
-const NavItemDropdown = ({ title, subLinks }: { title?: string; subLinks?: LinkProps[] }) => {
+const NavItemDropdown = ({
+  title,
+  subLinks,
+}: {
+  title?: string;
+  subLinks?: LinkProps[];
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <div className="relative">
@@ -260,13 +295,15 @@ const NavItemDropdown = ({ title, subLinks }: { title?: string; subLinks?: LinkP
         onClick={() => setIsOpen(!isOpen)}
       >
         {title}
-        <RxChevronDown className={`transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+        <RxChevronDown
+          className={`transition-transform ${isOpen ? "rotate-180" : ""}`}
+        />
       </button>
       <AnimatePresence>
         {isOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
+            animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             className="absolute left-0 mt-2 w-40 bg-white shadow-lg"
           >

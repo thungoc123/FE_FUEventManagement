@@ -183,7 +183,7 @@ export const Signup7Defaults: Signup7Props = {
   },
   
   image: {
-    src: "src/assets/7.jpg",
+    src: "",
     alt: "Placeholder image",
   },
   logInText: "Already have an account?",

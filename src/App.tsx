@@ -13,21 +13,21 @@ import viteLogo from "/vite.svg";
 import HomePage from "./components/Pages/HomePage";
 import DesignTesting from "./components/Pages/DesignTesting";
 import EventDetail from "./components/Pages/EventDetail";
-import { Layout28 } from "./components/Organisms/Guest/EventScheduleDetail";
 
 // import * as React from 'react';
 
 import "./App.css";
 import "./index.css";
-import { Login1 } from "./components/Pages/Test";
+// import { Login1 } from "./components/Pages/Test";
 import RoleChoosing from "./components/Pages/RoleChosing";
 import { SponsorSignUp } from "./components/Pages/SponsorSignUp";
 import { VisitorSignUp } from "./components/Pages/VisitorSignUp";
-import { Payment } from "./components/Pages/Payment";
 import { OrderHistory } from "./components/Pages/OrderHistory";
 import HomePageLogout from "./components/Pages/HomePageLogout";
 import SurveyForm from "./components/Pages/TestforCreateSurvey";
 import QuestionForm from "./components/Pages/Question";
+import { ApplicationShell4 } from "./components/Pages/ApplicationShell";
+import { Payment } from "./components/Pages/Payment";
 
 function App() {
   return (
@@ -38,9 +38,9 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/homepage" element={<HomePageLogout />} />
 
-          <Route path="/login" element={<Login1 />} />
+          <Route path="/Dashboard" element={<ApplicationShell4 />} />
 
-          <Route path="/EventScheduleDetail" element={<Layout28 />} />
+          {/* <Route path="/EventScheduleDetail" element={<Layout28 />} /> */}
           <Route path="/role-choosing" element={<RoleChoosing />} />
           <Route path="/sponsor" element={<SponsorSignUp />} />
           <Route path="/visitor" element={<VisitorSignUp />} />
