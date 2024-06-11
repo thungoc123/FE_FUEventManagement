@@ -47,7 +47,7 @@ const [email, setEmail] = useState("");
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     console.log({ name:email, companyName,companyID,staffEmail , password });
-    navigate("/home"); // Navigate to homepage
+    navigate("/homepage"); // Navigate to homepage
   };
  
 
@@ -66,7 +66,7 @@ const [email, setEmail] = useState("");
               <p className="md:text-md">{description}</p>
             </div>
             <form className="grid grid-cols-1 gap-6" onSubmit={handleSubmit}>
-              <div className="grid w-full items-center">
+              <div className="grid w-full items-center text-left">
                 <Label htmlFor="email" className="mb-2">
                   Gmail*
                 </Label>
@@ -78,7 +78,7 @@ const [email, setEmail] = useState("");
                   required
                 />
               </div>
-              <div className="grid w-full items-center">
+              <div className="grid w-full items-center text-left">
                 <Label htmlFor="name" className="mb-2">
                   Company Name/FullName*
                 </Label>
@@ -91,7 +91,7 @@ const [email, setEmail] = useState("");
                 />
               </div>
               
-              <div className="grid w-full items-center">
+              <div className="grid w-full items-center text-left">
                 <Label htmlFor="companyID" className="mb-2">
                   Company ID/Personal ID*
                 </Label>
@@ -103,7 +103,7 @@ const [email, setEmail] = useState("");
                   required
                 />
               </div>
-              <div className="grid w-full items-center">
+              <div className="grid w-full items-center text-left">
                 <Label htmlFor="companyID" className="mb-2">
                   FPT Staff Email*
                 </Label>
@@ -115,7 +115,7 @@ const [email, setEmail] = useState("");
                   required
                 />
               </div>
-              <div className="grid w-full items-center">
+              <div className="grid w-full items-center text-left">
                 <Label htmlFor="password" className="mb-2">
                   Password*
                 </Label>
@@ -127,7 +127,7 @@ const [email, setEmail] = useState("");
                   required
                 />
               </div>
-              <div className="grid w-full items-center">
+              <div className="grid w-full items-center text-left">
                 <Label htmlFor="password" className="mb-2">
                   Confirm Password*
                 </Label>
@@ -183,7 +183,7 @@ export const Signup7Defaults: Signup7Props = {
   },
   
   image: {
-    src: "src/assets/4.jpg",
+    src: "src/assets/7.jpg",
     alt: "Placeholder image",
   },
   logInText: "Already have an account?",

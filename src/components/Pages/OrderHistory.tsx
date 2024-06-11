@@ -2,11 +2,12 @@
 
 import { useState } from "react";
 import { Button } from "@relume_io/relume-ui";
-import type { ImageProps, ButtonProps } from "@relume_io/relume-ui";
+import type { ImgProps, ButtonProps } from "@relume_io/relume-ui";
 import { AnimatePresence, motion } from "framer-motion";
 import { RxChevronDown, RxBell, RxStack } from "react-icons/rx";
-import HeaderTable from "./HeaderTable";
-import { Footer } from "./Footer";
+import HeaderTable from "../Organisms/Guest/HeaderTable";
+import { Footer } from "../Organisms/Guest/FooterPayment";
+import { Table1 } from "../Organisms/Guest/HeaderTableHistory";
 
 type LinkProps = {
   title: string;
@@ -18,7 +19,7 @@ type MenuLinkProps = LinkProps & {
 };
 
 type Props = {
-  logo: ImageProps;
+  logo: ImgProps;
   links: MenuLinkProps[];
   buttons: ButtonProps[];
 };
@@ -79,7 +80,7 @@ const dropDownVariants = {
   },
 };
 
-export const Test = (props: Navbar2Props) => {
+export const OrderHistory = (props: Navbar2Props) => {
   const { logo, links, buttons } = {
     ...Navbar2Defaults,
     ...props,
@@ -187,7 +188,7 @@ export const Test = (props: Navbar2Props) => {
       </nav>
 
       <div className="body" style={{ height: "40%" }}>
-        <HeaderTable />
+        <Table1 />
       </div>
       <div className="footer" style={{ height: "40%" }}>
         <Footer />
@@ -281,9 +282,9 @@ export const Navbar2Defaults: Navbar2Props = {
       title: "More",
       url: "#",
       subLinks: [
-        { title: "hef hef ", url: "#" },
-        { title: "HUHUHU", url: "#" },
-        { title: "MEMEMEMEME", url: "#" },
+        { title:  "Option 1", url: "#" },
+        { title: "Option 2", url: "#" },
+        { title: "Option 3", url: "#" },
       ],
     },
   ],

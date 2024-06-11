@@ -1,23 +1,12 @@
-import React, { useState } from 'react';
+import { useState } from "react";
 import { Button } from "@relume_io/relume-ui";
 import type { ImageProps, ButtonProps } from "@relume_io/relume-ui";
 import { AnimatePresence, motion } from "framer-motion";
 import { RxChevronDown } from "react-icons/rx";
-import {
-  Dialog,
-  DialogTrigger,
-  DialogPortal,
-  DialogOverlay,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-  Label,
-  Input
-} from "@relume_io/relume-ui";
-import { BiLogoGoogle } from "react-icons/bi";
-import RoleChoosing from '../../Pages/RoleChosing';
+import Modal from './Modal'; // Import the Modal component
+import RoleChoosing from "../../Pages/RoleChosing";
+import { Login1 } from "../../Pages/Test";
+import { useNavigate } from 'react-router-dom'; // Import useNavigate from react-router-dom
 
 type LinkProps = {
   title?: string;
@@ -90,27 +79,19 @@ const dropDownVariants = {
   },
 };
 
-export const Navbar2 = (props: Navbar2Props) => {
+export const NavbarLogout = (props: Navbar2Props) => {
   const { logo, links, buttons } = {
     ...Navbar2Defaults,
     ...props,
   } as Props;
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [authModalOpen, setAuthModalOpen] = useState(false);
-  const [roleChoosingOpen, setRoleChoosingOpen] = useState(false);
-  const [isLoginForm, setIsLoginForm] = useState(true);
+  const [loginModalOpen, setLoginModalOpen] = useState(false);
+  const [logoutModalOpen, setLogoutModalOpen] = useState(false);
+  const navigate = useNavigate(); // useNavigate hook for redirection
 
-  const handleAuthButtonClick = (isLogin: boolean) => {
-    if (isLogin) {
-      setIsLoginForm(true);
-      setAuthModalOpen(true);
-    } else {
-      setRoleChoosingOpen(true);
-    }
-  };
-
-  const handleRoleChoosingClose = () => {
-    setRoleChoosingOpen(false);
+  const handleLogout = () => {
+    // Logic for logging out the user, e.g., clearing auth tokens
+    navigate('/'); // Redirect to homepage
   };
 
   return (
@@ -126,7 +107,9 @@ export const Navbar2 = (props: Navbar2Props) => {
                   className="w-full px-4 py-1"
                   variant={button.variant}
                   size={button.size}
-                  onClick={() => handleAuthButtonClick(button.title === 'Login')}
+                  onClick={() => {
+                    if (button.title === 'Logout') setLogoutModalOpen(true);
+                  }}
                 >
                   {button.title}
                 </Button>
@@ -182,128 +165,105 @@ export const Navbar2 = (props: Navbar2Props) => {
               className="px-6 py-2 mx-2"
               variant={button.variant}
               size={button.size}
-              onClick={() => handleAuthButtonClick(button.title === 'Login')}
+              onClick={() => {
+                if (button.title === 'Logout') setLogoutModalOpen(true);
+              }}
             >
               {button.title}
             </Button>
           ))}
         </div>
       </div>
-
-       {/* Auth Modal */}
-       <Dialog open={authModalOpen} onOpenChange={setAuthModalOpen}>
-        <DialogTrigger asChild>
-          <div></div>
-        </DialogTrigger>
-        <DialogPortal>
-          <DialogOverlay className="bg-black/25" />
-          <DialogContent className="w-full max-w-md bg-white px-10 py-14 md:py-16 md:px-12 md:data-[state=open]:duration-300 md:data-[state=open]:animate-in md:data-[state=closed]:animate-out md:data-[state=closed]:fade-out-0 md:data-[state=open]:fade-in-0 md:data-[state=closed]:slide-out-to-left-1/2 md:data-[state=open]:slide-in-from-left-1/2">
-            <DialogHeader>
-              <DialogTitle className="mb-2">{isLoginForm ? 'Log In' : 'Sign Up'}</DialogTitle>
-              <DialogDescription>{isLoginForm ? 'Log in to your account' : 'Create an account to get started'}</DialogDescription>
-            </DialogHeader>
-            <form className="grid gap-4 py-4" onSubmit={(e) => {
-              e.preventDefault();
-              console.log(isLoginForm ? 'Logging in' : 'Signing up');
-              setAuthModalOpen(false);
-            }}>
-              <div className="grid items-center gap-2">
-                <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" required />
-              </div>
-              <div className="grid items-center gap-2">
-                <Label htmlFor="password">Password</Label>
-                <Input id="password" type="password" required />
-              </div>
-              <div className="mt-6 flex w-full flex-col gap-4 md:mt-8">
-                <Button type="submit">{isLoginForm ? 'Log in' : 'Sign up'}</Button>
-                <Button variant="secondary" iconLeft={<BiLogoGoogle className="size-6" />} className="gap-x-3">
-                  {isLoginForm ? 'Log in with Google' : 'Sign up with Google'}
-                </Button>
-              </div>
-              <DialogFooter className="mt-6">
-                {isLoginForm ? (
-                  <>
-                    <span>Don't have an account?</span>
-                    <Button asChild variant="link" size="link" onClick={() => handleAuthButtonClick(false)}>
-                    <a className="underline">Sign up</a>
-                    </Button>
-
-                  </>
-                ) : (
-                  <>
-                    <span>Already have an account?</span>
-                    <Button asChild variant="link" size="link" onClick={() => setIsLoginForm(true)}>
-                      <a className="underline">Log in</a>
-                    </Button>
-                  </>
-                )}
-              </DialogFooter>
-            </form>
-          </DialogContent>
-        </DialogPortal>
-      </Dialog>
-
-      {/* Role Choosing Modal */}
-      {roleChoosingOpen && <RoleChoosing onClose={handleRoleChoosingClose} />}
+      <Modal isOpen={logoutModalOpen} onClose={() => setLogoutModalOpen(false)}>
+        <div className="p-4">
+          <h2>Confirm Logout</h2>
+          <p>Are you sure you want to logout?</p>
+          <div className="flex justify-end mt-4">
+            <Button variant="secondary" onClick={() => setLogoutModalOpen(false)}>
+              Cancel
+            </Button>
+            <Button variant="primary" onClick={handleLogout} className="ml-2">
+              Logout
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </nav>
   );
 };
 
-// This component will render your dropdown links
-const NavItemDropdown = ({ title, subLinks }: { title?: string; subLinks?: LinkProps[] }) => {
-  const [isOpen, setIsOpen] = useState(false);
+const NavItemDropdown = ({ title, subLinks }: { title: string; subLinks: LinkProps[] }) => {
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   return (
-    <div className="relative">
+    <nav onMouseEnter={() => setDropdownOpen(true)} onMouseLeave={() => setDropdownOpen(false)}>
       <button
-        className="flex items-center gap-1 text-md lg:px-4 lg:py-2 lg:text-base"
-        onClick={() => setIsOpen(!isOpen)}
+        className="flex w-full items-center justify-center gap-4 py-3 text-center text-md ring-offset-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-primary focus-visible:ring-offset-2 lg:w-auto lg:flex-none lg:justify-start lg:gap-2 lg:px-4 lg:py-2 lg:text-base"
+        onClick={() => setDropdownOpen((prev) => !prev)}
       >
-        {title}
-        <RxChevronDown className={`transition-transform ${isOpen ? 'rotate-180' : ''}`} />
-      </button>
-      <AnimatePresence>
-        {isOpen && (
+        <span>{title}</span>
+        <AnimatePresence>
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="absolute left-0 mt-2 w-40 bg-white shadow-lg"
+            animate={dropdownOpen ? "rotated" : "initial"}
+            variants={{
+              rotated: { rotate: 180 },
+              initial: { rotate: 0 },
+            }}
+            transition={{ duration: 0.3 }}
           >
-            {subLinks?.map((subLink, index) => (
-              <a
-                key={`${subLink.title}-${index}`}
-                href={subLink.url}
-                className="block px-4 py-2 text-sm text-black hover:bg-gray-200"
-              >
-                {subLink.title}
-              </a>
-            ))}
+            <RxChevronDown className="size-4" />
           </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+        </AnimatePresence>
+      </button>
+      {dropdownOpen && (
+        <AnimatePresence>
+          <motion.ul
+            animate={dropdownOpen ? "open" : "close"}
+            initial="close"
+            exit="close"
+            variants={{
+              open: {
+                visibility: "visible",
+                opacity: "var(--opacity-open, 100%)",
+                y: 0,
+              },
+              close: {
+                visibility: "hidden",
+                opacity: "var(--opacity-close, 0)",
+                y: "var(--y-close, 0%)",
+              },
+            }}
+            transition={{ duration: 0.3 }}
+            className="bg-white lg:absolute lg:h-auto lg:border lg:border-border-primary lg:p-2 lg:[--y-close:25%]"
+          >
+            {subLinks.map((subLink, index) => (
+              <li
+                key={`${subLink.title}-${index}`}
+                className="relative whitespace-nowrap py-3 text-center align-top text-base lg:px-4 lg:py-2 lg:text-left"
+              >
+                <a
+                  href={subLink.url}
+                  className="ring-offset-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-primary focus-visible:ring-offset-2"
+                >
+                  {subLink.title}
+                </a>
+              </li>
+            ))}
+          </motion.ul>
+        </AnimatePresence>
+      )}
+    </nav>
   );
 };
 
-export const Navbar2Defaults = {
+export const Navbar2Defaults: Navbar2Props = {
   logo: {
-    src: "/images/logo.svg",
-    alt: "Logo",
+    src: "https://relume-assets.s3.amazonaws.com/logo-image.svg",
+    alt: "Logo image",
   },
   links: [
-    {
-      title: "Home",
-      url: "/",
-    },
-    {
-      title: "About",
-      url: "/about",
-    },
-    {
-      title: "Contact",
-      url: "/contact",
-    },
+    { title: "About Us", url: "#" },
+    { title: "Events", url: "#" },
+    { title: "Sponsors", url: "#" },
     {
       title: "More",
       subLinks: [
@@ -323,15 +283,10 @@ export const Navbar2Defaults = {
     },
   ],
   buttons: [
+    
     {
-      title: "Login",
-      variant: "primary",
-      size: "medium",
-    },
-    {
-      title: "Sign Up",
-      variant: "secondary",
-      size: "medium",
+      title: "Logout",
+      size: "sm",
     },
   ],
 };
