@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"; // Import useNavigate
 import { useState } from "react";
 import { Button, Input, Label } from "@relume_io/relume-ui";
 import type { ImgProps, ButtonProps } from "@relume_io/relume-ui";
+import VAuthAPI from "../../config/axios/VAuthAPI";
 
 type Props = {
   logo: ImgProps;
@@ -48,7 +49,18 @@ export const VisitorSignUp = (props: Signup7Props) => {
     navigate("/homepage"); // Navigate to homepage
   };
  
+  const handleClick = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // bi 403 roi, khong lay duoc :v khong co permission 
 
+    try {
+      const response = await VAuthAPI.post(`api-visitor/sign-up-visitor`);
+
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  }; 
   return (
     <section>
       <div className="relative grid min-h-screen grid-cols-1 items-stretch justify-center overflow-auto lg:grid-cols-2">
@@ -120,6 +132,7 @@ export const VisitorSignUp = (props: Signup7Props) => {
                   size={signUpButton.size}
                   iconLeft={signUpButton.iconLeft}
                   iconRight={signUpButton.iconRight}
+                  onClick={handleClick}
                 >
                   {signUpButton.title}
                 </Button>

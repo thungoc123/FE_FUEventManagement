@@ -28,6 +28,8 @@ import SurveyForm from "./components/Pages/TestforCreateSurvey";
 import QuestionForm from "./components/Pages/Question";
 import { ApplicationShell4 } from "./components/Pages/ApplicationShell";
 import { Payment } from "./components/Pages/Payment";
+import CreateEvent from "./components/Pages/CreateEvent";
+import Testing from "./components/Pages/Testing";
 
 function App() {
   return (
@@ -48,6 +50,7 @@ function App() {
           <Route path="/order-history" element={<OrderHistory />} />
           <Route path="/survey" element={<SurveyForm />} />
           <Route path="/question" element={<QuestionForm />} />
+          <Route path="/create-event" element={<Testing />} />
 
         </Routes>
       </Router>

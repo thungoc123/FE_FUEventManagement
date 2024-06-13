@@ -19,6 +19,7 @@ import {
 import { BiLogoGoogle } from "react-icons/bi";
 import RoleChoosing from "../../Pages/RoleChosing";
 import RoleChoosingwithDialog from "../../Molecules/RoleChoosingWithDialog";
+import UnauthAPI from "../../../config/axios/UnauthAPI";
 
 type LinkProps = {
   title?: string;
@@ -100,6 +101,10 @@ export const Navbar2 = (props: Navbar2Props) => {
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [roleChoosingOpen, setRoleChoosingOpen] = useState(false);
   const [isLoginForm, setIsLoginForm] = useState(true);
+  const [loginData, setLoginData] = useState({
+    email: "",
+    password: "",
+  });
 
   const handleAuthButtonClick = (isLogin: boolean) => {
     if (isLogin) {
@@ -107,6 +112,20 @@ export const Navbar2 = (props: Navbar2Props) => {
       setAuthModalOpen(true);
     } else {
       setRoleChoosingOpen(true);
+    }
+  };
+
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const response = await UnauthAPI.post(`login`, {
+        loginData
+       
+      });
+
+      console.log(response);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -220,15 +239,38 @@ export const Navbar2 = (props: Navbar2Props) => {
                 e.preventDefault();
                 console.log(isLoginForm ? "Logging in" : "Signing up");
                 setAuthModalOpen(false);
+                handleLogin(e);
               }}
             >
               <div className="grid items-center gap-2">
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" required />
+                <Input
+                  id="email"
+                  type="email"
+                  value={loginData.email}
+                  required
+                  onChange={(e) =>
+                    setLoginData({
+                      ...loginData,
+                      email: e.target.value,
+                    })
+                  }
+                />
               </div>
               <div className="grid items-center gap-2">
                 <Label htmlFor="password">Password</Label>
-                <Input id="password" type="password" required />
+                <Input
+                  id="password"
+                  type="password"
+                  required
+                  value={loginData.password}
+                  onChange={(e) =>
+                    setLoginData({
+                      ...loginData,
+                      password: e.target.value,
+                    })
+                  }
+                />
               </div>
               <div className="mt-6 flex w-full flex-col gap-4 md:mt-8">
                 <Button type="submit">
@@ -253,7 +295,7 @@ export const Navbar2 = (props: Navbar2Props) => {
                       asChild
                       variant="link"
                       size="link"
-                      onClick={() => setIsLoginForm(true)}
+                      onClick={handleLogin}
                     >
                       <a className="underline">Log in</a>
                     </Button>
@@ -266,11 +308,12 @@ export const Navbar2 = (props: Navbar2Props) => {
       </Dialog>
 
       {/* Role Choosing with DialogContent  */}
-      <RoleChoosingwithDialog roleChoosingOpen={roleChoosingOpen} setRoleChoosingOpen={setRoleChoosingOpen} />   
+      <RoleChoosingwithDialog
+        roleChoosingOpen={roleChoosingOpen}
+        setRoleChoosingOpen={setRoleChoosingOpen}
+      />
 
       {/* Role Choosing Modal */}
-
-
 
       {/* {roleChoosingOpen && (
         <RoleChoosingwithDialog onClose={handleRoleChoosingClose} />
