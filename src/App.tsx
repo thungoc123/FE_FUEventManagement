@@ -19,7 +19,7 @@ import { Layout28 } from "./components/Organisms/Guest/EventScheduleDetail";
 
 import "./App.css";
 import "./index.css";
-import { Login1 } from "./components/Pages/Test";
+// import { Login1 } from "./components/Pages/Test";
 import RoleChoosing from "./components/Pages/RoleChosing";
 import { SponsorSignUp } from "./components/Pages/SponsorSignUp";
 import { VisitorSignUp } from "./components/Pages/VisitorSignUp";
@@ -38,7 +38,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/homepage" element={<HomePageLogout />} />
 
-          <Route path="/login" element={<Login1 />} />
+          {/* <Route path="/login" element={<Login1 />} />   */}
 
           <Route path="/EventScheduleDetail" element={<Layout28 />} />
           <Route path="/role-choosing" element={<RoleChoosing />} />
