@@ -55,7 +55,7 @@ export const SponsorSignUp = (props: Signup7Props) => {
   // HANDLE GET SPONSOR DATA
   const handleClick = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // bi 403 roi, khong lay duoc :v khong co permission 
+    // bi 403 roi, khong lay duoc :v khong co permission
 
     try {
       const response = await AuthAPI.get(`api-sponsor`);
@@ -82,7 +82,7 @@ export const SponsorSignUp = (props: Signup7Props) => {
               </h1>
               <p className="md:text-md">{description}</p>
             </div>
-            <form className="grid grid-cols-1 gap-6" onSubmit={handleSubmit}>
+            <form className="grid grid-cols-1 gap-6" onSubmit={handleClick}>
               <div className="grid w-full items-center text-left">
                 <Label htmlFor="email" className="mb-2">
                   Gmail*
@@ -162,7 +162,8 @@ export const SponsorSignUp = (props: Signup7Props) => {
                   size={signUpButton.size}
                   iconLeft={signUpButton.iconLeft}
                   iconRight={signUpButton.iconRight}
-                  onClick={e => handleClick}
+                  // onClick={e => handleClick}
+                  type="submit"
                 >
                   {signUpButton.title}
                 </Button>

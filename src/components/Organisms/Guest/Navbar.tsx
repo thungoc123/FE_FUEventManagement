@@ -117,11 +117,12 @@ export const Navbar2 = (props: Navbar2Props) => {
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log(loginData)
     try {
-      const response = await UnauthAPI.post(`login`, {
-        loginData
-       
-      });
+      const response = await UnauthAPI.post(`login`, 
+        
+       loginData
+      );
 
       console.log(response);
     } catch (error) {
@@ -236,7 +237,7 @@ export const Navbar2 = (props: Navbar2Props) => {
             <form
               className="grid gap-4 py-4"
               onSubmit={(e) => {
-                e.preventDefault();
+                // e.preventDefault();
                 console.log(isLoginForm ? "Logging in" : "Signing up");
                 setAuthModalOpen(false);
                 handleLogin(e);
