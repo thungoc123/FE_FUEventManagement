@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@relume_io/relume-ui";
 import type { ImgProps, ButtonProps } from "@relume_io/relume-ui";
 import { AnimatePresence, motion } from "framer-motion";
@@ -20,6 +20,15 @@ import { BiLogoGoogle } from "react-icons/bi";
 import RoleChoosing from "../../Pages/RoleChosing";
 import RoleChoosingwithDialog from "../../Molecules/RoleChoosingWithDialog";
 import UnauthAPI from "../../../config/axios/UnauthAPI";
+
+// import { useLoginMutation } from '';
+
+// setToken
+import { useDispatch } from "react-redux";
+import { useLoginMutation } from "../../../Features/Auth/authApi";
+import { setToken } from "../../../Features/Auth/authSlice";
+import Dropdown from "../Visitor/Dropdown";
+import { useAuth } from "../../../Contexts/AuthContext";
 
 type LinkProps = {
   title?: string;
@@ -101,11 +110,8 @@ export const Navbar2 = (props: Navbar2Props) => {
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [roleChoosingOpen, setRoleChoosingOpen] = useState(false);
   const [isLoginForm, setIsLoginForm] = useState(true);
-  const [loginData, setLoginData] = useState({
-    email: "",
-    password: "",
-  });
-
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const handleAuthButtonClick = (isLogin: boolean) => {
     if (isLogin) {
       setIsLoginForm(true);
@@ -115,20 +121,64 @@ export const Navbar2 = (props: Navbar2Props) => {
     }
   };
 
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log(loginData)
-    try {
-      const response = await UnauthAPI.post(`login`, 
-        
-       loginData
-      );
 
-      console.log(response);
-    } catch (error) {
-      console.log(error);
+  const [isLogin,setIsLogin] = useState(false)
+  const [login, { isLoading, error }] = useLoginMutation();
+  const dispatch = useDispatch();
+  // const {setEmailContext} = useAuth();
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const result = await login({ email, password }).unwrap();
+      console.log(result.data)
+      sessionStorage.setItem('token', result.data);
+      sessionStorage.setItem('email',email)
+      dispatch(setToken(result.data));
+      // setEmailContext(email)
+      // dispatch(setEmail(result.email)); // Lưu email vào Redux store
+      setIsLogin(true)
+    } catch (err) {
+      console.error('Failed to login:');
     }
   };
+
+  console.log(email)
+  // sessionStorage.removeItemItem('token')
+  useEffect(() => {
+    const token = sessionStorage.getItem('token');
+    const storedEmail = sessionStorage.getItem('email') || "";
+    if (token&& storedEmail) {
+      // Nếu có token trong sessionStorage, lưu vào Redux state (nếu cần thiết)
+      // setEmailContext(email)
+      setEmail(storedEmail)
+      setIsLogin(true)
+      dispatch(setToken(token));
+    } else {
+      // Nếu không có token, điều hướng người dùng về trang đăng nhập
+      // history.push('/login');
+      setIsLogin(false)
+
+    }
+  }, [dispatch]);
+
+
+
+
+
+  // const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+  //   console.log(loginData)
+  //   try {
+  //     const response = await UnauthAPI.post(`login`, 
+        
+  //      loginData
+  //     );
+
+  //     console.log(response);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   const handleRoleChoosingClose = () => {
     setRoleChoosingOpen(false);
@@ -140,21 +190,21 @@ export const Navbar2 = (props: Navbar2Props) => {
         <div className="flex min-h-16 items-center justify-between px-[5%] md:min-h-18 lg:min-h-full lg:px-0">
           <img src={logo.src} alt={logo.alt} />
           <div className="flex items-center gap-4 lg:hidden">
-            <div>
-              {buttons.map((button, index) => (
-                <Button
-                  key={`${button.title}-${index}`}
-                  className="w-full px-4 py-1"
-                  variant={button.variant}
-                  size={button.size}
-                  onClick={() =>
-                    handleAuthButtonClick(button.title === "Login")
-                  }
-                >
-                  {button.title}
-                </Button>
-              ))}
-            </div>
+          {isLogin ? (
+            <Dropdown email={email} />
+          ): (
+            buttons.map((button, index) => (
+              <Button
+                key={`${button.title}-${index}`}
+                className="px-6 py-2 mx-2"
+                variant={button.variant}
+                size={button.size}
+                onClick={() => handleAuthButtonClick(button.title === "Login")}
+              >
+                {button.title}
+              </Button>
+            )) 
+          )}
             <button
               className="-mr-2 flex size-12 flex-col items-center justify-center"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -200,19 +250,26 @@ export const Navbar2 = (props: Navbar2Props) => {
               )}
             </div>
           ))}
+           
         </motion.div>
         <div className="hidden justify-self-end lg:block">
-          {buttons.map((button, index) => (
-            <Button
-              key={`${button.title}-${index}`}
-              className="px-6 py-2 mx-2"
-              variant={button.variant}
-              size={button.size}
-              onClick={() => handleAuthButtonClick(button.title === "Login")}
-            >
-              {button.title}
-            </Button>
-          ))}
+          {isLogin ? (
+            <Dropdown email={email} />
+          ): (
+            buttons.map((button, index) => (
+              <Button
+                key={`${button.title}-${index}`}
+                className="px-6 py-2 mx-2"
+                variant={button.variant}
+                size={button.size}
+                onClick={() => handleAuthButtonClick(button.title === "Login")}
+              >
+                {button.title}
+              </Button>
+            )) 
+          )}
+          
+          
         </div>
       </div>
 
@@ -240,7 +297,7 @@ export const Navbar2 = (props: Navbar2Props) => {
                 // e.preventDefault();
                 console.log(isLoginForm ? "Logging in" : "Signing up");
                 setAuthModalOpen(false);
-                handleLogin(e);
+                handleSubmit(e);
               }}
             >
               <div className="grid items-center gap-2">
@@ -248,14 +305,10 @@ export const Navbar2 = (props: Navbar2Props) => {
                 <Input
                   id="email"
                   type="email"
-                  value={loginData.email}
+                  // value={loginData.email}
                   required
-                  onChange={(e) =>
-                    setLoginData({
-                      ...loginData,
-                      email: e.target.value,
-                    })
-                  }
+                  onChange={(e) => setEmail(e.target.value)}
+                  
                 />
               </div>
               <div className="grid items-center gap-2">
@@ -264,13 +317,7 @@ export const Navbar2 = (props: Navbar2Props) => {
                   id="password"
                   type="password"
                   required
-                  value={loginData.password}
-                  onChange={(e) =>
-                    setLoginData({
-                      ...loginData,
-                      password: e.target.value,
-                    })
-                  }
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
               <div className="mt-6 flex w-full flex-col gap-4 md:mt-8">

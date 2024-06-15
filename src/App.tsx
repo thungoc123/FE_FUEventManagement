@@ -30,9 +30,11 @@ import { ApplicationShell4 } from "./components/Pages/ApplicationShell";
 import { Payment } from "./components/Pages/Payment";
 import CreateEvent from "./components/Pages/CreateEvent";
 import Testing from "./components/Pages/Testing";
+import { EventBlog } from "./components/Organisms/TestRedux/EventList";
 
 function App() {
   return (
+    
     <>
       <Router>
         <Routes>
@@ -42,7 +44,6 @@ function App() {
 
           <Route path="/Dashboard" element={<ApplicationShell4 />} />
 
-          {/* <Route path="/EventScheduleDetail" element={<Layout28 />} /> */}
           <Route path="/role-choosing" element={<RoleChoosing />} />
           <Route path="/sponsor" element={<SponsorSignUp />} />
           <Route path="/visitor" element={<VisitorSignUp />} />
@@ -54,6 +55,7 @@ function App() {
 
         </Routes>
       </Router>
+      {/* <EventBlog /> */}
     </>
   );
 }
