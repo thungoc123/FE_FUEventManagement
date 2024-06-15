@@ -41,9 +41,7 @@ function App() {
           <Route path="/EventDetail" element={<EventDetail />} />
           <Route path="/" element={<HomePage />} />
           <Route path="/homepage" element={<HomePageLogout />} />
-
           <Route path="/Dashboard" element={<ApplicationShell4 />} />
-
           <Route path="/role-choosing" element={<RoleChoosing />} />
           <Route path="/sponsor" element={<SponsorSignUp />} />
           <Route path="/visitor" element={<VisitorSignUp />} />
