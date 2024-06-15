@@ -7,6 +7,8 @@ import DateDisplay from "../../Atoms/Date";
 import LocationDisplay from "../../Atoms/Location";
 import { RxChevronRight } from "react-icons/rx";
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../Store/Store";
 type EventPosts = {
   url?: string;
   image?: ImageProps;
@@ -34,8 +36,10 @@ export const EventBlog = (props: EventBlogProps) => {
     ...props,
   } as Props;
   const [visibleEvents, setVisibleEvents] = useState(3);
+  const EventList = useSelector((state: RootState) => state.event.eventList)
+  console.log(EventList)
   const handleViewAll = () => {
-    setVisibleEvents(EventPosts?.length || 0);
+    setVisibleEvents(EventList?.length || 0);
   };
 
   return (
@@ -50,33 +54,32 @@ export const EventBlog = (props: EventBlogProps) => {
           <p className="md:text-md">{description}</p>
         </div>
         <div className="grid grid-cols-1 gap-x-8 gap-y-16 md:grid-cols-2 md:gap-y-12 lg:grid-cols-3">
-          {EventPosts?.slice(0, visibleEvents).map((post, index) => (
-            <div key={`${post.title}-${index}`}>
+          {EventList?.slice(0, visibleEvents).map((post, index) => (
+            <div key={`${post.name}-${index}`}>
               <a
-                href={post.url}
+                href={post.image}
                 className="mb-3 inline-block w-full max-w-full focus-visible:outline-none"
               >
-                <EventImage src={post.image?.src} alt={post.image?.alt} />
+                <EventImage src={post.image} alt="" />
               </a>
               <div className="mt-3 flex items-center justify-between">
-                <DateDisplay date={post.date} />
-                <LocationDisplay location={post.location} />
+                <DateDisplay date={post.timestart} />
+                <DateDisplay date={post.timeend} />
               </div>
               <a
-                href={post.url}
+                href=""
                 className="mb-2 block max-w-full focus-visible:outline-none"
               >
-                <h5 className="text-xl font-bold md:text-2xl">{post.title}</h5>
+                <h5 className="text-xl font-bold md:text-2xl">{post.name}</h5>
               </a>
               <p>{post.description}</p>
               <Button
-                variant={post.button?.variant}
-                size={post.button?.size}
-                iconRight={post.button?.iconRight}
-                iconLeft={post.button?.iconLeft}
+                variant="link"
+                size="sm"
+                
                 className="mt-6 flex items-center justify-center gap-x-1"
               >
-                {post.button?.title}
+                View Detail
               </Button>
             </div>
           ))}

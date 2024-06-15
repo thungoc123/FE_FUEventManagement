@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from "react";
 import { Button } from "@relume_io/relume-ui";
-import type { ImageProps, ButtonProps } from "@relume_io/relume-ui";
+import type { ImgProps, ButtonProps } from "@relume_io/relume-ui";
 import { AnimatePresence, motion } from "framer-motion";
 import { RxChevronDown } from "react-icons/rx";
 import {
@@ -14,10 +14,21 @@ import {
   DialogDescription,
   DialogFooter,
   Label,
-  Input
+  Input,
 } from "@relume_io/relume-ui";
 import { BiLogoGoogle } from "react-icons/bi";
-import RoleChoosing from '../../Pages/RoleChosing';
+import RoleChoosing from "../../Pages/RoleChosing";
+import RoleChoosingwithDialog from "../../Molecules/RoleChoosingWithDialog";
+import UnauthAPI from "../../../config/axios/UnauthAPI";
+
+// import { useLoginMutation } from '';
+
+// setToken
+import { useDispatch } from "react-redux";
+import { useLoginMutation } from "../../../Features/Auth/authApi";
+import { setToken } from "../../../Features/Auth/authSlice";
+import Dropdown from "../Visitor/Dropdown";
+import { useAuth } from "../../../Contexts/AuthContext";
 
 type LinkProps = {
   title?: string;
@@ -29,7 +40,7 @@ type MenuLinkProps = LinkProps & {
 };
 
 type Props = {
-  logo?: ImageProps;
+  logo?: ImgProps;
   links?: MenuLinkProps[];
   buttons?: ButtonProps[];
 };
@@ -99,7 +110,8 @@ export const Navbar2 = (props: Navbar2Props) => {
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [roleChoosingOpen, setRoleChoosingOpen] = useState(false);
   const [isLoginForm, setIsLoginForm] = useState(true);
-
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const handleAuthButtonClick = (isLogin: boolean) => {
     if (isLogin) {
       setIsLoginForm(true);
@@ -108,6 +120,65 @@ export const Navbar2 = (props: Navbar2Props) => {
       setRoleChoosingOpen(true);
     }
   };
+
+
+  const [isLogin,setIsLogin] = useState(false)
+  const [login, { isLoading, error }] = useLoginMutation();
+  const dispatch = useDispatch();
+  // const {setEmailContext} = useAuth();
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const result = await login({ email, password }).unwrap();
+      console.log(result.data)
+      sessionStorage.setItem('token', result.data);
+      sessionStorage.setItem('email',email)
+      dispatch(setToken(result.data));
+      // setEmailContext(email)
+      // dispatch(setEmail(result.email)); // Lưu email vào Redux store
+      setIsLogin(true)
+    } catch (err) {
+      console.error('Failed to login:');
+    }
+  };
+
+  console.log(email)
+  // sessionStorage.removeItemItem('token')
+  useEffect(() => {
+    const token = sessionStorage.getItem('token');
+    const storedEmail = sessionStorage.getItem('email') || "";
+    if (token&& storedEmail) {
+      // Nếu có token trong sessionStorage, lưu vào Redux state (nếu cần thiết)
+      // setEmailContext(email)
+      setEmail(storedEmail)
+      setIsLogin(true)
+      dispatch(setToken(token));
+    } else {
+      // Nếu không có token, điều hướng người dùng về trang đăng nhập
+      // history.push('/login');
+      setIsLogin(false)
+
+    }
+  }, [dispatch]);
+
+
+
+
+
+  // const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+  //   console.log(loginData)
+  //   try {
+  //     const response = await UnauthAPI.post(`login`, 
+        
+  //      loginData
+  //     );
+
+  //     console.log(response);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   const handleRoleChoosingClose = () => {
     setRoleChoosingOpen(false);
@@ -120,19 +191,21 @@ export const Navbar2 = (props: Navbar2Props) => {
         <div className="flex min-h-16 items-center justify-between px-[5%] md:min-h-18 lg:min-h-full lg:px-0">
           <img src={logo.src} alt={logo.alt} />
           <div className="flex items-center gap-4 lg:hidden">
-            <div>
-              {buttons.map((button, index) => (
-                <Button
-                  key={`${button.title}-${index}`}
-                  className="w-full px-4 py-1"
-                  variant={button.variant}
-                  size={button.size}
-                  onClick={() => handleAuthButtonClick(button.title === 'Login')}
-                >
-                  {button.title}
-                </Button>
-              ))}
-            </div>
+          {isLogin ? (
+            <Dropdown email={email} />
+          ): (
+            buttons.map((button, index) => (
+              <Button
+                key={`${button.title}-${index}`}
+                className="px-6 py-2 mx-2"
+                variant={button.variant}
+                size={button.size}
+                onClick={() => handleAuthButtonClick(button.title === "Login")}
+              >
+                {button.title}
+              </Button>
+            )) 
+          )}
             <button
               className="-mr-2 flex size-12 flex-col items-center justify-center"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -162,7 +235,10 @@ export const Navbar2 = (props: Navbar2Props) => {
           className="overflow-hidden px-[5%] text-center lg:flex lg:items-center lg:justify-center lg:px-0 lg:[--height-closed:auto] lg:[--height-open:auto]"
         >
           {links.map((link, index) => (
-            <div key={`${link.title}-${index}`} className="first:pt-4 lg:first:pt-0">
+            <div
+              key={`${link.title}-${index}`}
+              className="first:pt-4 lg:first:pt-0"
+            >
               {link.subLinks && link.subLinks.length > 0 ? (
                 <NavItemDropdown subLinks={link.subLinks} title={link.title} />
               ) : (
@@ -175,24 +251,31 @@ export const Navbar2 = (props: Navbar2Props) => {
               )}
             </div>
           ))}
+           
         </motion.div>
         <div className="hidden justify-self-end lg:block">
-          {buttons.map((button, index) => (
-            <Button
-              key={`${button.title}-${index}`}
-              className="px-6 py-2 mx-2"
-              variant={button.variant}
-              size={button.size}
-              onClick={() => handleAuthButtonClick(button.title === 'Login')}
-            >
-              {button.title}
-            </Button>
-          ))}
+          {isLogin ? (
+            <Dropdown email={email} />
+          ): (
+            buttons.map((button, index) => (
+              <Button
+                key={`${button.title}-${index}`}
+                className="px-6 py-2 mx-2"
+                variant={button.variant}
+                size={button.size}
+                onClick={() => handleAuthButtonClick(button.title === "Login")}
+              >
+                {button.title}
+              </Button>
+            )) 
+          )}
+          
+          
         </div>
       </div>
 
-       {/* Auth Modal */}
-       <Dialog open={authModalOpen} onOpenChange={setAuthModalOpen}>
+      {/* Auth Modal */}
+      <Dialog open={authModalOpen} onOpenChange={setAuthModalOpen}>
         <DialogTrigger asChild>
           <div></div>
         </DialogTrigger>
@@ -200,41 +283,69 @@ export const Navbar2 = (props: Navbar2Props) => {
           <DialogOverlay className="bg-black/25" />
           <DialogContent className="w-full max-w-md bg-white px-10 py-14 md:py-16 md:px-12 md:data-[state=open]:duration-300 md:data-[state=open]:animate-in md:data-[state=closed]:animate-out md:data-[state=closed]:fade-out-0 md:data-[state=open]:fade-in-0 md:data-[state=closed]:slide-out-to-left-1/2 md:data-[state=open]:slide-in-from-left-1/2">
             <DialogHeader>
-              <DialogTitle className="mb-2">{isLoginForm ? 'Log In' : 'Sign Up'}</DialogTitle>
-              <DialogDescription>{isLoginForm ? 'Log in to your account' : 'Create an account to get started'}</DialogDescription>
+              <DialogTitle className="mb-2">
+                {isLoginForm ? "Log In" : "Sign Up"}
+              </DialogTitle>
+              <DialogDescription>
+                {isLoginForm
+                  ? "Log in to your account"
+                  : "Create an account to get started"}
+              </DialogDescription>
             </DialogHeader>
-            <form className="grid gap-4 py-4" onSubmit={(e) => {
-              e.preventDefault();
-              console.log(isLoginForm ? 'Logging in' : 'Signing up');
-              setAuthModalOpen(false);
-            }}>
+            <form
+              className="grid gap-4 py-4"
+              onSubmit={(e) => {
+                // e.preventDefault();
+                console.log(isLoginForm ? "Logging in" : "Signing up");
+                setAuthModalOpen(false);
+                handleSubmit(e);
+              }}
+            >
               <div className="grid items-center gap-2">
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" required />
+                <Input
+                  id="email"
+                  type="email"
+                  // value={loginData.email}
+                  required
+                  onChange={(e) => setEmail(e.target.value)}
+                  
+                />
               </div>
               <div className="grid items-center gap-2">
                 <Label htmlFor="password">Password</Label>
-                <Input id="password" type="password" required />
+                <Input
+                  id="password"
+                  type="password"
+                  required
+                  onChange={(e) => setPassword(e.target.value)}
+                />
               </div>
               <div className="mt-6 flex w-full flex-col gap-4 md:mt-8">
-                <Button type="submit">{isLoginForm ? 'Log in' : 'Sign up'}</Button>
-                <Button variant="secondary" iconLeft={<BiLogoGoogle className="size-6" />} className="gap-x-3">
-                  {isLoginForm ? 'Log in with Google' : 'Sign up with Google'}
+                <Button type="submit">
+                  {isLoginForm ? "Log in" : "Sign up"}
                 </Button>
+                {/* <Button variant="secondary" iconLeft={<BiLogoGoogle className="size-6" />} className="gap-x-3">
+                  {isLoginForm ? 'Log in with Google' : 'Sign up with Google'}
+                </Button> */}
               </div>
               <DialogFooter className="mt-6">
                 {isLoginForm ? (
                   <>
-                    <span>Don't have an account?</span>
+                    {/* <span>Don't have an account?</span>
                     <Button asChild variant="link" size="link" onClick={() => handleAuthButtonClick(false)}>
                     <a className="underline">Sign up</a>
-                    </Button>
-
+                    </Button> */}
                   </>
                 ) : (
                   <>
                     <span>Already have an account?</span>
-                    <Button asChild variant="link" size="link" onClick={() => setIsLoginForm(true)}>
+                    <Button
+                      asChild
+                      variant="link"
+                      size="link"
+                      onClick={handleLogin}
+                    >
                       <a className="underline">Log in</a>
                     </Button>
                   </>
@@ -245,15 +356,30 @@ export const Navbar2 = (props: Navbar2Props) => {
         </DialogPortal>
       </Dialog>
 
+      {/* Role Choosing with DialogContent  */}
+      <RoleChoosingwithDialog
+        roleChoosingOpen={roleChoosingOpen}
+        setRoleChoosingOpen={setRoleChoosingOpen}
+      />
+
       {/* Role Choosing Modal */}
-      {roleChoosingOpen && <RoleChoosing onClose={handleRoleChoosingClose} />}
+
+      {/* {roleChoosingOpen && (
+        <RoleChoosingwithDialog onClose={handleRoleChoosingClose} />
+      )} */}
     </nav>
     
   );
 };
 
 // This component will render your dropdown links
-const NavItemDropdown = ({ title, subLinks }: { title?: string; subLinks?: LinkProps[] }) => {
+const NavItemDropdown = ({
+  title,
+  subLinks,
+}: {
+  title?: string;
+  subLinks?: LinkProps[];
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <div className="relative">
@@ -262,13 +388,15 @@ const NavItemDropdown = ({ title, subLinks }: { title?: string; subLinks?: LinkP
         onClick={() => setIsOpen(!isOpen)}
       >
         {title}
-        <RxChevronDown className={`transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+        <RxChevronDown
+          className={`transition-transform ${isOpen ? "rotate-180" : ""}`}
+        />
       </button>
       <AnimatePresence>
         {isOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
+            animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             className="absolute left-0 mt-2 w-40 bg-white shadow-lg"
           >

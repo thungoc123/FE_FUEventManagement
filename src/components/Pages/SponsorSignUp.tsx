@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom"; // Import useNavigate
 import { useState } from "react";
 import { Button, Input, Label } from "@relume_io/relume-ui";
 import type { ImageProps, ButtonProps } from "@relume_io/relume-ui";
+import UnauthAPI from "../../config/axios/UnauthAPI";
+import AuthAPI from "../../config/axios/AuthAPI";
 
 type Props = {
   logo: ImageProps;
@@ -36,20 +38,33 @@ export const SponsorSignUp = (props: Signup7Props) => {
     ...Signup7Defaults,
     ...props,
   } as Props;
-const [email, setEmail] = useState("");
+  const [email, setEmail] = useState("");
   const [companyName, setCompanyName] = useState("");
-  const[companyID,setCompanyID] = useState("");
-  const[staffEmail,setStaffEmail] = useState("");
+  const [companyID, setCompanyID] = useState("");
+  const [staffEmail, setStaffEmail] = useState("");
   const [password, setPassword] = useState("");
   const [cpassword, setcPassword] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log({ name:email, companyName,companyID,staffEmail , password });
+    console.log({ name: email, companyName, companyID, staffEmail, password });
     navigate("/homepage"); // Navigate to homepage
   };
- 
+
+  // HANDLE GET SPONSOR DATA
+  const handleClick = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // bi 403 roi, khong lay duoc :v khong co permission
+
+    try {
+      const response = await AuthAPI.get(`api-sponsor`);
+
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <section>
@@ -62,10 +77,12 @@ const [email, setEmail] = useState("");
         <div className="relative mx-[5vw] flex items-center justify-center pb-16 pt-20 md:pb-20 md:pt-24 lg:py-20">
           <div className="container max-w-sm">
             <div className="container mb-6 max-w-lg text-center md:mb-8">
-              <h1 className="mb-5 text-5xl font-bold md:mb-6 md:text-7xl lg:text-8xl">{title}</h1>
+              <h1 className="mb-5 text-5xl font-bold md:mb-6 md:text-7xl lg:text-8xl">
+                {title}
+              </h1>
               <p className="md:text-md">{description}</p>
             </div>
-            <form className="grid grid-cols-1 gap-6" onSubmit={handleSubmit}>
+            <form className="grid grid-cols-1 gap-6" onSubmit={handleClick}>
               <div className="grid w-full items-center text-left">
                 <Label htmlFor="email" className="mb-2">
                   Gmail*
@@ -90,7 +107,7 @@ const [email, setEmail] = useState("");
                   required
                 />
               </div>
-              
+
               <div className="grid w-full items-center text-left">
                 <Label htmlFor="companyID" className="mb-2">
                   Company ID/Personal ID*
@@ -145,22 +162,30 @@ const [email, setEmail] = useState("");
                   size={signUpButton.size}
                   iconLeft={signUpButton.iconLeft}
                   iconRight={signUpButton.iconRight}
+                  // onClick={e => handleClick}
+                  type="submit"
                 >
                   {signUpButton.title}
                 </Button>
-                
               </div>
             </form>
             <div className="mt-5 inline-flex w-full items-center justify-center gap-x-1 text-center md:mt-6">
               <p>{logInText}</p>
-              <a href={logInLink.url} className="underline focus-visible:outline-none">
+              <a
+                href={logInLink.url}
+                className="underline focus-visible:outline-none"
+              >
                 {logInLink.text}
               </a>
             </div>
           </div>
         </div>
         <div className="hidden bg-background-secondary lg:block">
-          <img src={image.src} alt={image.alt} className="h-full w-full object-cover" />
+          <img
+            src={image.src}
+            alt={image.alt}
+            className="h-full w-full object-cover"
+          />
         </div>
         <footer className="absolute bottom-0 left-0 right-0 top-auto flex h-16 w-full items-center justify-center pr-[5%] md:h-18 lg:justify-start lg:px-[5%]">
           <p className="text-sm">{footerText}</p>
@@ -181,9 +206,9 @@ export const Signup7Defaults: Signup7Props = {
   signUpButton: {
     title: "Sign up",
   },
-  
+
   image: {
-    src: "src/assets/7.jpg",
+    src: "",
     alt: "Placeholder image",
   },
   logInText: "Already have an account?",

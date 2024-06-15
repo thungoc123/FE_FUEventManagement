@@ -2,15 +2,16 @@ import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 import { useState } from "react";
 import { Button, Input, Label } from "@relume_io/relume-ui";
-import type { ImageProps, ButtonProps } from "@relume_io/relume-ui";
+import type { ImgProps, ButtonProps } from "@relume_io/relume-ui";
+import VAuthAPI from "../../config/axios/VAuthAPI";
 
 type Props = {
-  logo: ImageProps;
+  logo: ImgProps;
   logoLink: string;
   title: string;
   description: string;
   signUpButton: ButtonProps;
-  image: ImageProps;
+  image: ImgProps;
   logInText: string;
   logInLink: {
     text: string;
@@ -48,7 +49,18 @@ export const VisitorSignUp = (props: Signup7Props) => {
     navigate("/homepage"); // Navigate to homepage
   };
  
+  const handleClick = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // bi 403 roi, khong lay duoc :v khong co permission 
 
+    try {
+      const response = await VAuthAPI.post(`api-visitor/sign-up-visitor`);
+
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  }; 
   return (
     <section>
       <div className="relative grid min-h-screen grid-cols-1 items-stretch justify-center overflow-auto lg:grid-cols-2">
@@ -120,6 +132,7 @@ export const VisitorSignUp = (props: Signup7Props) => {
                   size={signUpButton.size}
                   iconLeft={signUpButton.iconLeft}
                   iconRight={signUpButton.iconRight}
+                  onClick={handleClick}
                 >
                   {signUpButton.title}
                 </Button>
@@ -158,7 +171,7 @@ export const Signup7Defaults: Signup7Props = {
   },
   
   image: {
-    src: "src/assets/7.jpg",
+    src: "",
     alt: "Placeholder image",
   },
   logInText: "Already have an account?",

@@ -5,8 +5,23 @@ import { Button } from "@relume_io/relume-ui";
 import { RxCube } from "react-icons/rx";
 import { RadioGroup, RadioGroupItem, Label } from "@relume_io/relume-ui";
 import PaymentMethod from "../../Molecules/PaymentMethod";
+import { Input } from "@relume_io/relume-ui";
+import {
 
-const HeaderTable: React.FC = () => {
+Pagination,
+    PaginationContent,
+    PaginationItem,
+    PaginationLink,
+    PaginationNext,
+    PaginationPrevious,
+    ButtonProps,
+  } from "@relume_io/relume-ui";
+import { BiSearch } from "react-icons/bi";
+
+type Props = {
+    paginationItems: number[];
+  };
+const OrderHistoryTable: React.FC<Props> = (props) => {
   const [quantities, setQuantities] = useState<number[]>([1, 1]);
   const [showDropdown, setShowDropdown] = useState<number | null>(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -44,17 +59,23 @@ const HeaderTable: React.FC = () => {
   };
 
   return (
-    <div className="p-6">
+    <div className="m-18 border border-b-0 border-border-primary p-10">
       <div className="flex justify-between items-center mb-6">
-        <div>
+        <div className="sm:w-1/3 lg:w-1/3">
           <h2 className="text-xl font-bold text-left">Heading goes here</h2>
           <p className="text-sm text-gray-600">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
             varius enim in eros.
           </p>
         </div>
-        <Button onClick={openModal}>Check out</Button>
+        <div className="lg:w-1/3 sm:w-1/2">
+        <Input id="search" placeholder="Search" className="" icon={<BiSearch className="size-6" />} />
+
+        </div>
+
       </div>
+      <div  className="overflow-x-auto">
+
       <table className="min-w-full bg-white border border-gray-200">
         <thead>
           <tr>
@@ -75,15 +96,7 @@ const HeaderTable: React.FC = () => {
               <td className="px-4 py-2 border-b text-center">1/11/2050</td>
               <td className="px-4 py-2 border-b text-center">$55.00</td>
               <td className="px-4 py-2 border-b text-center">
-                <input
-                  className="w-16 px-2 py-1 border border-gray-300 rounded text-center"
-                  type="number"
-                  value={quantity}
-                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                    handleQuantityChange(index, Number(e.target.value))
-                  }
-                  min="0"
-                />
+                1
               </td>
               {/* bg-red-100 text-black font-bold p-4 rounded-md */}
               <td className="px-2 py-2 border-b text-center">
@@ -116,47 +129,30 @@ const HeaderTable: React.FC = () => {
           ))}
         </tbody>
       </table>
+      </div>
 
-      <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={closeModal}
-        className="fixed inset-0 flex items-center justify-center"
-        overlayClassName="fixed inset-0 bg-black bg-opacity-50"
-      >
-        <div className="bg-white p-6 shadow-lg w-96">
-          <PaymentMethod
-            selectedOption={selectedOption}
-            onChange={setSelectedOption}
-            onClose={closeModal}
-          />
-
-          {/* <h2 className="text-xl font-bold">
-            <Button variant="tertiary" size="icon">
-              <RxCube />
-            </Button>
-            Payment method
-          </h2>
-          
-          <RadioGroup defaultValue="option-one">
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="option-one" id="option-one" />
-              <Label htmlFor="option-one">Option one</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="option-two" id="option-two" />
-              <Label htmlFor="option-two">Option two</Label>
-            </div>
-          </RadioGroup> */}
-          {/* <button
-            className="mt-4 px-4 py-2 bg-black text-white rounded hover:bg-gray-800"
-            
-          >
-            Close
-          </button> */}
-        </div>
-      </Modal>
+      <Pagination className="mt-8">
+            <PaginationContent className="flex justify-center">
+              <PaginationItem>
+                <PaginationPrevious href="#" size="sm" variant="secondary" />
+              </PaginationItem>
+              <PaginationItem className="hidden md:block">
+                {props.paginationItems.map((item, index) => (
+                  <PaginationLink key={index} href="#" size="sm" variant="link" className="px-4 py-2">
+                    {item}
+                  </PaginationLink>
+                ))}
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationNext href="#" size="sm" variant="secondary" />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+    
     </div>
   );
 };
-
-export default HeaderTable;
+OrderHistoryTable.defaultProps = {
+    paginationItems: [1, 2, 3, 4, 5],
+}
+export default OrderHistoryTable;
