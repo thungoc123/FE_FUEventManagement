@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^41.4.2",
+    "@ckeditor/ckeditor5-react": "^7.0.0",
     "@fortawesome/fontawesome-svg-core": "^6.5.2",
     "@fortawesome/free-solid-svg-icons": "^6.5.2",
     "@fortawesome/react-fontawesome": "^0.2.2",
@@ -19,11 +21,14 @@
     "@reduxjs/toolkit": "^2.2.5",
     "@relume_io/relume-tailwind": "^0.1.0",
     "@relume_io/relume-ui": "^0.2.0",
+    "@types/ckeditor__ckeditor5-core": "^37.0.0",
     "@types/react-modal": "^3.16.3",
     "axios": "^1.7.2",
+    "chart.js": "^4.4.3",
     "classnames": "^2.5.1",
     "framer-motion": "^11.2.10",
     "react": "^18.2.0",
+    "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
     "react-dropdown": "^1.11.0",
     "react-modal": "^3.16.1",

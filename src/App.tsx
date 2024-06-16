@@ -25,12 +25,12 @@ import { OrderHistory } from "./components/Pages/OrderHistory";
 import HomePageLogout from "./components/Pages/HomePageLogout";
 import SurveyForm from "./components/Pages/TestforCreateSurvey";
 import QuestionForm from "./components/Pages/Question";
-import { ApplicationShell4 } from "./components/Pages/ApplicationShell";
+// import { ApplicationShell4 } from "./components/Pages/ApplicationShell";
 import { Payment } from "./components/Pages/Payment";
 import CreateEvent from "./components/Pages/CreateEvent";
 import SponsorHomepage from "./components/Pages/SponsorProgramePage";
 import ManageAccount from "./components/Pages/ManageAccount";
-import ServiceTerm from "./components/Pages/AboutPage";
+// import ServiceTerm from "./components/Pages/AboutPage";
 import { AddCheckStaffTable } from "./components/Organisms/Dashboard/AddCheckingStaffTable";
 import { AddSponsorTable } from "./components/Organisms/Dashboard/AddSponsorTable";
 import { EventScheduleTable } from "./components/Organisms/Dashboard/EventScheduleTable";
@@ -47,21 +47,33 @@ function App() {
           <Route path="/EventDetail" element={<EventDetail />} />
           <Route path="/" element={<HomePage />} />
           <Route path="/homepage" element={<HomePageLogout />} />
+<<<<<<< Updated upstream
           <Route path="/sponsor-homepage" element={<SponsorHomepage />} />
           <Route path="/Dashboard" element={<ApplicationShell4 />} />
           <Route path="/role-choosing" element={<RoleChoosing />} />
+=======
+
+          <Route path="/Dashboard" element={<AnalyticsDashboard />} />
+          <Route path="/Dashboard/Question" element={<QuestionAnalyticsDashboard />} />
+>>>>>>> Stashed changes
           <Route path="/sponsor" element={<SponsorSignUp />} />
           <Route path="/visitor" element={<VisitorSignUp />} />
           <Route path="/payment" element={<Payment />} />
           <Route path="/order-history" element={<OrderHistory />} />
           <Route path="/survey" element={<SurveyForm />} />
           <Route path="/question" element={<QuestionForm />} />
+<<<<<<< Updated upstream
           <Route path="/create-event" element={<CreateEvent />} />
           <Route path="/manage" element={<ManageAccount />} />
           <Route path="/service-term" element={<ServiceTerm />} />
           <Route path="/checkstaff" element={<AddCheckStaffTable />} />
           <Route path="/sponsor-table" element={<AddSponsorTable />} />
           <Route path="/event-table" element={<EventScheduleTable />} />
+=======
+          <Route path="/create-event" element={<Testing />} />
+          <Route path="/Sponsor/Program" element={<Program />} />
+          <Route path="/Sponsor/Program/Create" element={<AddProgram />} />
+>>>>>>> Stashed changes
 
         </Routes>
       </Router>
