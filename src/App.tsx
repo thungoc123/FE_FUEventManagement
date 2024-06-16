@@ -29,6 +29,7 @@ import QuestionForm from "./components/Pages/Question";
 import { ApplicationShell4 } from "./components/Pages/ApplicationShell";
 import { Payment } from "./components/Pages/Payment";
 import CreateEvent from "./components/Pages/CreateEvent";
+<<<<<<< HEAD
 import SponsorHomepage from "./components/Pages/SponsorProgramePage";
 import ManageAccount from "./components/Pages/ManageAccount";
 import ServiceTerm from "./components/Pages/AboutPage";
@@ -36,20 +37,26 @@ import { AddCheckStaffTable } from "./components/Organisms/Dashboard/AddChecking
 import { AddSponsorTable } from "./components/Organisms/Dashboard/AddSponsorTable";
 import { EventScheduleTable } from "./components/Organisms/Dashboard/EventScheduleTable";
 // import CreateEvent from "./components/Organisms/Dashboard/CreateEventButton";
+=======
+import Testing from "./components/Pages/Testing";
+import { EventBlog } from "./components/Organisms/TestRedux/EventList";
+>>>>>>> 6a32defc99fda3be136bae018c14917ab2b5092e
 
 function App() {
   return (
+    
     <>
       <Router>
         <Routes>
           <Route path="/EventDetail" element={<EventDetail />} />
           <Route path="/" element={<HomePage />} />
           <Route path="/homepage" element={<HomePageLogout />} />
+<<<<<<< HEAD
           <Route path="/sponsor-homepage" element={<SponsorHomepage />} />
 
+=======
+>>>>>>> 6a32defc99fda3be136bae018c14917ab2b5092e
           <Route path="/Dashboard" element={<ApplicationShell4 />} />
-
-          {/* <Route path="/EventScheduleDetail" element={<Layout28 />} /> */}
           <Route path="/role-choosing" element={<RoleChoosing />} />
           <Route path="/sponsor" element={<SponsorSignUp />} />
           <Route path="/visitor" element={<VisitorSignUp />} />
@@ -66,6 +73,7 @@ function App() {
 
         </Routes>
       </Router>
+      {/* <EventBlog /> */}
     </>
   );
 }
