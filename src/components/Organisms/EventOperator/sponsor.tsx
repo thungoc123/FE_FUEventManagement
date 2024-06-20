@@ -1,8 +1,12 @@
 import { BiEdit } from "react-icons/bi";
-import { ApplicationShell4 } from "./AppModel";
-import { TableTemplate } from "./Table1";
-import AddFeedbackButton from "./AddFeedbackButton";
+// import { ApplicationShell4 } from "./AppModel";
+// import { TableTemplate } from "./Table1";
+// import AddFeedbackButton from "./AddFeedbackButton";
 import { SponsorTable } from "../../../Types/sponsor";
+import { ApplicationShell4 } from "../Dashboard/ApplicationShell";
+import { TableTemplate } from "../Dashboard/TableTemplate";
+import AddFeedbackButton from "../Dashboard/AddFeedbackButton";
+import AddSponsor from "../Dashboard/AddSponsor";
 
 export const AddSponsorTable = () => {
   const tableHeaders = ["Name","Sponsor_Program", "Email", "Date", "Edit"];
@@ -30,11 +34,18 @@ export const AddSponsorTable = () => {
         Edit: <BiEdit />
     },
   ];
+  const tableHeaderClasses = [
+    "w-[200px] pr-4 xxl:w-[225px]",
+    "w-[200px] pr-4 xxl:w-[250px]",
+    "w-[128px] pr-4 xxl:w-[250px]",
+    "w-[200px] pr-4 xxl:w-[250px]",
+    "w-[192px] pr-4 xxl:w-[150px]",
+    "w-[96px] pr-4 text-center",
+  ];
   const paginationItems = [1, 2, 3, 4, 5];
   return (
     <>
-      <ApplicationShell4
-        MainComponent={
+    
           <TableTemplate
             headerTitle="Sponsor"
             headerDescription="List of Sponsor"
@@ -48,12 +59,11 @@ export const AddSponsorTable = () => {
             ]}
             tableHeaders={tableHeaders}
             tableRows={tableRows} // Truyền dữ liệu mới cho tableRows
-            paginationItems={paginationItems}
+            // paginationItems={paginationItems}
+            tableHeadersClasses={tableHeaderClasses}
           />
-        }
-        // MainComponent = { <Table1 />}
-        // StateComponent={<AddCheckingStaff />}
-      />
+          <AddSponsor />
+       
     </>
   );
 };

@@ -6,6 +6,9 @@ import "./index.css";
 import { Provider } from "react-redux";
 import { store } from "./Store/Store.ts";
 import { AuthProvider } from "./Contexts/AuthContext.tsx";
+import Modal from "./components/Organisms/Guest/Modal.tsx";
+
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
   // <React.StrictMode>
   <Provider store={store}>

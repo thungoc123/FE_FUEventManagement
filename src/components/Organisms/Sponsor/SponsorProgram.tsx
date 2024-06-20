@@ -1,5 +1,9 @@
 import {
     Button,
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
     Input,
     Select,
     SelectContent,
@@ -8,7 +12,7 @@ import {
     SelectValue,
   } from "@relume_io/relume-ui";
   import type { ButtonProps } from "@relume_io/relume-ui";
-  import { BiPencil,BiBookmark, BiMap, BiSearch } from "react-icons/bi";
+  import { BiPencil,BiBookmark,BiDotsHorizontalRounded, BiMap, BiSearch } from "react-icons/bi";
   
   type ImageProps = {
     src: string;
@@ -31,13 +35,14 @@ import {
     inputIcon: React.ReactNode;
     selectPlaceholder: string;
     selectItems: string[];
+    options: string[];
     properties: PropertyCard[];
   };
   
   export type GridList6Props = React.ComponentPropsWithoutRef<"section"> & Partial<Props>;
   
   export const GridList6 = (props: GridList6Props) => {
-    const { heading, description, inputIcon, selectPlaceholder, selectItems, properties } = {
+    const { heading, description, inputIcon, selectPlaceholder, selectItems, properties,options } = {
       ...GridList6Defaults,
       ...props,
     } as Props;
@@ -81,12 +86,10 @@ import {
                 <div className="mb-2 flex items-center justify-between gap-4">
                   <h2 className="text-md font-bold leading-[1.4] md:text-xl">{property.title}</h2>
                   <div className="p-2">
-                  <Select>
+                  {/* <Select>
               <SelectTrigger >
-                {/* <SelectValue placeholder={selectPlaceholder} /> */}
-                {/* <Button className="cursor-pointer" size="icon" variant="tertiary" asChild> */}
+                
                       <BiPencil className="size-6" />
-                    {/* </Button> */}
               </SelectTrigger>
               <SelectContent>
                 {selectItems.map((item, index) => (
@@ -95,8 +98,17 @@ import {
                   </SelectItem>
                 ))}
               </SelectContent>
-            </Select>
-                   
+            </Select> */}
+            <DropdownMenu>
+            <DropdownMenuTrigger>
+              <BiDotsHorizontalRounded className="size-6" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              {options.map((option, index) => (
+                <DropdownMenuItem key={index}>{option}</DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
                   </div>
                 </div>
                 <p className="mb-3 md:mb-4">{property.description}</p>
@@ -129,6 +141,7 @@ import {
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros.",
     selectPlaceholder: "Sort by",
     inputIcon: <BiSearch className="size-6" />,
+    options: ["Option One", "Option Two", "Option Three"],
     selectItems: ["Option 1", "Option 2", "Option 3"],
     properties: [
       {

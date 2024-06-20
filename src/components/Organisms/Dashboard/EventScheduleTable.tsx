@@ -2,7 +2,7 @@ import { BiEdit } from "react-icons/bi";
 import { ApplicationShell4 } from "./AppModel";
 import { TableTemplate } from "./Table1";
 import AddFeedbackButton from "./AddFeedbackButton";
-import { EventTable } from "../../../Type/eventSchedule";
+import { EventTable } from "../../../Types/eventSchedule";
 
 export const EventScheduleTable = () => {
   const tableHeaders = ["No","Schedule", "Duration", "Actor", "Time","Date","Hinh_Thuc","Detail","Edit"];

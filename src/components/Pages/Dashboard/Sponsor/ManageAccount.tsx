@@ -37,29 +37,15 @@ import {
   SheetTrigger,
 } from "@relume_io/relume-ui";
 import { MdTrendingUp } from "react-icons/md";
-import {
-  RxChevronDown,
-  RxChevronRight,
-  RxCross2,
-  RxHamburgerMenu,
-} from "react-icons/rx";
-import { ReactNode, useEffect, useState } from "react";
+import { RxChevronDown, RxChevronRight, RxCross2, RxHamburgerMenu } from "react-icons/rx";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Stat1 } from "./StateCard";
-import { Table1 } from "./Table";
-import { useNavigate } from "react-router-dom";
+import Account from "../../../Organisms/Dashboard/Account";
+// import Account from "../Organisms/Dashboard/Account";
 
-type ParentComponentProps = {
-  MainComponent : React.ReactNode;
-  StateComponent? : React.ReactNode;
-}
-
-
-
-export const ApplicationShell4:React.FC<ParentComponentProps> = ({MainComponent,StateComponent }) => {
+export const ManageAccount = () => {
   const [isMobile, setIsMobile] = useState<boolean>(false);
-  const [isSearchIconClicked, setIsSearchIconClicked] =
-    useState<boolean>(false);
+  const [isSearchIconClicked, setIsSearchIconClicked] = useState<boolean>(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -77,7 +63,7 @@ export const ApplicationShell4:React.FC<ParentComponentProps> = ({MainComponent,
     <section>
       {/* Topbar */}
       <div className="sticky top-0 flex min-h-16 w-full items-center border-b border-border-primary bg-white px-4 md:min-h-18 md:px-8">
-        <div className="mx-auto grid size-full grid-cols-2 items-center justify-between gap-4 lg:grid-cols-[1fr_1.5fr_1fr] z-100">
+        <div className="mx-auto grid size-full grid-cols-2 items-center justify-between gap-4 lg:grid-cols-[1fr_1.5fr_1fr]">
           <a href="#" className="ml-14 justify-self-start lg:ml-0">
             <img
               src="https://relume-assets.s3.amazonaws.com/logo-image.svg"
@@ -87,11 +73,7 @@ export const ApplicationShell4:React.FC<ParentComponentProps> = ({MainComponent,
           </a>
 
           <div className="hidden lg:block lg:w-full lg:max-w-md lg:justify-self-center">
-            <Input
-              className="w-full"
-              placeholder="Search"
-              icon={<BiSearch className="size-6" />}
-            />
+            <Input className="w-full" placeholder="Search" icon={<BiSearch className="size-6" />} />
           </div>
 
           <div className="flex items-center gap-2 justify-self-end md:gap-4">
@@ -118,9 +100,7 @@ export const ApplicationShell4:React.FC<ParentComponentProps> = ({MainComponent,
                     placeholder="Search"
                     icon={<BiSearch className="size-6" />}
                   />
-                  <button
-                    onClick={() => setIsSearchIconClicked(!isSearchIconClicked)}
-                  >
+                  <button onClick={() => setIsSearchIconClicked(!isSearchIconClicked)}>
                     <RxCross2 className="ml-4 size-6" />
                   </button>
                 </motion.div>
@@ -131,16 +111,10 @@ export const ApplicationShell4:React.FC<ParentComponentProps> = ({MainComponent,
                 <div className="absolute bottom-auto left-auto right-2 top-2 size-2 rounded-full bg-black outline outline-[3px] outline-offset-0 outline-white" />
                 <BiBell className="size-6" />
               </DropdownMenuTrigger>
-              <DropdownMenuContent
-                className="max-w-[19rem] px-0"
-                align="end"
-                sideOffset={0}
-              >
+              <DropdownMenuContent className="max-w-[19rem] px-0" align="end" sideOffset={0}>
                 <div className="flex flex-col">
                   <div className="flex items-center justify-between px-4 py-2">
-                    <DropdownMenuLabel className="p-0">
-                      Notifications
-                    </DropdownMenuLabel>
+                    <DropdownMenuLabel className="p-0">Notifications</DropdownMenuLabel>
                     <a href="#">Mark as read</a>
                   </div>
                   <DropdownMenuSeparator />
@@ -154,10 +128,7 @@ export const ApplicationShell4:React.FC<ParentComponentProps> = ({MainComponent,
                         />
                       </div>
                       <div>
-                        <p>
-                          Lorem ipsum dolor sit amet, consectetur adipiscing
-                          elit.
-                        </p>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
                         <p className="mt-2 text-sm">11 Jan 2022</p>
                       </div>
                     </DropdownMenuItem>
@@ -170,10 +141,7 @@ export const ApplicationShell4:React.FC<ParentComponentProps> = ({MainComponent,
                         />
                       </div>
                       <div>
-                        <p>
-                          Lorem ipsum dolor sit amet, consectetur adipiscing
-                          elit.
-                        </p>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
                         <p className="mt-2 text-sm">11 Jan 2022</p>
                       </div>
                     </DropdownMenuItem>
@@ -181,12 +149,7 @@ export const ApplicationShell4:React.FC<ParentComponentProps> = ({MainComponent,
                 </div>
                 <DropdownMenuSeparator />
                 <div className="flex w-full items-end justify-end px-4 py-2">
-                  <Button
-                    variant="link"
-                    size="link"
-                    iconRight={<RxChevronRight />}
-                    asChild
-                  >
+                  <Button variant="link" size="link" iconRight={<RxChevronRight />} asChild>
                     <a href="#">View All</a>
                   </Button>
                 </div>
@@ -200,11 +163,7 @@ export const ApplicationShell4:React.FC<ParentComponentProps> = ({MainComponent,
                   className="size-10 rounded-full object-cover"
                 />
               </DropdownMenuTrigger>
-              <DropdownMenuContent
-                align="end"
-                sideOffset={0}
-                className="mt-1.5 px-0 py-2"
-              >
+              <DropdownMenuContent align="end" sideOffset={0} className="mt-1.5 px-0 py-2">
                 <DropdownMenuGroup>
                   <DropdownMenuItem>
                     <a href="#">My Profile</a>
@@ -254,21 +213,15 @@ export const ApplicationShell4:React.FC<ParentComponentProps> = ({MainComponent,
           </div>
         </div>
 
-        {/* Shell Main wrapper  */}
-        {/*  bg-background-secondary text-black/50*/}
-        <main className="relative w-[30%] flex-1">
-          <div className="border-b-2 border-dashed border-[#d3d3d3] px-2 py-6 text-center bg-white">
-            {/* <Stat1 /> */}
-            {StateComponent}
-          </div>
-          <div className="container px-2 py-2  md:py-10 lg:py-12">
-            {/* <Table1 /> */}
-            {MainComponent}
-            {/* <div className="grid grid-cols-1 gap-12">
-              <div className="flex h-screen items-center justify-center border-2 border-dashed border-[#d3d3d3] py-6 text-center text-black/50">
-             
+        {/* Shell Main wrapper */}
+        <main className="relative -z-10 flex-1 bg-white">
+ 
+  <div className="container px-6 py-8 md:px-8 md:py-10 lg:py-12">
+    <div className="grid grid-cols-1 gap-12">
+      <div >
+               <Account/>
               </div>
-            </div> */}
+            </div>
           </div>
         </main>
       </div>
@@ -277,10 +230,6 @@ export const ApplicationShell4:React.FC<ParentComponentProps> = ({MainComponent,
 };
 
 const Navigation = () => {
-  const navigate = useNavigate();
-  const goToHome = () => {
-    navigate("/");
-  };
   return (
     <nav className="absolute left-0 right-auto top-0 float-right h-full w-[80vw] max-w-[none] md:w-full md:max-w-[19.5rem] lg:relative lg:inset-auto lg:w-auto lg:max-w-[auto]">
       <div className="absolute flex size-full flex-col gap-4 border-r border-border-primary bg-white py-6 lg:gap-6 lg:border-none lg:py-0">
@@ -288,7 +237,7 @@ const Navigation = () => {
           <a href="#" className="flex items-center gap-x-2 p-2 text-center">
             <span className="flex w-full items-center gap-3">
               <BiHome className="size-6 shrink-0" />
-              <span onClick={goToHome}>Home</span>
+              <span>Home</span>
             </span>
           </a>
           <a href="#" className="flex items-center gap-x-2 p-2 text-center">
@@ -341,12 +290,6 @@ const Navigation = () => {
           </a>
           <a href="#" className="flex items-center gap-x-2 p-2 text-center">
             <span className="flex w-full items-center gap-3">
-              <BiLayer className="size-6 shrink-0" />
-              <p>Feedback</p>
-            </span>
-          </a>
-          <a href="#" className="flex items-center gap-x-2 p-2 text-center">
-            <span className="flex w-full items-center gap-3">
               <BiFile className="size-6 shrink-0" />
               <p>Documents</p>
             </span>
@@ -373,6 +316,5 @@ const Navigation = () => {
   );
 };
 
-export const ApplicationShell4Defaults = {};
+export default ManageAccount;
 
-ApplicationShell4.displayName = "ApplicationShell4";
