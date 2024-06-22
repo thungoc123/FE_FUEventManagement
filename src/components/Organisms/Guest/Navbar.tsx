@@ -114,6 +114,10 @@ export const Navbar2 = (props: Navbar2Props) => {
   const [isResetPassword, setIsResetPassword] = useState(false);
   const [resetData, setResetData] = useState({ email: "", newPassword: "" });
   const [isNewPassword, setIsNewPassword] = useState(false);
+
+  const [isResetPassword, setIsResetPassword] = useState(false);
+  const [resetData, setResetData] = useState({ email: "", newPassword: "" });
+  const [isNewPassword, setIsNewPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [newPasswordData, setNewPasswordData] = useState({
@@ -175,6 +179,8 @@ export const Navbar2 = (props: Navbar2Props) => {
   const [isLogin,setIsLogin] = useState(false)
   const [login, { isLoading, error }] = useLoginMutation();
   const dispatch = useDispatch();
+  // // console.log(email)
+  // // sessionStorage.removeItemItem('token')
   // // console.log(email)
   // // sessionStorage.removeItemItem('token')
   useEffect(() => {
@@ -341,6 +347,38 @@ export const Navbar2 = (props: Navbar2Props) => {
                 handleNewPasswordClick();
               } else {
                 e.preventDefault();
+      <DialogTrigger asChild>
+        <div></div>
+      </DialogTrigger>
+      <DialogPortal>
+        <DialogOverlay className="bg-black/25" />
+        <DialogContent className="w-full max-w-md bg-white px-10 py-14 md:py-16 md:px-12 md:data-[state=open]:duration-300 md:data-[state=open]:animate-in md:data-[state=closed]:animate-out md:data-[state=closed]:fade-out-0 md:data-[state=open]:fade-in-0 md:data-[state=closed]:slide-out-to-left-1/2 md:data-[state=open]:slide-in-from-left-1/2">
+          <DialogHeader>
+            <DialogTitle className="mb-2">
+              {isNewPassword ? "New Password" : isResetPassword ? "Reset Password" : isLoginForm ? "Log In" : "Sign Up"}
+            </DialogTitle>
+            <DialogDescription>
+              {isNewPassword
+                ? "Enter your new password"
+                : isResetPassword
+                ? "Enter your email to reset password"
+                : isLoginForm
+                ? "Log in to your account"
+                : "Create an account to get started"}
+            </DialogDescription>
+          </DialogHeader>
+          <form
+            className="grid gap-4 py-4"
+            onSubmit={(e) => {
+              if (isNewPassword) {
+                handleNewPasswordSubmit(e);
+              } else if (isResetPassword) {
+                e.preventDefault();
+                console.log('Resetting password for', resetData.email);
+                // Implement your reset password logic here
+                handleNewPasswordClick();
+              } else {
+                e.preventDefault();
                 console.log(isLoginForm ? "Logging in" : "Signing up");
                 setAuthModalOpen(false);
                 handleLogin(e);
@@ -381,11 +419,52 @@ export const Navbar2 = (props: Navbar2Props) => {
                 </div>
               </>
             ) : isResetPassword ? (
+                handleLogin(e);
+              }
+            }}
+          >
+            {isNewPassword ? (
+              <>
+                <div className="grid items-center gap-2">
+                  <Label htmlFor="new-password">New Password</Label>
+                  <Input
+                    id="new-password"
+                    type="password"
+                    value={newPasswordData.newPassword}
+                    required
+                    onChange={(e) =>
+                      setNewPasswordData({
+                        ...newPasswordData,
+                        newPassword: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <div className="grid items-center gap-2">
+                  <Label htmlFor="confirm-password">Confirm New Password</Label>
+                  <Input
+                    id="confirm-password"
+                    type="password"
+                    value={newPasswordData.confirmPassword}
+                    required
+                    onChange={(e) =>
+                      setNewPasswordData({
+                        ...newPasswordData,
+                        confirmPassword: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+              </>
+            ) : isResetPassword ? (
               <div className="grid items-center gap-2">
+                <Label htmlFor="reset-email">Email</Label>
                 <Label htmlFor="reset-email">Email</Label>
                 <Input
                   id="reset-email"
+                  id="reset-email"
                   type="email"
+                  value={resetData.email}
                   value={resetData.email}
                   required
                   onChange={(e) =>
@@ -453,7 +532,102 @@ export const Navbar2 = (props: Navbar2Props) => {
                   onClick={handleNewPasswordClick}
                 >
                   <a className="underline">New Password</a>
+                  onChange={(e) =>
+                    setResetData({
+                      ...resetData,
+                      email: e.target.value,
+                    })
+                  }
+                />
+              </div>
+            ) : (
+              <>
+                <div className="grid items-center gap-2">
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={loginData.email}
+                    required
+                    onChange={(e) =>
+                      setLoginData({
+                        ...loginData,
+                        email: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <div className="grid items-center gap-2">
+                  <Label htmlFor="password">Password</Label>
+                  <Input
+                    id="password"
+                    type="password"
+                    required
+                    value={loginData.password}
+                    onChange={(e) =>
+                      setLoginData({
+                        ...loginData,
+                        password: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+              </>
+            )}
+            <div className="mt-6 flex w-full flex-col gap-4 md:mt-8">
+              <Button type="submit">
+                {isNewPassword ? "Set New Password" : isResetPassword ? "Reset Password" : isLoginForm ? "Log in" : "Sign up"}
+              </Button>
+            </div>
+            <DialogFooter className="mt-6">
+              {isNewPassword ? (
+                <Button
+                  asChild
+                  variant="link"
+                  size="link"
+                  onClick={handleBackToLoginClick}
+                >
+                  <a className="underline">Back to Log in</a>
                 </Button>
+              ) : isResetPassword ? (
+                <Button
+                  asChild
+                  variant="link"
+                  size="link"
+                  onClick={handleNewPasswordClick}
+                >
+                  <a className="underline">New Password</a>
+                </Button>
+              ) : isLoginForm ? (
+                <>
+                  <span>Forgot your password?</span>
+                  <Button
+                    asChild
+                    variant="link"
+                    size="link"
+                    onClick={handleForgotPasswordClick}
+                  >
+                    <a className="underline">Reset password</a>
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <span>Already have an account?</span>
+                  <Button
+                    asChild
+                    variant="link"
+                    size="link"
+                    onClick={handleLogin}
+                  >
+                    <a className="underline">Log in</a>
+                  </Button>
+                </>
+              )}
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </DialogPortal>
+    </Dialog>
               ) : isLoginForm ? (
                 <>
                   <span>Forgot your password?</span>
