@@ -378,9 +378,7 @@ export const Navbar2 = (props: Navbar2Props) => {
                   <Label htmlFor="reset-email">Email</Label>
                   <Input
                     id="reset-email"
-                    id="reset-email"
                     type="email"
-                    value={resetData.email}
                     value={resetData.email}
                     required
                     onChange={(e) =>
@@ -552,7 +550,7 @@ export const Navbar2Defaults = {
     src: "/images/logo.svg",
     alt: "Logo",
   },
-  
+
   links: [
     {
       title: "Home",
