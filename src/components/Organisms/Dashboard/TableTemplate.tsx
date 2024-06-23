@@ -25,13 +25,13 @@ import EventTag from "../../Atoms/EventTag";
   type Props<T> = {
     headerTitle: string;
     headerDescription: string;
-    buttons: ButtonProps[];
+    buttons?: ButtonProps[];
     tableHeaders: string[];
     tableRows: T[];
     paginationItems?: number[];
     tableHeadersClasses: string[];
     addNew? : React.ReactNode;
-
+    
     // search?: Search;
   };
   
@@ -108,43 +108,5 @@ import EventTag from "../../Atoms/EventTag";
       </section>
     );
   };
-  
-//   export const TableTemplateDefaults: Props<Record<string, any>> = {
-//     headerTitle: "Table Header",
-//     headerDescription: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-//     buttons: [
-//       { children: "Button", variant: "secondary", size: "sm" },
-//       { children: "Button", size: "sm" },
-//     ],
-//     tableHeaders: ["No", "Question", "Number", "Survey Name", "Date", "View"],
-//     tableRows: [
-//       {
-//         No: "1" ,
-//         Question: 'Question 1',
-//         Number: 2,
-//         SurveyName: "Test",
-//         Date: "20/11/2023",
-//         View: "view"
-//       },
-//       {
-//         No: "2" ,
-//         Question: 'Question 1',
-//         Number: 2,
-//         SurveyName: "Test",
-//         Date: "20/11/2023",
-//         View: "view"
-//       },
-//       {
-//         No: "3" ,
-//         Question: 'Question 1',
-//         Number: 2,
-//         SurveyName: "Test",
-//         Date: "20/11/2023",
-//         View: "view"
-//       },
-//     ],
-//     paginationItems: [1, 2, 3, 4, 5],
-//   };
-  
-  TableTemplate.displayName = "Table1";
+TableTemplate.displayName = "Table1";
   

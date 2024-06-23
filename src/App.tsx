@@ -1,27 +1,10 @@
-import { useState } from "react";
-
 // App.tsx
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  useNavigate,
-} from "react-router-dom";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-// import HomePage from "./components/Pages/HomePage";
-// import EventDetail from "./components/Pages/EventDetail";
-
-// import * as React from 'react';
-
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import "./index.css";
 import RoleChoosing from "./components/Pages/Guest/RoleChosing";
 import QuestionForm from "./components/Pages/Dashboard/EventOperator/Question";
 import SponsorHomepage from "./components/Pages/Guest/SponsorProgramePage";
-import { AddCheckStaffTable } from "./components/Organisms/Dashboard/AddCheckingStaffTable";
-import { AddSponsorTable } from "./components/Organisms/Dashboard/AddSponsorTable";
-import { EventScheduleTable } from "./components/Organisms/Dashboard/EventScheduleTable";
 import { Program } from "./components/Pages/Dashboard/Sponsor/Program";
 import { AddProgram } from "./components/Pages/Dashboard/Sponsor/CreateProgram";
 import { QuestionAnalyticsDashboard } from "./components/Pages/Dashboard/QuestionAnalyticsDashboard";
@@ -40,48 +23,158 @@ import HomePage from "./components/Pages/Guest/HomePage";
 import EventDetail from "./components/Pages/Guest/EventDetail";
 import { ManageFeedbackDetail } from "./components/Pages/Dashboard/EventOperator/ManageFeedbackDetail";
 import { ManageFeedback } from "./components/Pages/Dashboard/EventOperator/ManageFeedback";
-import Stepper from "./components/Molecules/Stepper";
-// import Modal from "./components/Organisms/Guest/Modal";
 import ReactModal from "react-modal";
+import TokenDecode from "./ulities/TokenDecode";
+import { Login1 } from "./components/Pages/Login";
+import ProtectedRoute from "./ulities/ProtectedRoute";
+import RequireAuth from "./ulities/ProtectedRoute";
+import { Admin } from "./components/Pages/Admin";
 
 function App() {
-  ReactModal.setAppElement('#root');
+  ReactModal.setAppElement("#root");
 
   return (
     <>
       <Router>
         <Routes>
-          <Route path="/EventDetail" element={<EventDetail />} />
+          {/* Guest  */}
+          <Route path="/eventdetail" element={<EventDetail />} />
           <Route path="/" element={<HomePage />} />
-          <Route path="/homepage" element={<HomePageLogout />} />
+          {/* <Route path="/homepage" element={<HomePageLogout />} /> */}
           <Route path="/sponsor-homepage" element={<SponsorHomepage />} />
           <Route path="/role-choosing" element={<RoleChoosing />} />
-          <Route path="/Dashboard" element={<AnalyticsDashboard />} />
+          {/* sponsor  */}
+
           <Route
-            path="/Dashboard/Question"
-            element={<QuestionAnalyticsDashboard />}
+            path="/sponsor/dashboard/"
+            element={
+              <RequireAuth role="ROLE_SPONSOR">
+                <AnalyticsDashboard />
+              </RequireAuth>
+            }
           />
+          <Route
+            path="/sponsor/dashboard/question"
+            element={
+              <RequireAuth role="ROLE_SPONSOR">
+                <QuestionAnalyticsDashboard />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/sponsor/dashboard/question"
+            element={
+              <RequireAuth role="ROLE_SPONSOR">
+                <QuestionAnalyticsDashboard />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/sponsor/dashboard/program"
+            element={
+              <RequireAuth role="ROLE_SPONSOR">
+                <Program />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/sponsor/dashboard/create"
+            element={
+              <RequireAuth role="ROLE_SPONSOR">
+                <AddProgram />
+              </RequireAuth>
+            }
+          />
+          <Route path="/manage" element={<ManageAccount />} />
+
+          {/* event operator  */}
+          {/* <Route
+            path="/eventoperator/dashboard/question"
+            element={
+              <RequireAuth role="ROLE_EO">
+                <QuestionAnalyticsDashboard />
+              </RequireAuth>
+            }
+          /> */}
+          <Route
+            path="/eventoperator/dashboard/question"
+            element={
+              <RequireAuth role="ROLE_EO">
+                <QuestionAnalyticsDashboard />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/eventoperator/dashboard/"
+            element={
+              <RequireAuth role="ROLE_EO">
+                <AnalyticsDashboard />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/eventoperator/dashboard/event"
+            element={
+              <RequireAuth role="ROLE_EO">
+                <EO />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/eventoperator/dashboard/feedback"
+            element={
+              <RequireAuth role="ROLE_EO">
+                <ManageFeedback />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/eventoperator/dashboard/FeedbackDetail"
+            element={
+              <RequireAuth role="ROLE_EO">
+                <ManageFeedbackDetail />
+              </RequireAuth>
+            }
+          />
+
+          {/* Visitor  */}
+          <Route
+            path="/payment"
+            element={
+              <RequireAuth role="ROLE_VISITOR">
+                <Payment />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/order-history"
+            element={
+              <RequireAuth role="ROLE_VISITOR">
+                <OrderHistory />
+              </RequireAuth>
+            }
+          />
+
+          {/* Admin  */}
+          <Route
+            path="/admin"
+            element={
+              <RequireAuth role="ROLE_ADMIN">
+                <Admin />
+              </RequireAuth>
+            }
+          />
+
           <Route path="/sponsor" element={<SponsorSignUp />} />
           <Route path="/visitor" element={<VisitorSignUp />} />
-          <Route path="/payment" element={<Payment />} />
-          <Route path="/order-history" element={<OrderHistory />} />
           <Route path="/survey" element={<SurveyForm />} />
           <Route path="/question" element={<QuestionForm />} />
           <Route path="/create-event" element={<CreateEvent />} />
-          <Route path="/manage" element={<ManageAccount />} />
           <Route path="/service-term" element={<ServiceTerm />} />
-          <Route path="/checkstaff" element={<AddCheckStaffTable />} />
-          <Route path="/sponsor-table" element={<AddSponsorTable />} />
-          <Route path="/event-table" element={<EventScheduleTable />} />
-          <Route path="/Sponsor/Program" element={<Program />} />
-          <Route path="/Sponsor/Program/Create" element={<AddProgram />} />
-          <Route path="/dashboard/event" element={<EO />} />
-          <Route path="/dashboard/feedback" element={<ManageFeedback />} />
-          <Route path="/dashboard/FeedbackDetail" element={<ManageFeedbackDetail />} />
-          <Route path="/test" element= {<Stepper />} />
+          <Route path="/test" element={<TokenDecode />} />
+          <Route path="/login" element={<Login1 />} />
         </Routes>
       </Router>
-      {/* <EventBlog /> */}
     </>
   );
 }

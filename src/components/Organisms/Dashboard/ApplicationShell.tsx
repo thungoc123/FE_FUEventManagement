@@ -48,19 +48,21 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Stat1 } from "./StateCard";
 import { Table1 } from "./Table";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { clearToken } from "../../../Features/Auth/authSlice";
 
 type ParentComponentProps = {
-  MainComponent : React.ReactNode;
-  StateComponent? : React.ReactNode;
-}
+  MainComponent: React.ReactNode;
+  StateComponent?: React.ReactNode;
+};
 
-
-
-export const ApplicationShell4:React.FC<ParentComponentProps> = ({MainComponent,StateComponent }) => {
+export const ApplicationShell4: React.FC<ParentComponentProps> = ({
+  MainComponent,
+  StateComponent,
+}) => {
   const [isMobile, setIsMobile] = useState<boolean>(false);
-  const [isSearchIconClicked, setIsSearchIconClicked] =
-    useState<boolean>(false);
-
+  const [isSearchIconClicked, setIsSearchIconClicked] = useState<boolean>(false);
+  const email = sessionStorage.getItem("email");
   useEffect(() => {
     if (typeof window === "undefined") return;
     const checkMobile = () => {
@@ -72,12 +74,20 @@ export const ApplicationShell4:React.FC<ParentComponentProps> = ({MainComponent,
       window.removeEventListener("resize", checkMobile);
     };
   }, []);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const handleLogout = () => {
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("email");
+    dispatch(clearToken());
+    navigate("/login");
+  };
 
   return (
     <section>
       {/* Topbar */}
-      <div className="sticky top-0 flex min-h-16 w-full items-center border-b border-border-primary bg-white px-4 md:min-h-18 md:px-8">
-        <div className="mx-auto grid size-full grid-cols-2 items-center justify-between gap-4 lg:grid-cols-[1fr_1.5fr_1fr] z-100">
+      <div className="sticky top-0 flex min-h-16 w-full items-center border-b border-border-primary bg-white px-4 md:min-h-18 md:px-8 z-[100]">
+        <div className="mx-auto grid size-full grid-cols-2 items-center justify-between gap-4 lg:grid-cols-[1fr_1.5fr_1fr]">
           <a href="#" className="ml-14 justify-self-start lg:ml-0">
             <img
               src="https://relume-assets.s3.amazonaws.com/logo-image.svg"
@@ -194,6 +204,7 @@ export const ApplicationShell4:React.FC<ParentComponentProps> = ({MainComponent,
             </DropdownMenu>
             <DropdownMenu>
               <DropdownMenuTrigger className="flex items-center p-0">
+                {email}
                 <img
                   src="https://relume-assets.s3.amazonaws.com/avatar-image.svg"
                   alt="Avatar"
@@ -214,7 +225,9 @@ export const ApplicationShell4:React.FC<ParentComponentProps> = ({MainComponent,
                   </DropdownMenuItem>
                   <DropdownMenuSeparator className="mx-4" />
                   <DropdownMenuItem>
-                    <a href="#">Log Out</a>
+                    <a href="" onClick={handleLogout}>
+                      Log Out
+                    </a>
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
               </DropdownMenuContent>

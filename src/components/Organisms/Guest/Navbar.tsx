@@ -26,6 +26,8 @@ import { useLoginMutation } from "../../../Features/Auth/authApi";
 import { setToken } from "../../../Features/Auth/authSlice";
 import Dropdown from "../Visitor/Dropdown";
 import { useAuth } from "../../../Contexts/AuthContext";
+import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 
 type LinkProps = {
   title?: string;
@@ -116,6 +118,8 @@ export const Navbar2 = (props: Navbar2Props) => {
   const [isLogin, setIsLogin] = useState(false);
   const [login, { isLoading, error }] = useLoginMutation();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const [newPasswordData, setNewPasswordData] = useState({
     newPassword: "",
     confirmPassword: "",
@@ -155,7 +159,10 @@ export const Navbar2 = (props: Navbar2Props) => {
     setIsResetPassword(false);
     setIsNewPassword(false);
   };
-
+  interface JwtPayload {
+    sub: string;
+    role?: string;
+  }
 
   // login function with redux  
   const handleSubmit = async (e: React.FormEvent) => {
@@ -168,12 +175,32 @@ export const Navbar2 = (props: Navbar2Props) => {
       sessionStorage.setItem('email',email)
       dispatch(setToken(result.data));
       setIsLogin(true)
+      NavigationAuth(result.data);
     } catch (err) {
       console.error('Failed to login:');
     }
   };
 
-
+  const NavigationAuth = (token: string) => {
+    let decodedToken = jwtDecode<JwtPayload>(token);
+    switch (decodedToken.sub) {
+      case "ROLE_EO":
+        navigate("/eventoperator/dashboard/");
+        break;
+      case "ROLE_SPONSOR":
+        navigate("/sponsor/dashboard/");
+        break;
+      case "ROLE_VISITOR":
+        navigate("/");
+        break;
+      case "ROLE_CHECKING_STAFF":
+        navigate("");
+        break;
+      case "ROLE_ADMIN":
+        navigate("/admin");
+        break;
+    }
+  };
   useEffect(() => {
     const token = sessionStorage.getItem("token");
     const storedEmail = sessionStorage.getItem("email") || "";
@@ -182,8 +209,6 @@ export const Navbar2 = (props: Navbar2Props) => {
       setIsLogin(true);
       dispatch(setToken(token));
     } else {
-      // Nếu không có token, điều hướng người dùng về trang đăng nhập
-      // history.push('/login');
       setIsLogin(false);
     }
   }, [dispatch]);
@@ -273,7 +298,7 @@ export const Navbar2 = (props: Navbar2Props) => {
                 size={button.size}
                 onClick={() => handleAuthButtonClick(button.title === "Login")}
               >
-                {button.title}
+                {isLoading ? "Loging in..." : button.title}
               </Button>
             ))
           )}
@@ -454,7 +479,7 @@ export const Navbar2 = (props: Navbar2Props) => {
                       asChild
                       variant="link"
                       size="link"
-                      onClick={handleLogin}
+                      // onClick={handleLogin}
                     >
                       <a className="underline">Log in</a>
                     </Button>
@@ -527,7 +552,7 @@ const NavItemDropdown = ({
 
 export const Navbar2Defaults = {
   logo: {
-    src: "src/assets/logo.png",
+    src: "",
     alt: "Logo",
   },
   links: [

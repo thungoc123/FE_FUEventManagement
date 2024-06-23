@@ -1,8 +1,9 @@
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 
-import { useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { Button, Input, Label } from "@relume_io/relume-ui";
 import type { ImgProps, ButtonProps } from "@relume_io/relume-ui";
+import { useRegisterVisitorMutation } from "../../../Features/Auth/authApi";
 
 type Props = {
   logo: ImgProps;
@@ -37,17 +38,36 @@ export const VisitorSignUp = (props: Signup7Props) => {
     ...props,
   } as Props;
   const [email, setEmail] = useState("");
-  const [FullName, setFullName] = useState("");
+  // const [FullName, setFullName] = useState("");
   const [password, setPassword] = useState("");
-  const [cpassword, setcPassword] = useState("");
+  // const [cpassword, setcPassword] = useState("");
+  const [err, setErr] = useState("");
   const navigate = useNavigate();
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    console.log({ name:email, FullName, password });
-    navigate("/homepage"); // Navigate to homepage
+  const [visitorData, setVisitorData] = useState({
+    "email": '',
+    "password": '',
+    "confirmPassword": '',
+    "information": null
+  })
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setVisitorData({
+      ...visitorData,
+      [e.target.name]: e.target.value,
+    });
   };
- 
+  const [registerVisitor, { isLoading, isError, isSuccess, error }] = useRegisterVisitorMutation(); 
+  
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+        await registerVisitor(visitorData).unwrap();
+        navigate('/login')
+        
+      } catch (error) {
+      console.error('Registration failed:', error);
+    } 
+  };
+  
  
   return (
     <section>
@@ -71,25 +91,12 @@ export const VisitorSignUp = (props: Signup7Props) => {
                 <Input
                   type="email"
                   id="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  name="email"
+                  // value={email}
+                  onChange={handleChange}
                   required
                 />
               </div>
-              <div className="grid w-full items-center text-left">
-                <Label htmlFor="name" className="mb-2">
-                  Company Name/FullName*
-                </Label>
-                <Input
-                  type="text"
-                  id="text"
-                  value={FullName}
-                  onChange={(e) => setFullName(e.target.value)}
-                  required
-                />
-              </div>
-              
-
               <div className="grid w-full items-center text-left">
                 <Label htmlFor="password" className="mb-2">
                   Password*
@@ -97,8 +104,9 @@ export const VisitorSignUp = (props: Signup7Props) => {
                 <Input
                   type="password"
                   id="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  name="password"
+                  // value={password}
+                  onChange={handleChange}
                   required
                 />
               </div>
@@ -107,13 +115,23 @@ export const VisitorSignUp = (props: Signup7Props) => {
                   Confirm Password*
                 </Label>
                 <Input
-                  type="cpassword"
-                  id="cpassword"
-                  value={cpassword}
-                  onChange={(e) => setcPassword(e.target.value)}
+                  type="hidden"
+                  id="password"
+                  name="information"
+                  value=""
+                  onChange={handleChange}
                   required
                 />
               </div>
+             
+              <Input
+                  type="password"
+                  id="password"
+                  name="confirmPassword"
+                  // value={password}
+                  onChange={handleChange}
+                  required
+                />
               <div className="grid-col-1 grid gap-4">
                 <Button
                   variant={signUpButton.variant}
@@ -122,10 +140,12 @@ export const VisitorSignUp = (props: Signup7Props) => {
                   iconRight={signUpButton.iconRight}
                   // onClick={handleClick}
                 >
-                  {signUpButton.title}
+                          {isLoading ? 'Signing in...' :  signUpButton.title}
+                 
                 </Button>
                 
               </div>
+              {isError && <p style={{ color: 'red' }}>{error?.data || 'Sign up failed'}</p>}
             </form>
             <div className="mt-5 inline-flex w-full items-center justify-center gap-x-1 text-center md:mt-6">
               <p>{logInText}</p>
@@ -159,7 +179,7 @@ export const Signup7Defaults: Signup7Props = {
   },
   
   image: {
-    src: "",
+    src: "src/assets/student.png",
     alt: "Placeholder image",
   },
   logInText: "Already have an account?",

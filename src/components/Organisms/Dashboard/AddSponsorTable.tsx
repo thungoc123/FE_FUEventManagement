@@ -41,10 +41,8 @@ export const AddSponsorTable = () => {
             buttons={[
               {
                 children: <AddFeedbackButton/>,
-                
                 size: "sm",
               },
-             
             ]}
             tableHeaders={tableHeaders}
             tableRows={tableRows} // Truyền dữ liệu mới cho tableRows

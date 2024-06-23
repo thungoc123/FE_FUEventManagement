@@ -1,19 +1,18 @@
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 
-import { useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { Button, Input, Label } from "@relume_io/relume-ui";
-import type { ImageProps, ButtonProps } from "@relume_io/relume-ui";
-import AuthAPI from "../../../config/axios/AuthAPI";
-// import UnauthAPI from "../../config/axios/UnauthAPI";
-// import AuthAPI from "../../config/axios/AuthAPI";
+import type { ImgProps, ButtonProps } from "@relume_io/relume-ui";
+import { useRegisterSponsorMutation } from "../../../Features/Auth/authApi";
+
 
 type Props = {
-  logo: ImageProps;
+  logo: ImgProps;
   logoLink: string;
   title: string;
   description: string;
   signUpButton: ButtonProps;
-  image: ImageProps;
+  image: ImgProps;
   logInText: string;
   logInLink: {
     text: string;
@@ -39,20 +38,33 @@ export const SponsorSignUp = (props: Signup7Props) => {
     ...Signup7Defaults,
     ...props,
   } as Props;
-  const [email, setEmail] = useState("");
-  const [companyName, setCompanyName] = useState("");
-  const [companyID, setCompanyID] = useState("");
-  const [staffEmail, setStaffEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [cpassword, setcPassword] = useState("");
   const navigate = useNavigate();
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    console.log({ name: email, companyName, companyID, staffEmail, password });
-    navigate("/homepage"); // Navigate to homepage
+  const [registerSponsor, {isError, isLoading, isSuccess, error} ] = useRegisterSponsorMutation()
+  const [sponsorData, setSponsorData] = useState({
+    email: '',
+    password: '',
+    confirmPassword: '',
+    companyName: '',
+    companyID: '',
+    fptStaffEmail: '',
+    information: '',
+  });
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setSponsorData({
+      ...sponsorData,
+      [e.target.name]: e.target.value,
+    })
+  }
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+        await registerSponsor(sponsorData).unwrap();
+        navigate('/login')
+        
+      } catch (error) {
+      console.error('Registration failed:', error);
+    } 
   };
-
 
   return (
     <section>
@@ -70,8 +82,9 @@ export const SponsorSignUp = (props: Signup7Props) => {
               </h1>
               <p className="md:text-md">{description}</p>
             </div>
-            <form className="grid grid-cols-1 gap-6" 
-            // onSubmit={handleClick}
+            <form
+              className="grid grid-cols-1 gap-6"
+              onSubmit={handleSubmit}
             >
               <div className="grid w-full items-center text-left">
                 <Label htmlFor="email" className="mb-2">
@@ -80,8 +93,9 @@ export const SponsorSignUp = (props: Signup7Props) => {
                 <Input
                   type="email"
                   id="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  // value={email}
+                  onChange={handleChange}
+                  name="email"
                   required
                 />
               </div>
@@ -92,8 +106,9 @@ export const SponsorSignUp = (props: Signup7Props) => {
                 <Input
                   type="text"
                   id="text"
-                  value={companyName}
-                  onChange={(e) => setCompanyName(e.target.value)}
+                  // value={companyName}
+                  onChange={handleChange}
+                  name="companyName"
                   required
                 />
               </div>
@@ -105,8 +120,9 @@ export const SponsorSignUp = (props: Signup7Props) => {
                 <Input
                   type="companyID"
                   id="companyID"
-                  value={companyID}
-                  onChange={(e) => setCompanyID(e.target.value)}
+                  // value={companyID}
+                  onChange={handleChange}
+                  name="companyID"
                   required
                 />
               </div>
@@ -117,8 +133,9 @@ export const SponsorSignUp = (props: Signup7Props) => {
                 <Input
                   type="StaffEmail"
                   id="staffEmail"
-                  value={staffEmail}
-                  onChange={(e) => setStaffEmail(e.target.value)}
+                  // value={staffEmail}
+                  onChange={handleChange}
+                  name="fptStaffEmail"
                   required
                 />
               </div>
@@ -129,8 +146,9 @@ export const SponsorSignUp = (props: Signup7Props) => {
                 <Input
                   type="password"
                   id="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  // value={password}
+                  onChange={handleChange}
+                  name="password"
                   required
                 />
               </div>
@@ -139,10 +157,11 @@ export const SponsorSignUp = (props: Signup7Props) => {
                   Confirm Password*
                 </Label>
                 <Input
-                  type="cpassword"
+                  type="password"
                   id="cpassword"
-                  value={cpassword}
-                  onChange={(e) => setcPassword(e.target.value)}
+                  // value={cpassword}
+                  onChange={handleChange}
+                  name="cpassword"
                   required
                 />
               </div>
@@ -155,9 +174,11 @@ export const SponsorSignUp = (props: Signup7Props) => {
                   // onClick={e => handleClick}
                   type="submit"
                 >
-                  {signUpButton.title}
-                </Button>
+                          {isLoading ? 'Signing in...' :  signUpButton.title}
+                          </Button>
               </div>
+              {isError && <p style={{ color: 'red' }}>{error?.data || 'Sign up failed'}</p>}
+
             </form>
             <div className="mt-5 inline-flex w-full items-center justify-center gap-x-1 text-center md:mt-6">
               <p>{logInText}</p>
