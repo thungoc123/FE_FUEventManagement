@@ -50,6 +50,7 @@ import { Table1 } from "./Table";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { clearToken } from "../../../Features/Auth/authSlice";
+import { JwtPayload, jwtDecode } from "jwt-decode";
 
 type ParentComponentProps = {
   MainComponent: React.ReactNode;
@@ -61,9 +62,18 @@ export const ApplicationShell4: React.FC<ParentComponentProps> = ({
   StateComponent,
 }) => {
   const [isMobile, setIsMobile] = useState<boolean>(false);
-  const [isSearchIconClicked, setIsSearchIconClicked] = useState<boolean>(false);
+  const [isSearchIconClicked, setIsSearchIconClicked] =
+    useState<boolean>(false);
+  const [isRole, setRole] = useState("ROLE_VISITOR");
   const email = sessionStorage.getItem("email");
+  
+  console.log(isRole)
   useEffect(() => {
+    let decodedToken = jwtDecode<JwtPayload>(
+      sessionStorage.getItem("token") || "");
+    if(decodedToken.sub) {
+      setRole(decodedToken.sub)
+    }
     if (typeof window === "undefined") return;
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 992);
@@ -218,7 +228,11 @@ export const ApplicationShell4: React.FC<ParentComponentProps> = ({
               >
                 <DropdownMenuGroup>
                   <DropdownMenuItem>
-                    <a href="#">My Profile</a>
+                    {isRole ? (
+                    <a href="#">Dashboard</a>
+                    ) : (
+                      <a href="#">My Cart</a>
+                    )}
                   </DropdownMenuItem>
                   <DropdownMenuItem>
                     <a href="#">Profile Settings</a>

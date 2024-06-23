@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   Button,
@@ -48,6 +48,7 @@ import { useLoginMutation } from "../../../Features/Auth/authApi";
 import { clearToken } from "../../../Features/Auth/authSlice";
 import { RootState } from "@reduxjs/toolkit/query";
 import { useNavigate } from "react-router-dom";
+import { JwtPayload, jwtDecode } from "jwt-decode";
 
 type Props = {
   email?: string | null;
@@ -55,8 +56,17 @@ type Props = {
 const Dropdown: React.FC<Props> = (props) => {
   // const [isLogout, setLogout] = useState(false)
   // const { token } = useSelector((state: RootState) => state.auth)
-  const navigate = useNavigate();
+  const [isRole, setRole] = useState("ROLE_VISITOR");
 
+  const navigate = useNavigate();
+  useEffect(() => {
+    let decodedToken = jwtDecode<JwtPayload>(
+      sessionStorage.getItem("token") || ""
+    );
+    if (decodedToken.sub) {
+      setRole(decodedToken.sub);
+    }
+  }, []);
   const dispatch = useDispatch();
   const handleLogout = () => {
     sessionStorage.removeItem("token");
@@ -65,6 +75,25 @@ const Dropdown: React.FC<Props> = (props) => {
     navigate("/");
   };
 
+  const NavigationAuth = (roleName: string) => {
+    switch (roleName) {
+      case "ROLE_EO":
+        navigate("/eventoperator/dashboard/");
+        break;
+      case "ROLE_SPONSOR":
+        navigate("/sponsor/dashboard/");
+        break;
+      case "ROLE_VISITOR":
+        navigate("/");
+        break;
+      case "ROLE_CHECKING_STAFF":
+        navigate("");
+        break;
+      case "ROLE_ADMIN":
+        navigate("/admin");
+        break;
+    }
+  };
   // dispatch(clearToken(token))
 
   return (
@@ -151,11 +180,23 @@ const Dropdown: React.FC<Props> = (props) => {
         >
           <DropdownMenuGroup>
             <DropdownMenuItem>
-              <a href="#">My Profile</a>
+              {isRole === "ROLE_VISITOR" ? (
+                <a href="#">My Cart</a>
+              ) : (
+                <a
+                  href=""
+                  onClick={(e) => {
+                    e.preventDefault();
+                    NavigationAuth(isRole);
+                  }}
+                >
+                  Dashboard
+                </a>
+              )}
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            {/* <DropdownMenuItem>
               <a href="#">Profile Settings</a>
-            </DropdownMenuItem>
+            </DropdownMenuItem> */}
             <DropdownMenuSeparator className="mx-4" />
             <DropdownMenuItem>
               <a href="" onClick={handleLogout}>

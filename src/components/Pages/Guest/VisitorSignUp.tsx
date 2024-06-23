@@ -37,11 +37,6 @@ export const VisitorSignUp = (props: Signup7Props) => {
     ...Signup7Defaults,
     ...props,
   } as Props;
-  const [email, setEmail] = useState("");
-  // const [FullName, setFullName] = useState("");
-  const [password, setPassword] = useState("");
-  // const [cpassword, setcPassword] = useState("");
-  const [err, setErr] = useState("");
   const navigate = useNavigate();
   const [visitorData, setVisitorData] = useState({
     "email": '',
