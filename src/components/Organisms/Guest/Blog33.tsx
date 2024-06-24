@@ -3,7 +3,6 @@
 import { Button, Input } from "@relume_io/relume-ui";
 import type { ImgProps, ButtonProps } from "@relume_io/relume-ui";
 import SearchBar from "../../Atoms/SearchBar";
-import { BiSearch } from "react-icons/bi";
 
 type BlogPost = {
   url?: string;
@@ -37,7 +36,6 @@ export const Blog33 = (props: Blog33Props) => {
       <div className="container">
         <div className="container mb-12 max-w-lg text-center md:mb-18 lg:mb-20">
           {/* <SearchBar /> */}
-          <Input id="search" placeholder="Search" icon={<BiSearch className="size-6" />} />
 
 
           <p className="mb-3 font-semibold md:mb-4">{tagline}</p>

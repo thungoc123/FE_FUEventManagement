@@ -16,10 +16,7 @@ import {
   Label,
   Input,
 } from "@relume_io/relume-ui";
-import { BiLogoGoogle } from "react-icons/bi";
-import RoleChoosing from "../../Pages/RoleChosing";
 import RoleChoosingwithDialog from "../../Molecules/RoleChoosingWithDialog";
-import UnauthAPI from "../../../config/axios/UnauthAPI";
 
 // import { useLoginMutation } from '';
 
@@ -29,6 +26,8 @@ import { useLoginMutation } from "../../../Features/Auth/authApi";
 import { setToken } from "../../../Features/Auth/authSlice";
 import Dropdown from "../Visitor/Dropdown";
 import { useAuth } from "../../../Contexts/AuthContext";
+import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 
 type LinkProps = {
   title?: string;
@@ -110,8 +109,23 @@ export const Navbar2 = (props: Navbar2Props) => {
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [roleChoosingOpen, setRoleChoosingOpen] = useState(false);
   const [isLoginForm, setIsLoginForm] = useState(true);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+
+  const [isResetPassword, setIsResetPassword] = useState(false);
+  const [resetData, setResetData] = useState({ email: "", newPassword: "" });
+  const [isNewPassword, setIsNewPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLogin, setIsLogin] = useState(false);
+  const [login, { isLoading, error }] = useLoginMutation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [newPasswordData, setNewPasswordData] = useState({
+    newPassword: "",
+    confirmPassword: "",
+  });
+
+
   const handleAuthButtonClick = (isLogin: boolean) => {
     if (isLogin) {
       setIsLoginForm(true);
@@ -120,92 +134,112 @@ export const Navbar2 = (props: Navbar2Props) => {
       setRoleChoosingOpen(true);
     }
   };
+  const handleForgotPasswordClick = () => {
+    setIsResetPassword(true);
+  };
+
+  const handleNewPasswordClick = () => {
+    setIsNewPassword(true);
+  };
+
+  const handleNewPasswordSubmit = (e) => {
+    e.preventDefault();
+    if (newPasswordData.newPassword !== newPasswordData.confirmPassword) {
+      console.log("Passwords do not match");
+      return;
+    }
+    console.log("Setting new password", newPasswordData);
+    // Implement your set new password logic here
+    setAuthModalOpen(false);
+  };
 
 
-  const [isLogin,setIsLogin] = useState(false)
-  const [login, { isLoading, error }] = useLoginMutation();
-  const dispatch = useDispatch();
-  // const {setEmailContext} = useAuth();
+
+  const handleBackToLoginClick = () => {
+    setIsResetPassword(false);
+    setIsNewPassword(false);
+  };
+  interface JwtPayload {
+    sub: string;
+    role?: string;
+  }
+
+  // login function with redux  
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log(email, password)
     try {
       const result = await login({ email, password }).unwrap();
       console.log(result.data)
       sessionStorage.setItem('token', result.data);
       sessionStorage.setItem('email',email)
       dispatch(setToken(result.data));
-      // setEmailContext(email)
-      // dispatch(setEmail(result.email)); // Lưu email vào Redux store
       setIsLogin(true)
+      NavigationAuth(result.data);
     } catch (err) {
       console.error('Failed to login:');
     }
   };
 
-  console.log(email)
-  // sessionStorage.removeItemItem('token')
+  const NavigationAuth = (token: string) => {
+    let decodedToken = jwtDecode<JwtPayload>(token);
+    switch (decodedToken.sub) {
+      case "ROLE_EO":
+        navigate("/eventoperator/dashboard/");
+        break;
+      case "ROLE_SPONSOR":
+        navigate("/sponsor/dashboard/");
+        break;
+      case "ROLE_VISITOR":
+        navigate("/");
+        break;
+      case "ROLE_CHECKING_STAFF":
+        navigate("");
+        break;
+      case "ROLE_ADMIN":
+        navigate("/admin");
+        break;
+    }
+  };
   useEffect(() => {
-    const token = sessionStorage.getItem('token');
-    const storedEmail = sessionStorage.getItem('email') || "";
-    if (token&& storedEmail) {
-      // Nếu có token trong sessionStorage, lưu vào Redux state (nếu cần thiết)
-      // setEmailContext(email)
-      setEmail(storedEmail)
-      setIsLogin(true)
+    const token = sessionStorage.getItem("token");
+    const storedEmail = sessionStorage.getItem("email") || "";
+    if (token && storedEmail) {
+      setEmail(storedEmail);
+      setIsLogin(true);
       dispatch(setToken(token));
     } else {
-      // Nếu không có token, điều hướng người dùng về trang đăng nhập
-      // history.push('/login');
-      setIsLogin(false)
-
+      setIsLogin(false);
     }
   }, [dispatch]);
-
-
-
-
-
-  // const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-  //   console.log(loginData)
-  //   try {
-  //     const response = await UnauthAPI.post(`login`, 
-        
-  //      loginData
-  //     );
-
-  //     console.log(response);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
 
   const handleRoleChoosingClose = () => {
     setRoleChoosingOpen(false);
   };
 
   return (
-  
     <nav className="flex w-full items-center border-b border-border-primary bg-white lg:min-h-18 lg:px-[5%]">
       <div className="mx-auto size-full lg:grid lg:grid-cols-[0.375fr_1fr_0.375fr] lg:items-center lg:justify-between lg:gap-4">
         <div className="flex min-h-16 items-center justify-between px-[5%] md:min-h-18 lg:min-h-full lg:px-0">
           <img src={logo.src} alt={logo.alt} />
           <div className="flex items-center gap-4 lg:hidden">
-          {isLogin ? (
-            <Dropdown email={email} />
-          ): (
-            buttons.map((button, index) => (
-              <Button
-                key={`${button.title}-${index}`}
-                className="px-6 py-2 mx-2"
-                variant={button.variant}
-                size={button.size}
-                onClick={() => handleAuthButtonClick(button.title === "Login")}
-              >
-                {button.title}
-              </Button>
-            )) 
-          )}
+            {isLogin ? (
+              <Dropdown email={email} />
+            ) : (
+              buttons.map((button, index) => (
+                <Button
+                  key={`${button.title}-${index}`}
+                  className="px-6 py-2 mx-2"
+                  variant={button.variant}
+                  size={button.size}
+                  onClick={() =>
+                    handleAuthButtonClick(button.title === "Login")
+                  }
+                >
+                  {button.title}
+                </Button>
+              ))
+            )}
             <button
               className="-mr-2 flex size-12 flex-col items-center justify-center"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -251,12 +285,11 @@ export const Navbar2 = (props: Navbar2Props) => {
               )}
             </div>
           ))}
-           
         </motion.div>
         <div className="hidden justify-self-end lg:block">
           {isLogin ? (
             <Dropdown email={email} />
-          ): (
+          ) : (
             buttons.map((button, index) => (
               <Button
                 key={`${button.title}-${index}`}
@@ -265,12 +298,10 @@ export const Navbar2 = (props: Navbar2Props) => {
                 size={button.size}
                 onClick={() => handleAuthButtonClick(button.title === "Login")}
               >
-                {button.title}
+                {isLoading ? "Loging in..." : button.title}
               </Button>
-            )) 
+            ))
           )}
-          
-          
         </div>
       </div>
 
@@ -284,10 +315,20 @@ export const Navbar2 = (props: Navbar2Props) => {
           <DialogContent className="w-full max-w-md bg-white px-10 py-14 md:py-16 md:px-12 md:data-[state=open]:duration-300 md:data-[state=open]:animate-in md:data-[state=closed]:animate-out md:data-[state=closed]:fade-out-0 md:data-[state=open]:fade-in-0 md:data-[state=closed]:slide-out-to-left-1/2 md:data-[state=open]:slide-in-from-left-1/2">
             <DialogHeader>
               <DialogTitle className="mb-2">
-                {isLoginForm ? "Log In" : "Sign Up"}
+                {isNewPassword
+                  ? "New Password"
+                  : isResetPassword
+                  ? "Reset Password"
+                  : isLoginForm
+                  ? "Log In"
+                  : "Sign Up"}
               </DialogTitle>
               <DialogDescription>
-                {isLoginForm
+                {isNewPassword
+                  ? "Enter your new password"
+                  : isResetPassword
+                  ? "Enter your email to reset password"
+                  : isLoginForm
                   ? "Log in to your account"
                   : "Create an account to get started"}
               </DialogDescription>
@@ -295,47 +336,141 @@ export const Navbar2 = (props: Navbar2Props) => {
             <form
               className="grid gap-4 py-4"
               onSubmit={(e) => {
-                // e.preventDefault();
-                console.log(isLoginForm ? "Logging in" : "Signing up");
-                setAuthModalOpen(false);
-                handleSubmit(e);
+                if (isNewPassword) {
+                  handleNewPasswordSubmit(e);
+                } else if (isResetPassword) {
+                  e.preventDefault();
+                  console.log("Resetting password for", resetData.email);
+                  // Implement your reset password logic here
+                  handleNewPasswordClick();
+                } else {
+                  e.preventDefault();
+                  console.log(isLoginForm ? "Logging in" : "Signing up");
+                  setAuthModalOpen(false);
+                  handleSubmit(e);
+                }
               }}
             >
-              <div className="grid items-center gap-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  // value={loginData.email}
-                  required
-                  onChange={(e) => setEmail(e.target.value)}
-                  
-                />
-              </div>
-              <div className="grid items-center gap-2">
-                <Label htmlFor="password">Password</Label>
-                <Input
-                  id="password"
-                  type="password"
-                  required
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </div>
+              {isNewPassword ? (
+                <>
+                  <div className="grid items-center gap-2">
+                    <Label htmlFor="new-password">New Password</Label>
+                    <Input
+                      id="new-password"
+                      type="password"
+                      value={newPasswordData.newPassword}
+                      required
+                      onChange={(e) =>
+                        setNewPasswordData({
+                          ...newPasswordData,
+                          newPassword: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+                  <div className="grid items-center gap-2">
+                    <Label htmlFor="confirm-password">
+                      Confirm New Password
+                    </Label>
+                    <Input
+                      id="confirm-password"
+                      type="password"
+                      value={newPasswordData.confirmPassword}
+                      required
+                      onChange={(e) =>
+                        setNewPasswordData({
+                          ...newPasswordData,
+                          confirmPassword: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+                </>
+              ) : isResetPassword ? (
+                <div className="grid items-center gap-2">
+                  <Label htmlFor="reset-email">Email</Label>
+                  <Input
+                    id="reset-email"
+                    type="email"
+                    value={resetData.email}
+                    required
+                    onChange={(e) =>
+                      setResetData({
+                        ...resetData,
+                        email: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+              ) : (
+                <>
+                  <div className="grid items-center gap-2">
+                    <Label htmlFor="email">Email</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      value={email}
+                      required
+                      onChange={(e) =>
+                        setEmail(e.target.value)
+                      }
+                    />
+                  </div>
+                  <div className="grid items-center gap-2">
+                    <Label htmlFor="password">Password</Label>
+                    <Input
+                      id="password"
+                      type="password"
+                      required
+                      value={password}
+                      onChange={(e) =>
+                       setPassword(e.target.value)
+                      }
+                    />
+                  </div>
+                </>
+              )}
               <div className="mt-6 flex w-full flex-col gap-4 md:mt-8">
                 <Button type="submit">
-                  {isLoginForm ? "Log in" : "Sign up"}
+                  {isNewPassword
+                    ? "Set New Password"
+                    : isResetPassword
+                    ? "Reset Password"
+                    : isLoginForm
+                    ? "Log in"
+                    : "Sign up"}
                 </Button>
-                {/* <Button variant="secondary" iconLeft={<BiLogoGoogle className="size-6" />} className="gap-x-3">
-                  {isLoginForm ? 'Log in with Google' : 'Sign up with Google'}
-                </Button> */}
               </div>
               <DialogFooter className="mt-6">
-                {isLoginForm ? (
+                {isNewPassword ? (
+                  <Button
+                    asChild
+                    variant="link"
+                    size="link"
+                    onClick={handleBackToLoginClick}
+                  >
+                    <a className="underline">Back to Log in</a>
+                  </Button>
+                ) : isResetPassword ? (
+                  <Button
+                    asChild
+                    variant="link"
+                    size="link"
+                    onClick={handleNewPasswordClick}
+                  >
+                    <a className="underline">New Password</a>
+                  </Button>
+                ) : isLoginForm ? (
                   <>
-                    {/* <span>Don't have an account?</span>
-                    <Button asChild variant="link" size="link" onClick={() => handleAuthButtonClick(false)}>
-                    <a className="underline">Sign up</a>
-                    </Button> */}
+                    <span>Forgot your password?</span>
+                    <Button
+                      asChild
+                      variant="link"
+                      size="link"
+                      onClick={handleForgotPasswordClick}
+                    >
+                      <a className="underline">Reset password</a>
+                    </Button>
                   </>
                 ) : (
                   <>
@@ -344,7 +479,7 @@ export const Navbar2 = (props: Navbar2Props) => {
                       asChild
                       variant="link"
                       size="link"
-                      onClick={handleLogin}
+                      // onClick={handleLogin}
                     >
                       <a className="underline">Log in</a>
                     </Button>
@@ -368,7 +503,6 @@ export const Navbar2 = (props: Navbar2Props) => {
         <RoleChoosingwithDialog onClose={handleRoleChoosingClose} />
       )} */}
     </nav>
-    
   );
 };
 
@@ -418,7 +552,7 @@ const NavItemDropdown = ({
 
 export const Navbar2Defaults = {
   logo: {
-    src: "/images/logo.svg",
+    src: "",
     alt: "Logo",
   },
   links: [

@@ -28,7 +28,7 @@ type Props = {
 export type Navbar2Props = React.ComponentPropsWithoutRef<"section"> &
   Partial<Props>;
 
-export const Navbar2 = (props: Navbar2Props) => {
+export const Navbar3 = (props: Navbar2Props) => {
   const { logo, navLinks, buttons, avatar } = {
     ...Navbar2Defaults,
     ...props,
@@ -293,4 +293,4 @@ const bottomLineVariants = {
   },
 };
 
-Navbar2.displayName = "Navbar2";
+Navbar3.displayName = "Navbar3";
