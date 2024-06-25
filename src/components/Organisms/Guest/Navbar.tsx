@@ -201,8 +201,8 @@ export const Navbar2 = (props: Navbar2Props) => {
       {/* DONE */}
       <div className="mx-auto size-full lg:grid lg:grid-cols-[0.375fr_1fr_0.375fr] lg:items-center lg:justify-between lg:gap-4">
         <div className="flex min-h-16 items-center justify-between px-[5%] md:min-h-18 lg:min-h-full lg:px-0">
-          <img src={logo?.src} alt={logo?.alt} />
-          <div className="flex items-center gap-4 lg:hidden">
+        <img src={logo?.src} alt={logo?.alt} style={{ height: '50px', width: 'auto', borderRadius: '50%' }} />
+        <div className="flex items-center gap-4 lg:hidden">
             {isLogin ? (
               <Dropdown email={email} />
             ) : (
@@ -547,7 +547,7 @@ const NavItemDropdown = ({
 
 export const Navbar2Defaults = {
   logo: {
-    src: "/images/logo.svg",
+    src: "/src/assets/logo.jpg",
     alt: "Logo",
   },
 

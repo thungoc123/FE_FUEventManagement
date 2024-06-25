@@ -8,9 +8,14 @@ import Schedule from "../Organisms/Guest/Schedule";
 import { Header80 } from "../Molecules/EventHeader";
 import { Cta7 } from "../Molecules/CTA";
 import { useGetEventDetailsQuery } from "../../Features/Event/eventApi";
+import { useParams } from "react-router-dom";
 
 function EventDetail() {
-  const { data, error, isLoading } = useGetEventDetailsQuery("1");
+  const { id } = useParams<{ id: string }>();
+  if (!id) {
+    return <div>Error: Event ID is missing.</div>;
+  }
+  const { data, error, isLoading } = useGetEventDetailsQuery(id);
   if (isLoading) return <div>Loading...</div>;
   if (error) {
     let errorMessage;
@@ -47,7 +52,7 @@ function EventDetail() {
       {/* <Blog33 /> */}
       <Header80 />
       <EventDetails
-        eventId="1"
+        eventId={id}
         eventName={eventName}
         summary={summary}
         tags={tags}

@@ -6,6 +6,7 @@ import type { ButtonProps } from "@relume_io/relume-ui";
 import { RxChevronRight } from "react-icons/rx";
 import DateDisplay from "../../Atoms/Date"; // Ensure this component exists or adjust accordingly
 import LocationDisplay from "../../Atoms/Location"; // Ensure this component exists or adjust accordingly
+import { Navigate, unstable_HistoryRouter, useNavigate } from "react-router-dom";
 
 type StateEvent = {
   id: number;
@@ -49,6 +50,11 @@ export const EventBlog = (props: EventBlogProps) => {
     ...EventBlogDefault,
     ...props,
   } as Props;
+
+  const history = useNavigate(); // Initialize useHistory
+
+  const handleButtonClick = (eventId: number) => {
+    history(`/event/${eventId}`);  };
 
   const [visibleEvents, setVisibleEvents] = useState(3);
   const handleViewAll = () => {
@@ -106,12 +112,15 @@ export const EventBlog = (props: EventBlogProps) => {
                       <p className="text-sm">End: {new Date(post.timeend).toLocaleDateString()}</p>
                     </div>
                   </div>
+                  
                   <Button
+                  
                     variant={post.button?.variant}
                     size={post.button?.size}
                     iconRight={post.button?.iconRight}
                     iconLeft={post.button?.iconLeft}
                     className="mt-6 flex items-center justify-center gap-x-1"
+                    onClick={() => handleButtonClick(post.id)}
                   >
                     {post.button?.title}
                   </Button>

@@ -6,6 +6,7 @@ import type { ButtonProps } from "@relume_io/relume-ui";
 import { RxChevronRight } from "react-icons/rx";
 import DateDisplay from "../../Atoms/Date"; // Ensure this component exists or adjust accordingly
 import LocationDisplay from "../../Atoms/Location"; // Ensure this component exists or adjust accordingly
+import SearchBar from "./SearchBar";
 
 type StateEvent = {
   id: number;
@@ -60,6 +61,7 @@ export const Blog33 = (props: Blog33Props) => {
       <div className="container">
         <div className="container mb-12 max-w-lg text-center md:mb-18 lg:mb-20">
           <p className="mb-3 font-semibold md:mb-4">{tagline}</p>
+          <SearchBar />
           <h2 className="mb-5 text-5xl font-bold md:mb-6 md:text-7xl lg:text-8xl">
             {heading}
           </h2>
@@ -67,10 +69,11 @@ export const Blog33 = (props: Blog33Props) => {
         </div>
         <div className="grid grid-cols-1 gap-x-8 gap-y-16 md:grid-cols-2 md:gap-y-12 lg:grid-cols-3">
           {EventPosts?.slice(0, visibleEvents).map((post, index) => {
-            const stateEventName = post.stateEvent?.name ?? 'No location';
-            const eventImageUrl = post.eventImages && post.eventImages.length > 0 
-              ? post.eventImages[0].url 
-              : 'https://relume-assets.s3.amazonaws.com/placeholder-image-landscape.svg';
+            const stateEventName = post.stateEvent?.name ?? "No location";
+            const eventImageUrl =
+              post.eventImages && post.eventImages.length > 0
+                ? post.eventImages[0].url
+                : "https://relume-assets.s3.amazonaws.com/placeholder-image-landscape.svg";
 
             return (
               <div key={post.id}>
@@ -81,14 +84,21 @@ export const Blog33 = (props: Blog33Props) => {
                   <div className="w-full overflow-hidden">
                     <img
                       src={eventImageUrl}
-                      alt={post.eventImages && post.eventImages.length > 0 ? post.eventImages[0].event : 'Placeholder image'}
+                      alt={
+                        post.eventImages && post.eventImages.length > 0
+                          ? post.eventImages[0].event
+                          : "Placeholder image"
+                      }
                       className="aspect-[3/2] size-full object-cover"
                     />
                   </div>
                 </a>
                 <div className="mt-3 flex items-center justify-between">
-                  <DateDisplay date={new Date(post.timestart).toLocaleDateString()} />
-                  <LocationDisplay location={post.location ?? 'No location'} /> {/* Sử dụng thuộc tính location */}
+                  <DateDisplay
+                    date={new Date(post.timestart).toLocaleDateString()}
+                  />
+                  <LocationDisplay location={post.location ?? "No location"} />{" "}
+                  {/* Sử dụng thuộc tính location */}
                 </div>
                 <a
                   href={post.url}
@@ -99,11 +109,17 @@ export const Blog33 = (props: Blog33Props) => {
                 <p>{post.description}</p>
                 <div className="mt-6 flex items-center justify-between">
                   <div>
-                    <h6 className="text-sm font-semibold">Price: ${post.price}</h6>
+                    <h6 className="text-sm font-semibold">
+                      Price: ${post.price}
+                    </h6>
                     <div className="flex items-center">
-                      <p className="text-sm">Start: {new Date(post.timestart).toLocaleDateString()}</p>
+                      <p className="text-sm">
+                        Start: {new Date(post.timestart).toLocaleDateString()}
+                      </p>
                       <span className="mx-2">•</span>
-                      <p className="text-sm">End: {new Date(post.timeend).toLocaleDateString()}</p>
+                      <p className="text-sm">
+                        End: {new Date(post.timeend).toLocaleDateString()}
+                      </p>
                     </div>
                   </div>
                   <Button
@@ -140,8 +156,8 @@ export const Blog33 = (props: Blog33Props) => {
 };
 
 export const Blog33Default: Blog33Props = {
-  tagline: "Discover",
-  heading: "Upcoming Events",
+  tagline: "Blog",
+  heading: "Event On the Line",
   description: "",
   button: { title: "View all", variant: "secondary" },
   EventPosts: [],
