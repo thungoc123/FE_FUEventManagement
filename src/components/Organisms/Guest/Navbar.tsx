@@ -21,13 +21,14 @@ import RoleChoosingwithDialog from "../../Molecules/RoleChoosingWithDialog";
 // import { useLoginMutation } from '';
 
 // setToken
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useLoginMutation } from "../../../Features/Auth/authApi";
 import { setToken } from "../../../Features/Auth/authSlice";
 import Dropdown from "../Visitor/Dropdown";
 import { useAuth } from "../../../Contexts/AuthContext";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
+import { RootState } from "../../../Store/Store";
 
 type LinkProps = {
   title?: string;
@@ -125,7 +126,6 @@ export const Navbar2 = (props: Navbar2Props) => {
     confirmPassword: "",
   });
 
-
   const handleAuthButtonClick = (isLogin: boolean) => {
     if (isLogin) {
       setIsLoginForm(true);
@@ -153,8 +153,6 @@ export const Navbar2 = (props: Navbar2Props) => {
     setAuthModalOpen(false);
   };
 
-
-
   const handleBackToLoginClick = () => {
     setIsResetPassword(false);
     setIsNewPassword(false);
@@ -164,26 +162,45 @@ export const Navbar2 = (props: Navbar2Props) => {
     role?: string;
   }
 
-  // login function with redux  
+  // login function with redux
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(email, password)
+    console.log(email, password);
     try {
       const result = await login({ email, password }).unwrap();
-      console.log(result.data)
-      sessionStorage.setItem('token', result.data);
-      sessionStorage.setItem('email',email)
       dispatch(setToken(result.data));
-      setIsLogin(true)
+      setIsLogin(true);
       NavigationAuth(result.data);
+      localStorage.setItem("email", email);
+      sessionStorage.setItem("token", result.data);
+      sessionStorage.setItem("email", email);
     } catch (err) {
-      console.error('Failed to login:');
+      console.error("Failed to login:");
     }
   };
+  const token = useSelector((state: RootState) => state.auth.token);
+  useEffect(() => {
+    if (token) {
+      const storedEmail = localStorage.getItem("email") || "";
+      setEmail(storedEmail);
+      setIsLogin(true);
+      dispatch(setToken(token));
+    } else {
+      setIsLogin(false);
+    }
+  }, [token]); 
+  // if (token) {
+  //   const storedEmail = localStorage.getItem("email") || "";
+  //   setEmail(storedEmail);
+  //   setIsLogin(true);
+  //   dispatch(setToken(token));
+  // } else {
+  //   setIsLogin(false);
+  // }
 
   const NavigationAuth = (token: string) => {
     let decodedToken = jwtDecode<JwtPayload>(token);
-    switch (decodedToken.sub) {
+    switch (decodedToken.role) {
       case "ROLE_EO":
         navigate("/eventoperator/dashboard/");
         break;
@@ -201,17 +218,18 @@ export const Navbar2 = (props: Navbar2Props) => {
         break;
     }
   };
-  useEffect(() => {
-    const token = sessionStorage.getItem("token");
-    const storedEmail = sessionStorage.getItem("email") || "";
-    if (token && storedEmail) {
-      setEmail(storedEmail);
-      setIsLogin(true);
-      dispatch(setToken(token));
-    } else {
-      setIsLogin(false);
-    }
-  }, [dispatch]);
+  // useEffect(() => {
+  //   const token = localStorage.getItem(''));
+
+  //   const storedEmail = localStorage.getItem("email") || "";
+  //   if (token && storedEmail) {
+  //     setEmail(storedEmail);
+  //     setIsLogin(true);
+  //     dispatch(setToken(token));
+  //   } else {
+  //     setIsLogin(false);
+  //   }
+  // }, [dispatch]);
 
   const handleRoleChoosingClose = () => {
     setRoleChoosingOpen(false);
@@ -411,9 +429,7 @@ export const Navbar2 = (props: Navbar2Props) => {
                       type="email"
                       value={email}
                       required
-                      onChange={(e) =>
-                        setEmail(e.target.value)
-                      }
+                      onChange={(e) => setEmail(e.target.value)}
                     />
                   </div>
                   <div className="grid items-center gap-2">
@@ -423,9 +439,7 @@ export const Navbar2 = (props: Navbar2Props) => {
                       type="password"
                       required
                       value={password}
-                      onChange={(e) =>
-                       setPassword(e.target.value)
-                      }
+                      onChange={(e) => setPassword(e.target.value)}
                     />
                   </div>
                 </>

@@ -13,6 +13,7 @@ import {
   } from "@relume_io/relume-ui";
   import type { ButtonProps } from "@relume_io/relume-ui";
   import { BiPencil,BiBookmark,BiDotsHorizontalRounded, BiMap, BiSearch } from "react-icons/bi";
+import { Navigate, useNavigate } from "react-router-dom";
   
   type ImageProps = {
     src: string;
@@ -46,6 +47,7 @@ import {
       ...GridList6Defaults,
       ...props,
     } as Props;
+    const navigate = useNavigate()
     return (
       <section>
         <div className="grid auto-cols-fr grid-cols-1 items-end gap-4 pb-5 md:grid-cols-[1fr_max-content] md:gap-6 md:pb-6">
@@ -67,6 +69,7 @@ import {
                 ))}
               </SelectContent>
             </Select>
+            <Button className="w-[110px] mx-4 py-2" onClick={(e) => navigate("/sponsor/dashboard/create")}>New</Button>
           </div>
         </div>
         <div className="grid w-full auto-cols-fr grid-cols-1 gap-6 lg:grid-cols-2">

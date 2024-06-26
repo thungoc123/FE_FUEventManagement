@@ -16,7 +16,6 @@ import { VisitorSignUp } from "./components/Pages/Guest/VisitorSignUp";
 import { OrderHistory } from "./components/Pages/Visitor/OrderHistory";
 import SurveyForm from "./components/Pages/Dashboard/TestforCreateSurvey";
 import CreateEvent from "./components/Pages/Dashboard/EventOperator/CreateEvent";
-import ManageAccount from "./components/Pages/Dashboard/Sponsor/ManageAccount";
 import ServiceTerm from "./components/Pages/Guest/AboutPage";
 import { Payment } from "./components/Pages/Visitor/Payment";
 import HomePage from "./components/Pages/Guest/HomePage";
@@ -26,9 +25,10 @@ import { ManageFeedback } from "./components/Pages/Dashboard/EventOperator/Manag
 import ReactModal from "react-modal";
 import TokenDecode from "./ulities/TokenDecode";
 import { Login1 } from "./components/Pages/Login";
-import ProtectedRoute from "./ulities/ProtectedRoute";
+// import ProtectedRoute from "./ulities/ProtectedRoute";
 import RequireAuth from "./ulities/ProtectedRoute";
 import { Admin } from "./components/Pages/Admin";
+import { ManageAccount } from "./components/Pages/Dashboard/Sponsor/ManageAccount";
 
 function App() {
   ReactModal.setAppElement("#root");
@@ -85,7 +85,14 @@ function App() {
               </RequireAuth>
             }
           />
-          <Route path="/manage" element={<ManageAccount />} />
+          <Route
+            path="/sponsor/dashboard/manage"
+            element={
+              <RequireAuth role="ROLE_SPONSOR">
+                <ManageAccount />
+              </RequireAuth>
+            }
+          />
 
           {/* event operator  */}
           {/* <Route
@@ -167,8 +174,8 @@ function App() {
 
           <Route path="/sponsor" element={<SponsorSignUp />} />
           <Route path="/visitor" element={<VisitorSignUp />} />
-          <Route path="/survey" element={<SurveyForm />} />
-          <Route path="/question" element={<QuestionForm />} />
+          {/* <Route path="/survey" element={<SurveyForm />} /> */}
+          {/* <Route path="/question" element={<QuestionForm />} /> */}
           <Route path="/create-event" element={<CreateEvent />} />
           <Route path="/service-term" element={<ServiceTerm />} />
           <Route path="/test" element={<TokenDecode />} />

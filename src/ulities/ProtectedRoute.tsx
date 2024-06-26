@@ -15,19 +15,9 @@ interface RequireAuthProps {
 }
 
 const RequireAuth: React.FC<RequireAuthProps> = ({ children, role }) => {
-    const token = sessionStorage.getItem('token');
-//   const token = useSelector((state: RootState) => state.auth.token);
-//   const location = useLocation();
-  let decodedToken: JwtPayload;
+  const roleName = useSelector((state: RootState) => state.auth.role);
 
-  try {
-    decodedToken = jwtDecode<JwtPayload>(token || "");
-  } catch (error) {
-    console.error("Failed to decode token:", error);
-    return <Navigate to="/login" />;
-  }
-
-  if (decodedToken.sub.length > 0 && decodedToken.sub === role) {
+  if (roleName === role) {
     return children;
   } else {
     return <Navigate to="/login" />;

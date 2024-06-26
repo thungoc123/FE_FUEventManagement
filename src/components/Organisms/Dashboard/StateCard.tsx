@@ -39,31 +39,6 @@ import {
     } as Props;
     return (
       <section className="px-12">
-        {/* <div className="grid auto-cols-fr grid-cols-1 items-end gap-4 pb-5 md:grid-cols-[1fr_max-content] md:gap-6 md:pb-6">
-          <div className="w-full max-w-lg">
-            <h1 className="text-xl font-bold md:text-2xl">{heading}</h1>
-            <p className="mt-2">{description}</p>
-          </div>
-          <div className="flex items-center justify-between gap-4 md:justify-normal">
-            <div className="flex items-center gap-4">
-              {buttons.map((button, index) => (
-                <Button key={index} {...button}>
-                  {button.title}
-                </Button>
-              ))}
-            </div>
-            <DropdownMenu>
-              <DropdownMenuTrigger>
-                <BiDotsHorizontalRounded className="size-6" />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                {options.map((option, index) => (
-                  <DropdownMenuItem key={index}>{option}</DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        </div> */}
         <div className="grid auto-cols-fr grid-cols-1 gap-4 md:grid-flow-col md:gap-6">
           {stats.map((stat, index) => (
             <div
