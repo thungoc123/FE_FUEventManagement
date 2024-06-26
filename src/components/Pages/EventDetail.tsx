@@ -9,6 +9,7 @@ import { Header80 } from "../Molecules/EventHeader";
 import { Cta7 } from "../Molecules/CTA";
 import { useGetEventDetailsQuery } from "../../Features/Event/eventApi";
 import { useParams } from "react-router-dom";
+import { EventImage } from "../../Types/event.type";
 
 function EventDetail() {
   const { id } = useParams<{ id: string }>();
@@ -16,7 +17,7 @@ function EventDetail() {
     return <div>Error: Event ID is missing.</div>;
   }
   const { data, error, isLoading } = useGetEventDetailsQuery(id);
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <div className="loader">Loading...</div>;
   if (error) {
     let errorMessage;
     if ("status" in error) {
@@ -27,7 +28,7 @@ function EventDetail() {
     }
     return <div>Error: {errorMessage}</div>;
   }
-
+  const eventImages=data?.eventImages?? "No event image available";
   const eventName = data?.name ?? "No event name available";
   const summary = data?.description ?? "No description available";
   const tags = data?.stateEvent ? [data.stateEvent.name] : [];
@@ -45,12 +46,17 @@ function EventDetail() {
       const eventSchedules = data?.eventSchedules ?? [];
       const client = eventSchedules.map(schedule => schedule.actor).join(", ") || "No actors available";
       const location = eventSchedules.map(schedule => schedule.location).join(", ") || "No locations available";
+      const eventImage: EventImage[] = data?.eventImages.map((image) => ({
+        id: image.id,
+        url: image.url,
+        event: image.event,
+      })) ?? [];
   return (
     <>
       <Navbar2 />
       {/* <Header9 /> */}
       {/* <Blog33 /> */}
-      <Header80 />
+      <Header80 heading={eventName} description={summary} eventImage={eventImage}/>
       <EventDetails
         eventId={id}
         eventName={eventName}
