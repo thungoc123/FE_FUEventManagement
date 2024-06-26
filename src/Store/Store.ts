@@ -51,6 +51,7 @@ import { authApi } from '../Features/Auth/authApi';
 import authReducer from '../Features/Auth/authSlice';
 import { eventApi } from '../Features/Event/eventApi';
 import notificationsReducer, { initialState as notificationsInitialState } from '../Features/Utils/notificationsSlice';
+import { sponsorApi } from '../Features/Sponsor/sponsorApi';
 
 // Cấu hình persist cho auth reducer
 const authPersistConfig = {
@@ -68,11 +69,12 @@ export const store = configureStore({
     auth: persistedAuthReducer,
     [eventApi.reducerPath]: eventApi.reducer,
     notifications: notificationsReducer,
+    [sponsorApi.reducerPath]: sponsorApi.reducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
-    }).concat(authApi.middleware, eventApi.middleware),
+    }).concat(authApi.middleware, eventApi.middleware, sponsorApi.middleware),
 });
 
 store.subscribe(() => {

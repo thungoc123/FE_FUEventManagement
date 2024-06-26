@@ -47,8 +47,11 @@ export const eventApi = createApi({
         body: newEvent,
       }),
     }),
+    getListEvent: builder.query({
+      query: () => 'api-events/account'
+    })
   }),
 });
 
-export const { useCreateEventMutation } = eventApi;
+export const { useCreateEventMutation, useGetListEventQuery } = eventApi;
 
