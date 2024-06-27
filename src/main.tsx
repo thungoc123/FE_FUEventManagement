@@ -5,8 +5,7 @@ import "./index.css";
 // phải thêm provider vào mới sử dụng được
 import { Provider } from "react-redux";
 import { store, persistor } from "./Store/Store.ts";
-import { AuthProvider } from "./Contexts/AuthContext.tsx";
-import Modal from "./components/Organisms/Guest/Modal.tsx";
+
 import { PersistGate } from 'redux-persist/integration/react';
 
 

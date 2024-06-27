@@ -1,5 +1,5 @@
 export interface EventTable{
-   No: String,
+   No: number,
    Schedule: String,
    Duration: String,
    Actor: String,
@@ -8,4 +8,6 @@ export interface EventTable{
    Hinh_Thuc:String,
    Detail:React.ReactNode,
    Edit:React.ReactNode
-    }
+}
+
+

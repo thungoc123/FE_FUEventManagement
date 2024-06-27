@@ -29,12 +29,32 @@ import { Login1 } from "./components/Pages/Login";
 import RequireAuth from "./ulities/ProtectedRoute";
 import { Admin } from "./components/Pages/Admin";
 import { ManageAccount } from "./components/Pages/Dashboard/Sponsor/ManageAccount";
+import { ManageEvent } from "./components/Pages/Dashboard/EventOperator/ManageEvent";
+import { UnpublishEvent } from "./components/Organisms/EventOperator/UnpublishEvent";
+import { PublishEvent } from "./components/Organisms/EventOperator/PublishEvent";
+import { useGetListEventQuery } from "./Features/EventManage/eventApi";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { setEvents } from "./Features/EventManage/eventSlice";
+import { RootState } from "./Store/Store";
 
 function App() {
   ReactModal.setAppElement("#root");
-
+  const cachedEvents = useSelector((state: RootState) => state.events.events);
+  const { data: events, isLoading, error } = useGetListEventQuery(undefined, {
+    skip: !!cachedEvents.length, // Bỏ qua gọi API nếu đã có dữ liệu
+  });
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (events) {
+      dispatch(setEvents(events));
+    }
+  }, [events, dispatch]);
+ 
   return (
+
     <>
+
       <Router>
         <Routes>
           {/* Guest  */}
@@ -120,7 +140,7 @@ function App() {
             }
           />
           <Route
-            path="/eventoperator/dashboard/event"
+            path="/eventoperator/dashboard/event/:id"
             element={
               <RequireAuth role="ROLE_EO">
                 <EO />
@@ -132,6 +152,22 @@ function App() {
             element={
               <RequireAuth role="ROLE_EO">
                 <ManageFeedback />
+              </RequireAuth>
+            }
+          />
+           <Route
+            path="/eventoperator/dashboard/UnpublishEvent"
+            element={
+              <RequireAuth role="ROLE_EO">
+                <ManageEvent component={<UnpublishEvent />} />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/eventoperator/dashboard/PublishEvent"
+            element={
+              <RequireAuth role="ROLE_EO">
+                <ManageEvent component={<PublishEvent />} />
               </RequireAuth>
             }
           />

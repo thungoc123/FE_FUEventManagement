@@ -19,52 +19,45 @@ import {
   DialogFooter,
 } from "@relume_io/relume-ui";
 import { BiLogoGoogle } from "react-icons/bi";
-import { BiCalendarAlt, BiUser, BiHourglass, BiTime, BiEnvelope } from "react-icons/bi";
+import {
+  BiCalendarAlt,
+  BiUser,
+  BiHourglass,
+  BiTime,
+  BiEnvelope,
+} from "react-icons/bi";
+import { eventCheckingStaff } from "../../../Types/eo.type";
+import React from "react";
+import { RootState } from "../../../Store/Store";
+import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-export const AddCheckStaffTable = () => {
-  const tableHeaders = ["Name", "Email", "Date", "Delete"];
-  const tableRows: StaffTable[] = [
-    {
-      Name: "Nguyen Van A",
-      Email: "123@gmail.com",
-      Date: "01/01/2023",
-      Delete: (
-        <Button size="icon" variant="link">
-          {" "}
-          <BiTrash />
-        </Button>
-      ),
-    },
-    {
-      Name: "Nguyen Van A",
-      Email: "123@gmail.com",
-      Date: "01/01/2023",
-      Delete: (
-        <Button size="icon" variant="link">
-          {" "}
-          <BiTrash />
-        </Button>
-      ),
-    },
-    {
-      Name: "Nguyen Van A",
-      Email: "123@gmail.com",
-      Date: "01/01/2023",
-      Delete: (
-        <Button size="icon" variant="link">
-          {" "}
-          <BiTrash />
-        </Button>
-      ),
-    },
-  ];
+type Props = {
+  Staff: eventCheckingStaff[];
+};
+export const AddCheckStaffTable: React.FC<Props> = (props) => {
+  const { id } = useParams();
+  const Events = useSelector((state: RootState) => state.events.events);
+
+  const Staff = Events?.find(event => event.id === parseInt(id))?.eventCheckingStaffs || []
+  const tableHeaders = ["No", "Email", "Password", "Delete"];
+  const tableRows: StaffTable[] = Staff.map((item, index) => ({
+    No: index +1,
+    Email: item.account.email,
+    Password: item.account.password,
+    // Date: "01/01/2023",
+    Delete: ( 
+      <Button size="icon" variant="link">
+        {" "}
+        <BiTrash />
+      </Button>
+    ),
+  }));
+
   const tableHeaderClasses = [
     "w-[200px] pr-4 xxl:w-[225px]",
     "w-[200px] pr-4 xxl:w-[150px]",
-    "w-[128px] pr-4 xxl:w-[250px]",
     "w-[200px] pr-4 xxl:w-[250px]",
-    // "w-[192px] pr-4 xxl:w-[150px]",
-    // "w-[96px] pr-4 text-right",
   ];
   const paginationItems = [1, 2, 3, 4];
   return (
@@ -104,14 +97,17 @@ export const AddCheckStaffTable = () => {
               </label>
               {/* <DatePicker /> */}
 
-              <Input className="h-1/2"
+              <Input
+                className="h-1/2"
                 id="search"
                 placeholder="Search"
                 icon={<BiEnvelope className="size-6" />}
               />
             </div>
             <DialogFooter className="mt-4">
-              <Button variant="secondary" size="sm">Cancel</Button>
+              <Button variant="secondary" size="sm">
+                Cancel
+              </Button>
 
               <Button size="sm">Done</Button>
             </DialogFooter>

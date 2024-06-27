@@ -23,7 +23,7 @@ import {
 } from "@relume_io/relume-ui";
 import { BiCalendarAlt, BiUser, BiHourglass, BiTime } from "react-icons/bi";
 import Modal from "react-modal";
-import { useCreateEventMutation } from "../../../../Features/Event/eventApi";
+import { useCreateEventMutation } from "../../../../Features/EventManage/eventApi";
 import { RootState } from "../../../../Store/Store";
 import { useDispatch, useSelector } from "react-redux";
 const steps = [{ label: "Schedule" }, { label: "Actor" }];

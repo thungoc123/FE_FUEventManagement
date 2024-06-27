@@ -3,7 +3,27 @@ import { AddCheckStaffTable } from '../EventOperator/checkingStaff';
 import { AddSponsorTable } from '../EventOperator/sponsor';
 import { EventScheduleTable } from '../EventOperator/eventSchedule';
 import { Gallery5 } from '../EventOperator/image';
-function Tabbar() {
+import React from 'react';
+import { EOevent } from '../../../Types/eo.type';
+import { useSelector } from 'react-redux';
+import { selectUnpublishEvents } from '../../../Features/EventManage/eventSelector';
+import { RootState } from '../../../Store/Store';
+
+type Props = {
+  id: number
+}
+
+const Tabbar:React.FC<Props> = (prop) => {
+  // const Events = useSelector(selectUnpublishEvents);
+  const Events = useSelector((state: RootState) => state.events.events);
+
+  console.log(Events)
+  console.log('prop.id:', prop.id);
+
+  // const eventDetail= Events?.find(event => event.id === prop.id);
+  const eventDetail = Events?.find(event => event.id === parseInt(prop.id));
+
+  // console.log(eventDetail)
     return (
         <Tabs defaultValue="schedule">
         <TabsList>
@@ -16,15 +36,15 @@ function Tabbar() {
 
         </TabsList>
         <TabsContent className="mt-2" value="img">
-          <Gallery5 />
+          <Gallery5 images={eventDetail?.eventImages}/>
         </TabsContent>
         <TabsContent className="mt-2" value="checking">
-          <AddCheckStaffTable />
+          <AddCheckStaffTable Staff={eventDetail?.eventCheckingStaffs}/>
         </TabsContent>
         <TabsContent className="mt-2" value="sponsor">
           <AddSponsorTable />
         </TabsContent><TabsContent className="mt-2" value="schedule">
-          <EventScheduleTable />
+          <EventScheduleTable eventSchedule={eventDetail?.eventSchedules}/>
         </TabsContent>
       </Tabs>
     );

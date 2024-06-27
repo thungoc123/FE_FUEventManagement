@@ -56,13 +56,18 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { clearToken } from "../../../Features/Auth/authSlice";
 import { JwtPayload, jwtDecode } from "jwt-decode";
+import { createSelector } from '@reduxjs/toolkit';
+
 import {
   NavigationComponentProps,
   NavigationProps,
 } from "../../../Types/global.type";
+import { eventApi, useGetListEventQuery } from '../../../Features/EventManage/eventApi'
 import SurveyForm from "../../Pages/Dashboard/TestforCreateSurvey";
 import { RootState, persistor } from "../../../Store/Store";
 import CreateEvent from "../../Pages/Dashboard/EventOperator/CreateEvent";
+import { selectPublishEvents, selectUnpublishEvents } from "../../../Features/EventManage/eventSelector";
+import { setEvents } from "../../../Features/EventManage/eventSlice";
 
 type ParentComponentProps = {
   MainComponent: React.ReactNode;
@@ -341,9 +346,22 @@ export const ApplicationShell4: React.FC<ParentComponentProps> = ({
     </section>
   );
 };
+//  const selectEvents = (state: RootState) => state.event;
 
+//   export const selectPublishedEvents = createSelector(
+//     selectEvents,
+//     (events) => events.filter(event => event.state === 'PUBLISHED')
+//   );
+
+// const unpublishEventCount =  events?.filter(event => event.stateEvent.name === "UNPUBLISH").length;
+  // const publishEventCount =  events?.filter(event => event.stateEvent.name === "HAPPENED").length;
 let NavigationProp: NavigationProps[] = [];
 const NavigationAuth = (role: string) => {
+  const Events = useSelector((state: RootState) => state.events.events);
+
+  // const Events = useSelector(selectUnpublishEvents);
+  const unpublishEvents = Events.filter(event => event.stateEvent.name === 'UNPUBLISH')
+  const publishEvent = Events.filter(event => event.stateEvent.name === "PUBLISH")  
   switch (role) {
     case "ROLE_EO":
       NavigationProp = [
@@ -379,14 +397,14 @@ const NavigationAuth = (role: string) => {
           State: [
             {
               name: "Unpublish",
-              url: "",
-              number: 2,
+              url: "/eventoperator/dashboard/UnpublishEvent",
+              number: unpublishEvents.length,
               icon: <BiCalendarEdit className="size-6 shrink-0" />,
             },
             {
               name: "Happened",
-              url: "",
-              number: 3,
+              url: "/eventoperator/dashboard/PublishEvent",
+              number: publishEvent.length,
               icon: <BiCalendarCheck className="size-6 shrink-0" />,
             },
           ],
@@ -533,6 +551,7 @@ type Props = {
 
 const Navigation: React.FC<Props> = ({ navigationProps = NavigationProp }) => {
   const navigate = useNavigate();
+
   const goToHome = () => {
     navigate("/");
   };
