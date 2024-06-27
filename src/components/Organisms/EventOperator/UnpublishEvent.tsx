@@ -18,10 +18,11 @@ import { RootState } from "../../../Store/Store";
 export const UnpublishEvent = () => {
   const tableHeaders = ["No", "Name", "Date", "Detail", "Delete", "Publish"];
   // const Events = useSelector(selectUnpublishEvents);
-  const Events = useSelector((state: RootState) => state.events.events);
+  // const Events = useSelector((state: RootState) => state.events.events);
+  const { data: Events, isLoading, error } = useGetListEventQuery();
 
   const unpublishEvents =
-  Events?.filter((event) => event.stateEvent.name === "UNPUBLISH") || [];
+    Events?.filter((event) => event.stateEvent.name === "UNPUBLISH") || [];
   const tableRows: EventTable[] = unpublishEvents?.map((event, index) => ({
     No: index + 1, // Số thứ tự bắt đầu từ 1
     Name: event.name, // Tên sự kiện
@@ -56,22 +57,25 @@ export const UnpublishEvent = () => {
   const paginationItems = [1, 2, 3, 4, 5];
   return (
     <>
-      {/* {isLoading && "Vui lòng đợi vài giây"} */}
-      <TableTemplate
-        headerTitle="Unpublish Event"
-        headerDescription="List of unpublish event"
-        // buttons={[
-        //   {
-        //     children: <AddFeedbackButton />,
+      {isLoading ? (
+        "Vui lòng đợi vài giây"
+      ) : (
+        <TableTemplate
+          headerTitle={"Unpublish Event"}
+          headerDescription="List of unpublish event"
+          // buttons={[
+          //   {
+          //     children: <AddFeedbackButton />,
 
-        //     size: "sm",
-        //   },
-        // ]}
-        tableHeaders={tableHeaders}
-        tableRows={tableRows} // Truyền dữ liệu mới cho tableRows
-        // paginationItems={paginationItems}
-        tableHeadersClasses={tableHeaderClasses}
-      />
+          //     size: "sm",
+          //   },
+          // ]}
+          tableHeaders={tableHeaders}
+          tableRows={tableRows} // Truyền dữ liệu mới cho tableRows
+          // paginationItems={paginationItems}
+          tableHeadersClasses={tableHeaderClasses}
+        />
+      )}
     </>
   );
 };

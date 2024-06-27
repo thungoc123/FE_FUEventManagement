@@ -357,9 +357,11 @@ export const ApplicationShell4: React.FC<ParentComponentProps> = ({
   // const publishEventCount =  events?.filter(event => event.stateEvent.name === "HAPPENED").length;
 let NavigationProp: NavigationProps[] = [];
 const NavigationAuth = (role: string) => {
-  const Events = useSelector((state: RootState) => state.events.events);
 
+  const Events = useSelector((state: RootState) => state.events.events);
+  // const { data: Events, isLoading, error } = useGetListEventQuery();
   // const Events = useSelector(selectUnpublishEvents);
+
   const unpublishEvents = Events.filter(event => event.stateEvent.name === 'UNPUBLISH')
   const publishEvent = Events.filter(event => event.stateEvent.name === "PUBLISH")  
   switch (role) {

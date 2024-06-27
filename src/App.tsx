@@ -40,10 +40,7 @@ import { RootState } from "./Store/Store";
 
 function App() {
   ReactModal.setAppElement("#root");
-  const cachedEvents = useSelector((state: RootState) => state.events.events);
-  const { data: events, isLoading, error } = useGetListEventQuery(undefined, {
-    skip: !!cachedEvents.length, // Bỏ qua gọi API nếu đã có dữ liệu
-  });
+    const { data: events, isLoading, error } = useGetListEventQuery();
   const dispatch = useDispatch();
   useEffect(() => {
     if (events) {
