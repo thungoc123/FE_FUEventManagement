@@ -14,7 +14,7 @@ import { RootState } from "../../../Store/Store";
 export const AddSponsorTable = () => {
   const { id } = useParams();
   const Events = useSelector((state: RootState) => state.events.events);
-
+  
   const sponsor = Events?.find((event) => event.id === parseInt(id))?.sponsor || [];
   console.log(sponsor)
   const tableHeaders = [

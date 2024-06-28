@@ -1,4 +1,4 @@
-import { BiEdit, BiShow, BiTrash } from "react-icons/bi";
+import { BiEdit, BiShow, BiTrash, BiAddToQueue } from "react-icons/bi";
 // import { ApplicationShell4 } from "./AppModel";
 // import { TableTemplate } from "./Table1";
 // import AddFeedbackButton from "./AddFeedbackButton";
@@ -12,25 +12,37 @@ import { useGetListEventQuery } from "../../../Features/EventManage/eventApi";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../Store/Store";
+import { useState } from "react";
+import UpdateEvent from "../../Pages/Dashboard/EventOperator/UpdateEvent";
 // import { selectUnpublishEvents } from "../../../Features/EventManage/eventSelector";
 // import { selectPublishEvents } from "../../../Features/EventManage/eventSelector";
 
 export const PublishEvent = () => {
-  const tableHeaders = ["No", "Name", "Date", "Detail", "Delete", "Publish"];
-  const Events = useSelector((state: RootState) => state.events.events);
+  const tableHeaders = ["No", "Name", "Date", "Detail","Edit", "Delete", "Publish"];
+
+  const { data: Events, isLoading, error } = useGetListEventQuery();
+
   const publishEvents =
     Events?.filter((event) => event.stateEvent.name === "PUBLISH") || [];
-  const tableRows: EventTable[] = publishEvents?.map((event, index) => ({
+  const tableRows: EventTable[] = publishEvents?.map((item, index) => ({
     No: index + 1, // Số thứ tự bắt đầu từ 1
-    Name: event.name, // Tên sự kiện
-    Date: new Date(event.timestart).toLocaleDateString(), // Ngày diễn ra sự kiện, chuyển đổi sang định dạng chuỗi
+    Name: item.name, // Tên sự kiện
+    Date: new Date(item.timestart).toLocaleDateString(), // Ngày diễn ra sự kiện, chuyển đổi sang định dạng chuỗi
     Detail: (
-      <Link to={`/eventoperator/dashboard/event/${event.id}`}>
+      <Link to={`/eventoperator/dashboard/event/${item.id}`}>
         <Button size="icon" variant="link">
-          <BiEdit />
+          <BiAddToQueue />
         </Button>
       </Link>
     ), // Nút chi tiết
+    Edit: (
+      <Link to={`/eventoperator/dashboard/event/update/${item.id}`}>
+        <Button size="icon" variant="link">
+          <BiEdit />
+        </Button>
+    </Link>
+
+    ),
     Delete: (
       <Button size="icon" variant="link">
         <BiTrash />
@@ -48,27 +60,31 @@ export const PublishEvent = () => {
     "w-[200px] pr-4 xxl:w-[150px]",
     "w-[128px] pr-4 xxl:w-[150px]",
     "w-[200px] pr-4 xxl:w-[50px]",
-    "w-[200px] pr-4 xxl:w-[50px]",
-    "w-[200px] pr-4 xxl:w-[50px]",
+    "w-[200px] pr-4 xxl:w-[20px]",
+    "w-[200px] pr-4 xxl:w-[20px]",
+    "w-[200px] pr-4 xxl:w-[20px]",
   ];
-  const paginationItems = [1, 2, 3, 4, 5];
   return (
     <>
-      <TableTemplate
-        headerTitle="Unpublish Event"
-        headerDescription="List of unpublish event"
-        // buttons={[
-        //   {
-        //     children: <AddFeedbackButton />,
+      {isLoading ? (
+        "Vui lòng đợi trong giây lát"
+      ) : (
+        <TableTemplate
+          headerTitle="Publish Event"
+          headerDescription="List of unpublish event"
+          // buttons={[
+          //   {
+          //     children: <AddFeedbackButton />,
 
-        //     size: "sm",
-        //   },
-        // ]}
-        tableHeaders={tableHeaders}
-        tableRows={tableRows} // Truyền dữ liệu mới cho tableRows
-        // paginationItems={paginationItems}
-        tableHeadersClasses={tableHeaderClasses}
-      />
+          //     size: "sm",
+          //   },
+          // ]}
+          tableHeaders={tableHeaders}
+          tableRows={tableRows} // Truyền dữ liệu mới cho tableRows
+          // paginationItems={paginationItems}
+          tableHeadersClasses={tableHeaderClasses}
+        />
+      )}
     </>
   );
 };

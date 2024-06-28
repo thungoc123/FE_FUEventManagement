@@ -5,6 +5,8 @@ import { useSelector } from 'react-redux';
 import { EOevent } from '../../Types/eo.type';
 
 
+
+
 const baseQuery = fetchBaseQuery({
   baseUrl: 'https://eventmanagementfu.azurewebsites.net/',
   prepareHeaders: (headers, { getState }) => {
@@ -29,12 +31,41 @@ export const eventApi = createApi({
         body: newEvent,
       }),
     }),
+    updateEvent: builder.mutation({
+      query: ({ eventId, newEvent }) => ({
+        url: `api-events/${eventId}`,
+        method: 'PUT',
+        body: newEvent,
+      }),
+    }),
     getListEvent: builder.query<EOevent[], void>({
       query: () => 'api-events/account',
-      keepUnusedDataFor: 3600,
+      // keepUnusedDataFor: 3600,
+    }),
+
+    addSchedule: builder.mutation({
+      query: ({ id, newSchedule }) => ({
+        url: `api-events/${id}/create-schedule`,
+        method: 'POST',
+        body: newSchedule,
+      }),
+    }),
+    addImage: builder.mutation({
+      query: ({id, newImage}) => ({
+        url: `api-events/${id}/add-image`,
+        method: 'POST',
+        body: newImage,
+      })
+    }),
+    addCheckingStaff: builder.mutation({
+      query: ({id, newStaff}) => ({
+        url: `api-events/${id}/create-staff`,
+        method: 'POST',
+        body: newStaff,
+      })
     })
   }),
 });
 
-export const { useCreateEventMutation, useGetListEventQuery } = eventApi;
+export const { useCreateEventMutation, useGetListEventQuery, useAddScheduleMutation, useAddImageMutation, useAddCheckingStaffMutation, useUpdateEventMutation } = eventApi;
 

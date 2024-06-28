@@ -358,12 +358,12 @@ export const ApplicationShell4: React.FC<ParentComponentProps> = ({
 let NavigationProp: NavigationProps[] = [];
 const NavigationAuth = (role: string) => {
 
-  const Events = useSelector((state: RootState) => state.events.events);
+  // const Events = useSelector((state: RootState) => state.events.events);
   // const { data: Events, isLoading, error } = useGetListEventQuery();
   // const Events = useSelector(selectUnpublishEvents);
 
-  const unpublishEvents = Events.filter(event => event.stateEvent.name === 'UNPUBLISH')
-  const publishEvent = Events.filter(event => event.stateEvent.name === "PUBLISH")  
+  // const unpublishEvents = Events.filter(event => event.stateEvent.name === 'UNPUBLISH')
+  // const publishEvent = Events.filter(event => event.stateEvent.name === "PUBLISH")  
   switch (role) {
     case "ROLE_EO":
       NavigationProp = [
@@ -400,13 +400,13 @@ const NavigationAuth = (role: string) => {
             {
               name: "Unpublish",
               url: "/eventoperator/dashboard/UnpublishEvent",
-              number: unpublishEvents.length,
+              number: 0,
               icon: <BiCalendarEdit className="size-6 shrink-0" />,
             },
             {
               name: "Happened",
               url: "/eventoperator/dashboard/PublishEvent",
-              number: publishEvent.length,
+              number: 0,
               icon: <BiCalendarCheck className="size-6 shrink-0" />,
             },
           ],

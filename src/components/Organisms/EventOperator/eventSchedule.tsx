@@ -1,4 +1,4 @@
-import { BiEdit, BiShow } from "react-icons/bi";
+import { BiEdit, BiShow, BiTrash } from "react-icons/bi";
 // import { ApplicationShell4 } from "./AppModel";
 // import { TableTemplate } from "./Table1";
 // import AddFeedbackButton from "./AddFeedbackButton";
@@ -21,7 +21,7 @@ export const EventScheduleTable:React.FC<Props> = (prop) => {
 
   const eventSchedule = Events?.find(event => event.id === parseInt(id))?.eventSchedules || []
   console.log(eventSchedule)
-  const tableHeaders = ["No","Schedule", "Duration", "Actor", "Time","Date","Hinh_Thuc","Detail","Edit"];
+  const tableHeaders = ["No","Schedule", "Duration", "Actor", "Time","Date","Hinh_Thuc","Detail","Edit","Delete"];
   const tableHeaderClasses = [
     "w-[200px] pr-4 xxl:w-[25px]",
     "w-[200px] pr-4 xxl:w-[100px]",
@@ -29,6 +29,7 @@ export const EventScheduleTable:React.FC<Props> = (prop) => {
     "w-[200px] pr-4 xxl:w-[100px]",
     "w-[192px] pr-4 xxl:w-[50px]",
     "w-[192px] pr-4 xxl:w-[70px]",
+    "w-[192px] pr-4 xxl:w-[50px]",
     "w-[192px] pr-4 xxl:w-[50px]",
     "w-[192px] pr-4 xxl:w-[50px]",
     "w-[96px] pr-4 text-center",
@@ -43,7 +44,8 @@ export const EventScheduleTable:React.FC<Props> = (prop) => {
     Date:item.date, 
     Hinh_Thuc:item.eventType,
     Detail:<Button size="icon" variant="link"> <BiShow /></Button>,
-    Edit:<Button size="icon" variant="link"> <BiEdit /></Button>
+    Edit:<Button size="icon" variant="link"> <BiEdit /></Button>,
+    Delete:<Button size="icon" variant="link"> <BiTrash /></Button>
     ,
   }));
   // const paginationItems = [1, 2, 3, 4, 5,6,7,8,9];

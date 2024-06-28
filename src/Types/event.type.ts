@@ -5,6 +5,7 @@ export interface EventTable {
     Name: string, 
     Date: string, 
     Detail : React.ReactNode, 
+    Edit : React.ReactNode, 
     Delete : React.ReactNode,
     Publish: React.ReactNode
 }

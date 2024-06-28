@@ -7,7 +7,9 @@ export interface EventTable{
    Date:String, 
    Hinh_Thuc:String,
    Detail:React.ReactNode,
-   Edit:React.ReactNode
+   Edit:React.ReactNode,
+   Delete:React.ReactNode
+
 }
 
 

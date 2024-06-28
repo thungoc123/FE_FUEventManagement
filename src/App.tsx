@@ -37,6 +37,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { setEvents } from "./Features/EventManage/eventSlice";
 import { RootState } from "./Store/Store";
+import UpdateEvent from "./components/Pages/Dashboard/EventOperator/UpdateEvent";
 
 function App() {
   ReactModal.setAppElement("#root");
@@ -141,6 +142,15 @@ function App() {
             element={
               <RequireAuth role="ROLE_EO">
                 <EO />
+              </RequireAuth>
+            }
+          />
+          
+          <Route
+            path="/eventoperator/dashboard/event/update/:id"
+            element={
+              <RequireAuth role="ROLE_EO">
+                <UpdateEvent />
               </RequireAuth>
             }
           />

@@ -12,7 +12,12 @@ export interface State {
     number: number,
     icon: React.ReactNode
 }
-
+export interface Time {
+    hour: number;
+    minute: number;
+    second: number;
+    nano: number;
+  }
 export interface NavigationProps {
     Name: string, 
     Url: string,

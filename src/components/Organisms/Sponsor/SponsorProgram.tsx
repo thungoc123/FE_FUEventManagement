@@ -15,6 +15,7 @@ import {
   import { BiPencil,BiBookmark,BiDotsHorizontalRounded, BiMap, BiSearch } from "react-icons/bi";
 import { Navigate, useNavigate } from "react-router-dom";
 import { sponsorApi, useGetListSponsorProgramQuery } from "../../../Features/Sponsor/sponsorApi";
+import { truncateString } from "../../../ulities/Stringhandle";
   
   type ImageProps = {
     src: string;
@@ -82,7 +83,7 @@ import { sponsorApi, useGetListSponsorProgramQuery } from "../../../Features/Spo
             <div className="size-full overflow-hidden">
               <img
                 src={property.thumbnail}
-                alt={property.description}
+                alt=""
                 className="aspect-square size-full object-cover"
               />
             </div>
@@ -103,7 +104,7 @@ import { sponsorApi, useGetListSponsorProgramQuery } from "../../../Features/Spo
         </DropdownMenu>
                 </div>
               </div>
-              <div className="mb-3 md:mb-4"dangerouslySetInnerHTML={{ __html: property.description }} />
+              <div className="mb-3 md:mb-4"dangerouslySetInnerHTML={{ __html: truncateString(property.description,150,"...") }} />
               <div className="flex flex-wrap gap-4">
                 <div className="flex items-center gap-2">
                   <BiMap className="size-6" />
