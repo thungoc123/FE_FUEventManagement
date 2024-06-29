@@ -6,7 +6,11 @@ import type { ButtonProps } from "@relume_io/relume-ui";
 import { RxChevronRight } from "react-icons/rx";
 import DateDisplay from "../../Atoms/Date"; // Ensure this component exists or adjust accordingly
 import LocationDisplay from "../../Atoms/Location"; // Ensure this component exists or adjust accordingly
-import { Navigate, unstable_HistoryRouter, useNavigate } from "react-router-dom";
+import {
+  Navigate,
+  unstable_HistoryRouter,
+  useNavigate,
+} from "react-router-dom";
 
 type StateEvent = {
   id: number;
@@ -54,7 +58,8 @@ export const EventBlog = (props: EventBlogProps) => {
   const history = useNavigate(); // Initialize useHistory
 
   const handleButtonClick = (eventId: number) => {
-    history(`/event/${eventId}`);  };
+    history(`/event-detail/${eventId}`);
+  };
 
   const [visibleEvents, setVisibleEvents] = useState(3);
   const handleViewAll = () => {
@@ -73,10 +78,11 @@ export const EventBlog = (props: EventBlogProps) => {
         </div>
         <div className="grid grid-cols-1 gap-x-8 gap-y-16 md:grid-cols-2 md:gap-y-12 lg:grid-cols-3">
           {EventPosts?.slice(0, visibleEvents).map((post, index) => {
-            const stateEventName = post.stateEvent?.name ?? 'No location';
-            const eventImageUrl = post.eventImages && post.eventImages.length > 0 
-              ? post.eventImages[0].url 
-              : 'https://relume-assets.s3.amazonaws.com/placeholder-image-landscape.svg';
+            const stateEventName = post.stateEvent?.name ?? "No location";
+            const eventImageUrl =
+              post.eventImages && post.eventImages.length > 0
+                ? post.eventImages[0].url
+                : "https://relume-assets.s3.amazonaws.com/placeholder-image-landscape.svg";
 
             return (
               <div key={post.id}>
@@ -87,14 +93,21 @@ export const EventBlog = (props: EventBlogProps) => {
                   <div className="w-full overflow-hidden">
                     <img
                       src={eventImageUrl}
-                      alt={post.eventImages && post.eventImages.length > 0 ? post.eventImages[0].event : 'Placeholder image'}
+                      alt={
+                        post.eventImages && post.eventImages.length > 0
+                          ? post.eventImages[0].event
+                          : "Placeholder image"
+                      }
                       className="aspect-[3/2] size-full object-cover"
                     />
                   </div>
                 </a>
                 <div className="mt-3 flex items-center justify-between">
-                  <DateDisplay date={new Date(post.timestart).toLocaleDateString()} />
-                  <LocationDisplay location={post.location ?? 'No location'} /> {/* Sử dụng thuộc tính location */}
+                  <DateDisplay
+                    date={new Date(post.timestart).toLocaleDateString()}
+                  />
+                  <LocationDisplay location={post.location ?? "No location"} />{" "}
+                  {/* Sử dụng thuộc tính location */}
                 </div>
                 <a
                   href={post.url}
@@ -105,16 +118,21 @@ export const EventBlog = (props: EventBlogProps) => {
                 <p>{post.description}</p>
                 <div className="mt-6 flex items-center justify-between">
                   <div>
-                    <h6 className="text-sm font-semibold">Price: ${post.price}</h6>
+                    <h6 className="text-sm font-semibold">
+                      Price: ${post.price}
+                    </h6>
                     <div className="flex items-center">
-                      <p className="text-sm">Start: {new Date(post.timestart).toLocaleDateString()}</p>
+                      <p className="text-sm">
+                        Start: {new Date(post.timestart).toLocaleDateString()}
+                      </p>
                       <span className="mx-2">•</span>
-                      <p className="text-sm">End: {new Date(post.timeend).toLocaleDateString()}</p>
+                      <p className="text-sm">
+                        End: {new Date(post.timeend).toLocaleDateString()}
+                      </p>
                     </div>
                   </div>
-                  
+
                   <Button
-                  
                     variant={post.button?.variant}
                     size={post.button?.size}
                     iconRight={post.button?.iconRight}
@@ -123,6 +141,7 @@ export const EventBlog = (props: EventBlogProps) => {
                     onClick={() => handleButtonClick(post.id)}
                   >
                     {post.button?.title}
+                    Detail
                   </Button>
                 </div>
               </div>

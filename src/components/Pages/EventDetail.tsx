@@ -9,7 +9,7 @@ import { Header80 } from "../Molecules/EventHeader";
 import { Cta7 } from "../Molecules/CTA";
 import { useGetEventDetailsQuery } from "../../Features/Event/eventApi";
 import { useParams } from "react-router-dom";
-import { EventImage } from "../../Types/event.type";
+import { NavbarLogout } from "../Organisms/Guest/NavbarLogout";
 
 function EventDetail() {
   const { id } = useParams<{ id: string }>();
@@ -17,7 +17,8 @@ function EventDetail() {
     return <div>Error: Event ID is missing.</div>;
   }
   const { data, error, isLoading } = useGetEventDetailsQuery(id);
-  if (isLoading) return <div className="loader">Loading...</div>;
+
+  if (isLoading) return <div className="loader"></div>;
   if (error) {
     let errorMessage;
     if ("status" in error) {
@@ -28,13 +29,30 @@ function EventDetail() {
     }
     return <div>Error: {errorMessage}</div>;
   }
-  const eventImages=data?.eventImages?? "No event image available";
+
+  //#region EXTRACTING EVENTS DATA GOT FROM BACKEND
+  const eventImages =
+    data?.eventImages?.map((image) => ({
+      src: image.url,
+      alt: image.event,
+    })) ?? [];
+
+  const eventSchedules = data?.eventSchedules ?? [];
+
   const eventName = data?.name ?? "No event name available";
+
   const summary = data?.description ?? "No description available";
+
   const tags = data?.stateEvent ? [data.stateEvent.name] : [];
-  const date = data?.timestart
+
+  const startDate = data?.timestart
     ? new Date(data.timestart).toLocaleDateString()
     : "No date available";
+
+  // const endDate = data?.timeend
+  //   ? new Date(data.timeend).toLocaleDateString()
+  //   : "No date available";
+
   const duration =
     data?.timestart && data?.timeend
       ? `${Math.round(
@@ -43,32 +61,62 @@ function EventDetail() {
             60000
         )} minutes`
       : "No duration available";
-      const eventSchedules = data?.eventSchedules ?? [];
-      const client = eventSchedules.map(schedule => schedule.actor).join(", ") || "No actors available";
-      const location = eventSchedules.map(schedule => schedule.location).join(", ") || "No locations available";
-      const eventImage: EventImage[] = data?.eventImages.map((image) => ({
-        id: image.id,
-        url: image.url,
-        event: image.event,
-      })) ?? [];
+
+  const client =
+    eventSchedules.map((schedule) => schedule.actor).join(", ") ||
+    "No actors available";
+
+  const location =
+    eventSchedules.map((schedule) => schedule.location).join(", ") ||
+    "No locations available";
+
+  // FINAL DATA PASSED
+  const days: { [key: string]: any[] } = eventSchedules.reduce(
+    (acc: { [key: string]: any[] }, schedule) => {
+      const date = new Date(schedule.date).toLocaleDateString();
+      if (!acc[date]) {
+        acc[date] = [];
+      }
+      acc[date].push({
+        time: `${schedule.timestart} - ${schedule.duration}`,
+        title: schedule.name,
+        tags: [schedule.eventType],
+        speaker: schedule.actor,
+        location: schedule.location,
+      });
+      return acc;
+    },
+    {}
+  );
+
+  const formattedDays = Object.keys(days).map((date) => ({
+    date,
+    events: days[date],
+  }));
+  //#endregion
+  //EVENT GALLERY 
+  
   return (
     <>
-      <Navbar2 />
-      {/* <Header9 /> */}
-      {/* <Blog33 /> */}
-      <Header80 heading={eventName} description={summary} eventImage={eventImage}/>
+        <NavbarLogout/>
+        <Header80
+        heading={eventName}
+        description={summary}
+        eventImages={eventImages}
+      />
       <EventDetails
         eventId={id}
         eventName={eventName}
         summary={summary}
         tags={tags}
-        client={client} // Adjust this line according to your data structure
-        date={date}
+        client={client}
+        date={startDate}
         duration={duration}
         location={location}
       />
-      <Schedule days={[]} />
-      <Gallery3 />
+
+      <Schedule days={formattedDays} />
+      <Gallery3 heading="Event Gallery" description="" images={eventImages} /> {/* Truyền eventImages vào Gallery3 */}
       <Cta7 />
       <Contact1 />
       <Testimonial1 />

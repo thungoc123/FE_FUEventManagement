@@ -180,7 +180,7 @@ export const SponsorSignUp = (props: Signup7Props) => {
             </div>
           </div>
         </div>
-        <div className="hidden bg-background-secondary lg:block">
+        <div className="h-screen w-full flex items-center justify-center">
           <img
             src={image.src}
             alt={image.alt}
@@ -208,7 +208,7 @@ export const Signup7Defaults: Signup7Props = {
   },
 
   image: {
-    src: "",
+    src: "/src/assets/7.jpg",
     alt: "Placeholder image",
   },
   logInText: "Already have an account?",

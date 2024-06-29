@@ -64,7 +64,7 @@ function App() {
           <Route path="/checkstaff" element={<AddCheckStaffTable />} />
           <Route path="/sponsor-table" element={<AddSponsorTable />} />
           <Route path="/event-table" element={<EventScheduleTable />} />
-          <Route path="/event/:id" element={<EventDetail/>} />
+          <Route path="/event-detail/:id" element={<EventDetail/>} />
 
 
         </Routes>

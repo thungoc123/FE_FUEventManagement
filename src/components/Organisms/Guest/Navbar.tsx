@@ -558,7 +558,7 @@ export const Navbar2Defaults = {
     },
     {
       title: "About",
-      url: "/about",
+      url: "/service-term",
     },
     {
       title: "Contact",

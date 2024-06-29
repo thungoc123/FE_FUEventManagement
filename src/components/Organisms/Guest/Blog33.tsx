@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { ChangeEvent, useState, useEffect } from "react";
 import { Button } from "@relume_io/relume-ui";
 import type { ButtonProps } from "@relume_io/relume-ui";
-import { RxChevronRight } from "react-icons/rx";
 import DateDisplay from "../../Atoms/Date"; // Ensure this component exists or adjust accordingly
 import LocationDisplay from "../../Atoms/Location"; // Ensure this component exists or adjust accordingly
 import SearchBar from "./SearchBar";
+import { useNavigate } from "react-router-dom";
 
 type StateEvent = {
   id: number;
@@ -28,8 +28,8 @@ type EventPost = {
   timeend: string;
   timeopensale: string;
   timeclosesale: string;
-  stateEvent?: StateEvent | null; // Đảm bảo rằng stateEvent có thể là null
-  eventImages: EventImage[] | null; // Đảm bảo rằng eventImages có thể là null
+  stateEvent?: StateEvent | null;
+  eventImages: EventImage[] | null;
   url?: string;
   button?: ButtonProps;
   location?: string;
@@ -51,24 +51,46 @@ export const Blog33 = (props: Blog33Props) => {
     ...props,
   } as Props;
 
+  const [searchValue, setSearchValue] = useState<string>("");
   const [visibleEvents, setVisibleEvents] = useState(3);
+  const [filteredEvents, setFilteredEvents] = useState<EventPost[]>(EventPosts || []);
+
   const handleViewAll = () => {
     setVisibleEvents(EventPosts?.length || 0);
   };
+
+  const navigate = useNavigate();
+  const handleButtonClick = (eventId: number) => {
+    navigate(`/event-detail/${eventId}`);
+  };
+
+  const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
+    const query = event.target.value;
+    setSearchValue(query);
+
+    if (!EventPosts) return;
+
+    const filtered = EventPosts.filter((post) =>
+      post.name.toLowerCase().includes(query.toLowerCase())
+    );
+    setFilteredEvents(filtered);
+  };
+
+  useEffect(() => {
+    setFilteredEvents(EventPosts || []);
+  }, [EventPosts]);
 
   return (
     <section className="px-[5%] py-16 md:py-24 lg:py-28">
       <div className="container">
         <div className="container mb-12 max-w-lg text-center md:mb-18 lg:mb-20">
           <p className="mb-3 font-semibold md:mb-4">{tagline}</p>
-          <SearchBar />
-          <h2 className="mb-5 text-5xl font-bold md:mb-6 md:text-7xl lg:text-8xl">
-            {heading}
-          </h2>
+          <SearchBar value={searchValue} onChange={handleSearch} />
+          <h2 className="mb-5 text-5xl font-bold md:mb-6 md:text-7xl lg:text-8xl">{heading}</h2>
           <p className="md:text-md">{description}</p>
         </div>
         <div className="grid grid-cols-1 gap-x-8 gap-y-16 md:grid-cols-2 md:gap-y-12 lg:grid-cols-3">
-          {EventPosts?.slice(0, visibleEvents).map((post, index) => {
+          {filteredEvents.slice(0, visibleEvents).map((post) => {
             const stateEventName = post.stateEvent?.name ?? "No location";
             const eventImageUrl =
               post.eventImages && post.eventImages.length > 0
@@ -77,49 +99,30 @@ export const Blog33 = (props: Blog33Props) => {
 
             return (
               <div key={post.id}>
-                <a
-                  href={post.url}
-                  className="mb-3 inline-block w-full max-w-full focus-visible:outline-none"
-                >
+                <a href={post.url} className="mb-3 inline-block w-full max-w-full focus-visible:outline-none">
                   <div className="w-full overflow-hidden">
                     <img
                       src={eventImageUrl}
-                      alt={
-                        post.eventImages && post.eventImages.length > 0
-                          ? post.eventImages[0].event
-                          : "Placeholder image"
-                      }
+                      alt={post.eventImages && post.eventImages.length > 0 ? post.eventImages[0].event : "Placeholder image"}
                       className="aspect-[3/2] size-full object-cover"
                     />
                   </div>
                 </a>
                 <div className="mt-3 flex items-center justify-between">
-                  <DateDisplay
-                    date={new Date(post.timestart).toLocaleDateString()}
-                  />
-                  <LocationDisplay location={post.location ?? "No location"} />{" "}
-                  {/* Sử dụng thuộc tính location */}
+                  <DateDisplay date={new Date(post.timestart).toLocaleDateString()} />
+                  <LocationDisplay location={post.location ?? "No location"} />
                 </div>
-                <a
-                  href={post.url}
-                  className="mb-2 block max-w-full focus-visible:outline-none"
-                >
+                <a href={post.url} className="mb-2 block max-w-full focus-visible:outline-none">
                   <h5 className="text-xl font-bold md:text-2xl">{post.name}</h5>
                 </a>
                 <p>{post.description}</p>
                 <div className="mt-6 flex items-center justify-between">
                   <div>
-                    <h6 className="text-sm font-semibold">
-                      Price: ${post.price}
-                    </h6>
+                    <h6 className="text-sm font-semibold">Price: ${post.price}</h6>
                     <div className="flex items-center">
-                      <p className="text-sm">
-                        Start: {new Date(post.timestart).toLocaleDateString()}
-                      </p>
+                      <p className="text-sm">Start: {new Date(post.timestart).toLocaleDateString()}</p>
                       <span className="mx-2">•</span>
-                      <p className="text-sm">
-                        End: {new Date(post.timeend).toLocaleDateString()}
-                      </p>
+                      <p className="text-sm">End: {new Date(post.timeend).toLocaleDateString()}</p>
                     </div>
                   </div>
                   <Button
@@ -128,15 +131,16 @@ export const Blog33 = (props: Blog33Props) => {
                     iconRight={post.button?.iconRight}
                     iconLeft={post.button?.iconLeft}
                     className="mt-6 flex items-center justify-center gap-x-1"
+                    onClick={() => handleButtonClick(post.id)}
                   >
-                    {post.button?.title}
+                    {post.button?.title || "Detail"}
                   </Button>
                 </div>
               </div>
             );
           })}
         </div>
-        {visibleEvents < (EventPosts?.length || 0) && (
+        {visibleEvents < filteredEvents.length && (
           <div className="flex items-center justify-center">
             <Button
               variant={button?.variant}
@@ -146,7 +150,7 @@ export const Blog33 = (props: Blog33Props) => {
               className="mt-10 md:mt-14 lg:mt-16"
               onClick={handleViewAll}
             >
-              {button?.title}
+              {button?.title || "View all"}
             </Button>
           </div>
         )}

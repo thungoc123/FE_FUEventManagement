@@ -79,7 +79,10 @@ const dropDownVariants = {
   },
 };
 
-export const NavbarLogout = (props: Navbar2Props) => {
+export const 
+
+
+NavbarLogout = (props: Navbar2Props) => {
   const { logo, links, buttons } = {
     ...Navbar2Defaults,
     ...props,
@@ -98,7 +101,7 @@ export const NavbarLogout = (props: Navbar2Props) => {
     <nav className="flex w-full items-center border-b border-border-primary bg-white lg:min-h-18 lg:px-[5%]">
       <div className="mx-auto size-full lg:grid lg:grid-cols-[0.375fr_1fr_0.375fr] lg:items-center lg:justify-between lg:gap-4">
         <div className="flex min-h-16 items-center justify-between px-[5%] md:min-h-18 lg:min-h-full lg:px-0">
-          <img src={logo.src} alt={logo.alt} />
+        <img src={logo?.src} alt={logo?.alt} style={{ height: '50px', width: 'auto', borderRadius: '50%' }} />
           <div className="flex items-center gap-4 lg:hidden">
             <div>
               {buttons.map((button, index) => (
@@ -149,7 +152,11 @@ export const NavbarLogout = (props: Navbar2Props) => {
                 <NavItemDropdown subLinks={link.subLinks} title={link.title} />
               ) : (
                 <a
-                  href={link.url}
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (link.title === "About Us") navigate("/service-term");
+                  }}
                   className="relative mx-auto block py-3 text-md ring-offset-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-primary focus-visible:ring-offset-2 lg:px-4 lg:py-2 lg:text-base"
                 >
                   {link.title}
@@ -257,7 +264,7 @@ const NavItemDropdown = ({ title, subLinks }: { title: string; subLinks: LinkPro
 
 export const Navbar2Defaults: Navbar2Props = {
   logo: {
-    src: "https://relume-assets.s3.amazonaws.com/logo-image.svg",
+    src: "/src/assets/logo.jpg",
     alt: "Logo image",
   },
   links: [

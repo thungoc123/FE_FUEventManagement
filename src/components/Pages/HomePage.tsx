@@ -4,46 +4,69 @@ import { Blog33 } from "../Organisms/Guest/Blog33";
 import { Logo1 } from "../Organisms/Guest/Logo1";
 import { Footer1 } from "../Organisms/Guest/Footer";
 import { EventBlog } from "../Organisms/Guest/UpcommingEvent";
-import { useGetEventsQuery } from "../../Features/Event/eventApi";
+import {
+  useGetHappenedEventsQuery,
+  useGetPublishedEventsQuery,
+} from "../../Features/Event/eventApi";
+import { Event } from "../../Types/event.type";
 
 function HomePage() {
-  const { data: eventPosts = [], error, isLoading } = useGetEventsQuery(); // Sử dụng hook để lấy dữ liệu
+  // DATA OF PUBLISHED EVENTS
+  const {
+    data: publishedEvents = [],
+    error: publishedEventsError,
+    isLoading: publishedEventsLoading,
+  } = useGetPublishedEventsQuery(); // Sử dụng hook để lấy dữ liệu
 
-  if (isLoading) return;
-  <div className="loader">Loading...</div>;
+  // DATA OF HAPPENED EVENTS
+  const {
+    data: happendEvents = [],
+    error: happenedEventsError,
+    isLoading: happenedEventsLoading,
+  } = useGetHappenedEventsQuery();
 
-  if (error) return <div>Error loading events</div>;
-  const eventImages = eventPosts.flatMap((event) => event.eventImages);
+  if (publishedEventsLoading || happenedEventsLoading)
+    return <div className="loader"></div>;
+
+  if (publishedEventsError || happenedEventsError)
+    return <div>Error loading events</div>;
+  // const eventImages = eventPosts.flatMap((event: Event) => event.eventImages);
   const headerData = {
-    heading: "FPT Event Website",
-    description: "All Event You Need Are Here",
+    name: "",
+    description:"" ,
     buttons: [
       { title: "View Event" },
       { title: "Buy Ticket", variant: "secondary" },
     ],
     images: [],
-    eventImages: eventPosts.flatMap(event => event.eventImages),
-    carouselHeading: eventPosts.flatMap(event=> event.name),
-    carouselDescription: eventPosts.flatMap(event=> event.description)
+    eventImages: publishedEvents.flatMap((event: Event) => event.eventImages),
+    carouselHeading: publishedEvents.flatMap((event: Event) => event.name),
+    carouselDescription: publishedEvents.flatMap(
+      (event: Event) => event.description
+    ),
   };
 
   return (
     <>
       <Navbar2 />
-      <Header9 {...headerData}/>
+      <Header9 {...headerData} />
+
+      {/* RENDER THE UPCOMING EVENTS */}
       <EventBlog
         tagline="Discover"
         heading="Upcoming Events"
         description="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
         button={{ title: "View all", variant: "secondary" }}
-        EventPosts={eventPosts}
+        EventPosts={publishedEvents}
       />
+
+      {/* RENDER THE HAPPENED EVENTS */}
       <Blog33
         tagline="Blog"
         heading="Event On the Line"
         description="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
         button={{ title: "View all", variant: "secondary" }}
-        EventPosts={eventPosts} // Truyền dữ liệu sự kiện vào Blog />
+        EventPosts={publishedEvents} // Truyền dữ liệu sự kiện vào Blog />
       />
 
       <Logo1 />
