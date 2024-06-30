@@ -1,49 +1,19 @@
-import { configureStore } from '@reduxjs/toolkit';
-import { persistStore, persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage'; // Sử dụng localStorage
-import { authApi } from '../Features/Auth/authApi';
-import authReducer from '../Features/Auth/authSlice';
-import { eventApi } from '../Features/EventManage/eventApi';
-import notificationsReducer, { initialState as notificationsInitialState } from '../Features/Utils/notificationsSlice';
-import { sponsorApi } from '../Features/Sponsor/sponsorApi';
-import eventReducer from '../Features/EventManage/eventSlice'; // Import eventReducer
+// src/app/store.ts
+import { configureStore } from "@reduxjs/toolkit";
+import { sponsorApi } from "../Features/Sponsor/sponsorApi";
+import { eventApi } from "../Features/Event/eventApi";
+import { sponsor_programApi } from "../Features/Sponsor/sponsor_programApi";
 
-// Cấu hình persist cho auth reducer
-const authPersistConfig = {
-  key: 'auth',
-  storage,
-  whitelist: ['token', 'role', 'accountId'],
-};
-
-const persistedAuthReducer = persistReducer(authPersistConfig, authReducer);
-
-// Tạo store với persistedReducer
 export const store = configureStore({
   reducer: {
-    [authApi.reducerPath]: authApi.reducer,
-    auth: persistedAuthReducer,
-    [eventApi.reducerPath]: eventApi.reducer,
-    notifications: notificationsReducer,
     [sponsorApi.reducerPath]: sponsorApi.reducer,
-    events: eventReducer,
+    [eventApi .reducerPath]: eventApi.reducer,
+    [sponsor_programApi.reducerPath] : sponsor_programApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: false,
-    }).concat(authApi.middleware, eventApi.middleware, sponsorApi.middleware),
+    getDefaultMiddleware().concat(sponsorApi.middleware,eventApi.middleware,sponsor_programApi.middleware),
+  
 });
 
-store.subscribe(() => {
-  const state = store.getState().notifications;
-  try {
-    localStorage.setItem('notifications', JSON.stringify(state));
-  } catch {
-    // ignore write errors
-  }
-});
-// Tạo persistor
-export const persistor = persistStore(store);
-
-// Lấy RootState và AppDispatch từ store
-export type RootState = ReturnType<typeof store.getState>;
+export type RootState = ReturnType<typeof store.getState>; 
 export type AppDispatch = typeof store.dispatch;

@@ -2,6 +2,7 @@ import React from 'react';
 import Tag from '../../Atoms/Tag';
 
 interface EventDetailsProps {
+  eventId:String;
   eventName: string;
   summary: string;
   tags: string[];
@@ -12,6 +13,7 @@ interface EventDetailsProps {
 }
 
 const EventDetails: React.FC<EventDetailsProps> = ({ 
+  eventId,
   eventName, 
   summary, 
   tags, 

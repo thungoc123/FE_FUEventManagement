@@ -1,5 +1,5 @@
-import React from 'react';
-import DaySchedule from '../../Molecules/Dayschedule';
+import React from "react";
+import DaySchedule from "../../Molecules/Dayschedule";
 interface Event {
   time: string;
   title: string;
@@ -20,7 +20,8 @@ const Schedule: React.FC<ScheduleProps> = ({ days }) => {
     <div className="p-6">
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold">Event Schedule</h1>
-        <p className="text-gray-700">Stay on track with the detailed schedule of the event.</p>
+        <p className="text-gray-700">
+        </p>
       </div>
       {days.map((day, index) => (
         <DaySchedule key={index} date={day.date} events={day.events} />
@@ -28,11 +29,5 @@ const Schedule: React.FC<ScheduleProps> = ({ days }) => {
     </div>
   );
 };
-// Schedule.defaultProps = {
-//     days = {
-        
-//     }
-   
-// }
-    
+
 export default Schedule;

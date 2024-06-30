@@ -1,10 +1,10 @@
-"use client";
 
 import { Button } from "@relume_io/relume-ui";
 import type { ButtonProps } from "@relume_io/relume-ui";
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 import { useRef } from "react";
 import clsx from "clsx";
+import { useNavigate } from "react-router-dom";
 
 type ImageProps = {
   src: string;
@@ -15,13 +15,13 @@ type Props = {
   heading: string;
   description: string;
   buttons: ButtonProps[];
-  images: ImageProps[];
+  eventImages: ImageProps[]; // Update Props to include eventImages
 };
 
 export type Header80Props = React.ComponentPropsWithoutRef<"section"> & Partial<Props>;
 
 export const Header80 = (props: Header80Props) => {
-  const { heading, description, buttons, images } = {
+  const { heading, description, buttons, eventImages } = {
     ...Header80Defaults,
     ...props,
   } as Props;
@@ -33,13 +33,16 @@ export const Header80 = (props: Header80Props) => {
   });
   const yFirst = useTransform(animatedScrollYProgress, [0, 1], ["0vh", "-87.5vh"]);
   const ySecond = useTransform(animatedScrollYProgress, [0, 1], ["0vh", "-39.6vh"]);
-
+  const navigator= useNavigate();
+  const buyTicketButton = () => {
+    navigator('/payment');
+  }
   return (
     <section ref={transformRef} className="relative h-[150vh] px-[5%] md:h-[300vh]">
       <div className="sticky top-0 h-[100vh] overflow-hidden">
         <div className="absolute bottom-0 left-0 right-auto top-0 z-10">
           <motion.div className="flex flex-col gap-[26vw] pt-[70vh]" style={{ y: yFirst }}>
-            {images.slice(0, 4).map((image, index) => (
+            {eventImages.slice(0, 4).map((image, index) => (
               <div
                 key={index}
                 className={clsx("relative h-[35vw] pt-[120%] sm:h-auto", {
@@ -64,7 +67,7 @@ export const Header80 = (props: Header80Props) => {
           style={{ y: ySecond }}
         >
           <div className="flex flex-col gap-[26vw] pt-[70vh]">
-            {images.slice(4).map((image, index) => (
+            {eventImages.slice(4).map((image, index) => (
               <div
                 key={index}
                 className={clsx("relative h-[35vw] pt-[120%] opacity-75 sm:h-auto", {
@@ -94,6 +97,7 @@ export const Header80 = (props: Header80Props) => {
                   size={button.size}
                   iconRight={button.iconRight}
                   iconLeft={button.iconLeft}
+                  onClick={buyTicketButton}
                 >
                   {button.title}
                 </Button>
@@ -108,44 +112,21 @@ export const Header80 = (props: Header80Props) => {
 };
 
 export const Header80Defaults: Header80Props = {
-  heading: "Medium length hero heading goes here",
-  description:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat.",
-  buttons: [
+  heading: "",
+  description:"",
+    buttons: [
     {
-      title: "Button",
-    },
-    {
-      title: "Button",
-      variant: "secondary",
-    },
+      title: "Add To Cart",
+    }
   ],
-  images: [
+  eventImages: [ // Update with default eventImages if needed
+    
     {
-      src: "https://relume-assets.s3.amazonaws.com/placeholder-image.svg",
-      alt: "Placeholder image 1",
-    },
-    {
-      src: "https://relume-assets.s3.amazonaws.com/placeholder-image.svg",
-      alt: "Placeholder image 2",
-    },
-    {
-      src: "https://relume-assets.s3.amazonaws.com/placeholder-image.svg",
-      alt: "Placeholder image 3",
-    },
-    {
-      src: "https://relume-assets.s3.amazonaws.com/placeholder-image.svg",
-      alt: "Placeholder image 4",
-    },
-    {
-      src: "https://relume-assets.s3.amazonaws.com/placeholder-image.svg",
-      alt: "Placeholder image 5",
-    },
-    {
-      src: "https://relume-assets.s3.amazonaws.com/placeholder-image.svg",
-      alt: "Placeholder image 6",
+      src: "",
+      alt: "",
     },
   ],
 };
 
 Header80.displayName = "Header80";
+  

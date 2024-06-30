@@ -106,8 +106,8 @@ export const Blog44 = (props: Blog44Props) => {
 };
 
 export const Blog44Defaults: Blog44Props = {
-  tagline: "Blog",
-  heading: "Short heading goes here",
+  tagline: "",
+  heading: "Related Program",
   description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
   button: { title: "View all", variant: "secondary" },
   blogPosts: [

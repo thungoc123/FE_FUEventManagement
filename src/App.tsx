@@ -40,23 +40,15 @@ import { RootState } from "./Store/Store";
 import UpdateEvent from "./components/Pages/Dashboard/EventOperator/UpdateEvent";
 
 function App() {
-  ReactModal.setAppElement("#root");
-    const { data: events, isLoading, error } = useGetListEventQuery();
-  const dispatch = useDispatch();
-  useEffect(() => {
-    if (events) {
-      dispatch(setEvents(events));
-    }
-  }, [events, dispatch]);
- 
+  const eventId='1';
   return (
 
     <>
 
       <Router>
         <Routes>
-          {/* Guest  */}
-          <Route path="/eventdetail" element={<EventDetail />} />
+          <Route path="/EventDetail" element={<EventDetail eventId={eventId}/>} 
+            />
           <Route path="/" element={<HomePage />} />
           {/* <Route path="/homepage" element={<HomePageLogout />} /> */}
           <Route path="/sponsor-homepage" element={<SponsorHomepage />} />
@@ -221,8 +213,12 @@ function App() {
           {/* <Route path="/question" element={<QuestionForm />} /> */}
           <Route path="/create-event" element={<CreateEvent />} />
           <Route path="/service-term" element={<ServiceTerm />} />
-          <Route path="/test" element={<TokenDecode />} />
-          <Route path="/login" element={<Login1 />} />
+          <Route path="/checkstaff" element={<AddCheckStaffTable />} />
+          <Route path="/sponsor-table" element={<AddSponsorTable />} />
+          <Route path="/event-table" element={<EventScheduleTable />} />
+          <Route path="/event-detail/:id" element={<EventDetail/>} />
+
+
         </Routes>
       </Router>
     </>
