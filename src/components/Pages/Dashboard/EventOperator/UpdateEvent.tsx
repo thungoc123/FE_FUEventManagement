@@ -23,15 +23,18 @@ import {
 } from "@relume_io/relume-ui";
 import { BiCalendarAlt, BiUser, BiHourglass, BiTime } from "react-icons/bi";
 import Modal from "react-modal";
-import { useCreateEventMutation } from "../../../../Features/EventManage/eventApi";
+import { useCreateEventMutation, useUpdateEventMutation } from "../../../../Features/EventManage/eventApi";
 import { RootState } from "../../../../Store/Store";
 import { useDispatch, useSelector } from "react-redux";
 const steps = [{ label: "Schedule" }, { label: "Actor" }];
 import { DateTime } from 'luxon'
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { addNotification } from "../../../../Features/Utils/notificationsSlice";
+import { EOevent } from "../../../../Types/eo.type";
+import { ApplicationShell4 } from "../../../Organisms/Dashboard/ApplicationShell";
 
-const CreateEvent = () => {
+
+const UpdateEvent = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [submitError, setSubmitError] = useState<string[]>([]);
@@ -49,15 +52,21 @@ const CreateEvent = () => {
     setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1));
   const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 0));
   const accountId = useSelector((state: RootState) => state.auth.accountId);
+  const [updateEvent] = useUpdateEventMutation()
+   const { id } = useParams();
+  const Events = useSelector((state: RootState) => state.events.events);
+  const eventInfor = Events?.find(event => event.id === parseInt(id))
+
+
 
   const [eventData, setEventData] = useState({
-    eventName: "",
-    description: "",
-    timeStart: "",
-    timeEnd: "",
-    timeOpenSale: "",
-    timeCloseSale: "",
-    price: 0,
+    eventName: eventInfor?.name,
+    description: eventInfor?.description,
+    timeStart: eventInfor?.timestart,
+    timeEnd: eventInfor?.timeend,
+    timeOpenSale: eventInfor?.timeopensale,
+    timeCloseSale: eventInfor?.timeclosesale,
+    price: eventInfor?.price,
     accountId: accountId,
   });
 
@@ -120,10 +129,10 @@ const CreateEvent = () => {
     e.preventDefault();
     console.log(eventData);
     try {
-      await createEvent(eventData).unwrap();
+      await updateEvent({eventId: id, newEvent : eventData}).unwrap();
       dispatch(addNotification({
         id: new Date().getTime(), // Sử dụng timestamp làm ID
-        message: 'Create event successfully!',
+        message: 'Update event successfully!',
         type: 'success',
         timestamp: Date.now(), // Thời gian hiện tại
       }));
@@ -132,7 +141,7 @@ const CreateEvent = () => {
     } catch (err) {
       dispatch(addNotification({
         id: new Date().getTime(), // Sử dụng timestamp làm ID
-        message: 'Create event unsuccessfully!',
+        message: 'Update event unsuccessfully!',
         type: 'error',
         timestamp: Date.now(), // Thời gian hiện tại
       }));
@@ -143,14 +152,13 @@ const CreateEvent = () => {
  
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button>Create Event</Button>
-      </DialogTrigger>
-      <DialogPortal>
-        <DialogOverlay className="bg-black/50" />
-        <DialogContent className="w-full max-w-md bg-white p-10 md:p-12">
-          <div className="relative flex justify-between items-center mb-8">
+        <>
+        <ApplicationShell4 
+        
+          MainComponent = {
+            (
+              <>
+                  <div className="relative flex justify-between items-center mb-8">
             {steps.map((step, index) => (
               <div key={index} className="flex-1 text-center relative">
                 <div className="relative flex items-center justify-center mb-2">
@@ -176,14 +184,17 @@ const CreateEvent = () => {
               </div>
             ))}
           </div>
+
+
+
           <form onSubmit={handleSubmit}>
             {currentStep === 0 && (
               // <Step1  handleChange={handleChange} />
               <div>
-                <DialogHeader>
+                {/* <DialogHeader>
                   <DialogTitle>Let’s start with your event </DialogTitle>
                   <DialogDescription></DialogDescription>
-                </DialogHeader>
+                </DialogHeader> */}
                 <div className="grid gap-4 py-4">
                   <div className="grid items-center gap-2">
                     <Label htmlFor="eventName">Name</Label>
@@ -211,10 +222,10 @@ const CreateEvent = () => {
             )}
             {currentStep === 1 && (
               <div>
-                <DialogHeader>
+                {/* <DialogHeader>
                   <DialogTitle>Time & Price </DialogTitle>
                   <DialogDescription></DialogDescription>
-                </DialogHeader>
+                </DialogHeader> */}
                 <div className="grid gap-4 py-4">
                   <div className="grid items-center gap-2">
                     <Label htmlFor="time">Ticket Open Sale</Label>
@@ -279,7 +290,7 @@ const CreateEvent = () => {
               </div>
             )}
 
-            <DialogFooter>
+            {/* <DialogFooter> */}
               <div className="mt-6 flex w-full flex gap-4 md:mt-8 justify-between">
                 <Button
                   variant="secondary"
@@ -289,7 +300,7 @@ const CreateEvent = () => {
                   {currentStep === 0 ? "Cancel" : "Back"}
                 </Button>
                 {currentStep === steps.length - 1 ? (
-                  <Button type="submit">{isLoading ? 'Creating' : 'Get Started'} </Button>
+                  <Button type="submit">{isLoading ? 'Updating' : 'Get Started'} </Button>
                 ) : (
                   <span
                     className="focus-visible:ring-border-primary inline-flex gap-3 items-center justify-center whitespace-nowrap ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-border-primary bg-background-alternative text-text-alternative px-6 py-3"
@@ -302,23 +313,29 @@ const CreateEvent = () => {
                 {currentStep === steps.length - 1 ? "Get Started" : "Next"}
               </Button> */}
               </div>
-            </DialogFooter>
+            {/* </DialogFooter> */}
           </form>
-        </DialogContent>
-      </DialogPortal>
-    </Dialog>
+
+              </>
+            )
+          }
+        />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </>
   );
 };
-// type Step1Props = {
-//   handleChange: React.ChangeEventHandler<HTMLInputElement> | undefined;
-// };
 
-// const Step1:React.FC<{ handleChange: React.ChangeEventHandler<HTMLInputElement> | undefined }> = (handleChange) => (
-//   <>
-
-//   </>
-// );
-// const Step2: React.FC<{
-//   handleChange: React.ChangeEventHandler<HTMLInputElement> | undefined;
-// }> = (handleChange) => <></>;
-export default CreateEvent;
+export default UpdateEvent;

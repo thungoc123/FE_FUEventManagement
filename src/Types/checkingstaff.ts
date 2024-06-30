@@ -1,6 +1,7 @@
 export interface StaffTable{
-Name:String,
+    No: number
 Email:String,
-Date:String,
+Password:String,
+// Date:String,
 Delete:React.ReactNode
 }

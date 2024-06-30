@@ -55,7 +55,7 @@ export const Login1 = (props: Login1Props) => {
     sub: string;
     role?: string;
   }
-  const [login, { isLoading, error }] = useLoginMutation();
+  const [login, {  isLoading, isError, isSuccess, error }] = useLoginMutation();
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -76,7 +76,7 @@ export const Login1 = (props: Login1Props) => {
   };
   const NavigationAuth = (token: string) => {
     let decodedToken = jwtDecode<JwtPayload>(token);
-    switch (decodedToken.sub) {
+    switch (decodedToken.role) {
       case "ROLE_EO":
         navigate("/eventoperator/dashboard/");
         break;
@@ -154,6 +154,8 @@ export const Login1 = (props: Login1Props) => {
               </Button>
             </div>
           </form>
+          {isError && <p style={{ color: 'red' }}>{error?.message || 'Invalid Email or Password'}</p>}
+
           <div className="mt-5 w-full text-center md:mt-6">
             <a
               href={forgotPassword.url}

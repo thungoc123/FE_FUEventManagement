@@ -1,4 +1,14 @@
-import { ReactNode } from "react"
+import React from "react"
+
+export interface EventTable {
+    No: number,
+    Name: string, 
+    Date: string, 
+    Detail : React.ReactNode, 
+    Edit : React.ReactNode, 
+    Delete : React.ReactNode,
+    Publish: React.ReactNode
+}
 
 export interface Event {
     name: string, 

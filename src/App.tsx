@@ -16,7 +16,6 @@ import { VisitorSignUp } from "./components/Pages/Guest/VisitorSignUp";
 import { OrderHistory } from "./components/Pages/Visitor/OrderHistory";
 import SurveyForm from "./components/Pages/Dashboard/TestforCreateSurvey";
 import CreateEvent from "./components/Pages/Dashboard/EventOperator/CreateEvent";
-import ManageAccount from "./components/Pages/Dashboard/Sponsor/ManageAccount";
 import ServiceTerm from "./components/Pages/Guest/AboutPage";
 import { Payment } from "./components/Pages/Visitor/Payment";
 import HomePage from "./components/Pages/Guest/HomePage";
@@ -26,15 +25,34 @@ import { ManageFeedback } from "./components/Pages/Dashboard/EventOperator/Manag
 import ReactModal from "react-modal";
 import TokenDecode from "./ulities/TokenDecode";
 import { Login1 } from "./components/Pages/Login";
-import ProtectedRoute from "./ulities/ProtectedRoute";
+// import ProtectedRoute from "./ulities/ProtectedRoute";
 import RequireAuth from "./ulities/ProtectedRoute";
 import { Admin } from "./components/Pages/Admin";
+import { ManageAccount } from "./components/Pages/Dashboard/Sponsor/ManageAccount";
+import { ManageEvent } from "./components/Pages/Dashboard/EventOperator/ManageEvent";
+import { UnpublishEvent } from "./components/Organisms/EventOperator/UnpublishEvent";
+import { PublishEvent } from "./components/Organisms/EventOperator/PublishEvent";
+import { useGetListEventQuery } from "./Features/EventManage/eventApi";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { setEvents } from "./Features/EventManage/eventSlice";
+import { RootState } from "./Store/Store";
+import UpdateEvent from "./components/Pages/Dashboard/EventOperator/UpdateEvent";
 
 function App() {
   ReactModal.setAppElement("#root");
-
+    const { data: events, isLoading, error } = useGetListEventQuery();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (events) {
+      dispatch(setEvents(events));
+    }
+  }, [events, dispatch]);
+ 
   return (
+
     <>
+
       <Router>
         <Routes>
           {/* Guest  */}
@@ -85,7 +103,14 @@ function App() {
               </RequireAuth>
             }
           />
-          <Route path="/manage" element={<ManageAccount />} />
+          <Route
+            path="/sponsor/dashboard/manage"
+            element={
+              <RequireAuth role="ROLE_SPONSOR">
+                <ManageAccount />
+              </RequireAuth>
+            }
+          />
 
           {/* event operator  */}
           {/* <Route
@@ -113,10 +138,19 @@ function App() {
             }
           />
           <Route
-            path="/eventoperator/dashboard/event"
+            path="/eventoperator/dashboard/event/:id"
             element={
               <RequireAuth role="ROLE_EO">
                 <EO />
+              </RequireAuth>
+            }
+          />
+          
+          <Route
+            path="/eventoperator/dashboard/event/update/:id"
+            element={
+              <RequireAuth role="ROLE_EO">
+                <UpdateEvent />
               </RequireAuth>
             }
           />
@@ -125,6 +159,22 @@ function App() {
             element={
               <RequireAuth role="ROLE_EO">
                 <ManageFeedback />
+              </RequireAuth>
+            }
+          />
+           <Route
+            path="/eventoperator/dashboard/UnpublishEvent"
+            element={
+              <RequireAuth role="ROLE_EO">
+                <ManageEvent component={<UnpublishEvent />} />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/eventoperator/dashboard/PublishEvent"
+            element={
+              <RequireAuth role="ROLE_EO">
+                <ManageEvent component={<PublishEvent />} />
               </RequireAuth>
             }
           />
@@ -167,8 +217,8 @@ function App() {
 
           <Route path="/sponsor" element={<SponsorSignUp />} />
           <Route path="/visitor" element={<VisitorSignUp />} />
-          <Route path="/survey" element={<SurveyForm />} />
-          <Route path="/question" element={<QuestionForm />} />
+          {/* <Route path="/survey" element={<SurveyForm />} /> */}
+          {/* <Route path="/question" element={<QuestionForm />} /> */}
           <Route path="/create-event" element={<CreateEvent />} />
           <Route path="/service-term" element={<ServiceTerm />} />
           <Route path="/test" element={<TokenDecode />} />

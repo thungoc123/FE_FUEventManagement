@@ -21,7 +21,12 @@ import {
   BiLayer,
   BiPieChartAlt2,
   BiSearch,
+  BiUserCheck,
   BiStar,
+  BiNotepad,
+  BiCalendarCheck,
+  BiCalendarEdit,
+  BiTrash,
 } from "react-icons/bi";
 import {
   Accordion,
@@ -43,14 +48,26 @@ import {
   RxCross2,
   RxHamburgerMenu,
 } from "react-icons/rx";
-import { ReactNode, useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Stat1 } from "./StateCard";
 import { Table1 } from "./Table";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { clearToken } from "../../../Features/Auth/authSlice";
 import { JwtPayload, jwtDecode } from "jwt-decode";
+import { createSelector } from '@reduxjs/toolkit';
+
+import {
+  NavigationComponentProps,
+  NavigationProps,
+} from "../../../Types/global.type";
+import { eventApi, useGetListEventQuery } from '../../../Features/EventManage/eventApi'
+import SurveyForm from "../../Pages/Dashboard/TestforCreateSurvey";
+import { RootState, persistor } from "../../../Store/Store";
+import CreateEvent from "../../Pages/Dashboard/EventOperator/CreateEvent";
+import { selectPublishEvents, selectUnpublishEvents } from "../../../Features/EventManage/eventSelector";
+import { setEvents } from "../../../Features/EventManage/eventSlice";
 
 type ParentComponentProps = {
   MainComponent: React.ReactNode;
@@ -64,16 +81,14 @@ export const ApplicationShell4: React.FC<ParentComponentProps> = ({
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [isSearchIconClicked, setIsSearchIconClicked] =
     useState<boolean>(false);
-  const [isRole, setRole] = useState("ROLE_VISITOR");
+  const [isRole, setRole] = useState("");
   const email = sessionStorage.getItem("email");
-  
-  console.log(isRole)
+  const role = useSelector((state: RootState) => state.auth.role);
+
+  console.log(isRole);
+  NavigationAuth(isRole);
   useEffect(() => {
-    let decodedToken = jwtDecode<JwtPayload>(
-      sessionStorage.getItem("token") || "");
-    if(decodedToken.sub) {
-      setRole(decodedToken.sub)
-    }
+    setRole(role);
     if (typeof window === "undefined") return;
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 992);
@@ -90,9 +105,41 @@ export const ApplicationShell4: React.FC<ParentComponentProps> = ({
     sessionStorage.removeItem("token");
     sessionStorage.removeItem("email");
     dispatch(clearToken());
-    navigate("/login");
+    persistor.purge();
+    navigate("/");
   };
 
+  const notifications = useSelector(
+    (state: RootState) => state.notifications || []
+  );
+  console.log("Notifications state after rehydrate:", notifications);
+
+  if (!Array.isArray(notifications)) {
+    console.error(
+      "Expected notifications to be an array, but got:",
+      notifications
+    );
+    return null;
+  }
+  const NavigationAuthLink = (role: string) => {
+    switch (role) {
+      case "ROLE_EO":
+        navigate("/eventoperator/dashboard/");
+        break;
+      case "ROLE_SPONSOR":
+        navigate("/sponsor/dashboard/");
+        break;
+      case "ROLE_VISITOR":
+        navigate("/");
+        break;
+      case "ROLE_CHECKING_STAFF":
+        navigate("");
+        break;
+      case "ROLE_ADMIN":
+        navigate("/admin");
+        break;
+    }
+  };
   return (
     <section>
       {/* Topbar */}
@@ -148,77 +195,71 @@ export const ApplicationShell4: React.FC<ParentComponentProps> = ({
             </AnimatePresence>
             <DropdownMenu>
               <DropdownMenuTrigger className="relative">
-                <div className="absolute bottom-auto left-auto right-2 top-2 size-2 rounded-full bg-black outline outline-[3px] outline-offset-0 outline-white" />
+                {notifications.length !== 0 && (
+                  <div className="absolute bottom-auto left-auto right-2 top-2 size-2 rounded-full bg-black outline outline-[3px] outline-offset-0 outline-white" />
+                )}
                 <BiBell className="size-6" />
               </DropdownMenuTrigger>
-              <DropdownMenuContent
-                className="max-w-[19rem] px-0"
-                align="end"
-                sideOffset={0}
-              >
-                <div className="flex flex-col">
-                  <div className="flex items-center justify-between px-4 py-2">
-                    <DropdownMenuLabel className="p-0">
-                      Notifications
-                    </DropdownMenuLabel>
-                    <a href="#">Mark as read</a>
+              {notifications.length !== 0 && (
+                <DropdownMenuContent
+                  className="max-w-[19rem] px-0"
+                  align="end"
+                  sideOffset={0}
+                >
+                  <div className="flex flex-col">
+                    <div className="flex items-center justify-between px-4 py-2">
+                      <DropdownMenuLabel className="p-0">
+                        Notifications
+                      </DropdownMenuLabel>
+                      <a href="#">Mark as read</a>
+                    </div>
+                    <DropdownMenuSeparator />
+                    <div className="h-full max-h-[14rem] overflow-auto px-2 py-1">
+                      {notifications.map((notification) => (
+                        <DropdownMenuItem className="mt-2 grid grid-cols-[max-content_1fr] gap-2 px-2 py-1">
+                          <div className="flex size-full flex-col items-start justify-start">
+                            <img
+                              src="https://relume-assets.s3.amazonaws.com/relume-icon.svg"
+                              alt="Avatar"
+                              className="size-6"
+                            />
+                          </div>
+                          <div>
+                            <p>{notification.message}</p>
+                            <p className="mt-2 text-sm">
+                              {new Date(
+                                notification.timestamp
+                              ).toLocaleString()}
+                            </p>
+                          </div>
+                        </DropdownMenuItem>
+                      ))}
+                    </div>
                   </div>
                   <DropdownMenuSeparator />
-                  <div className="h-full max-h-[14rem] overflow-auto px-2 py-1">
-                    <DropdownMenuItem className="mt-2 grid grid-cols-[max-content_1fr] gap-2 px-2 py-1">
-                      <div className="flex size-full flex-col items-start justify-start">
-                        <img
-                          src="https://relume-assets.s3.amazonaws.com/relume-icon.svg"
-                          alt="Avatar"
-                          className="size-6"
-                        />
-                      </div>
-                      <div>
-                        <p>
-                          Lorem ipsum dolor sit amet, consectetur adipiscing
-                          elit.
-                        </p>
-                        <p className="mt-2 text-sm">11 Jan 2022</p>
-                      </div>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem className="mt-2 grid grid-cols-[max-content_1fr] gap-2 px-2 py-1">
-                      <div className="flex size-full flex-col items-start justify-start">
-                        <img
-                          src="https://relume-assets.s3.amazonaws.com/relume-icon.svg"
-                          alt="Avatar"
-                          className="size-6"
-                        />
-                      </div>
-                      <div>
-                        <p>
-                          Lorem ipsum dolor sit amet, consectetur adipiscing
-                          elit.
-                        </p>
-                        <p className="mt-2 text-sm">11 Jan 2022</p>
-                      </div>
-                    </DropdownMenuItem>
+                  <div className="flex w-full items-end justify-end px-4 py-2">
+                    <Button
+                      variant="link"
+                      size="link"
+                      iconRight={<RxChevronRight />}
+                      asChild
+                    >
+                      <a href="#">View All</a>
+                    </Button>
                   </div>
-                </div>
-                <DropdownMenuSeparator />
-                <div className="flex w-full items-end justify-end px-4 py-2">
-                  <Button
-                    variant="link"
-                    size="link"
-                    iconRight={<RxChevronRight />}
-                    asChild
-                  >
-                    <a href="#">View All</a>
-                  </Button>
-                </div>
-              </DropdownMenuContent>
+                </DropdownMenuContent>
+              )}
             </DropdownMenu>
             <DropdownMenu>
+              {isRole === "ROLE_SPONSOR" && <SurveyForm />}
+              {isRole === "ROLE_EO" && <CreateEvent />}
+              {isRole === "ROLE_CHECKING_STAFF" && email}
+              {isRole === "ROLE_ADMIN" && email}
               <DropdownMenuTrigger className="flex items-center p-0">
-                {email}
                 <img
                   src="https://relume-assets.s3.amazonaws.com/avatar-image.svg"
                   alt="Avatar"
-                  className="size-10 rounded-full object-cover"
+                  className="mx-2 size-10 rounded-full object-cover"
                 />
               </DropdownMenuTrigger>
               <DropdownMenuContent
@@ -229,14 +270,24 @@ export const ApplicationShell4: React.FC<ParentComponentProps> = ({
                 <DropdownMenuGroup>
                   <DropdownMenuItem>
                     {isRole ? (
-                    <a href="#">Dashboard</a>
+                      <a href="" onClick={() => NavigationAuthLink(isRole)}>
+                        Dashboard
+                      </a>
                     ) : (
                       <a href="#">My Cart</a>
                     )}
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <a href="#">Profile Settings</a>
-                  </DropdownMenuItem>
+                  {isRole === "ROLE_SPONSOR" && (
+                    <>
+                    <DropdownMenuItem>
+                      <a href="/sponsor/dashboard/manage">Profile Settings</a>
+                    </DropdownMenuItem>
+                     {/* <DropdownMenuItem>
+                     <a href="/sponsor/dashboard/list"></a>
+                   </DropdownMenuItem> */}
+                   </>
+                  )}
+
                   <DropdownMenuSeparator className="mx-4" />
                   <DropdownMenuItem>
                     <a href="" onClick={handleLogout}>
@@ -281,8 +332,6 @@ export const ApplicationShell4: React.FC<ParentComponentProps> = ({
           </div>
         </div>
 
-        {/* Shell Main wrapper  */}
-        {/*  bg-background-secondary text-black/50*/}
         <main className="relative w-[30%] flex-1">
           <div className="border-b-2 border-dashed border-[#d3d3d3] px-2 py-6 text-center bg-white">
             {/* <Stat1 /> */}
@@ -291,20 +340,220 @@ export const ApplicationShell4: React.FC<ParentComponentProps> = ({
           <div className="container px-2 py-2  md:py-10 lg:py-12">
             {/* <Table1 /> */}
             {MainComponent}
-            {/* <div className="grid grid-cols-1 gap-12">
-              <div className="flex h-screen items-center justify-center border-2 border-dashed border-[#d3d3d3] py-6 text-center text-black/50">
-             
-              </div>
-            </div> */}
           </div>
         </main>
       </div>
     </section>
   );
 };
+//  const selectEvents = (state: RootState) => state.event;
 
-const Navigation = () => {
+//   export const selectPublishedEvents = createSelector(
+//     selectEvents,
+//     (events) => events.filter(event => event.state === 'PUBLISHED')
+//   );
+
+// const unpublishEventCount =  events?.filter(event => event.stateEvent.name === "UNPUBLISH").length;
+  // const publishEventCount =  events?.filter(event => event.stateEvent.name === "HAPPENED").length;
+let NavigationProp: NavigationProps[] = [];
+const NavigationAuth = (role: string) => {
+
+  // const Events = useSelector((state: RootState) => state.events.events);
+  // const { data: Events, isLoading, error } = useGetListEventQuery();
+  // const Events = useSelector(selectUnpublishEvents);
+
+  // const unpublishEvents = Events.filter(event => event.stateEvent.name === 'UNPUBLISH')
+  // const publishEvent = Events.filter(event => event.stateEvent.name === "PUBLISH")  
+  switch (role) {
+    case "ROLE_EO":
+      NavigationProp = [
+        {
+          Name: "Dashboard",
+          Url: "",
+          icon: <BiPieChartAlt2 className="size-6 shrink-0" />,
+          State: [
+            {
+              name: "Event Analytics",
+              url: "",
+              number: 2,
+              icon: <BiBarChartAlt2 className="size-6 shrink-0" />,
+            },
+            {
+              name: "Feedback Analytics",
+              url: "",
+              number: 3,
+              icon: <BiPieChartAlt2 className="size-6 shrink-0" />,
+            },
+            {
+              name: "Attendance",
+              url: "",
+              number: 3,
+              icon: <BiUserCheck className="size-6 shrink-0" />,
+            },
+          ],
+        },
+        {
+          Name: "Event",
+          Url: "",
+          icon: <BiNotepad className="size-6 shrink-0" />,
+          State: [
+            {
+              name: "Unpublish",
+              url: "/eventoperator/dashboard/UnpublishEvent",
+              number: 0,
+              icon: <BiCalendarEdit className="size-6 shrink-0" />,
+            },
+            {
+              name: "Happened",
+              url: "/eventoperator/dashboard/PublishEvent",
+              number: 0,
+              icon: <BiCalendarCheck className="size-6 shrink-0" />,
+            },
+          ],
+        },
+        {
+          Name: "Feedback",
+          Url: "",
+          icon: <BiFile className="size-6 shrink-0" />,
+          State: [
+            {
+              name: "Unpublish",
+              url: "",
+              number: 2,
+              icon: <BiCalendarEdit className="size-6 shrink-0" />,
+            },
+            {
+              name: "Happened",
+              url: "",
+              number: 3,
+              icon: <BiCalendarCheck className="size-6 shrink-0" />,
+            },
+          ],
+        },
+        {
+          Name: "Trash",
+          icon: <BiTrash className="size-6 shrink-0" />,
+          Url: "",
+          State: [
+            {
+              name: "Event",
+              url: "",
+              number: 2,
+              icon: <BiNotepad className="size-6 shrink-0" />,
+            },
+            {
+              name: "Feedback",
+              url: "",
+              number: 3,
+              icon: <BiFile className="size-6 shrink-0" />,
+            },
+          ],
+        },
+      ];
+
+      break;
+    case "ROLE_SPONSOR":
+      NavigationProp = [
+        {
+          Name: "Dashboard",
+          Url: "",
+          icon: <BiPieChartAlt2 className="size-6 shrink-0" />,
+          State: [
+            {
+              name: "Event Analytics",
+              url: "",
+              number: 2,
+              icon: <BiBarChartAlt2 className="size-6 shrink-0" />,
+            },
+            {
+              name: "Survey Analytics",
+              url: "",
+              number: 3,
+              icon: <BiPieChartAlt2 className="size-6 shrink-0" />,
+            },
+            {
+              name: "Visitor Survey",
+              url: "",
+              number: 3,
+              icon: <BiUserCheck className="size-6 shrink-0" />,
+            },
+          ],
+        },
+        {
+          Name: "Sponsor Program",
+          Url: "/sponsor/dashboard/program",
+          icon: <BiNotepad className="size-6 shrink-0" />,
+          // State: [
+          //   {
+          //     name: "Unpublish",
+          //     url: "",
+          //     number: 2,
+          //     icon: <BiCalendarEdit className="size-6 shrink-0" />,
+          //   },
+          //   {
+          //     name: "Happened",
+          //     url: "",
+          //     number: 3,
+          //     icon: <BiCalendarCheck className="size-6 shrink-0" />,
+          //   },
+          // ],
+        },
+        {
+          Name: "Survey",
+          Url: "",
+          icon: <BiFile className="size-6 shrink-0" />,
+          State: [
+            {
+              name: "Unpublish",
+              url: "",
+              number: 2,
+              icon: <BiCalendarEdit className="size-6 shrink-0" />,
+            },
+            {
+              name: "Happened",
+              url: "",
+              number: 3,
+              icon: <BiCalendarCheck className="size-6 shrink-0" />,
+            },
+          ],
+        },
+        {
+          Name: "Trash",
+          icon: <BiTrash className="size-6 shrink-0" />,
+          Url: "",
+          State: [
+            {
+              name: "Sponsor Program",
+              url: "",
+              number: 2,
+              icon: <BiNotepad className="size-6 shrink-0" />,
+            },
+            {
+              name: "Survey",
+              url: "",
+              number: 3,
+              icon: <BiFile className="size-6 shrink-0" />,
+            },
+          ],
+        },
+      ];
+      break;
+    case "ROLE_CHECKING_STAFF":
+      // navigate("");
+      break;
+    case "ROLE_ADMIN":
+      // navigate("/admin");
+      break;
+  }
+};
+
+type Props = {
+  navigationProps: NavigationProps[];
+};
+
+const Navigation: React.FC<Props> = ({ navigationProps = NavigationProp }) => {
   const navigate = useNavigate();
+
   const goToHome = () => {
     navigate("/");
   };
@@ -318,66 +567,40 @@ const Navigation = () => {
               <span onClick={goToHome}>Home</span>
             </span>
           </a>
-          <a href="#" className="flex items-center gap-x-2 p-2 text-center">
-            <span className="flex w-full items-center gap-3">
-              <BiStar className="size-6 shrink-0" />
-              <p>Saved</p>
-            </span>
-            <span className="rounded-full border border-border-primary px-2">
-              <p className="text-sm">24</p>
-            </span>
-          </a>
-          <Accordion type="single" collapsible>
-            <AccordionItem value="item-1" className="border-none">
-              <AccordionTrigger
-                className="p-2 font-normal"
-                icon={
-                  <RxChevronDown className="shrink-0 text-text-primary transition-transform duration-300" />
-                }
-              >
-                <span className="flex items-center gap-3">
-                  <BiPieChartAlt2 className="size-6 shrink-0" />
-                  <p>Dashboard</p>
-                </span>
-              </AccordionTrigger>
-              <AccordionContent className="flex items-center gap-x-2 p-2 pl-[2.75rem] text-center">
-                <a href="#" className="flex w-full items-center gap-3">
-                  <MdTrendingUp className="size-6 shrink-0" />
-                  <p>Trends</p>
-                </a>
-              </AccordionContent>
-              <AccordionContent className="flex items-center gap-x-2 p-2 pl-[2.75rem] text-center">
-                <a href="#" className="flex w-full items-center gap-3">
-                  <BiBarChartAlt2 className="size-6 shrink-0" />
-                  <p>Analytics</p>
-                </a>
-              </AccordionContent>
-              <AccordionContent className="flex items-center gap-x-2 p-2 pl-[2.75rem] text-center">
-                <a href="#" className="flex w-full items-center gap-3">
-                  <BiArchive className="size-6 shrink-0" />
-                  <p>Historical</p>
-                </a>
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
-          <a href="#" className="flex items-center gap-x-2 p-2 text-center">
-            <span className="flex w-full items-center gap-3">
-              <BiLayer className="size-6 shrink-0" />
-              <p>Projects</p>
-            </span>
-          </a>
-          <a href="#" className="flex items-center gap-x-2 p-2 text-center">
-            <span className="flex w-full items-center gap-3">
-              <BiLayer className="size-6 shrink-0" />
-              <p>Feedback</p>
-            </span>
-          </a>
-          <a href="#" className="flex items-center gap-x-2 p-2 text-center">
-            <span className="flex w-full items-center gap-3">
-              <BiFile className="size-6 shrink-0" />
-              <p>Documents</p>
-            </span>
-          </a>
+          {navigationProps.map((nav, index) => (
+            <Accordion type="single" collapsible>
+              <AccordionItem value="item-1" className="border-none">
+                <AccordionTrigger
+                  className="p-2 font-normal"
+                  icon={
+                    <RxChevronDown className="shrink-0 text-text-primary transition-transform duration-300" />
+                  }
+                >
+                  <span className="flex items-center gap-3">
+                    {nav.icon}
+
+                    <a href={nav.Url}><p>{nav.Name}</p></a>
+                  </span>
+                </AccordionTrigger>
+                {nav.State?.map((item, idx) => (
+                  <AccordionContent className="flex items-center gap-x-2 p-2 pl-[2.75rem] text-center">
+                    <a
+                      href={item.url}
+                      className="flex items-center gap-x-2 p-2 text-center"
+                    >
+                      <span className="flex w-full items-center gap-3">
+                        {item.icon}
+                        <p>{item.name}</p>
+                      </span>
+                      <span className="">
+                        <p className="text-sm">{item.number}</p>
+                      </span>
+                    </a>
+                  </AccordionContent>
+                ))}
+              </AccordionItem>
+            </Accordion>
+          ))}
         </div>
         <div className="flex flex-col gap-4 px-4 lg:gap-6">
           <div className="flex flex-col">
@@ -399,7 +622,6 @@ const Navigation = () => {
     </nav>
   );
 };
-
 export const ApplicationShell4Defaults = {};
 
 ApplicationShell4.displayName = "ApplicationShell4";

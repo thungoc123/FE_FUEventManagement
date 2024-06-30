@@ -49,7 +49,7 @@ import EventTag from "../../Atoms/EventTag";
       <section className="px-[1%] py-2 md:py-1 lg:py-1">
         <div className="container relative pb-2">
         <div className="flex flex-col items-start justify-between gap-6 border border-b-0 border-border-primary p-6 sm:flex-row sm:items-center">
-         
+         {headerTitle}
           <div className="flex gap-6 w-[1/2]">
           <Input
               className="w-full my-1"
