@@ -8,6 +8,13 @@ import { QuestionAnalytics } from "../../Molecules/QuestionAnalytics";
 
 export const QuestionAnalyticsDashboard = () => {
   const tableHeaders = ["No", "Question", "Number", "Survey", "Date", "View"];
+  const tableHeaderClasses = [
+    "w-[200px] pr-4 xxl:w-[25px]",
+    "w-[200px] pr-4 xxl:w-[100px]",
+    "w-[128px] pr-4 xxl:w-[30px]",
+    "w-[200px] pr-4 xxl:w-[100px]",
+    "w-[192px] pr-4 xxl:w-[50px]",
+  ];
   const tableRows: QuestionSurveyTable[] = [
     {
       No: 1,
@@ -61,8 +68,7 @@ export const QuestionAnalyticsDashboard = () => {
             ]}
             tableHeaders={tableHeaders}
             tableRows={tableRows} // Truyền dữ liệu mới cho tableRows
-            paginationItems={paginationItems}
-          />
+            paginationItems={paginationItems} tableHeadersClasses={[]}  />
         }
         StateComponent={<Stat1 />}
       />

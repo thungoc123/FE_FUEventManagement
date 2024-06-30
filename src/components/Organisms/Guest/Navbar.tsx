@@ -150,6 +150,7 @@ export const Navbar2 = (props: Navbar2Props) => {
     e.preventDefault();
     if (newPasswordData.newPassword !== newPasswordData.confirmPassword) {
       console.log("Passwords do not match");
+      console.log("Passwords do not match");
       return;
     }
 
@@ -280,8 +281,9 @@ export const Navbar2 = (props: Navbar2Props) => {
                 size={button.size}
                 onClick={() => handleAuthButtonClick(button.title === "Login")}
               >
-                {button.title}
+                {isLoading ? "Loging in..." : button.title}
               </Button>
+            ))
             ))
           )}
         </div>
@@ -596,3 +598,4 @@ export const Navbar2Defaults = {
     },
   ],
 };
+

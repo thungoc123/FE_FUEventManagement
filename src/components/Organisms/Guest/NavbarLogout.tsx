@@ -4,7 +4,7 @@ import type { ImageProps, ButtonProps } from "@relume_io/relume-ui";
 import { AnimatePresence, motion } from "framer-motion";
 import { RxChevronDown } from "react-icons/rx";
 import Modal from './Modal'; // Import the Modal component
-import RoleChoosing from "../../Pages/RoleChosing";
+import RoleChoosing from "../../Pages/Guest/RoleChosing";
 import { Login1 } from "../../Pages/Test";
 import { useNavigate } from 'react-router-dom'; // Import useNavigate from react-router-dom
 

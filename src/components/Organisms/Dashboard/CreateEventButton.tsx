@@ -13,7 +13,6 @@ import {
     Label,
     Input,
   } from "@relume_io/relume-ui"
-  import { BiLogoGoogle } from "react-icons/bi";
 export default class CreateEventButton extends Component {
   render() {
     return (
