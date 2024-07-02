@@ -64,10 +64,11 @@ import {
 } from "../../../Types/global.type";
 import { eventApi, useGetListEventQuery } from '../../../Features/EventManage/eventApi'
 import SurveyForm from "../../Pages/Dashboard/TestforCreateSurvey";
-import { RootState, persistor } from "../../../Store/Store";
+import { RootState } from "../../../Store/Store";
 import CreateEvent from "../../Pages/Dashboard/EventOperator/CreateEvent";
 import { selectPublishEvents, selectUnpublishEvents } from "../../../Features/EventManage/eventSelector";
 import { setEvents } from "../../../Features/EventManage/eventSlice";
+import { roleName } from "../../../ulities/ProtectedRoute";
 
 type ParentComponentProps = {
   MainComponent: React.ReactNode;
@@ -83,8 +84,9 @@ export const ApplicationShell4: React.FC<ParentComponentProps> = ({
     useState<boolean>(false);
   const [isRole, setRole] = useState("");
   const email = sessionStorage.getItem("email");
-  const role = useSelector((state: RootState) => state.auth.role);
-
+  let token = sessionStorage.getItem('token')
+  const role = roleName(token)
+  
   console.log(isRole);
   NavigationAuth(isRole);
   useEffect(() => {
@@ -104,23 +106,14 @@ export const ApplicationShell4: React.FC<ParentComponentProps> = ({
   const handleLogout = () => {
     sessionStorage.removeItem("token");
     sessionStorage.removeItem("email");
+    localStorage.setItem('notifications', JSON.stringify([]));
     dispatch(clearToken());
-    persistor.purge();
+    // persistor.purge();
     navigate("/");
   };
 
-  const notifications = useSelector(
-    (state: RootState) => state.notifications || []
-  );
-  console.log("Notifications state after rehydrate:", notifications);
+  const notifications = JSON.parse(localStorage.getItem('notifications'));
 
-  if (!Array.isArray(notifications)) {
-    console.error(
-      "Expected notifications to be an array, but got:",
-      notifications
-    );
-    return null;
-  }
   const NavigationAuthLink = (role: string) => {
     switch (role) {
       case "ROLE_EO":
@@ -413,22 +406,22 @@ const NavigationAuth = (role: string) => {
         },
         {
           Name: "Feedback",
-          Url: "",
+          Url: "/eventoperator/dashboard/feedback",
           icon: <BiFile className="size-6 shrink-0" />,
-          State: [
-            {
-              name: "Unpublish",
-              url: "",
-              number: 2,
-              icon: <BiCalendarEdit className="size-6 shrink-0" />,
-            },
-            {
-              name: "Happened",
-              url: "",
-              number: 3,
-              icon: <BiCalendarCheck className="size-6 shrink-0" />,
-            },
-          ],
+          // State: [
+          //   {
+          //     name: "Unpublish",
+          //     url: "",
+          //     number: 2,
+          //     icon: <BiCalendarEdit className="size-6 shrink-0" />,
+          //   },
+          //   {
+          //     name: "Happened",
+          //     url: "",
+          //     number: 3,
+          //     icon: <BiCalendarCheck className="size-6 shrink-0" />,
+          //   },
+          // ],
         },
         {
           Name: "Trash",

@@ -1,29 +1,42 @@
-import { BiEdit, BiShow, BiTrash, BiAddToQueue } from "react-icons/bi";
-// import { ApplicationShell4 } from "./AppModel";
-// import { TableTemplate } from "./Table1";
-// import AddFeedbackButton from "./AddFeedbackButton";
-import { SponsorTable } from "../../../Types/sponsor";
+import {BiTrash, BiAddToQueue } from "react-icons/bi";
 import { TableTemplate } from "../Dashboard/TableTemplate";
-import AddFeedbackButton from "../Dashboard/AddFeedbackButton";
-import { FeedbackTable } from "../../../Types/feedback";
-import { Button, Input } from "@relume_io/relume-ui";
+import { Button} from "@relume_io/relume-ui";
 import { EventTable } from "../../../Types/event.type";
-import { useGetListEventQuery } from "../../../Features/EventManage/eventApi";
+import { useDeleteEventMutation, useGetListEventQuery } from "../../../Features/EventManage/eventApi";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../Store/Store";
-import { useState } from "react";
-import UpdateEvent from "../../Pages/Dashboard/EventOperator/UpdateEvent";
-// import { selectUnpublishEvents } from "../../../Features/EventManage/eventSelector";
-// import { selectPublishEvents } from "../../../Features/EventManage/eventSelector";
+import { addNotification } from "../../../Features/Utils/notificationsSlice";
+import { useDispatch } from "react-redux";
 
 export const PublishEvent = () => {
-  const tableHeaders = ["No", "Name", "Date", "Detail","Edit", "Delete", "Publish"];
+  const tableHeaders = ["No", "Name", "Date", "Detail", "Delete"];
 
   const { data: Events, isLoading, error } = useGetListEventQuery();
+  console.log(Events)
+  const dispatch = useDispatch();
 
   const publishEvents =
     Events?.filter((event) => event.stateEvent.name === "PUBLISH") || [];
+  const [deleteEvent] = useDeleteEventMutation()
+    const handleDelete = async (e: MouseEvent<HTMLButtonElement>, eventId: number) => {
+      e.preventDefault(); // Ngăn chặn hành vi mặc định của button nếu có
+  
+      try {
+        await deleteEvent({ eventId: eventId }).unwrap();
+        // alert('Staff deleted successfully');    
+        dispatch(
+          addNotification({
+            id: new Date().getTime(), // Sử dụng timestamp làm ID
+            message: "Event deleted successfully",
+            type: "success",
+            timestamp: Date.now(), // Thời gian hiện tại
+          })
+        );
+      } catch (error) {
+        console.error('Failed to delete the event:', error);
+        alert('Failed to delete the event');
+      }
+    };
+  // const 
   const tableRows: EventTable[] = publishEvents?.map((item, index) => ({
     No: index + 1, // Số thứ tự bắt đầu từ 1
     Name: item.name, // Tên sự kiện
@@ -35,24 +48,13 @@ export const PublishEvent = () => {
         </Button>
       </Link>
     ), // Nút chi tiết
-    Edit: (
-      <Link to={`/eventoperator/dashboard/event/update/${item.id}`}>
-        <Button size="icon" variant="link">
-          <BiEdit />
-        </Button>
-    </Link>
-
-    ),
+   
     Delete: (
-      <Button size="icon" variant="link">
+      <Button size="icon" variant="link" onClick={(e)=> handleDelete(e,item.id)}>
         <BiTrash />
       </Button>
     ), // Nút xóa
-    Publish: (
-      <Button size="icon" variant="link">
-        <BiShow />
-      </Button>
-    ), // Nút xuất bản
+   
   }));
 
   const tableHeaderClasses = [
@@ -72,13 +74,7 @@ export const PublishEvent = () => {
         <TableTemplate
           headerTitle="Publish Event"
           headerDescription="List of unpublish event"
-          // buttons={[
-          //   {
-          //     children: <AddFeedbackButton />,
-
-          //     size: "sm",
-          //   },
-          // ]}
+       
           tableHeaders={tableHeaders}
           tableRows={tableRows} // Truyền dữ liệu mới cho tableRows
           // paginationItems={paginationItems}

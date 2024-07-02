@@ -27,14 +27,21 @@ import { useCreateEventMutation } from "../../../../Features/EventManage/eventAp
 import { RootState } from "../../../../Store/Store";
 import { useDispatch, useSelector } from "react-redux";
 const steps = [{ label: "Schedule" }, { label: "Actor" }];
-import { DateTime } from 'luxon'
+import { DateTime } from "luxon";
 import { useNavigate } from "react-router-dom";
 import { addNotification } from "../../../../Features/Utils/notificationsSlice";
+import { Alert } from "../../../Molecules/Alert";
+import { accountID } from "../../../../ulities/ProtectedRoute";
 
 const CreateEvent = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [submitError, setSubmitError] = useState<string[]>([]);
+  const [errs, setErrs] = useState({
+    eventName: "test",
+  });
+  const [fill, setFill] = useState("")
+
   const [createEvent, { isLoading, isSuccess, isError, error }] = useCreateEventMutation();
   const dispatch = useDispatch();
 
@@ -48,8 +55,8 @@ const CreateEvent = () => {
   const nextStep = () =>
     setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1));
   const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 0));
-  const accountId = useSelector((state: RootState) => state.auth.accountId);
-
+  // const accountId = useSelector((state: RootState) => state.auth.accountId);
+  const accountid = accountID(sessionStorage.getItem('token'))
   const [eventData, setEventData] = useState({
     eventName: "",
     description: "",
@@ -58,7 +65,7 @@ const CreateEvent = () => {
     timeOpenSale: "",
     timeCloseSale: "",
     price: 0,
-    accountId: accountId,
+    accountId: accountid,
   });
 
   const handleChange = (
@@ -70,7 +77,31 @@ const CreateEvent = () => {
       [name]: value,
     });
     let newErrors: string[] = [];
+    if (!eventData.eventName.trim()) {
+      newErrors.push("eventName is required.");
+    }
+    if (!eventData.description.trim()) {
+      newErrors.push("description is required.");
+    }
+    if (!eventData.timeStart) {
+      newErrors.push("Start time is required.");
+    }
+    if(!eventData.price) {
+      newErrors.push("Price is required.");
 
+    }
+    if (!eventData.timeEnd) {
+      newErrors.push("End time is required.");
+    }
+    if (!eventData.timeOpenSale) {
+      newErrors.push("Ticket open sale time is required.");
+    }
+    if (!eventData.timeCloseSale) {
+      newErrors.push("Ticket close sale time is required.");
+    }
+    if (eventData.price <= 0) {
+      newErrors.push("Price must be greater than zero.");
+    }
     if (name === "timeEnd" && value <= eventData.timeStart) {
       newErrors.push("End time must be after start time.");
     }
@@ -87,22 +118,25 @@ const CreateEvent = () => {
         "Ticket open sale time must be before ticket close sale time."
       );
     }
-    if(name === "price" && +value <= -1) {
-      newErrors.push(
-        "Price must be greater than 0."
-      );
+    if (name === "price" && +value <= -1) {
+      newErrors.push("Price must be greater than 0.");
     }
-    if ((name === "eventName" || name === "description") && value.trim() === "") {
+    if (
+      (name === "eventName" || name === "description") &&
+      value.trim() === ""
+    ) {
       // Hiển thị lỗi hoặc xử lý logic phù hợp
-      newErrors.push(
-        "Name and description cannot be empty ! "
-      );
+      newErrors.push("Name and description cannot be empty ! ");
       return; // Ngừng xử lý tiếp tục nếu có lỗi
     }
-   
 
     let formattedValue = value;
-    if (name === "timeStart" || name === "timeEnd" || name === "timeOpenSale" || name === "timeCloseSale") {
+    if (
+      name === "timeStart" ||
+      name === "timeEnd" ||
+      name === "timeOpenSale" ||
+      name === "timeCloseSale"
+    ) {
       const dateTime = DateTime.fromISO(value);
       formattedValue = dateTime.toFormat("yyyy-MM-dd'T'HH:mm:ss");
     }
@@ -111,37 +145,53 @@ const CreateEvent = () => {
       ...eventData,
       [name]: formattedValue,
     });
-    console.log(newErrors)
+    console.log(newErrors);
     setSubmitError(newErrors);
-    
+    setErrs(errs);
   };
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(eventData);
-    try {
-      await createEvent(eventData).unwrap();
-      dispatch(addNotification({
-        id: new Date().getTime(), // Sử dụng timestamp làm ID
-        message: 'Create event successfully!',
-        type: 'success',
-        timestamp: Date.now(), // Thời gian hiện tại
-      }));
-      navigate('/eventoperator/dashboard/event')
-      // alert('Event created successfully!');
-    } catch (err) {
-      dispatch(addNotification({
-        id: new Date().getTime(), // Sử dụng timestamp làm ID
-        message: 'Create event unsuccessfully!',
-        type: 'error',
-        timestamp: Date.now(), // Thời gian hiện tại
-      }));
-      console.error('Failed to create the event:', err);
+    console.log(JSON.stringify(eventData));
+    console.log(submitError); 
+    if (
+      !eventData.eventName.trim() &&
+      !eventData.description.trim() &&
+      !eventData.timeStart &&
+      !eventData.timeEnd &&
+      !eventData.timeOpenSale &&
+      !eventData.timeCloseSale &&
+      eventData.price >= 0
+    ) {
+      setFill("Please fill all field")
+    } else {
+      try {
+        await createEvent(eventData).unwrap();
+        dispatch(
+          addNotification({
+            id: new Date().getTime(), // Sử dụng timestamp làm ID
+            message: "Create event successfully!",
+            type: "success",
+            timestamp: Date.now(), // Thời gian hiện tại
+          })
+        );
+        // navigate("/eventoperator/dashboard/UnpublishEvent");
+      window.location.reload()
+      
+        // alert('Event created successfully!');
+      } catch (err) {
+        dispatch(
+          addNotification({
+            id: new Date().getTime(), // Sử dụng timestamp làm ID
+            message: "Create event unsuccessfully!",
+            type: "error",
+            timestamp: Date.now(), // Thời gian hiện tại
+          })
+        );
+        console.error("Failed to create the event:", err);
+      }
     }
   };
-
- 
-
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -194,6 +244,7 @@ const CreateEvent = () => {
                       required
                       value={eventData.eventName}
                     />
+                    {errs.eventName}
                   </div>
                   <div className="grid items-center gap-2">
                     <Label htmlFor="Objectives">Objectives</Label>
@@ -259,7 +310,6 @@ const CreateEvent = () => {
                       value={eventData.timeEnd}
                       onChange={handleChange}
                     />
-                   
                   </div>
                   <div className="grid items-center gap-2">
                     <Label htmlFor="Price">Price</Label>
@@ -273,12 +323,10 @@ const CreateEvent = () => {
                     />
                   </div>
                 </div>
-                {submitError && (
-                      <p>{submitError[submitError.length - 1]}</p>
-                    )}
+                {submitError && <p>{submitError[submitError.length - 1]}</p>}
               </div>
             )}
-
+            {fill && <Alert text={fill} />}
             <DialogFooter>
               <div className="mt-6 flex w-full flex gap-4 md:mt-8 justify-between">
                 <Button
@@ -289,7 +337,9 @@ const CreateEvent = () => {
                   {currentStep === 0 ? "Cancel" : "Back"}
                 </Button>
                 {currentStep === steps.length - 1 ? (
-                  <Button type="submit">{isLoading ? 'Creating' : 'Get Started'} </Button>
+                  <Button type="submit">
+                    {isLoading ? "Creating" : "Get Started"}{" "}
+                  </Button>
                 ) : (
                   <span
                     className="focus-visible:ring-border-primary inline-flex gap-3 items-center justify-center whitespace-nowrap ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-border-primary bg-background-alternative text-text-alternative px-6 py-3"

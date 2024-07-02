@@ -20,6 +20,8 @@ export const EventScheduleTable:React.FC<Props> = (prop) => {
   const Events = useSelector((state: RootState) => state.events.events);
 
   const eventSchedule = Events?.find(event => event.id === parseInt(id))?.eventSchedules || []
+  
+  
   console.log(eventSchedule)
   const tableHeaders = ["No","Schedule", "Duration", "Actor", "Time","Date","Hinh_Thuc","Detail","Edit","Delete"];
   const tableHeaderClasses = [

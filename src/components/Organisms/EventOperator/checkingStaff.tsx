@@ -29,10 +29,14 @@ import {
 import { eventCheckingStaff } from "../../../Types/eo.type";
 import React, { useState } from "react";
 import { RootState } from "../../../Store/Store";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { useAddCheckingStaffMutation } from "../../../Features/EventManage/eventApi";
+import { useAddCheckingStaffMutation, useDeleleCheckingStaffMutation } from "../../../Features/EventManage/eventApi";
 import { addNotification } from "../../../Features/Utils/notificationsSlice";
+import { Alert } from "../../Molecules/Alert";
+import { removeCheckingStaff } from "../../../Features/EventManage/eventSlice";
+import { setTab } from "../../../Features/Utils/tabSlice";
+// import { Alert } from "../../../Molecules/Alert";
 
 type Props = {
   Staff: eventCheckingStaff[];
@@ -40,20 +44,43 @@ type Props = {
 export const AddCheckStaffTable: React.FC<Props> = (props) => {
   const { id } = useParams();
   const Events = useSelector((state: RootState) => state.events.events);
+  const [deleleCheckingStaff] = useDeleleCheckingStaffMutation()
+  const [fill, setFill] = useState("")
 
-  const Staff = Events?.find(event => event.id === parseInt(id))?.eventCheckingStaffs || []
+  const Staff =
+    Events?.find((event) => event.id === parseInt(id))?.eventCheckingStaffs ||
+    [];
+  
   const tableHeaders = ["No", "Email", "Password", "Delete"];
   const dispatch = useDispatch();
+  // const navigate = useNavigate();
 
-  const navigate = useNavigate();
+  const handleDelete = async (e: MouseEvent<HTMLButtonElement>, checkingStaffId: number) => {
+    e.preventDefault(); // Ngăn chặn hành vi mặc định của button nếu có
+
+    try {
+      await deleleCheckingStaff({ checkingStaffId, eventId: id }).unwrap();
+      dispatch(
+        addNotification({
+          id: new Date().getTime(), // Sử dụng timestamp làm ID
+          message: "Staff deleted successfully",
+          type: "success",
+          timestamp: Date.now(), // Thời gian hiện tại
+        })
+      );
+      dispatch(setTab("checking"));
+    } catch (error) {
+      console.error('Failed to delete the staff:', error);
+      alert('Failed to delete the staff');
+    }
+  };
   const tableRows: StaffTable[] = Staff.map((item, index) => ({
-    No: index +1,
+    No: index + 1,
     Email: item.account.email,
     Password: item.account.password,
     // Date: "01/01/2023",
-    Delete: ( 
-      <Button size="icon" variant="link">
-        {" "}
+    Delete: (
+      <Button size="icon" variant="link"  onClick={(e) => handleDelete(e,item.id)}>
         <BiTrash />
       </Button>
     ),
@@ -64,38 +91,44 @@ export const AddCheckStaffTable: React.FC<Props> = (props) => {
     "w-[200px] pr-4 xxl:w-[250px]",
     "w-[200px] pr-4 xxl:w-[250px]",
   ];
+
   const accountId = useSelector((state: RootState) => state.auth.accountId);
-  const [addCheckingStaff, { isLoading, isSuccess, isError, error }] = useAddCheckingStaffMutation();
-  const [email, setEmail] = useState("")
+  const [addCheckingStaff, { isLoading, isSuccess, isError, error }] =
+    useAddCheckingStaffMutation();
+  const [email, setEmail] = useState("");
   const checkingStaff = {
     email: email,
     accountId: accountId,
     information: null,
-    eventId: id
-  }
-  const handleSubmit = async(e) => {
+    eventId: id,
+  };
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // console.log(JSON.stringify(checkingStaff))
     try {
-      await addCheckingStaff({id: id, newStaff: checkingStaff}).unwrap();
-      dispatch(addNotification({
-        id: new Date().getTime(), // Sử dụng timestamp làm ID
-        message: 'Create staff successfully!',
-        type: 'success',
-        timestamp: Date.now(), // Thời gian hiện tại
-      }));
-      navigate('/eventoperator/dashboard/event/')
-      // alert('Event created successfully!');
+      await addCheckingStaff({ id: id, newStaff: checkingStaff }).unwrap();
+      dispatch(
+        addNotification({
+          id: new Date().getTime(), // Sử dụng timestamp làm ID
+          message: "Create staff successfully!",
+          type: "success",
+          timestamp: Date.now(), // Thời gian hiện tại
+        })
+      );
+      dispatch(setTab("checking"));
     } catch (err) {
-      dispatch(addNotification({
-        id: new Date().getTime(), // Sử dụng timestamp làm ID
-        message: 'Create staff unsuccessfully!',
-        type: 'error',
-        timestamp: Date.now(), // Thời gian hiện tại
-      }));
-      console.error('Failed to create the event:', err);
+      dispatch(
+        addNotification({
+          id: new Date().getTime(), // Sử dụng timestamp làm ID
+          message: "Create staff unsuccessfully!",
+          type: "error",
+          timestamp: Date.now(), // Thời gian hiện tại
+        })
+      );
+      console.error("Failed to create the event:", err);
+      setFill("This Email is already existed !")
     }
-  }
+  };
   const paginationItems = [1, 2, 3, 4];
   return (
     <>
@@ -126,27 +159,27 @@ export const AddCheckStaffTable: React.FC<Props> = (props) => {
               <DialogDescription>Modal Description</DialogDescription>
             </DialogHeader>
             <form onSubmit={handleSubmit}>
-            <div className="mb-4">
-              <label
-                // className="block mb-2 text-sm font-medium text-gray-700"
-                htmlFor="objectives"
-              >
-                Enter your checking staff email *
-              </label>
-              {/* <DatePicker /> */}
+              <div className="mb-4">
+                <label
+                  // className="block mb-2 text-sm font-medium text-gray-700"
+                  htmlFor="objectives"
+                >
+                  Enter your checking staff email *
+                </label>
+                {/* <DatePicker /> */}
 
-              <Input
-                className="h-1/2"
-                id="search"
-                placeholder="Search"
-                icon={<BiEnvelope className="size-6" />}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-            <DialogFooter className="mt-4">
-          
-              <Button size="sm">Done</Button>
-            </DialogFooter>
+                <Input
+                  className="h-1/2"
+                  id="search"
+                  placeholder="Search"
+                  icon={<BiEnvelope className="size-6" />}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+              {fill && <Alert text={fill} />}
+              <DialogFooter className="mt-4">
+                <Button size="sm">{isLoading ? "Creating" : "Done"}</Button>
+              </DialogFooter>
             </form>
           </DialogContent>
         </DialogPortal>

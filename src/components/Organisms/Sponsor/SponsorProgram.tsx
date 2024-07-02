@@ -118,7 +118,7 @@ import { truncateString } from "../../../ulities/Stringhandle";
                   {/* <span className="text-xl font-bold md:text-2xl">{property.state}</span> */}
                   <span className={`before:content-['_']`}>{property.state}</span>
                 </div>
-                <Button >Add Survey</Button>
+                <Button >Add Event</Button>
               </div>
             </div>
           </div>

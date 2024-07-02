@@ -24,10 +24,18 @@ const eventSlice = createSlice({
     setEvents(state, action: PayloadAction<EOevent[]>) {
       state.events = action.payload;
     },
-    // Các action khác (nếu cần) có thể được thêm vào đây
-  },
+    removeCheckingStaff: (state, action) => {
+      const { eventId, checkingStaffId } = action.payload;
+      const event = state.events.find((event) => event.id === eventId);
+      if (event) {
+        event.eventCheckingStaffs = event.eventCheckingStaffs.filter(
+          (staff) => staff.id !== checkingStaffId
+        );
+      }
+    },
+}
 });
 
-export const { setEvents } = eventSlice.actions;
+export const { setEvents, removeCheckingStaff } = eventSlice.actions;
 
 export default eventSlice.reducer;

@@ -6,26 +6,26 @@ import { Gallery5 } from '../EventOperator/image';
 import React from 'react';
 import { EOevent } from '../../../Types/eo.type';
 import { useSelector } from 'react-redux';
-import { selectUnpublishEvents } from '../../../Features/EventManage/eventSelector';
 import { RootState } from '../../../Store/Store';
 
 type Props = {
   id: number
+  defaultDisplay: string
 }
 
 const Tabbar:React.FC<Props> = (prop) => {
   // const Events = useSelector(selectUnpublishEvents);
   const Events = useSelector((state: RootState) => state.events.events);
-
   console.log(Events)
   console.log('prop.id:', prop.id);
+  // console.l
 
   // const eventDetail= Events?.find(event => event.id === prop.id);
   const eventDetail = Events?.find(event => event.id === parseInt(prop.id));
 
   // console.log(eventDetail)
     return (
-        <Tabs defaultValue="schedule">
+      <Tabs defaultValue={prop.defaultDisplay}>
         <TabsList>
           <TabsTrigger value="img" className='border-t-0 border-r-0 border-b border-l-0 m-[2px]'>Image
           </TabsTrigger>

@@ -36,33 +36,43 @@ import { useGetListEventQuery } from "./Features/EventManage/eventApi";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { setEvents } from "./Features/EventManage/eventSlice";
-import { RootState } from "./Store/Store";
+import { RootState, store } from "./Store/Store";
 import UpdateEvent from "./components/Pages/Dashboard/EventOperator/UpdateEvent";
+import { useGetListFeedbackQuery } from "./Features/FeedbackManage/feedbackApi";
+import { QuestionManage } from "./components/Organisms/Dashboard/Question";
 
 function App() {
   ReactModal.setAppElement("#root");
-    const { data: events, isLoading, error } = useGetListEventQuery();
+  const { data: events, isLoading, error } = useGetListEventQuery();
   const dispatch = useDispatch();
+   useGetListFeedbackQuery('1');
+
   useEffect(() => {
     if (events) {
       dispatch(setEvents(events));
+      sessionStorage.setItem('currentTab','schedule')
     }
   }, [events, dispatch]);
- 
+
+  if (!localStorage.getItem('notifications')) {
+    // Nếu không có, thiết lập `notifications` với một mảng rỗng
+    localStorage.setItem('notifications', JSON.stringify([]));
+  }
+  // localStorage.setItem('notifications', JSON.stringify([]));
+
+  const notifications = JSON.parse(localStorage.getItem('notifications'));
+  console.log(notifications)
+  const currentTab = sessionStorage.getItem('currentTab') // Lấy giá trị tab hiện tại từ Redux
   return (
-
     <>
-
       <Router>
         <Routes>
           {/* Guest  */}
           <Route path="/eventdetail" element={<EventDetail />} />
           <Route path="/" element={<HomePage />} />
-          {/* <Route path="/homepage" element={<HomePageLogout />} /> */}
           <Route path="/sponsor-homepage" element={<SponsorHomepage />} />
           <Route path="/role-choosing" element={<RoleChoosing />} />
           {/* sponsor  */}
-
           <Route
             path="/sponsor/dashboard/"
             element={
@@ -111,7 +121,6 @@ function App() {
               </RequireAuth>
             }
           />
-
           {/* event operator  */}
           {/* <Route
             path="/eventoperator/dashboard/question"
@@ -141,7 +150,7 @@ function App() {
             path="/eventoperator/dashboard/event/:id"
             element={
               <RequireAuth role="ROLE_EO">
-                <EO />
+                <EO defaultTabbar={currentTab}/>
               </RequireAuth>
             }
           />
@@ -179,10 +188,18 @@ function App() {
             }
           />
           <Route
-            path="/eventoperator/dashboard/FeedbackDetail"
+            path="/eventoperator/dashboard/FeedbackDetail/:id"
             element={
               <RequireAuth role="ROLE_EO">
                 <ManageFeedbackDetail />
+              </RequireAuth>
+            }
+          />
+           <Route
+            path="/eventoperator/dashboard/FeedbackQuestionDetail/:id"
+            element={
+              <RequireAuth role="ROLE_EO">
+                <QuestionManage />
               </RequireAuth>
             }
           />

@@ -48,8 +48,8 @@ import { useLoginMutation } from "../../../Features/Auth/authApi";
 import { clearToken } from "../../../Features/Auth/authSlice";
 import { useNavigate } from "react-router-dom";
 import { JwtPayload, jwtDecode } from "jwt-decode";
-import { RootState, persistor } from "../../../Store/Store";
-import notificationsSlice, { removeAllNotifications } from "../../../Features/Utils/notificationsSlice";
+import { RootState } from "../../../Store/Store";
+import notificationsSlice from "../../../Features/Utils/notificationsSlice";
 
 type Props = {
   email?: string | null;
@@ -71,9 +71,12 @@ const Dropdown: React.FC<Props> = (props) => {
   }, [token]);
   const dispatch = useDispatch();
   const handleLogout = () => {
-    localStorage.removeItem("email");
+    // localStorage.removeItem("email");
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("email");
+    localStorage.setItem("notifications", JSON.stringify([]));
     dispatch(clearToken());
-    persistor.purge();
+    // persistor.purge();
     navigate("/");
   };
 
@@ -97,9 +100,8 @@ const Dropdown: React.FC<Props> = (props) => {
     }
   };
   // dispatch(clearToken(token))
-  const notifications = useSelector(
-    (state: RootState) => state.notifications || []
-  );
+  const notifications = JSON.parse(localStorage.getItem('notifications'));
+  // console.log(notifications)
   return (
     <div className="flex items-center gap-2 justify-self-end md:gap-4">
       {/* <a href='' onClick={handleLogout}>Log Out</a> */}
@@ -186,7 +188,7 @@ const Dropdown: React.FC<Props> = (props) => {
                     <DropdownMenuLabel className="p-0">
                       Notifications
                     </DropdownMenuLabel>
-                    <a href="#" onClick={() => dispatch(removeAllNotifications(notifications))}>Mark as read</a>
+                    {/* <a href="#" onClick={() => dispatch(removeAllNotifications(notifications))}>Mark as read</a> */}
                   </div>
                   <DropdownMenuSeparator />
                   <div className="h-full max-h-[14rem] overflow-auto px-2 py-1">

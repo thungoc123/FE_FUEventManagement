@@ -7,7 +7,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import { uploadImage } from "../../../ulities/s3Image";
 // import { useAddImageMutation } from "../../../Features/EventManage/eventApi";
 import { addNotification } from "../../../Features/Utils/notificationsSlice";
-import { useAddImageMutation } from "../../../Features/EventManage/eventApi";
+import { useAddImageMutation, useDeleteImageMutation } from "../../../Features/EventManage/eventApi";
+import { BiTrash, BiExport } from "react-icons/bi";
+import { setTab } from "../../../Features/Utils/tabSlice";
 
 
 
@@ -41,6 +43,12 @@ export const Gallery5 = () => {
 
     try {
       const location = await uploadImage(selectedFile, key);
+      // console.log(location)
+      // if (location) {
+      //   setFileAddress(
+      //     "https://swpproject.s3.ap-southeast-2.amazonaws.com/" +
+      //     `${selectedFile.name}`
+      //   );
       setFileAddress(
         "https://swpproject.s3.ap-southeast-2.amazonaws.com/" +
           `${selectedFile.name}`
@@ -57,15 +65,16 @@ export const Gallery5 = () => {
     await handleUpload();
   };
   const newImage = {
-      eventId: id,
-      imagesUrl: fileAddress 
-    }
+    eventId: id,
+    imagesUrl: fileAddress 
+  }
   
   const [addImage, { isLoading, isSuccess, isError, error }] = useAddImageMutation()
-
+  const [deleteImage] = useDeleteImageMutation()
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(newImage);
+    
     try {
       await addImage({id, newImage}).unwrap();
       dispatch(addNotification({
@@ -74,6 +83,8 @@ export const Gallery5 = () => {
         type: 'success',
         timestamp: Date.now(), // Thời gian hiện tại
       }));
+      dispatch(setTab("img"));
+      // window.location.reload()
     } catch (err) {
       dispatch(addNotification({
         id: new Date().getTime(), // Sử dụng timestamp làm ID
@@ -81,7 +92,31 @@ export const Gallery5 = () => {
         type: 'error',
         timestamp: Date.now(), // Thời gian hiện tại
       }));
-      console.error('Failed to create the event:', err);
+      // console.error('Failed to create the event:', err);
+    }
+  };
+  const handleDelete = async (e: MouseEvent<HTMLButtonElement>, imageId: string) => {
+    e.preventDefault(); // Ngăn chặn hành vi mặc định của button nếu có
+
+    try {
+      await deleteImage({imageId}).unwrap();
+      dispatch(addNotification({
+        id: new Date().getTime(), // Sử dụng timestamp làm ID
+        message: 'Delete Image successfully!',
+        type: 'success',
+        timestamp: Date.now(), // Thời gian hiện tại
+      }));
+      dispatch(setTab("img"));
+      // window.location.reload()
+    } catch (error) {
+      dispatch(addNotification({
+        id: new Date().getTime(), // Sử dụng timestamp làm ID
+        message: 'Delete Image unsuccessfully!',
+        type: 'error',
+        timestamp: Date.now(), // Thời gian hiện tại
+      }));
+      console.error('Failed to delete image:', error);
+      alert('Failed to delete image');
     }
   };
   return (
@@ -89,6 +124,10 @@ export const Gallery5 = () => {
       <div className="container">
         <div className="grid grid-cols-2 items-start justify-center gap-6 md:gap-8 lg:grid-cols-3">
           {images.map((image, index) => (
+             <div
+             key={index}
+             className="w-40 h-40 relative inline-block m-2"
+           >
             <a
               key={index}
               href=""
@@ -98,27 +137,34 @@ export const Gallery5 = () => {
                 src={image.url}
                 
                 className="size-full object-cover"
+                // className="w-40 h-40 object-cover" // điều chỉnh kích thước hình ảnh theo ý muốn
+
               />
+      <Button size="icon" variant="link"  onClick={(e) => handleDelete(e,image.id)}>
+
+              <BiTrash  className="absolute top-2 right-2 text-white bg-red-700 p-1 rounded-full cursor-pointer"
+            size={24} />
+                  </Button>
+
             </a>
+            </div>
           ))}
         </div>
         <form onSubmit={handleSubmit}>
         <div className="grid gap-y-5 m-5">
           <Label htmlFor="Image">Image</Label>
           <Input type="file" onChange={handleFileChange} />
-          <span
-                    className="focus-visible:ring-border-primary inline-flex gap-3 items-center justify-center whitespace-nowrap ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-border-primary bg-background-alternative text-text-alternative px-6 py-3"
-                    onClick={handleUpload}
-                  >
-                    Add
-                  </span>
-          <Button
-          >
+          <a href="" onClick={(e)=> e.preventDefault()}> 
+          <BiExport onClick={handleUpload} />
+          </a>
+          <Button>
             Upload
           </Button>
         </div>
         </form>
       </div>
+
+
     </section>
   );
 ;

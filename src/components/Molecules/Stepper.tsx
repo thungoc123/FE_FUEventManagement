@@ -67,7 +67,8 @@ const AddEventSchedule = () => {
     eventType: eventType,
     location: location,
 };
-const [addSchedule, { isLoading, isSuccess, isError, error }] = useAddScheduleMutation();
+const [addSchedule, { isLoading, isSuccess, isError, error }
+] = useAddScheduleMutation();
 
 
   const handleSubmit =  async (e) => {

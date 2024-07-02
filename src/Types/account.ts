@@ -14,6 +14,7 @@ export interface account {
     role: role,
     email: string,
     password: string,
+    enabled: boolean,
     feedbacks: [] | null,
     visitors: [] | null,
     eventOperators: [] | null,

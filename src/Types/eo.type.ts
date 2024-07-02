@@ -21,7 +21,7 @@ export interface EOevent {
 export interface StateEvent {
     id: number,
     name: string, 
-    events: null | []
+    // events: null | []
 }
 
 export interface EventImage {
