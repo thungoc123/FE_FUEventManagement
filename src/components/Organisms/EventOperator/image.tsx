@@ -10,6 +10,7 @@ import { addNotification } from "../../../Features/Utils/notificationsSlice";
 import { useAddImageMutation, useDeleteImageMutation } from "../../../Features/EventManage/eventApi";
 import { BiTrash, BiExport } from "react-icons/bi";
 import { setTab } from "../../../Features/Utils/tabSlice";
+import { Alert } from "../../Molecules/Alert";
 
 
 
@@ -23,6 +24,7 @@ export const Gallery5 = () => {
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [fileAddress, setFileAddress] = useState("");
+  const [annouce, setAnnouce] = useState(Boolean);
   const dispatch = useDispatch();
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -38,21 +40,16 @@ export const Gallery5 = () => {
       return;
     }
 
-    // const bucketName = 'your-s3-bucket-name';
     const key = `${selectedFile.name}`; // Ví dụ: path/in/s3/example.jpg
 
     try {
       const location = await uploadImage(selectedFile, key);
-      // console.log(location)
-      // if (location) {
-      //   setFileAddress(
-      //     "https://swpproject.s3.ap-southeast-2.amazonaws.com/" +
-      //     `${selectedFile.name}`
-      //   );
       setFileAddress(
         "https://swpproject.s3.ap-southeast-2.amazonaws.com/" +
           `${selectedFile.name}`
       );
+      // console.log("File uploaded successfully at", location)
+      setAnnouce(location);
     } catch (error) {
       alert("Error uploading file");
     }
@@ -92,7 +89,6 @@ export const Gallery5 = () => {
         type: 'error',
         timestamp: Date.now(), // Thời gian hiện tại
       }));
-      // console.error('Failed to create the event:', err);
     }
   };
   const handleDelete = async (e: MouseEvent<HTMLButtonElement>, imageId: string) => {
@@ -137,7 +133,6 @@ export const Gallery5 = () => {
                 src={image.url}
                 
                 className="size-full object-cover"
-                // className="w-40 h-40 object-cover" // điều chỉnh kích thước hình ảnh theo ý muốn
 
               />
       <Button size="icon" variant="link"  onClick={(e) => handleDelete(e,image.id)}>
@@ -153,12 +148,15 @@ export const Gallery5 = () => {
         <form onSubmit={handleSubmit}>
         <div className="grid gap-y-5 m-5">
           <Label htmlFor="Image">Image</Label>
+          <p>Vui lòng click vào icon bên dưới trước khi click vào upload, xin lỗi vì sự bất tiện này. </p>
           <Input type="file" onChange={handleFileChange} />
+          <Alert text={annouce ? "Upload Image successfully" : "Upload Image unsuccessfully"}/>
+
           <a href="" onClick={(e)=> e.preventDefault()}> 
           <BiExport onClick={handleUpload} />
           </a>
           <Button>
-            Upload
+            {isLoading ? 'Uploading...' : 'Upload'}
           </Button>
         </div>
         </form>

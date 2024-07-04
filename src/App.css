@@ -1,0 +1,9 @@
+.editor-container {
+    height: 400px; /* Đặt chiều cao mong muốn */
+    overflow: auto; /* Cho phép cuộn */
+    border: 1px solid #ccc; /* Viền để dễ nhận diện */
+}
+
+.ck-editor__editable_inline {
+    height: 100%; /* Chiều cao đầy đủ bên trong vùng chứa */
+}

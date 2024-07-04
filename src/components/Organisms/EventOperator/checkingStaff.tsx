@@ -31,7 +31,7 @@ import React, { useState } from "react";
 import { RootState } from "../../../Store/Store";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { useAddCheckingStaffMutation, useDeleleCheckingStaffMutation } from "../../../Features/EventManage/eventApi";
+import { useAddCheckingStaffMutation, useDeleleCheckingStaffMutation, useGetListEventQuery } from "../../../Features/EventManage/eventApi";
 import { addNotification } from "../../../Features/Utils/notificationsSlice";
 import { Alert } from "../../Molecules/Alert";
 import { removeCheckingStaff } from "../../../Features/EventManage/eventSlice";
@@ -43,13 +43,12 @@ type Props = {
 };
 export const AddCheckStaffTable: React.FC<Props> = (props) => {
   const { id } = useParams();
-  const Events = useSelector((state: RootState) => state.events.events);
+  // const Events = useSelector((state: RootState) => state.events.events);
+  const { data, error, isLoading, isFetching } = useGetListEventQuery();
+
   const [deleleCheckingStaff] = useDeleleCheckingStaffMutation()
   const [fill, setFill] = useState("")
-
-  const Staff =
-    Events?.find((event) => event.id === parseInt(id))?.eventCheckingStaffs ||
-    [];
+  const Staff = data?.find((event) => event.id === parseInt(id))?.eventCheckingStaffs || [];
   
   const tableHeaders = ["No", "Email", "Password", "Delete"];
   const dispatch = useDispatch();
@@ -93,7 +92,7 @@ export const AddCheckStaffTable: React.FC<Props> = (props) => {
   ];
 
   const accountId = useSelector((state: RootState) => state.auth.accountId);
-  const [addCheckingStaff, { isLoading, isSuccess, isError, error }] =
+  const [addCheckingStaff] =
     useAddCheckingStaffMutation();
   const [email, setEmail] = useState("");
   const checkingStaff = {
@@ -116,6 +115,7 @@ export const AddCheckStaffTable: React.FC<Props> = (props) => {
         })
       );
       dispatch(setTab("checking"));
+      window.location.reload();
     } catch (err) {
       dispatch(
         addNotification({
@@ -130,6 +130,9 @@ export const AddCheckStaffTable: React.FC<Props> = (props) => {
     }
   };
   const paginationItems = [1, 2, 3, 4];
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
+  {isFetching && <div>Updating...</div>}
   return (
     <>
       <TableTemplate

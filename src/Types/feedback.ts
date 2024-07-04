@@ -3,7 +3,7 @@ import { account } from "./account";
 
 export interface FeedbackTable {
     No: number ,
-    title: string,
+    Name: string,
     Event: string,
     state: string,
     Detail: React.ReactNode,

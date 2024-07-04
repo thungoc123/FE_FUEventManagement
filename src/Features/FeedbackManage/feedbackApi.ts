@@ -22,7 +22,7 @@ const baseQuery = fetchBaseQuery({
 export const feedbackApi = createApi({
   reducerPath: 'feedback',
   baseQuery,
-  tagTypes: ['FeedbackQuestions'],
+  tagTypes: ['FeedbackQuestions', 'Feedbacks'],
 
   endpoints: (builder) => ({
     createFeedback: builder.mutation({
@@ -31,10 +31,12 @@ export const feedbackApi = createApi({
         method: 'POST',
         body: newFeedback,
       }),
+      invalidatesTags: ['Feedbacks'],
     }),
     getListFeedback: builder.query<FeedbackQuery[], string>({
       query: (accountId) => `api-feedbacks/list-feedback-account/${accountId}`,
       // keepUnusedDataFor: 3600,
+      providesTags: (result, error, accountId) => [{ type: 'Feedbacks', id: accountId }],
     }),
     createQuestion: builder.mutation({
       query:(feedbackquestion) => ({
@@ -49,7 +51,6 @@ export const feedbackApi = createApi({
     getListFeedbackQuestion: builder.query<feedbackQuestionQuery[],string>({
       query: (feedbackId) => `/feedbackQuestions/feedback/${feedbackId}`,
       providesTags: (result, error, id) => [{ type: 'FeedbackQuestions', id }],
-
     })
     
   }),

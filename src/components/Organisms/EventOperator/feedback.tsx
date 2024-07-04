@@ -14,7 +14,7 @@ import { Link } from "react-router-dom";
 export const Feedback = () => {
   const tableHeaders = [
     "No",
-    "title",
+    "Name",
     "Event",
     "state",
     "Detail",
@@ -25,7 +25,7 @@ export const Feedback = () => {
 
   const tableRows: FeedbackTable[] = Feedbacks?.map((item, index) => ({
     No: index+1,
-    title: item.title,
+    Name: item.title,
     Event: item.eventName,
     state: item.state.stateName,
     Detail: 

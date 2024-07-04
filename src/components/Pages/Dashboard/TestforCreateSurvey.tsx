@@ -34,7 +34,7 @@ export const SurveyForm: React.FC = () => {
   const [answers, setAnswers] = useState([
     { answer: "", deletedAt: null, modifiedAt: null },
   ]);
-  const [createFeedback] = useCreateFeedbackMutation();
+  const [createFeedback , {isLoading}] = useCreateFeedbackMutation();
   // const steps = [
   //   { label: "Survey" },
   //   { label: "Actor" },
@@ -97,7 +97,10 @@ export const SurveyForm: React.FC = () => {
           timestamp: Date.now(), // Thời gian hiện tại
         })
       );
-      navigate("/eventoperator/dashboard/feedback");
+      // navigate("/eventoperator/dashboard/feedback");
+      window.location.reload();
+
+
       // alert('Event created successfully!');
     } catch (err) {
       dispatch(
@@ -207,8 +210,8 @@ export const SurveyForm: React.FC = () => {
                     Cancel
                   </Button>
                   <Button type="submit">
-                      {/* {isLoading ? "Creating" : "Get Started"}{" "} */}
-                      submit
+                      {isLoading ? "Creating" : "Get Started"}{" "}
+                      
                     </Button>
                                           {/* {isLoading ? "Creating" : "Get Started"}{" "} */}
 

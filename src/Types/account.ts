@@ -1,12 +1,13 @@
 import React from "react";
 
 export interface AccountTable {
-    Name: string, 
-    Email: string, 
+    No: number,
+    Name: string,
+    Email:  string,
     Role: string,
-    Password: string, 
+    Password: string,
+    State: string,
     Edit: React.ReactNode,
-    Delete: React.ReactNode    
 }
 
 export interface account {

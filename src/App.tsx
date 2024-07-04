@@ -227,10 +227,28 @@ function App() {
             path="/admin"
             element={
               <RequireAuth role="ROLE_ADMIN">
-                <Admin />
+                <Admin Role="ROLE_SPONSOR"/>
               </RequireAuth>
             }
           />
+          <Route
+            path="/admin/visitor"
+            element={
+              <RequireAuth role="ROLE_ADMIN">
+                <Admin Role="ROLE_VISITOR"/>
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/admin/eventoperator"
+            element={
+              <RequireAuth role="ROLE_ADMIN">
+                <Admin Role="ROLE_EO"/>
+              </RequireAuth>
+            }
+          />
+
+
 
           <Route path="/sponsor" element={<SponsorSignUp />} />
           <Route path="/visitor" element={<VisitorSignUp />} />

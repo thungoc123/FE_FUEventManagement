@@ -9,16 +9,9 @@ import { sponsorApi } from '../Features/Sponsor/sponsorApi';
 import eventReducer from '../Features/EventManage/eventSlice'; // Import eventReducer
 import tabReducer from '../Features/Utils/tabSlice';
 import {feedbackApi} from '../Features/FeedbackManage/feedbackApi'
-// Cấu hình persist cho auth reducer
-// const authPersistConfig = {
-//   key: 'auth',
-//   storage,
-//   whitelist: ['token', 'role', 'accountId'],
-// };
+import { adminApi } from '../Features/Admin/AdminApi';
+import HeaderDisplayReducer from '../Features/Utils/HeaderDisplaySlice';
 
-// const persistedAuthReducer = persistReducer(authPersistConfig, authReducer);
-
-// Tạo store với persistedReducer
 export const store = configureStore({
   reducer: {
     [authApi.reducerPath]: authApi.reducer,
@@ -29,12 +22,14 @@ export const store = configureStore({
     auth: authReducer,
     events: eventReducer,
     tab: tabReducer, // Thêm reducer của tab vào store
-    [feedbackApi.reducerPath] : feedbackApi.reducer
+    [feedbackApi.reducerPath] : feedbackApi.reducer,
+    [adminApi.reducerPath]: adminApi.reducer,
+    headerDisplay: HeaderDisplayReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
-    }).concat(authApi.middleware, eventApi.middleware, sponsorApi.middleware, feedbackApi.middleware),
+    }).concat(authApi.middleware,adminApi.middleware ,eventApi.middleware, sponsorApi.middleware, feedbackApi.middleware),
 });
 
 

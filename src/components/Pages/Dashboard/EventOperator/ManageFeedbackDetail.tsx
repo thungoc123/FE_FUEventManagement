@@ -21,16 +21,16 @@ export const ManageFeedbackDetail = () => {
           <TabsTrigger value="Question" className='border-t-0 border-r-0 border-b border-l-0 m-[2px]'>Question
           </TabsTrigger>
          
-          <TabsTrigger value="Answer" className='border-t-0 border-r-0 border-b border-l-0 m-[2px]'>Answer
-          </TabsTrigger>
+          {/* <TabsTrigger value="Answer" className='border-t-0 border-r-0 border-b border-l-0 m-[2px]'>Answer
+          </TabsTrigger> */}
         </TabsList>
        
         <TabsContent className="mt-2" value="Question">
          <QuestionManage />
         </TabsContent>
-        <TabsContent className="mt-2" value="Answer">
+        {/* <TabsContent className="mt-2" value="Answer">
          <AnswerManage />
-        </TabsContent>
+        </TabsContent> */}
       </Tabs>
         
             }

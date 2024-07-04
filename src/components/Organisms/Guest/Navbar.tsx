@@ -178,7 +178,8 @@ export const Navbar2 = (props: Navbar2Props) => {
       console.error("Failed to login:");
     }
   };
-  const token = useSelector((state: RootState) => state.auth.token);
+  // const token = useSelector((state: RootState) => state.auth.token);
+  const token = sessionStorage.getItem("token");
   useEffect(() => {
     if (token) {
       const storedEmail = localStorage.getItem("email") || "";
@@ -189,14 +190,7 @@ export const Navbar2 = (props: Navbar2Props) => {
       setIsLogin(false);
     }
   }, [token]); 
-  // if (token) {
-  //   const storedEmail = localStorage.getItem("email") || "";
-  //   setEmail(storedEmail);
-  //   setIsLogin(true);
-  //   dispatch(setToken(token));
-  // } else {
-  //   setIsLogin(false);
-  // }
+
 
   const NavigationAuth = (token: string) => {
     let decodedToken = jwtDecode<JwtPayload>(token);

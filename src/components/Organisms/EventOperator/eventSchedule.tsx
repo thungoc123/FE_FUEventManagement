@@ -12,16 +12,19 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../Store/Store";
+import { useGetListEventQuery } from "../../../Features/EventManage/eventApi";
 type Props = {
   eventSchedule: EventSchedule[];
 };
 export const EventScheduleTable:React.FC<Props> = (prop) => {
   const { id } = useParams();
-  const Events = useSelector((state: RootState) => state.events.events);
+  // const Events = useSelector((state: RootState) => state.events.events);
+  // const [Events, isLoading, error] = useSelector((state: RootState) => [state.events.events, state.events.loading, state.events.error]);
+  const { data, error, isLoading, isFetching } = useGetListEventQuery();
+  // const [ d, { isLoading, isSuccess, isError, error }] = useGetListEventQuery()
+  const eventSchedule = data?.find(event => event.id === parseInt(id))?.eventSchedules || []
+  
 
-  const eventSchedule = Events?.find(event => event.id === parseInt(id))?.eventSchedules || []
-  
-  
   console.log(eventSchedule)
   const tableHeaders = ["No","Schedule", "Duration", "Actor", "Time","Date","Hinh_Thuc","Detail","Edit","Delete"];
   const tableHeaderClasses = [
@@ -51,6 +54,10 @@ export const EventScheduleTable:React.FC<Props> = (prop) => {
     ,
   }));
   // const paginationItems = [1, 2, 3, 4, 5,6,7,8,9];
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
+  {isFetching && <div>Updating...</div>}
+
   return (
     <>
      

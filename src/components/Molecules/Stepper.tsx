@@ -21,6 +21,8 @@ import { Time } from "../../Types/global.type";
 import { useDispatch } from "react-redux";
 import { addNotification } from "../../Features/Utils/notificationsSlice";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
+import { toggleHeaderVisibility } from "../../Features/Utils/HeaderDisplaySlice";
+
 const steps = [
   { label: "Schedule" },
   { label: "Actor" },
@@ -35,6 +37,7 @@ const AddEventSchedule = () => {
 
   const navigate = useNavigate();
   const openModal = () => {
+    dispatch(toggleHeaderVisibility("sticky top-0 flex min-h-16 w-full items-center border-b border-border-primary bg-white px-4 md:min-h-18 md:px-8"))
     setModalIsOpen(true);
   };
 
@@ -73,6 +76,7 @@ const [addSchedule, { isLoading, isSuccess, isError, error }
 
   const handleSubmit =  async (e) => {
     e.preventDefault();
+    console.log(JSON.stringify(ScheduleData))
     try {
         const response = await addSchedule({id: id, newSchedule: ScheduleData }).unwrap();
         console.log(response)
@@ -82,6 +86,7 @@ const [addSchedule, { isLoading, isSuccess, isError, error }
           type: 'success',
           timestamp: Date.now(), // Thời gian hiện tại
         }));
+        window.location.reload();
     } catch (err) {
       dispatch(addNotification({
         id: new Date().getTime(), // Sử dụng timestamp làm ID
@@ -258,11 +263,21 @@ const [addSchedule, { isLoading, isSuccess, isError, error }
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
                     varius enim in eros.
                   </p>
+                  <div className="editor-container">
                   <CKEditor
             editor={ClassicEditor}
             data="<p>Type your content here!</p>"
             // Sử dụng đối tượng cấu hình
-
+            config={{
+              toolbar: [
+                'bold', 'italic', '|',
+                'link', '|',
+                'bulletedList', 'numberedList', '|',
+                'undo', 'redo',
+                'insertImage', 'insertMedia', 'blockQuote', '|',
+              ],
+              // Include additional configuration options as needed
+            }}
             onReady={(editor: any) => {
               console.log("Editor is ready to use!", editor);
             }}
@@ -278,6 +293,7 @@ const [addSchedule, { isLoading, isSuccess, isError, error }
               console.log("Focus.", editor);
             }}
           />
+          </div>
                 </>
               )}
               {currentStep === 3 && (

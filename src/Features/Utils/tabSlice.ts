@@ -13,7 +13,7 @@ const tabSlice = createSlice({
       state.currentTab = action.payload;
       sessionStorage.setItem('currentTab',action.payload)
     },
-  },
+    },
 });
 
 export const { setTab } = tabSlice.actions;

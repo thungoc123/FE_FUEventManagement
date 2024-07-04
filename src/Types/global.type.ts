@@ -9,7 +9,7 @@ export interface Search {
 export interface State {
     name: string, 
     url: string,
-    number: number,
+    number?: number,
     icon: React.ReactNode
 }
 export interface Time {
