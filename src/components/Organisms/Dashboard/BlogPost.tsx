@@ -5,7 +5,7 @@ import { BiLinkAlt, BiLogoLinkedinSquare, BiLogoFacebookCircle } from "react-ico
 import { RxChevronLeft } from "react-icons/rx";
 import Content31 from "./Content31";
 import { useGetSponsorProgramQuery } from "../../../Features/Sponsor/sponsor_programApi";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 type ImageProps = {
   src: string;
@@ -36,6 +36,7 @@ export type BlogPostHeader2Props = React.ComponentPropsWithoutRef<"section"> & P
 
 export const BlogPostHeader2 = (props: BlogPostHeader2Props) => {
   const { id } = useParams<{ id: string }>(); // Lấy ID từ URL
+  const navigate = useNavigate(); // Use navigate to programmatically navigate
 
   const { button, category, readTime, heading, image, postDetails, socialMediaLinks } = {
     ...BlogPostHeader2Defaults,
@@ -88,6 +89,8 @@ export const BlogPostHeader2 = (props: BlogPostHeader2Props) => {
             iconLeft={button.iconLeft}
             className="mb-8 md:mb-10 lg:mb-12"
             asChild
+            onClick={() => navigate("/sponsor-program")} // Navigate to Sponsor Program page on click
+
           >
             <a>{button.title}</a>
           </Button>

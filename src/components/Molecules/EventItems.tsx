@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Tag from '../Atoms/Tag';
-import { Button } from '@relume_io/relume-ui';
 import { Content1 } from '../Organisms/Guest/EventScheduleDetail';
 interface EventItemProps {
   time: string;
@@ -33,7 +32,6 @@ const EventItem: React.FC<EventItemProps> = ({ time, title, tags, speaker, locat
       <div className="md:w-1/4 mb-2 md:mb-0">{speaker}</div>
       <div className="md:w-1/6 mb-2 md:mb-0">{location}</div>
       <div className="md:w-1/6">
-          <Button variant = "secondary" size="sm" onClick={handleEventOpen}>View Detail</Button>
       </div>   
 
 

@@ -1,10 +1,11 @@
 import { useParams } from 'react-router-dom';
-import { useGetSponsorProgramQuery } from "../../../Features/Sponsor/sponsor_programApi";
-import { Blog44 } from "../../Organisms/Dashboard/Blog44";
-import { BlogPostHeader2 } from "../../Organisms/Dashboard/BlogPost";
-import { Footer1 } from "../../Organisms/Guest/Footer";
+import { useGetSponsorProgramQuery } from '../../../../Features/Sponsor/sponsor_programApi';
+import { Navbar2 } from '../../../Organisms/Guest/Navbar';
+import { BlogPostHeader2 } from '../../../Organisms/Dashboard/BlogPost';
+import { Blog44 } from '../../../Organisms/Dashboard/Blog44';
+import { Footer1 } from '../../../Organisms/Guest/Footer';
 import { BiLinkAlt } from "react-icons/bi";
-import { Navbar2 } from "../../Organisms/Guest/Navbar";
+
 
 function SponsorProgramDetail() {
   const { id } = useParams(); // Lấy ID từ URL

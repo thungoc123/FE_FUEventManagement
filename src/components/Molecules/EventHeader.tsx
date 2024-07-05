@@ -1,4 +1,3 @@
-
 import { Button } from "@relume_io/relume-ui";
 import type { ButtonProps } from "@relume_io/relume-ui";
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
@@ -14,13 +13,13 @@ type ImageProps = {
 type Props = {
   heading: string;
   description: string;
-  eventImages: ImageProps[]; // Update Props to include eventImages
+  eventImages: ImageProps[];
 };
 
 export type Header80Props = React.ComponentPropsWithoutRef<"section"> & Partial<Props>;
 
 export const Header80 = (props: Header80Props) => {
-  const { heading, description,  eventImages } = {
+  const { heading, description, eventImages } = {
     ...Header80Defaults,
     ...props,
   } as Props;
@@ -32,13 +31,20 @@ export const Header80 = (props: Header80Props) => {
   });
   const yFirst = useTransform(animatedScrollYProgress, [0, 1], ["0vh", "-87.5vh"]);
   const ySecond = useTransform(animatedScrollYProgress, [0, 1], ["0vh", "-39.6vh"]);
-  const navigator= useNavigate();
+  const navigator = useNavigate();
   const buyTicketButton = () => {
     navigator('/payment');
-  }
+  };
+
   return (
     <section ref={transformRef} className="relative h-[150vh] px-[5%] md:h-[300vh]">
       <div className="sticky top-0 h-[100vh] overflow-hidden">
+        <div className="container relative flex h-full max-w-lg items-center pb-24 pt-16 text-center md:pt-24 lg:py-28 z-30">
+          <div>
+            <h1 className="mb-5 text-6xl font-bold md:mb-6 md:text-9xl lg:text-10xl">{heading}</h1>
+            <p className="relative z-20 md:text-md">{description}</p>
+          </div>
+        </div>
         <div className="absolute bottom-0 left-0 right-auto top-0 z-10">
           <motion.div className="flex flex-col gap-[26vw] pt-[70vh]" style={{ y: yFirst }}>
             {eventImages.slice(0, 4).map((image, index) => (
@@ -84,13 +90,6 @@ export const Header80 = (props: Header80Props) => {
             ))}
           </div>
         </motion.div>
-        <div className="container relative flex h-full max-w-lg items-center pb-24 pt-16 text-center md:pt-24 lg:py-28">
-          <div>
-            <h1 className="mb-5 text-6xl font-bold md:mb-6 md:text-9xl lg:text-10xl">{heading}</h1>
-            <p className="relative z-20 md:text-md ">{description}</p>
-            
-          </div>
-        </div>
         <div className="absolute inset-0 -z-10 mt-[35rem] md:mt-[100vh]" />
       </div>
     </section>
@@ -99,10 +98,8 @@ export const Header80 = (props: Header80Props) => {
 
 export const Header80Defaults: Header80Props = {
   heading: "",
-  description:"",
-  
-  eventImages: [ // Update with default eventImages if needed
-    
+  description: "",
+  eventImages: [
     {
       src: "",
       alt: "",
@@ -111,4 +108,3 @@ export const Header80Defaults: Header80Props = {
 };
 
 Header80.displayName = "Header80";
-  

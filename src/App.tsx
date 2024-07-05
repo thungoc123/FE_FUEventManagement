@@ -24,7 +24,7 @@ import { ManageFeedbackDetail } from "./components/Pages/Dashboard/EventOperator
 import { ManageFeedback } from "./components/Pages/Dashboard/EventOperator/ManageFeedback";
 import ReactModal from "react-modal";
 import TokenDecode from "./ulities/TokenDecode";
-import { Login1 } from "./components/Pages/Login";
+// import { Login1 } from "./components/Pages/Login";
 // import ProtectedRoute from "./ulities/ProtectedRoute";
 import RequireAuth from "./ulities/ProtectedRoute";
 import { Admin } from "./components/Pages/Admin";
@@ -40,36 +40,36 @@ import { RootState } from "./Store/Store";
 import UpdateEvent from "./components/Pages/Dashboard/EventOperator/UpdateEvent";
 import { PaymentPage } from "./components/Pages/Visitor/PaymentPage";
 import HomePage from "./components/Pages/HomePage";
-import SponsorHomepage from "./components/Pages/Sponsor/SponsorProgramDetail";
-import SponsorProgram from "./components/Pages/Sponsor/SponsorProgram";
-import SponsorProgramDetail from "./components/Pages/Sponsor/SponsorProgramDetail";
+import SponsorProgram from "./components/Pages/Dashboard/Sponsor/SponsorProgram";
+import SponsorProgramDetail from "./components/Pages/Dashboard/Sponsor/SponsorProgramDetail";
+import Login1 from "./components/Pages/Login";
+
 
 function App() {
-  const eventId='1';
+  const eventId = "1";
   ReactModal.setAppElement("#root");
-    const { data: events, isLoading, error } = useGetListEventQuery();
+  const { data: events, isLoading, error } = useGetListEventQuery();
   const dispatch = useDispatch();
   useEffect(() => {
     if (events) {
       dispatch(setEvents(events));
     }
   }, [events, dispatch]);
- 
+
   return (
-
     <>
-
       <Router>
         <Routes>
-          <Route path="/EventDetail" element={<EventDetail eventId={eventId}/>} 
-            />
+          <Route
+            path="/EventDetail"
+            element={<EventDetail eventId={eventId} />}
+          />
           {/* Guest  */}
           <Route path="/eventdetail" element={<EventDetail />} />
           <Route path="/" element={<HomePage />} />
           {/* <Route path="/homepage" element={<HomePageLogout />} /> */}
-          <Route path="//sponsor-detail/:id" element={<SponsorProgramDetail/>} />
+
           <Route path="/role-choosing" element={<RoleChoosing />} />
-          <Route path="/sponsor-program" element={<SponsorProgram />} />
 
           {/* sponsor  */}
 
@@ -121,7 +121,22 @@ function App() {
               </RequireAuth>
             }
           />
-
+          <Route
+            path="/sponsor-program"
+            element={
+              <RequireAuth role="ROLE_SPONSOR">
+                <SponsorProgram />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/sponsor-detail/:id"
+            element={
+              <RequireAuth role="ROLE_SPONSOR">
+                <SponsorProgramDetail />
+              </RequireAuth>
+            }
+          />
           {/* event operator  */}
           {/* <Route
             path="/eventoperator/dashboard/question"
@@ -155,7 +170,7 @@ function App() {
               </RequireAuth>
             }
           />
-          
+
           <Route
             path="/eventoperator/dashboard/event/update/:id"
             element={
@@ -172,7 +187,7 @@ function App() {
               </RequireAuth>
             }
           />
-           <Route
+          <Route
             path="/eventoperator/dashboard/UnpublishEvent"
             element={
               <RequireAuth role="ROLE_EO">
@@ -242,8 +257,7 @@ function App() {
           {/* <Route path="/checkstaff" element={<AddCheckStaffTable />} />
           <Route path="/sponsor-table" element={<AddSponsorTable />} />
           <Route path="/event-table" element={<EventScheduleTable />} /> */}
-          <Route path="/event-detail/:id" element={<EventDetail/>} />
-
+          <Route path="/event-detail/:id" element={<EventDetail />} />
 
           <Route path="/test" element={<TokenDecode />} />
           <Route path="/login" element={<Login1 />} />

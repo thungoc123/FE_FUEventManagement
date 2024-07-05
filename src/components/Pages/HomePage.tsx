@@ -29,18 +29,14 @@ function HomePage() {
     return <div>Error loading events</div>;
   // const eventImages = eventPosts.flatMap((event: Event) => event.eventImages);
   const headerData = {
-    name: "",
-    description:"" ,
-    buttons: [
-      { title: "View Event" },
-      { title: "Buy Ticket", variant: "secondary" },
-    ],
+    heading: "Event Of The Month",
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
     images: [],
-    eventImages: publishedEvents?.flatMap((event: Event) => event.eventImages),
-    carouselHeading: publishedEvents?.flatMap((event: Event) => event.name),
-    carouselDescription: publishedEvents?.flatMap(
-      (event: Event) => event.description
-    ),
+    eventImages: publishedEvents.flatMap((event: Event) => event.eventImages.map(img => ({
+      ...img,
+      name: event.name,
+      description: event.description
+    }))),
   };
 
   return (

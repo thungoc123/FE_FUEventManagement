@@ -1,10 +1,11 @@
 // src/Pages/SponsorProgram.js
 
-import React from 'react';
-import { Footer1 } from "../../Organisms/Guest/Footer";
-import { Navbar2 } from "../../Organisms/Guest/Navbar";
-import { DisplayProgram } from "../../Organisms/Sponsor/DisplaySponsorProgram";
-import { useGetSponsorProgramQuery } from '../../../Features/Sponsor/sponsor_programApi';
+import { useGetSponsorProgramQuery } from "../../../../Features/Sponsor/sponsor_programApi";
+import { Footer1 } from "../../../Organisms/Guest/Footer";
+import { Navbar2 } from "../../../Organisms/Guest/Navbar";
+import { DisplayProgram } from "../../../Organisms/Sponsor/DisplaySponsorProgram";
+
+
 
 function SponsorProgram() {
   const { data: sponsorPrograms = [], isLoading, isError } = useGetSponsorProgramQuery();

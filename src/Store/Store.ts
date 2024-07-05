@@ -11,6 +11,7 @@ import eventReducer from '../Features/EventManage/eventSlice';
 import { sponsorDashboardApi } from "../Features/Sponsor/sponsorDashboardApi";
 import { eventApi } from "../Features/EventManage/eventApi";
 import { createorderApi } from "../Features/Order/orderApi";
+import { passwordApi } from "../Features/Password/passwordApi";
 
 // Cấu hình persist cho auth reducer
 const authPersistConfig = {
@@ -27,6 +28,7 @@ export const store = configureStore({
     [eventDisplayApi.reducerPath]: eventDisplayApi.reducer,
     [sponsor_programApi.reducerPath] : sponsor_programApi.reducer,
     [createorderApi.reducerPath]: createorderApi.reducer,
+    [passwordApi.reducerPath]: passwordApi.reducer,
     [authApi.reducerPath]: authApi.reducer,
     auth: persistedAuthReducer,
     [eventApi.reducerPath]: eventApi.reducer,
@@ -45,6 +47,7 @@ export const store = configureStore({
       authApi.middleware,
       sponsorDashboardApi.middleware,
       eventApi.middleware,
+      passwordApi.middleware
     ),
 });
 

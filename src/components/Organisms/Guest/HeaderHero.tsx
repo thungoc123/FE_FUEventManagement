@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import type { ButtonProps, CarouselApi } from "@relume_io/relume-ui";
 import clsx from "clsx";
@@ -22,14 +21,13 @@ type EventImage = {
   id: number;
   url: string;
   event: string;
-  name:string;
-  description:string;
+  name: string;
+  description: string;
 };
 
 type Props = {
   heading: string;
   description: string;
-  buttons: ButtonProps[];
   images: ImageProps[];
   eventImages: EventImage[];
   carouselHeading: string;
@@ -55,11 +53,8 @@ export const Header9 = (props: Header9Props) => {
   const {
     heading,
     description,
-    buttons,
-    images,
     eventImages,
-    carouselHeading,
-    carouselDescription,
+    
   } = {
     ...Header9Defaults,
     ...props,
@@ -82,19 +77,6 @@ export const Header9 = (props: Header9Props) => {
           {heading}
         </h1>
         <p className="md:text-md">{description}</p>
-        <div className="mt-6 flex gap-x-4 md:mt-8">
-          {buttons.map((button, index) => (
-            <Button
-              key={index}
-              variant={button.variant}
-              size={button.size}
-              iconRight={button.iconRight}
-              iconLeft={button.iconLeft}
-            >
-              {button.title}
-            </Button>
-          ))}
-        </div>
       </div>
       <div className="relative clear-both h-[300px] max-h-[60rem] min-h-screen w-full bg-[#ddd] text-center">
         <Carousel
@@ -105,7 +87,6 @@ export const Header9 = (props: Header9Props) => {
         >
           <CarouselContent>
             {eventImages?.map((image, index) => (
-              
               <CarouselItem key={index} className="pl-0">
                 <div className="relative inline-block size-full whitespace-normal text-left align-top">
                   <div className="flex h-screen flex-col">
@@ -119,10 +100,10 @@ export const Header9 = (props: Header9Props) => {
                     <div className="relative bg-background-secondary px-6 pb-32 pt-6 sm:px-8 sm:pt-8">
                       <div className="w-full max-w-lg">
                         <h2 className="mb-1 text-md font-bold leading-[1.4] md:text-xl">
-                          {carouselHeading}
+                          {image.name}
                         </h2>
-                          {carouselDescription}
-                        </div>
+                        <p>{image.description}</p>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -152,24 +133,10 @@ export const Header9 = (props: Header9Props) => {
 };
 
 export const Header9Defaults: Header9Props = {
-  heading: "Medium length hero heading goes here",
+  heading: "Event Of The Month",
   description:
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat.",
-  buttons: [{ title: "Button" }, { title: "Button", variant: "secondary" }],
-  images: [
-    {
-      src: "https://relume-assets.s3.amazonaws.com/placeholder-image.svg",
-      alt: "Placeholder image 1",
-    },
-    {
-      src: "https://relume-assets.s3.amazonaws.com/placeholder-image.svg",
-      alt: "Placeholder image 2",
-    },
-    {
-      src: "https://relume-assets.s3.amazonaws.com/placeholder-image.svg",
-      alt: "Placeholder image 3",
-    },
-  ],
+  images: [],
   eventImages: [],
   carouselHeading: "Short heading goes here",
   carouselDescription:
@@ -177,6 +144,3 @@ export const Header9Defaults: Header9Props = {
 };
 
 Header9.displayName = "Header9";
-
-
-
