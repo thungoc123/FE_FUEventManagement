@@ -1,6 +1,6 @@
+import React from 'react';
 import { Button } from "@relume_io/relume-ui";
 import type { ButtonProps } from "@relume_io/relume-ui";
-import { RxChevronRight } from "react-icons/rx";
 
 type ImageProps = {
   src: string;
@@ -71,9 +71,8 @@ export const Blog44 = (props: Blog44Props) => {
                   <p className="mr-4 bg-background-secondary px-2 py-1 text-sm font-semibold">
                     {post.category}
                   </p>
-                  <p className="inline text-sm font-sexmibold">{post.readTime}</p>
+                  <p className="inline text-sm font-semibold">{post.readTime}</p>
                 </div>
-
                 <div className="flex w-full flex-col items-start justify-start">
                   <h2 className="mb-2 text-xl font-bold md:text-2xl">{post.title}</h2>
                   <p>{post.description}</p>
@@ -110,62 +109,7 @@ export const Blog44Defaults: Blog44Props = {
   heading: "Related Program",
   description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
   button: { title: "View all", variant: "secondary" },
-  blogPosts: [
-    {
-      url: "#",
-      image: {
-        src: "https://relume-assets.s3.amazonaws.com/placeholder-image-landscape.svg",
-        alt: "Placeholder image 1",
-      },
-      category: "Category",
-      readTime: "5 min read",
-      title: "Blog title heading will go here",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros.",
-      button: {
-        title: "Read more",
-        variant: "link",
-        size: "link",
-        iconRight: <RxChevronRight className="size-4" />,
-      },
-    },
-    {
-      url: "#",
-      image: {
-        src: "https://relume-assets.s3.amazonaws.com/placeholder-image-landscape.svg",
-        alt: "Placeholder image 2",
-      },
-      category: "Category",
-      readTime: "5 min read",
-      title: "Blog title heading will go here",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros.",
-      button: {
-        title: "Read more",
-        variant: "link",
-        size: "link",
-        iconRight: <RxChevronRight className="size-4" />,
-      },
-    },
-    {
-      url: "#",
-      image: {
-        src: "https://relume-assets.s3.amazonaws.com/placeholder-image-landscape.svg",
-        alt: "Placeholder image 3",
-      },
-      category: "Category",
-      readTime: "5 min read",
-      title: "Blog title heading will go here",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros.",
-      button: {
-        title: "Read more",
-        variant: "link",
-        size: "link",
-        iconRight: <RxChevronRight className="size-4" />,
-      },
-    },
-  ],
+  blogPosts: [],
 };
 
 Blog44.displayName = "Blog44";

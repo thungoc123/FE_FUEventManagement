@@ -14,14 +14,13 @@ type ImageProps = {
 type Props = {
   heading: string;
   description: string;
-  buttons: ButtonProps[];
   eventImages: ImageProps[]; // Update Props to include eventImages
 };
 
 export type Header80Props = React.ComponentPropsWithoutRef<"section"> & Partial<Props>;
 
 export const Header80 = (props: Header80Props) => {
-  const { heading, description, buttons, eventImages } = {
+  const { heading, description,  eventImages } = {
     ...Header80Defaults,
     ...props,
   } as Props;
@@ -89,20 +88,7 @@ export const Header80 = (props: Header80Props) => {
           <div>
             <h1 className="mb-5 text-6xl font-bold md:mb-6 md:text-9xl lg:text-10xl">{heading}</h1>
             <p className="relative z-20 md:text-md ">{description}</p>
-            <div className="relative z-20 mt-6 flex items-center justify-center gap-x-4 md:mt-8">
-              {buttons.map((button, index) => (
-                <Button
-                  key={index}
-                  variant={button.variant}
-                  size={button.size}
-                  iconRight={button.iconRight}
-                  iconLeft={button.iconLeft}
-                  onClick={buyTicketButton}
-                >
-                  {button.title}
-                </Button>
-              ))}
-            </div>
+            
           </div>
         </div>
         <div className="absolute inset-0 -z-10 mt-[35rem] md:mt-[100vh]" />
@@ -114,11 +100,7 @@ export const Header80 = (props: Header80Props) => {
 export const Header80Defaults: Header80Props = {
   heading: "",
   description:"",
-    buttons: [
-    {
-      title: "Add To Cart",
-    }
-  ],
+  
   eventImages: [ // Update with default eventImages if needed
     
     {

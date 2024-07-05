@@ -104,7 +104,7 @@ export const Header9 = (props: Header9Props) => {
           className="relative left-0 right-0 z-10 block h-full overflow-hidden whitespace-nowrap pl-4"
         >
           <CarouselContent>
-            {eventImages.map((image, index) => (
+            {eventImages?.map((image, index) => (
               
               <CarouselItem key={index} className="pl-0">
                 <div className="relative inline-block size-full whitespace-normal text-left align-top">
@@ -131,7 +131,7 @@ export const Header9 = (props: Header9Props) => {
           </CarouselContent>
           <div className="flex items-center justify-between pl-4">
             <div className="absolute bottom-[52px] left-8 right-auto top-auto flex w-full items-start justify-start">
-              {eventImages.map((_, index) => (
+              {eventImages?.map((_, index) => (
                 <button
                   key={index}
                   onClick={() => api?.scrollTo(index)}

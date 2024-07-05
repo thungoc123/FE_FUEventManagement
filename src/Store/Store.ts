@@ -1,23 +1,54 @@
-// src/app/store.ts
 import { configureStore } from "@reduxjs/toolkit";
 import { sponsorApi } from "../Features/Sponsor/sponsorApi";
-import { eventApi } from "../Features/Event/eventApi";
+import { eventDisplayApi } from "../Features/Event/eventDisplayApi";
 import { sponsor_programApi } from "../Features/Sponsor/sponsor_programApi";
-import { orderApi } from "../Types/order.type";
+import { persistStore, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
+import { authApi } from '../Features/Auth/authApi';
+import authReducer from '../Features/Auth/authSlice';
+import notificationsReducer from '../Features/Utils/notificationsSlice';
+import eventReducer from '../Features/EventManage/eventSlice';
+import { sponsorDashboardApi } from "../Features/Sponsor/sponsorDashboardApi";
+import { eventApi } from "../Features/EventManage/eventApi";
+import { createorderApi } from "../Features/Order/orderApi";
+
+// Cấu hình persist cho auth reducer
+const authPersistConfig = {
+  key: 'auth',
+  storage,
+  whitelist: ['token', 'role', 'accountId'],
+};
+
+const persistedAuthReducer = persistReducer(authPersistConfig, authReducer);
 
 export const store = configureStore({
   reducer: {
     [sponsorApi.reducerPath]: sponsorApi.reducer,
-    [eventApi .reducerPath]: eventApi.reducer,
+    [eventDisplayApi.reducerPath]: eventDisplayApi.reducer,
     [sponsor_programApi.reducerPath] : sponsor_programApi.reducer,
-    [orderApi.reducerPath]: orderApi.reducer,
-
+    [createorderApi.reducerPath]: createorderApi.reducer,
+    [authApi.reducerPath]: authApi.reducer,
+    auth: persistedAuthReducer,
+    [eventApi.reducerPath]: eventApi.reducer,
+    notifications: notificationsReducer,
+    [sponsorDashboardApi.reducerPath]: sponsorDashboardApi.reducer,
+    events: eventReducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(sponsorApi.middleware,eventApi.middleware,sponsor_programApi.middleware,orderApi.middleware),
-  
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }).concat(
+      sponsorApi.middleware,
+      eventDisplayApi.middleware,
+      sponsor_programApi.middleware,
+      createorderApi.middleware,
+      authApi.middleware,
+      sponsorDashboardApi.middleware,
+      eventApi.middleware,
+    ),
 });
 
-export type RootState = ReturnType<typeof store.getState>; 
+export const persistor = persistStore(store);
+export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
   

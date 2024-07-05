@@ -1,12 +1,12 @@
 "use client";
 
 import React, { ChangeEvent, useState, useEffect } from "react";
-import { Button } from "@relume_io/relume-ui";
-import type { ButtonProps } from "@relume_io/relume-ui";
 import DateDisplay from "../../Atoms/Date"; // Ensure this component exists or adjust accordingly
 import LocationDisplay from "../../Atoms/Location"; // Ensure this component exists or adjust accordingly
 import SearchBar from "./SearchBar";
 import { useNavigate } from "react-router-dom";
+import { Button, Input } from "@relume_io/relume-ui";
+import type { ImgProps, ButtonProps } from "@relume_io/relume-ui";
 
 type StateEvent = {
   id: number;
@@ -84,6 +84,7 @@ export const Blog33 = (props: Blog33Props) => {
     <section className="px-[5%] py-16 md:py-24 lg:py-28">
       <div className="container">
         <div className="container mb-12 max-w-lg text-center md:mb-18 lg:mb-20">
+          {/* <SearchBar /> */}
           <p className="mb-3 font-semibold md:mb-4">{tagline}</p>
           <SearchBar value={searchValue} onChange={handleSearch} />
           <h2 className="mb-5 text-5xl font-bold md:mb-6 md:text-7xl lg:text-8xl">{heading}</h2>

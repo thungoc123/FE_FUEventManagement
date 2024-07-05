@@ -102,6 +102,7 @@ export interface Event {
   timeopensale: string;
   timeclosesale: string;
   stateEvent: StateEvent;
+  quantity:string;
   eventImages: EventImage[];
   eventSchedules: EventSchedule[];
   eventCheckingStaffs: EventCheckingStaff[];

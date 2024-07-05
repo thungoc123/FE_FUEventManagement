@@ -17,11 +17,18 @@ import {
   Input,
 } from "@relume_io/relume-ui";
 import RoleChoosingwithDialog from "../../Molecules/RoleChoosingWithDialog";
-import UnauthAPI from "../../../config/axios/UnauthAPI";
-import { useDispatch } from "react-redux"; // SET TOKEN
-// import { useLoginMutation } from "../../../Features/Auth/authApi";
+
+// import { useLoginMutation } from '';
+
+// setToken
+import { useDispatch, useSelector } from "react-redux";
+import { useLoginMutation } from "../../../Features/Auth/authApi";
 import { setToken } from "../../../Features/Auth/authSlice";
 import Dropdown from "../Visitor/Dropdown";
+import { useAuth } from "../../../Contexts/AuthContext";
+import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
+import { RootState } from "../../../Store/Store";
 
 type LinkProps = {
   title?: string;
@@ -45,12 +52,10 @@ const topLineVariants = {
     translateY: 8,
     transition: { delay: 0.1 },
   },
-
   rotatePhase: {
     rotate: -45,
     transition: { delay: 0.2 },
   },
-
   closed: {
     translateY: 0,
     rotate: 0,
@@ -63,7 +68,6 @@ const middleLineVariants = {
     width: 0,
     transition: { duration: 0.1 },
   },
-
   closed: {
     width: "1.5rem",
     transition: { delay: 0.3, duration: 0.2 },
@@ -75,12 +79,10 @@ const bottomLineVariants = {
     translateY: -8,
     transition: { delay: 0.1 },
   },
-
   rotatePhase: {
     rotate: 45,
     transition: { delay: 0.2 },
   },
-
   closed: {
     translateY: 0,
     rotate: 0,
@@ -93,7 +95,6 @@ const dropDownVariants = {
     height: "var(--height-open, 100dvh)",
     transition: { duration: 0.2 },
   },
-
   close: {
     height: "var(--height-closed, 0)",
     transition: { duration: 0.3 },
@@ -109,23 +110,22 @@ export const Navbar2 = (props: Navbar2Props) => {
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [roleChoosingOpen, setRoleChoosingOpen] = useState(false);
   const [isLoginForm, setIsLoginForm] = useState(true);
+
   const [isResetPassword, setIsResetPassword] = useState(false);
   const [resetData, setResetData] = useState({ email: "", newPassword: "" });
   const [isNewPassword, setIsNewPassword] = useState(false);
-  const [isLogin, setIsLogin] = useState(false);
-  const dispatch = useDispatch();
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLogin, setIsLogin] = useState(false);
+  const [login, { isLoading, error }] = useLoginMutation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const [newPasswordData, setNewPasswordData] = useState({
     newPassword: "",
     confirmPassword: "",
   });
 
-  const [loginData, setLoginData] = useState({
-    email: "",
-    password: "",
-  });
-
-  // HANDLE AUTH BUTTON CLICK
   const handleAuthButtonClick = (isLogin: boolean) => {
     if (isLogin) {
       setIsLoginForm(true);
@@ -134,79 +134,97 @@ export const Navbar2 = (props: Navbar2Props) => {
       setRoleChoosingOpen(true);
     }
   };
-
-  // HANDLE FORGOT PWD CLICK
   const handleForgotPasswordClick = () => {
     setIsResetPassword(true);
   };
 
-  // HANDLE NEW PWD CLICK
   const handleNewPasswordClick = () => {
     setIsNewPassword(true);
   };
 
-  // HANDLE NEW PWD SUBMIT
-  const handleNewPasswordSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleNewPasswordSubmit = (e) => {
     e.preventDefault();
     if (newPasswordData.newPassword !== newPasswordData.confirmPassword) {
       console.log("Passwords do not match");
       return;
     }
-
     console.log("Setting new password", newPasswordData);
     // Implement your set new password logic here
     setAuthModalOpen(false);
   };
 
-  // HANDLE BACK TO LOGIN
   const handleBackToLoginClick = () => {
     setIsResetPassword(false);
     setIsNewPassword(false);
   };
+  interface JwtPayload {
+    sub: string;
+    role?: string;
+  }
 
-  // HANDLE LOGIN
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+  // login function with redux
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    console.log(email, password);
     try {
-      const response = await UnauthAPI.post(`login`, {
-        loginData,
-      });
-      console.log(response);
-    } catch (error) {
-      console.log(error);
+      const result = await login({ email, password }).unwrap();
+      dispatch(setToken(result.data));
+      setIsLogin(true);
+      NavigationAuth(result.data);
+      localStorage.setItem("email", email);
+      sessionStorage.setItem("token", result.data);
+      sessionStorage.setItem("email", email);
+    } catch (err) {
+      console.error("Failed to login:");
     }
   };
-
-  // ====== USE EFFECT SCOPE =======
-  // CHECKING TOKEN
+  const token = useSelector((state: RootState) => state.auth.token);
   useEffect(() => {
-    const token = sessionStorage.getItem("token");
-    const storedEmail = sessionStorage.getItem("email") || "";
-    if (token && storedEmail) {
-      // Nếu có token trong sessionStorage, lưu vào Redux state (nếu cần thiết)
-      // setEmailContext(email)
+    if (token) {
+      const storedEmail = localStorage.getItem("email") || "";
       setEmail(storedEmail);
       setIsLogin(true);
       dispatch(setToken(token));
     } else {
-      // Nếu không có token, điều hướng người dùng về trang đăng nhập
-      // history.push('/login');
       setIsLogin(false);
     }
-  }, [dispatch]);
+  }, [token]);
+
+  const NavigationAuth = (token: string) => {
+    let decodedToken = jwtDecode<JwtPayload>(token);
+    switch (decodedToken.role) {
+      case "ROLE_EO":
+        navigate("/eventoperator/dashboard/");
+        break;
+      case "ROLE_SPONSOR":
+        navigate("/sponsor/dashboard/");
+        break;
+      case "ROLE_VISITOR":
+        navigate("/");
+        break;
+      case "ROLE_CHECKING_STAFF":
+        navigate("");
+        break;
+      case "ROLE_ADMIN":
+        navigate("/admin");
+        break;
+    }
+  };
+
+  const handleRoleChoosingClose = () => {
+    setRoleChoosingOpen(false);
+  };
 
   return (
     <nav className="flex w-full items-center border-b border-border-primary bg-white lg:min-h-18 lg:px-[5%]">
-      {/* DONE */}
       <div className="mx-auto size-full lg:grid lg:grid-cols-[0.375fr_1fr_0.375fr] lg:items-center lg:justify-between lg:gap-4">
         <div className="flex min-h-16 items-center justify-between px-[5%] md:min-h-18 lg:min-h-full lg:px-0">
-        <img src={logo?.src} alt={logo?.alt} style={{ height: '50px', width: 'auto', borderRadius: '50%' }} />
-        <div className="flex items-center gap-4 lg:hidden">
+          <img src={logo.src} alt={logo.alt} />
+          <div className="flex items-center gap-4 lg:hidden">
             {isLogin ? (
               <Dropdown email={email} />
             ) : (
-              buttons?.map((button, index) => (
+              buttons.map((button, index) => (
                 <Button
                   key={`${button.title}-${index}`}
                   className="px-6 py-2 mx-2"
@@ -242,14 +260,13 @@ export const Navbar2 = (props: Navbar2Props) => {
             </button>
           </div>
         </div>
-
         <motion.div
           animate={mobileMenuOpen ? "open" : "close"}
           initial="close"
           variants={dropDownVariants}
           className="overflow-hidden px-[5%] text-center lg:flex lg:items-center lg:justify-center lg:px-0 lg:[--height-closed:auto] lg:[--height-open:auto]"
         >
-          {links?.map((link, index) => (
+          {links.map((link, index) => (
             <div
               key={`${link.title}-${index}`}
               className="first:pt-4 lg:first:pt-0"
@@ -267,20 +284,21 @@ export const Navbar2 = (props: Navbar2Props) => {
             </div>
           ))}
         </motion.div>
-
-        <div className="hidden justify-self-end lg:block">
+        <div className="hidden lg:flex lg:items-center lg:justify-end">
           {isLogin ? (
             <Dropdown email={email} />
           ) : (
-            buttons?.map((button, index) => (
+            buttons.map((button, index) => (
               <Button
                 key={`${button.title}-${index}`}
                 className="px-6 py-2 mx-2"
                 variant={button.variant}
                 size={button.size}
-                onClick={() => handleAuthButtonClick(button.title === "Login")}
+                onClick={() =>
+                  handleAuthButtonClick(button.title === "Login")
+                }
               >
-                {button.title}
+                {isLoading ? "Loging in..." : button.title}
               </Button>
             ))
           )}
@@ -292,11 +310,9 @@ export const Navbar2 = (props: Navbar2Props) => {
         <DialogTrigger asChild>
           <div></div>
         </DialogTrigger>
-
         <DialogPortal>
           <DialogOverlay className="bg-black/25" />
-
-          <DialogContent className="w-full max-w-md bg-white px-10 py-14 md:py-16 md:px-12 md:data-[state=open]:duration-300 md:data-[state=open]:animate-in md:data-[state=closed]:animate-out md:data-[state=closed]:fade-out-0 md:data-[state=open]:fade-in-0 md:data-[state=closed]:slide-out-to-left-1/2 md:data-[state=open]:slide-in-from-left-1/2">
+          <DialogContent className="w-full max-w-md bg-white px-10 py-14 md:py-16 md:px-12 md.data-[state=open]:duration-300 md.data-[state=open]:animate-in md.data-[state=closed]:animate-out md.data-[state=closed]:fade-out-0 md.data-[state=open]:fade-in-0 md.data-[state=closed]:slide-out-to-left-1/2 md.data-[state=open]:slide-in-from-left-1/2">
             <DialogHeader>
               <DialogTitle className="mb-2">
                 {isNewPassword
@@ -307,7 +323,6 @@ export const Navbar2 = (props: Navbar2Props) => {
                   ? "Log In"
                   : "Sign Up"}
               </DialogTitle>
-
               <DialogDescription>
                 {isNewPassword
                   ? "Enter your new password"
@@ -318,7 +333,6 @@ export const Navbar2 = (props: Navbar2Props) => {
                   : "Create an account to get started"}
               </DialogDescription>
             </DialogHeader>
-
             <form
               className="grid gap-4 py-4"
               onSubmit={(e) => {
@@ -333,7 +347,7 @@ export const Navbar2 = (props: Navbar2Props) => {
                   e.preventDefault();
                   console.log(isLoginForm ? "Logging in" : "Signing up");
                   setAuthModalOpen(false);
-                  handleLogin(e);
+                  handleSubmit(e);
                 }
               }}
             >
@@ -375,7 +389,6 @@ export const Navbar2 = (props: Navbar2Props) => {
               ) : isResetPassword ? (
                 <div className="grid items-center gap-2">
                   <Label htmlFor="reset-email">Email</Label>
-                  <Label htmlFor="reset-email">Email</Label>
                   <Input
                     id="reset-email"
                     type="email"
@@ -396,14 +409,9 @@ export const Navbar2 = (props: Navbar2Props) => {
                     <Input
                       id="email"
                       type="email"
-                      value={loginData.email}
+                      value={email}
                       required
-                      onChange={(e) =>
-                        setLoginData({
-                          ...loginData,
-                          email: e.target.value,
-                        })
-                      }
+                      onChange={(e) => setEmail(e.target.value)}
                     />
                   </div>
                   <div className="grid items-center gap-2">
@@ -412,18 +420,12 @@ export const Navbar2 = (props: Navbar2Props) => {
                       id="password"
                       type="password"
                       required
-                      value={loginData.password}
-                      onChange={(e) =>
-                        setLoginData({
-                          ...loginData,
-                          password: e.target.value,
-                        })
-                      }
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                     />
                   </div>
                 </>
               )}
-
               <div className="mt-6 flex w-full flex-col gap-4 md:mt-8">
                 <Button type="submit">
                   {isNewPassword
@@ -435,7 +437,6 @@ export const Navbar2 = (props: Navbar2Props) => {
                     : "Sign up"}
                 </Button>
               </div>
-
               <DialogFooter className="mt-6">
                 {isNewPassword ? (
                   <Button
@@ -474,7 +475,7 @@ export const Navbar2 = (props: Navbar2Props) => {
                       asChild
                       variant="link"
                       size="link"
-                      onClick={() => handleLogin}
+                      // onClick={handleLogin}
                     >
                       <a className="underline">Log in</a>
                     </Button>
@@ -491,11 +492,6 @@ export const Navbar2 = (props: Navbar2Props) => {
         roleChoosingOpen={roleChoosingOpen}
         setRoleChoosingOpen={setRoleChoosingOpen}
       />
-
-      {/* Role Choosing Modal */}
-      {/* {roleChoosingOpen && (
-        <RoleChoosingwithDialog onClose={handleRoleChoosingClose} />
-      )} */}
     </nav>
   );
 };
@@ -504,12 +500,11 @@ export const Navbar2 = (props: Navbar2Props) => {
 const NavItemDropdown = ({
   title,
   subLinks,
-} : {
+}: {
   title?: string;
   subLinks?: LinkProps[];
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-
   return (
     <div className="relative">
       <button
@@ -545,12 +540,12 @@ const NavItemDropdown = ({
   );
 };
 
+
 export const Navbar2Defaults = {
   logo: {
-    src: "/src/assets/logo.jpg",
+    src: "",
     alt: "Logo",
   },
-
   links: [
     {
       title: "Home",
@@ -561,8 +556,8 @@ export const Navbar2Defaults = {
       url: "/service-term",
     },
     {
-      title: "Contact",
-      url: "/contact",
+      title: "Sponsor",
+      url: "/sponsor-program",
     },
     {
       title: "More",
@@ -582,7 +577,6 @@ export const Navbar2Defaults = {
       ],
     },
   ],
-
   buttons: [
     {
       title: "Login",

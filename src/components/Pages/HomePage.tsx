@@ -4,11 +4,8 @@ import { Blog33 } from "../Organisms/Guest/Blog33";
 import { Logo1 } from "../Organisms/Guest/Logo1";
 import { Footer1 } from "../Organisms/Guest/Footer";
 import { EventBlog } from "../Organisms/Guest/UpcommingEvent";
-import {
-  useGetHappenedEventsQuery,
-  useGetPublishedEventsQuery,
-} from "../../Features/Event/eventApi";
 import { Event } from "../../Types/event.type";
+import { useGetHappenedEventsQuery, useGetPublishedEventsQuery } from "../../Features/Event/eventDisplayApi";
 
 function HomePage() {
   // DATA OF PUBLISHED EVENTS
@@ -39,9 +36,9 @@ function HomePage() {
       { title: "Buy Ticket", variant: "secondary" },
     ],
     images: [],
-    eventImages: publishedEvents.flatMap((event: Event) => event.eventImages),
-    carouselHeading: publishedEvents.flatMap((event: Event) => event.name),
-    carouselDescription: publishedEvents.flatMap(
+    eventImages: publishedEvents?.flatMap((event: Event) => event.eventImages),
+    carouselHeading: publishedEvents?.flatMap((event: Event) => event.name),
+    carouselDescription: publishedEvents?.flatMap(
       (event: Event) => event.description
     ),
   };

@@ -1,9 +1,10 @@
-import { StaffTable } from "../../../Type/checkingstaff";
+import { StaffTable } from "../../../Types/checkingstaff";
 import { BiTrash } from "react-icons/bi";
 import { ApplicationShell4 } from "./AppModel";
 import AddCheckingStaff from "./AddCheckingStaff";
 import { TableTemplate } from "./Table1";
 import AddFeedbackButton from "./AddFeedbackButton";
+import { Button } from "@relume_io/relume-ui";
 
 export const AddCheckStaffTable = () => {
   const tableHeaders = ["Name", "Email", "Date", "Delete"];
@@ -30,8 +31,7 @@ export const AddCheckStaffTable = () => {
   const paginationItems = [1, 2, 3, 4];
   return (
     <>
-      <ApplicationShell4
-        MainComponent={
+     
           <TableTemplate
           
             headerTitle="Checking Staff"
@@ -49,10 +49,8 @@ export const AddCheckStaffTable = () => {
             tableRows={tableRows} // Truyền dữ liệu mới cho tableRows
             paginationItems={paginationItems}
           />
-        }
-        // MainComponent = { <Tabbar />}
-        StateComponent={<AddCheckingStaff />}
-      />
+          <Button>New</Button>
+      
     </>
   );
 };

@@ -4,6 +4,8 @@ import { FaXTwitter } from "react-icons/fa6";
 import { BiLinkAlt, BiLogoLinkedinSquare, BiLogoFacebookCircle } from "react-icons/bi";
 import { RxChevronLeft } from "react-icons/rx";
 import Content31 from "./Content31";
+import { useGetSponsorProgramQuery } from "../../../Features/Sponsor/sponsor_programApi";
+import { useParams } from "react-router-dom";
 
 type ImageProps = {
   src: string;
@@ -33,10 +35,48 @@ type Props = {
 export type BlogPostHeader2Props = React.ComponentPropsWithoutRef<"section"> & Partial<Props>;
 
 export const BlogPostHeader2 = (props: BlogPostHeader2Props) => {
+  const { id } = useParams<{ id: string }>(); // Lấy ID từ URL
+
   const { button, category, readTime, heading, image, postDetails, socialMediaLinks } = {
     ...BlogPostHeader2Defaults,
     ...props,
   } as Props;
+  const { data: sponsorPrograms, error, isLoading } = useGetSponsorProgramQuery();
+
+  if (isLoading) {
+    return <div className="loader">Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error loading sponsor programs</div>;
+  }
+
+  const sponsorProgram = sponsorPrograms?.find(program => program.id.toString() === id);
+
+  if (!sponsorProgram) {
+    return <div>Sponsor Program not found</div>;
+  }
+
+  const contentData = {
+    introduction: sponsorProgram.description,
+    introductionImage: {
+      src: sponsorProgram.thumbnail,
+      alt: sponsorProgram.title,
+    },
+    introductionImageCaption: "Image caption goes here",
+    contentTitle: sponsorProgram.title,
+    contentText: [
+      "Content paragraph 1 goes here.",
+      "Content paragraph 2 goes here.",
+    ],
+    quote: "Quote goes here",
+    conclusionTitle: "Conclusion",
+    conclusionText: [
+      "Conclusion paragraph 1 goes here.",
+      "Conclusion paragraph 2 goes here.",
+    ],
+  };
+
   return (
     <section className="px-[5%] py-16 md:py-24 lg:py-28">
       <div className="container">
@@ -83,7 +123,7 @@ export const BlogPostHeader2 = (props: BlogPostHeader2Props) => {
             ))}
           </div>
         </div>
-        <Content31/>
+        {/* <Content31 {...contentData} /> */}
       </div>
     </section>
   );

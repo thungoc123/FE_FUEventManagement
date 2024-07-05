@@ -6,9 +6,9 @@ import { EventBlog } from "../Organisms/Guest/UpcommingEvent";
 import {
   useGetHappenedEventsQuery,
   useGetPublishedEventsQuery,
-} from "../../Features/Event/eventApi";
+} from "../../Features/Event/eventDisplayApi";
 import { Event } from "../../Types/event.type";
-import { NavbarLogout } from "../Organisms/Guest/NavbarLogout";
+import { Navbar2 } from "../Organisms/Guest/Navbar";
 
 function HomePageLogout() {
    // DATA OF PUBLISHED EVENTS
@@ -47,7 +47,7 @@ function HomePageLogout() {
   };
   return (
     <>
-      <NavbarLogout />
+      <Navbar2 />
       <Header9 {...headerData} />
 
       <EventBlog

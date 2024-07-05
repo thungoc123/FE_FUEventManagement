@@ -1,19 +1,36 @@
+import React from 'react';
 import { Button } from "@relume_io/relume-ui";
-import type { ButtonProps } from "@relume_io/relume-ui";
+import type { ButtonProps as RelumeButtonProps } from "@relume_io/relume-ui";
+import { useNavigate } from 'react-router-dom';
+
+type ExtendedButtonProps = RelumeButtonProps & {
+  url?: string;
+};
 
 type Props = {
   heading: string;
   description: string;
-  buttons: ButtonProps[];
+  buttons: ExtendedButtonProps[];
+  eventId: string;
+  eventDetails: any; // Thêm thuộc tính eventDetails
 };
 
 export type Cta7Props = React.ComponentPropsWithoutRef<"section"> & Partial<Props>;
 
 export const Cta7 = (props: Cta7Props) => {
-  const { heading, description, buttons } = {
+  const { heading, description, buttons, eventId, eventDetails } = {
     ...Cta7Defaults,
     ...props,
   } as Props;
+
+  const navigate = useNavigate();
+
+  const handleButtonClick = (url: string | undefined) => {
+    if (url) {
+      navigate(url, { state: { eventDetails, eventId } }); // Truyền eventDetails qua state
+    }
+  };
+
   return (
     <section className="px-[5%] py-16 md:py-24 lg:py-28">
       <div className="container grid w-full grid-cols-1 items-start justify-between gap-6 md:grid-cols-[1fr_max-content] md:gap-x-12 md:gap-y-8 lg:gap-x-20">
@@ -33,6 +50,7 @@ export const Cta7 = (props: Cta7Props) => {
               size={button.size}
               iconRight={button.iconRight}
               iconLeft={button.iconLeft}
+              onClick={() => handleButtonClick(button.url)} // Sử dụng URL trực tiếp
             >
               {button.title}
             </Button>
@@ -46,7 +64,9 @@ export const Cta7 = (props: Cta7Props) => {
 export const Cta7Defaults: Cta7Props = {
   heading: "Get Your Tickets Now!",
   description: "Experience the Event of a Lifetime.",
-  buttons: [{ title: "Buy Ticket" }],
+  buttons: [{ title: "Buy Ticket", url: "/payment" }],
+  eventId: "",
+  eventDetails: {}, // Giá trị mặc định cho eventDetails
 };
 
 Cta7.displayName = "Cta7";

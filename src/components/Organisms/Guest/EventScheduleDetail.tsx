@@ -1,7 +1,7 @@
 // src/components/Content1.tsx
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useGetEventDetailsQuery } from '../../../Features/Event/eventApi';
+import { useGetEventDetailsQuery } from '../../../Features/Event/eventDisplayApi';
 import { setContent } from '../../../Features/Event/eventSlice';
 import { RootState } from '../../../Store/Store';
 
@@ -48,7 +48,7 @@ export type Content1Props = React.ComponentPropsWithoutRef<"section"> &
   Partial<Props>;
 
 export const Content1 = (props: Content1Props) => {
-  const contentData = useSelector((state: RootState) => state.eventApi);
+  const contentData = useSelector((state: RootState) => state.eventDisplayApi);
 
   const { heading, children, description, image } = {
     ...contentData,
