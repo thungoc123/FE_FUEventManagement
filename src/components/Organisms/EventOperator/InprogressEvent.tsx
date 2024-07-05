@@ -1,13 +1,16 @@
 import {BiTrash, BiAddToQueue, BiShow } from "react-icons/bi";
-import { TableTemplate } from "../Dashboard/TableTemplate";
+// import { TableTemplate } from "../Dashboard/TableTemplate";
 import { Button} from "@relume_io/relume-ui";
 import { EventTable } from "../../../Types/event.type";
-import { useDeleteEventMutation, useGetListEventQuery } from "../../../Features/EventManage/eventApi";
+// import { useDeleteEventMutation, useGetListEventQuery } from "../../../Features/EventManage/eventApi";
 import { Link } from "react-router-dom";
-import { addNotification } from "../../../Features/Utils/notificationsSlice";
+// import { addNotification } from "../../../Features/Utils/notificationsSlice";
 import { useDispatch } from "react-redux";
+import { TableTemplate } from "../Dashboard/TableTemplate";
+import { useDeleteEventMutation, useGetListEventQuery } from "../../../Features/EventManage/eventApi";
+import { addNotification } from "../../../Features/Utils/notificationsSlice";
 
-export const PublishEvent = () => {
+export const InprogressEvent = () => {
   const tableHeaders = ["No", "Name", "Date", "Detail", "Delete"];
 
   const { data: Events, isLoading, error } = useGetListEventQuery();
@@ -15,7 +18,7 @@ export const PublishEvent = () => {
   const dispatch = useDispatch();
 
   const publishEvents =
-    Events?.filter((event) => event.stateEvent.name === "HAPPENED") || [];
+    Events?.filter((event) => event.stateEvent.name === "PUBLISH") || [];
   const [deleteEvent] = useDeleteEventMutation()
     const handleDelete = async (e: MouseEvent<HTMLButtonElement>, eventId: number) => {
       e.preventDefault(); // Ngăn chặn hành vi mặc định của button nếu có
@@ -72,8 +75,8 @@ export const PublishEvent = () => {
         "Vui lòng đợi trong giây lát"
       ) : (
         <TableTemplate
-          headerTitle="Những sự kiện đã diễn ra"
-          headerDescription="Danh sách những sự kiện đã diễn ra"
+          headerTitle="In progress events"
+          headerDescription="Danh sách những sự kiện đang diễn ra"
           tableHeaders={tableHeaders}
           tableRows={tableRows} // Truyền dữ liệu mới cho tableRows
           // paginationItems={paginationItems}

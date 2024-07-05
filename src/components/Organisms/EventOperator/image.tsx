@@ -81,6 +81,7 @@ export const Gallery5 = () => {
         timestamp: Date.now(), // Thời gian hiện tại
       }));
       dispatch(setTab("img"));
+      setAnnouce(false)
       // window.location.reload()
     } catch (err) {
       dispatch(addNotification({
@@ -103,7 +104,7 @@ export const Gallery5 = () => {
         timestamp: Date.now(), // Thời gian hiện tại
       }));
       dispatch(setTab("img"));
-      // window.location.reload()
+      window.location.reload()
     } catch (error) {
       dispatch(addNotification({
         id: new Date().getTime(), // Sử dụng timestamp làm ID
@@ -119,7 +120,9 @@ export const Gallery5 = () => {
     <section className="px-[5%] md:py-24 lg:py-28">
       <div className="container">
         <div className="grid grid-cols-2 items-start justify-center gap-6 md:gap-8 lg:grid-cols-3">
-          {images.map((image, index) => (
+          {images.length === 0 ? <div>There is no image</div> : (
+            <>
+            {images.map((image, index) => (
              <div
              key={index}
              className="w-40 h-40 relative inline-block m-2"
@@ -144,6 +147,9 @@ export const Gallery5 = () => {
             </a>
             </div>
           ))}
+            </>
+          )}
+          
         </div>
         <form onSubmit={handleSubmit}>
         <div className="grid gap-y-5 m-5">

@@ -116,18 +116,18 @@ export const SurveyForm: React.FC = () => {
   };
   
   const Events = useSelector((state: RootState) => state.events.events);
+  const PublishEvent = Events.filter((event) => event.stateEvent.name !== "HAPPENED");
 
-  const [filteredEvents, setFilteredEvents] = useState<EOevent[]>(Events);
+  const [filteredEvents, setFilteredEvents] = useState<EOevent[]>(PublishEvent);
 
   const handleSearchSubmit = (searchData: { searchTerm: string }) => {
     console.log("Search query:", searchData.searchTerm);
 
     if (searchData.searchTerm.trim()) {
-      const filtered = Events.filter((event) =>
+      const filtered = PublishEvent.filter((event) =>
         event.name.toLowerCase().includes(searchData.searchTerm.toLowerCase())
       );
       setFilteredEvents(filtered); // Cập nhật danh sách sự kiện đã lọc
-
       if (filteredEvents.length === 0) {
         setFill("Event not found and cannot be empty !");
       }
@@ -203,12 +203,7 @@ export const SurveyForm: React.FC = () => {
 
               <DialogFooter className="mt-6">
                 <div className="mt-6 flex w-full flex gap-4 md:mt-8 justify-between">
-                  <Button
-                    variant="secondary"
-                 
-                  >
-                    Cancel
-                  </Button>
+               
                   <Button type="submit">
                       {isLoading ? "Creating" : "Get Started"}{" "}
                       

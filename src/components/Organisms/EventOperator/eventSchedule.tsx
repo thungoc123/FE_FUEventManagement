@@ -60,24 +60,26 @@ export const EventScheduleTable:React.FC<Props> = (prop) => {
 
   return (
     <>
-     
-          <TableTemplate
-            headerTitle="Event"
-            headerDescription="List of Event"
-            buttons={[
-              {
-                children: <AddFeedbackButton/>,
-                
-                size: "sm",
-              },
-             
-            ]}
-            tableHeaders={tableHeaders}
-            tableRows={tableRows} // Truyền dữ liệu mới cho tableRows
-            // paginationItems={paginationItems}
-            tableHeadersClasses={tableHeaderClasses}
-            addNew={<AddEventSchedule />}
-          />
+      {eventSchedule.length === 0 ? <div>There is no event schedule</div> : (
+        <TableTemplate
+        headerTitle="Event"
+        headerDescription="List of Event"
+        buttons={[
+          {
+            children: <AddFeedbackButton/>,
+            
+            size: "sm",
+          },
+         
+        ]}
+        tableHeaders={tableHeaders}
+        tableRows={tableRows} // Truyền dữ liệu mới cho tableRows
+        // paginationItems={paginationItems}
+        tableHeadersClasses={tableHeaderClasses}
+        // addNew={}
+      />
+      )}
+          <AddEventSchedule />
        
     </>
   );

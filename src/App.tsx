@@ -3,18 +3,15 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import "./index.css";
 import RoleChoosing from "./components/Pages/Guest/RoleChosing";
-import QuestionForm from "./components/Pages/Dashboard/EventOperator/Question";
 import SponsorHomepage from "./components/Pages/Guest/SponsorProgramePage";
 import { Program } from "./components/Pages/Dashboard/Sponsor/Program";
 import { AddProgram } from "./components/Pages/Dashboard/Sponsor/CreateProgram";
 import { QuestionAnalyticsDashboard } from "./components/Pages/Dashboard/QuestionAnalyticsDashboard";
 import { AnalyticsDashboard } from "./components/Pages/Dashboard/AnalyticsDashboard";
 import { EO } from "./components/Pages/Dashboard/EventOperator/EO";
-import HomePageLogout from "./components/Pages/Guest/HomePageLogout";
 import { SponsorSignUp } from "./components/Pages/Guest/SponsorSignUp";
 import { VisitorSignUp } from "./components/Pages/Guest/VisitorSignUp";
 import { OrderHistory } from "./components/Pages/Visitor/OrderHistory";
-import SurveyForm from "./components/Pages/Dashboard/TestforCreateSurvey";
 import CreateEvent from "./components/Pages/Dashboard/EventOperator/CreateEvent";
 import ServiceTerm from "./components/Pages/Guest/AboutPage";
 import { Payment } from "./components/Pages/Visitor/Payment";
@@ -40,17 +37,19 @@ import { RootState, store } from "./Store/Store";
 import UpdateEvent from "./components/Pages/Dashboard/EventOperator/UpdateEvent";
 import { useGetListFeedbackQuery } from "./Features/FeedbackManage/feedbackApi";
 import { QuestionManage } from "./components/Organisms/Dashboard/Question";
+import { InprogressEvent } from "./components/Organisms/EventOperator/InprogressEvent";
+import VisitorAnswerPage from "./components/Pages/Visitor/VistiorAnswerPage";
 
 function App() {
   ReactModal.setAppElement("#root");
   const { data: events, isLoading, error } = useGetListEventQuery();
   const dispatch = useDispatch();
-   useGetListFeedbackQuery('1');
+  useGetListFeedbackQuery('1');
 
   useEffect(() => {
     if (events) {
       dispatch(setEvents(events));
-      sessionStorage.setItem('currentTab','schedule')
+      sessionStorage.setItem('currentTab', 'schedule')
     }
   }, [events, dispatch]);
 
@@ -130,6 +129,15 @@ function App() {
               </RequireAuth>
             }
           /> */}
+
+          <Route
+            path="/event/dashboard/analytics/:id"
+            element={
+              <RequireAuth role="ROLE_EO">
+                <AnalyticsDashboard />
+              </RequireAuth>
+            }
+          />
           <Route
             path="/eventoperator/dashboard/question"
             element={
@@ -147,14 +155,22 @@ function App() {
             }
           />
           <Route
+            path="/eventoperator/event/publish/analytics/"
+            element={
+              <RequireAuth role="ROLE_EO">
+                <ManageEvent component={<InprogressEvent />} />
+                </RequireAuth>
+            }
+          />
+          <Route
             path="/eventoperator/dashboard/event/:id"
             element={
               <RequireAuth role="ROLE_EO">
-                <EO defaultTabbar={currentTab}/>
+                <EO defaultTabbar={currentTab} />
               </RequireAuth>
             }
           />
-          
+
           <Route
             path="/eventoperator/dashboard/event/update/:id"
             element={
@@ -171,7 +187,7 @@ function App() {
               </RequireAuth>
             }
           />
-           <Route
+          <Route
             path="/eventoperator/dashboard/UnpublishEvent"
             element={
               <RequireAuth role="ROLE_EO">
@@ -195,7 +211,7 @@ function App() {
               </RequireAuth>
             }
           />
-           <Route
+          <Route
             path="/eventoperator/dashboard/FeedbackQuestionDetail/:id"
             element={
               <RequireAuth role="ROLE_EO">
@@ -227,7 +243,7 @@ function App() {
             path="/admin"
             element={
               <RequireAuth role="ROLE_ADMIN">
-                <Admin Role="ROLE_SPONSOR"/>
+                <Admin Role="ROLE_SPONSOR" />
               </RequireAuth>
             }
           />
@@ -235,7 +251,7 @@ function App() {
             path="/admin/visitor"
             element={
               <RequireAuth role="ROLE_ADMIN">
-                <Admin Role="ROLE_VISITOR"/>
+                <Admin Role="ROLE_VISITOR" />
               </RequireAuth>
             }
           />
@@ -243,7 +259,7 @@ function App() {
             path="/admin/eventoperator"
             element={
               <RequireAuth role="ROLE_ADMIN">
-                <Admin Role="ROLE_EO"/>
+                <Admin Role="ROLE_EO" />
               </RequireAuth>
             }
           />
@@ -258,6 +274,8 @@ function App() {
           <Route path="/service-term" element={<ServiceTerm />} />
           <Route path="/test" element={<TokenDecode />} />
           <Route path="/login" element={<Login1 />} />
+          <Route path="/visitorAnswer" element={<VisitorAnswerPage />} />
+
         </Routes>
       </Router>
     </>

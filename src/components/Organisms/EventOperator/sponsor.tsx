@@ -15,35 +15,38 @@ export const AddSponsorTable = () => {
   const { id } = useParams();
   const Events = useSelector((state: RootState) => state.events.events);
   
-  const sponsor = Events?.find((event) => event.id === parseInt(id))?.sponsor || [];
+  const sponsor = Events?.find((event) => event.id === parseInt(id))?.sponsorEvents || [];
   console.log(sponsor)
   const tableHeaders = [
     "No",
     "Name",
-    "Sponsor",
     "StaffEmail",
+    "ProfitPercent",
     "Edit",
     "Delete",
   ];
   const tableRows: SponsorTable[] = sponsor.map((item, index) => ({
     No: index + 1,
-    Sponsor: item.companyName,
-    StaffEmail: item.fptStaffEmail,
+    Name: item.sponsor.companyName,
+    StaffEmail: item.sponsor.fptStaffEmail,
+    ProfitPercent: item.profitPercent,
     Edit: <BiEdit />,
     Delete: <BiTrash />,
   }));
 
   const tableHeaderClasses = [
     "w-[200px] pr-4 xxl:w-[25px]",
-    "w-[200px] pr-4 xxl:w-[250px]",
-    "w-[128px] pr-4 xxl:w-[250px]",
-    "w-[200px] pr-4 xxl:w-[250px]",
+    "w-[128px] pr-4 xxl:w-[150px]",
+    "w-[200px] pr-4 xxl:w-[150px]",
+    "w-[200px] pr-4 xxl:w-[100px]",
     "w-[192px] pr-4 xxl:w-[150px]",
-    // "w-[96px] pr-4 text-center",
+    "w-[96px] pr-4",
   ];
   const paginationItems = [1, 2, 3, 4, 5];
   return (
     <>
+    {sponsor.length === 0 ? <div className="text-center">No sponsor</div> : (
+      <>
       <TableTemplate
         headerTitle="Sponsor"
         headerDescription="List of Sponsor"
@@ -59,7 +62,10 @@ export const AddSponsorTable = () => {
         // paginationItems={paginationItems}
         tableHeadersClasses={tableHeaderClasses}
       />
-      <AddSponsor />
+      </>
+    )}
+          <AddSponsor />
+      
     </>
   );
 };

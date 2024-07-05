@@ -34,6 +34,7 @@ import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   useCreateQuestionMutation,
+  useDeleteFeedbackQuestionMutation,
   useGetListFeedbackQuestionQuery,
 } from "../../../Features/FeedbackManage/feedbackApi";
 import { addNotification } from "../../../Features/Utils/notificationsSlice";
@@ -44,7 +45,7 @@ import { ApplicationShell4 } from "./ApplicationShell";
 // };
 export const QuestionManage = () => {
   const { id } = useParams();
-  const tableHeaders = ["No", "Question", "Type", "Answer", "Edit", "Delete"];
+  const tableHeaders = ["No", "Question", "Answer", "Edit", "Delete"];
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [
@@ -70,10 +71,10 @@ export const QuestionManage = () => {
       question_id: 1,
     },
   ]);
-  
+
 
   const handleAnswerChange = (answerIndex: number, value: string) => {
-    setAnswerData((prevData) => 
+    setAnswerData((prevData) =>
       prevData.map((item, i) =>
         i === answerIndex
           ? { ...item, answer: value, modifiedAt: null }
@@ -98,7 +99,7 @@ export const QuestionManage = () => {
     setAnswerData((prevData) => prevData.filter((_, i) => i !== answerIndex));
   };
 
-  const handleQuestionSubmit =  async (e) => {
+  const handleQuestionSubmit = async (e) => {
     e.preventDefault();
     // console.log(JSON.stringify([answerData]))
     const feedbackId = Number(e.currentTarget.getAttribute('data-feedback-id'));
@@ -110,10 +111,38 @@ export const QuestionManage = () => {
 
     console.log(JSON.stringify(updatedAnswerData));
   }
+  const [deleteFeedbackQuestion] = useDeleteFeedbackQuestionMutation();
+  const handleDeleteQuestion = async(e,feedbackQuestionId: number) => {
+    e.preventDefault();
+    console.log(feedbackQuestionId);
+    try {
+      await deleteFeedbackQuestion(feedbackQuestionId).unwrap();
+      dispatch(
+        addNotification({
+          id: new Date().getTime(), // Sử dụng timestamp làm ID
+          message: "Delete feedback question successfully!",
+          type: "success",
+          timestamp: Date.now(), // Thời gian hiện tại
+        })
+      );
+      refetch();
+      // window.location.reload();
+    } catch (err) {
+      dispatch(
+        addNotification({
+          id: new Date().getTime(), // Sử dụng timestamp làm ID
+          message: "Delete feedback question unsuccessfully!",
+          type: "error",
+          timestamp: Date.now(), // Thời gian hiện tại
+        })
+      );
+      console.error("Failed to delete the event:", err);
+    }
+  }
+
   const tableRows: Question[] = feedbackQuestions?.map((item, index) => ({
     No: index + 1,
     Question: item.textQuestion,
-    Type: item.typeQuestion,
     Answer:
       item.typeQuestion == "Multi-choice" ? (
         // <BiMessageAltDetail onClick={}/>
@@ -131,44 +160,44 @@ export const QuestionManage = () => {
                   <DialogTitle>Add Feedback Question</DialogTitle>
                   {/* <DialogDescription>Modal Description</DialogDescription> */}
                 </DialogHeader>
-                <form onSubmit={handleQuestionSubmit} data-feedback-id = {item.feedbackQuestionID}>
-                {answerData.map((answer, answerIndex) => (
-                  <div key={answerIndex} className="mb-4">
-                    <Label htmlFor={`answer-${answerIndex}`}>
-                      Answer {answerIndex + 1}
-                    </Label>
-                    <div className="relative">
-                      <Input
-                        type="text"
-                        className="w-full pr-10"
-                        id={`answer-${answerIndex}`}
-                        value={answer.answer}
-                        onChange={(e) =>
-                          handleAnswerChange(answerIndex, e.target.value)
-                        }
-                        placeholder="Answer"
-                      />
-                      <Button
-                        size="icon"
-                        variant="link"
-                        onClick={() => removeAnswer(answerIndex)}
-                        className="absolute right-2 top-1/2 transform -translate-y-1/2"
-                      >
-                        <BiTrash className="text-gray-600 hover:text-red-600" />
-                      </Button>
+                <form onSubmit={handleQuestionSubmit} data-feedback-id={item.feedbackQuestionID}>
+                  {answerData.map((answer, answerIndex) => (
+                    <div key={answerIndex} className="mb-4">
+                      <Label htmlFor={`answer-${answerIndex}`}>
+                        Answer {answerIndex + 1}
+                      </Label>
+                      <div className="relative">
+                        <Input
+                          type="text"
+                          className="w-full pr-10"
+                          id={`answer-${answerIndex}`}
+                          value={answer.answer}
+                          onChange={(e) =>
+                            handleAnswerChange(answerIndex, e.target.value)
+                          }
+                          placeholder="Answer"
+                        />
+                        <Button
+                          size="icon"
+                          variant="link"
+                          onClick={() => removeAnswer(answerIndex)}
+                          className="absolute right-2 top-1/2 transform -translate-y-1/2"
+                        >
+                          <BiTrash className="text-gray-600 hover:text-red-600" />
+                        </Button>
+                      </div>
                     </div>
-                  </div>
-                ))}
-                <Button size="icon" variant="link" onClick={addAnswer}>
-                  <BiAddToQueue />
-                </Button>
-                
-                <DialogFooter className="mt-4">
-                  <Button size="sm">
-                    {/* Creating */}
-                    {isCreating ? "Creating" : "Done"}
+                  ))}
+                  <Button size="icon" variant="link" onClick={addAnswer}>
+                    <BiAddToQueue />
                   </Button>
-                </DialogFooter>
+
+                  <DialogFooter className="mt-4">
+                    <Button size="sm">
+                      {/* Creating */}
+                      {isCreating ? "Creating" : "Done"}
+                    </Button>
+                  </DialogFooter>
                 </form>
                 {/* </form> */}
               </DialogContent>
@@ -181,19 +210,20 @@ export const QuestionManage = () => {
         </Button>
       ),
     Edit: <BiEdit />,
-    Delete: <BiTrash />,
+    Delete: 
+    <Button size="icon" variant="link" onClick={(e) => handleDeleteQuestion(e,item.feedbackQuestionID)}>
+      <BiTrash /></Button>,
   }));
-
+ 
   const tableHeaderClasses = [
     "w-[200px] pr-4 xxl:w-[25px]",
     "w-[200px] pr-4 xxl:w-[250px]",
-    "w-[200px] pr-4 xxl:w-[150px]",
+    // "w-[200px] pr-4 xxl:w-[150px]",
     "w-[128px] pr-4 xxl:w-[50px]",
     "w-[128px] pr-4 xxl:w-[50px]",
     "w-[128px] pr-4 xxl:w-[50px]",
   ];
   const [formData, setFormData] = useState({
-    typeQuestion: "Text",
     textQuestion: "",
     deletedAt: null,
     modifiedAt: null,
@@ -212,7 +242,7 @@ export const QuestionManage = () => {
     e.preventDefault();
     console.log(JSON.stringify(formData));
     try {
-      await createQuestion(formData).unwrap();
+      await createQuestion({ feedbackquestion: formData, feedbackId: id }).unwrap();
       dispatch(
         addNotification({
           id: new Date().getTime(), // Sử dụng timestamp làm ID
@@ -221,7 +251,8 @@ export const QuestionManage = () => {
           timestamp: Date.now(), // Thời gian hiện tại
         })
       );
-      refetch();
+      // refetch();
+      window.location.reload();
     } catch (err) {
       dispatch(
         addNotification({
@@ -233,17 +264,16 @@ export const QuestionManage = () => {
       );
       console.error("Failed to create the event:", err);
     }
+    window.location.reload();
+
   };
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
-  const paginationItems = [1, 2, 3, 4, 5];
-
+  
   return (
     <>
-      {/* <ApplicationShell4
-        MainComponent={ */}
-      <div>
-        <TableTemplate
+     {feedbackQuestions.length === 0 ? <div className="text-center">No feedback question</div> : (
+      <TableTemplate
           headerTitle="Feedback Question"
           headerDescription="List of Sponsor"
           buttons={[
@@ -260,6 +290,9 @@ export const QuestionManage = () => {
 
           tableHeadersClasses={tableHeaderClasses}
         />
+     )}
+      <div>
+        
         <Dialog>
           <DialogTrigger asChild>
             <Button>New</Button>
@@ -282,7 +315,7 @@ export const QuestionManage = () => {
                       onChange={handleInputChange}
                     />
                   </div>
-                  <div className="grid items-center gap-2">
+                  {/* <div className="grid items-center gap-2">
                     <Label htmlFor="Question">Type Question</Label>
 
                     <select
@@ -295,7 +328,7 @@ export const QuestionManage = () => {
                       <option value="Text">Text</option>
                       <option value="Multi-choice">Multi-choice</option>
                     </select>
-                  </div>
+                  </div> */}
                 </div>
                 {/* {fill && <Alert text={fill} />} */}
                 <DialogFooter className="mt-4">

@@ -1,7 +1,5 @@
 
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { RootState } from '../../Store/Store';
-import { useSelector } from 'react-redux';
 import { EOevent } from '../../Types/eo.type';
 import { Feedback, FeedbackQuery, feedbackQuestionQuery } from '../../Types/feedback';
 
@@ -33,14 +31,22 @@ export const feedbackApi = createApi({
       }),
       invalidatesTags: ['Feedbacks'],
     }),
+    deleteFeedback: builder.mutation({
+      query: (feedbackId) => ({
+        url: `api-feedbacks/${feedbackId}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Feedbacks'],
+    }),
+
     getListFeedback: builder.query<FeedbackQuery[], string>({
       query: (accountId) => `api-feedbacks/list-feedback-account/${accountId}`,
       // keepUnusedDataFor: 3600,
       providesTags: (result, error, accountId) => [{ type: 'Feedbacks', id: accountId }],
     }),
     createQuestion: builder.mutation({
-      query:(feedbackquestion) => ({
-        url: 'feedbackQuestions/create',
+      query:({feedbackquestion,feedbackId}) => ({
+        url: `feedbackQuestions/questions/${feedbackId}`,
         method: 'POST',
         body: feedbackquestion,
       }),
@@ -48,11 +54,26 @@ export const feedbackApi = createApi({
         { type: 'FeedbackQuestions', id: feedbackID },
       ],
     }),
+    updateFeedback: builder.mutation({
+      query: ({ feedbackId, feedback }) => ({
+        url: `api-feedbacks/update/${feedbackId}`,
+        method: 'PUT',  
+        body: feedback,
+      }),
+      invalidatesTags: (result, error, { feedbackId }) => [{ type: 'Feedbacks', id: feedbackId }],
+    }),
     getListFeedbackQuestion: builder.query<feedbackQuestionQuery[],string>({
-      query: (feedbackId) => `/feedbackQuestions/feedback/${feedbackId}`,
+      query: (feedbackId) => `/api-feedback-questions-event/feedback/${feedbackId}`,
       providesTags: (result, error, id) => [{ type: 'FeedbackQuestions', id }],
-    })
+    }),
+    deleteFeedbackQuestion: builder.mutation({
+      query: (questionId) => ({
+        url: `feedbackQuestions/${questionId}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: (result, error, questionId) => [{ type: 'FeedbackQuestions', id: questionId }],
+    }),
     
   }),
 });
-export const { useGetListFeedbackQuestionQuery,useCreateQuestionMutation,useCreateFeedbackMutation, useGetListFeedbackQuery } = feedbackApi;
+export const { useDeleteFeedbackMutation,useDeleteFeedbackQuestionMutation,useGetListFeedbackQuestionQuery,useCreateQuestionMutation,useCreateFeedbackMutation, useGetListFeedbackQuery } = feedbackApi;

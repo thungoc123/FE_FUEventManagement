@@ -7,14 +7,14 @@ export interface FeedbackTable {
     Event: string,
     state: string,
     Detail: React.ReactNode,
-    Edit: React.ReactNode,
+    Publish: React.ReactNode,
     Delete: React.ReactNode
 }
 
 export interface Question {
     No: number,
     Question: string, 
-    Type: string, 
+    // Type: string, 
     Answer: React.ReactNode,
     Edit: React.ReactNode,
     Delete: React.ReactNode
@@ -41,10 +41,10 @@ export interface Feedback {
 export interface FeedbackQuery {
     feedbackID: number,
     title: string, 
-    eventName:string,
+    eventName?:string,
     deleteAt: null, 
     modifiedAt: null, 
-    state: state,
+    state: state | null,
     // feedbackQuestions: feedbackQuestions[],
     // eventid: number
 }

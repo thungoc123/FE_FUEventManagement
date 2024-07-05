@@ -7,3 +7,26 @@
 .ck-editor__editable_inline {
     height: 100%; /* Chiều cao đầy đủ bên trong vùng chứa */
 }
+
+
+/* Đảm bảo rằng container có kích thước hợp lý và canh giữa */
+.progress-container {
+    width: 100%;
+    position: relative;
+    margin: 20px 0; /* Khoảng cách phía trên và dưới */
+  }
+  
+  /* Thanh tiến trình màu đen và mỏng */
+  .progress-bar {
+    height: 2px; /* Chiều cao nhỏ hơn */
+    background-color: #000; /* Màu đen */
+    transition: width 0.3s ease; /* Hiệu ứng khi thay đổi kích thước */
+  }
+  
+  /* Văn bản hiển thị bước nằm bên dưới thanh tiến trình */
+  .progress-text {
+    margin-top: 5px; /* Khoảng cách giữa thanh tiến trình và văn bản */
+    text-align: left; /* Canh trái văn bản */
+    font-size: 14px;
+    color: #000;
+  }

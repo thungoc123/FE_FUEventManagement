@@ -33,6 +33,7 @@ import { addNotification } from "../../../../Features/Utils/notificationsSlice";
 import { Alert } from "../../../Molecules/Alert";
 import { accountID } from "../../../../ulities/ProtectedRoute";
 
+
 const CreateEvent = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [modalIsOpen, setModalIsOpen] = useState(false);

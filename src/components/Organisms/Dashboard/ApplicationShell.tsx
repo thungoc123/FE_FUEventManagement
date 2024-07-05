@@ -369,7 +369,7 @@ const NavigationAuth = (role: string) => {
           State: [
             {
               name: "Event Analytics",
-              url: "",
+              url: '/eventoperator/event/publish/analytics/',
               // number: 2,
               icon: <BiBarChartAlt2 className="size-6 shrink-0" />,
             },

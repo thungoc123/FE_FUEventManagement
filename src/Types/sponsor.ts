@@ -2,8 +2,9 @@ import { account } from "./account"
 
 export interface SponsorTable{
     No: number,
-    Sponsor: string,
+    Name: string,
     StaffEmail: string,
+    ProfitPercent: number,
     Edit: React.ReactNode,
     Delete: React.ReactNode
     }
@@ -29,3 +30,12 @@ export interface SponsorInformation {
     fptStaffEmail: string, 
     account: account
 }
+
+export interface Sponsor {
+    id: number;
+    information: string;
+    companyName: string;
+    companyID: string;
+    fptStaffEmail: string;
+    account: account;
+};

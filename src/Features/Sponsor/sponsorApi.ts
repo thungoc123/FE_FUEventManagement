@@ -2,6 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { RootState } from '../../Store/Store';
 import { useSelector } from 'react-redux';
 import { SponsorProgramWithEvent } from '../../Types/dbsponsor.type';
+import { Sponsor } from '../../Types/sponsor';
 const baseQuery = fetchBaseQuery({
   baseUrl: 'http://localhost:7979/',
   prepareHeaders: (headers, { getState }) => {
@@ -28,9 +29,12 @@ export const sponsorApi = createApi({
     }),
     getListSponsorProgram: builder.query<SponsorProgramWithEvent[], void>({
       query: () => 'api-sponsor/program',
-    })
+    }),
+    getListSponsorPerson: builder.query<Sponsor[], void>({
+      query: () => 'api-sponsor',
+    }),
   }),
 });
 
-export const { useCreateSponsorMutation, useGetListSponsorProgramQuery } = sponsorApi;
+export const { useGetListSponsorPersonQuery,useCreateSponsorMutation, useGetListSponsorProgramQuery } = sponsorApi;
 

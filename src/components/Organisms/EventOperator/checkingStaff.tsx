@@ -68,6 +68,7 @@ export const AddCheckStaffTable: React.FC<Props> = (props) => {
         })
       );
       dispatch(setTab("checking"));
+      window.location.reload();
     } catch (error) {
       console.error('Failed to delete the staff:', error);
       alert('Failed to delete the staff');
@@ -92,7 +93,7 @@ export const AddCheckStaffTable: React.FC<Props> = (props) => {
   ];
 
   const accountId = useSelector((state: RootState) => state.auth.accountId);
-  const [addCheckingStaff] =
+  const [addCheckingStaff, {creating: isCreating}] =
     useAddCheckingStaffMutation();
   const [email, setEmail] = useState("");
   const checkingStaff = {
@@ -104,6 +105,13 @@ export const AddCheckStaffTable: React.FC<Props> = (props) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     // console.log(JSON.stringify(checkingStaff))
+      // Check if the checkingStaff array is empty
+  if (!checkingStaff.email || checkingStaff.email.trim() === ""){
+    // Handle the case when checkingStaff is empty
+    // For example, display an error message or disable the submission
+    setFill("Email can be not empty !")
+    return; // Exit the function to prevent further execution
+  } else {
     try {
       await addCheckingStaff({ id: id, newStaff: checkingStaff }).unwrap();
       dispatch(
@@ -128,6 +136,8 @@ export const AddCheckStaffTable: React.FC<Props> = (props) => {
       console.error("Failed to create the event:", err);
       setFill("This Email is already existed !")
     }
+  }
+    
   };
   const paginationItems = [1, 2, 3, 4];
   if (isLoading) return <div>Loading...</div>;
@@ -135,6 +145,8 @@ export const AddCheckStaffTable: React.FC<Props> = (props) => {
   {isFetching && <div>Updating...</div>}
   return (
     <>
+    {Staff.length === 0 ? <div className="text-center">No checking staff</div> : (
+      <>
       <TableTemplate
         headerTitle="Checking Staff"
         headerDescription="List of Checking Staff"
@@ -150,7 +162,10 @@ export const AddCheckStaffTable: React.FC<Props> = (props) => {
         paginationItems={paginationItems}
         tableHeadersClasses={tableHeaderClasses}
       />
-      <Dialog>
+      
+      </>
+    )}
+    <Dialog>
         <DialogTrigger asChild>
           <Button>New</Button>
         </DialogTrigger>
@@ -181,7 +196,7 @@ export const AddCheckStaffTable: React.FC<Props> = (props) => {
               </div>
               {fill && <Alert text={fill} />}
               <DialogFooter className="mt-4">
-                <Button size="sm">{isLoading ? "Creating" : "Done"}</Button>
+                <Button size="sm">{isCreating ? "Creating" : "Done"}</Button>
               </DialogFooter>
             </form>
           </DialogContent>
