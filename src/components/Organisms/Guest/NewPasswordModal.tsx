@@ -13,27 +13,39 @@ import {
   Input,
   Button,
 } from "@relume_io/relume-ui";
+import { useUpdatePasswordMutation } from "../../../Features/Password/resetPasswordApi";
 
 interface NewPasswordModalProps {
   isOpen: boolean;
   onClose: () => void;
+  token: string;
 }
 
-const NewPasswordModal: React.FC<NewPasswordModalProps> = ({ isOpen, onClose }) => {
+const NewPasswordModal: React.FC<NewPasswordModalProps> = ({ isOpen, onClose, token }) => {
   const [newPasswordData, setNewPasswordData] = useState({
     newPassword: "",
     confirmPassword: "",
   });
+  const [updatePassword] = useUpdatePasswordMutation();
 
-  const handleNewPasswordSubmit = (e: FormEvent) => {
+  const handleNewPasswordSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (newPasswordData.newPassword !== newPasswordData.confirmPassword) {
       console.log("Passwords do not match");
       return;
     }
     console.log("Setting new password", newPasswordData);
-    // Implement your set new password logic here
-    onClose();
+
+    try {
+      const response = await updatePassword({
+        token,
+        newPassword: newPasswordData.newPassword,
+      }).unwrap();
+      console.log("Password reset successful:", response);
+      onClose();
+    } catch (error) {
+      console.error("Failed to set new password:", error);
+    }
   };
 
   return (

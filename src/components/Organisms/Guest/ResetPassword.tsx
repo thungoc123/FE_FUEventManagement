@@ -11,7 +11,7 @@ interface ResetPasswordProps {
 }
 
 const ResetPassword: React.FC<ResetPasswordProps> = ({ isOpen, onClose }) => {
-  const [resetData, setResetData] = useState({ email: "", newPassword: "" });
+  const [resetData, setResetData] = useState({ email: "", token: "" });
   const [newPasswordData, setNewPasswordData] = useState({ newPassword: "", confirmPassword: "" });
   const [isNewPassword, setIsNewPassword] = useState(false);
   const dispatch = useDispatch();
@@ -24,8 +24,18 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ isOpen, onClose }) => {
       return;
     }
     console.log("Setting new password", newPasswordData);
-    // Implement your set new password logic here
-    onClose();
+
+    // Implement your set new password logic here, including sending the token
+    try {
+      const response = await resetPassword({
+        token: resetData.token,
+        newPassword: newPasswordData.newPassword,
+      }).unwrap();
+      console.log("Password reset successful:", response);
+      onClose();
+    } catch (error) {
+      console.error("Failed to set new password:", error);
+    }
   };
 
   const handleResetPasswordSubmit = async (e: FormEvent) => {
@@ -34,6 +44,7 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ isOpen, onClose }) => {
     try {
       const result = await resetPassword(resetData.email).unwrap();
       console.log(result);
+      setResetData((prevData) => ({ ...prevData, token: result.token }));
       setIsNewPassword(true);
       // Store the token in state or dispatch to Redux if needed
     } catch (err) {
