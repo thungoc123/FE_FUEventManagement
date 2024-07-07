@@ -42,9 +42,9 @@ import UpdateEvent from "./components/Pages/Dashboard/EventOperator/UpdateEvent"
 import HomePage from "./components/Pages/HomePage";
 import SponsorProgram from "./components/Pages/Dashboard/Sponsor/SponsorProgram";
 import SponsorProgramDetail from "./components/Pages/Dashboard/Sponsor/SponsorProgramDetail";
-import Login1 from "./components/Pages/Login";
 import { Payment } from "./components/Pages/Visitor/Payment";
 import { PaymentPage } from "./components/Pages/Visitor/PaymentPage";
+import { Login1 } from "./components/Pages/Login";
 
 function App() {
   const eventId = "1";

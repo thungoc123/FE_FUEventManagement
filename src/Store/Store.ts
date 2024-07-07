@@ -15,6 +15,7 @@ import { passwordApi } from '../Features/Password/passwordApi';
 import { sponsorDashboardApi } from '../Features/Sponsor/sponsorDashboardApi';
 import { eventApi } from '../Features/EventManage/eventApi';
 import { ticketApi } from '../Features/Order/ticketApi';
+import { paymentApi } from '../Features/Payment/paymentApi';
 
 const authPersistConfig = {
   key: 'auth',
@@ -27,6 +28,8 @@ const persistedAuthReducer = persistReducer(authPersistConfig, authReducer);
 export const store = configureStore({
   reducer: {
     // [ticketApi.reducerPath]: ticketApi.reducer,
+  
+    [paymentApi.reducerPath]: paymentApi.reducer,
     [sponsorApi.reducerPath]: sponsorApi.reducer,
     [eventDisplayApi.reducerPath]: eventDisplayApi.reducer,
     [sponsor_programApi.reducerPath]: sponsor_programApi.reducer,
@@ -51,7 +54,8 @@ export const store = configureStore({
       authApi.middleware,
       sponsorDashboardApi.middleware,
       eventApi.middleware,
-      passwordApi.middleware
+      passwordApi.middleware,
+      paymentApi.middleware
     ),
 });
 

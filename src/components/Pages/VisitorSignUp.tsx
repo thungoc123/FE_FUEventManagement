@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom"; // Import useNavigate
-
 import { useState } from "react";
 import { Button, Input, Label } from "@relume_io/relume-ui";
 import type { ImgProps, ButtonProps } from "@relume_io/relume-ui";
@@ -38,29 +37,67 @@ export const VisitorSignUp = (props: Signup7Props) => {
     ...props,
   } as Props;
   const [email, setEmail] = useState("");
-  const [FullName, setFullName] = useState("");
+  const [fullName, setFullName] = useState("");
   const [password, setPassword] = useState("");
-  const [cpassword, setcPassword] = useState("");
+  const [cpassword, setCPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    console.log({ name: email, FullName, password });
-    navigate("/homepage"); // Navigate to homepage
+  const validatePassword = (password: string) => {
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return regex.test(password);
   };
 
-  const handleClick = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    // bi 403 roi, khong lay duoc :v khong co permission
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newPassword = e.target.value;
+    setPassword(newPassword);
+
+    if (!validatePassword(newPassword)) {
+      setPasswordError(
+        "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character."
+      );
+    } else {
+      setPasswordError("");
+    }
+  };
+
+  const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newConfirmPassword = e.target.value;
+    setCPassword(newConfirmPassword);
+
+    if (newConfirmPassword !== password) {
+      setConfirmPasswordError("Passwords do not match");
+    } else {
+      setConfirmPasswordError("");
+    }
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    console.log({ name: email, fullName, password });
+
+    if (passwordError || confirmPasswordError) {
+      alert("Please correct the errors before submitting");
+      return;
+    }
 
     try {
-      const response = await VAuthAPI.post(`api-visitor/sign-up-visitor`);
+      const response = await VAuthAPI.post(`api-visitor/sign-up-visitor`, {
+        email,
+        fullName,
+        password,
+      });
 
-      console.log(response);
+      if (response.status === 200) {
+        console.log(response);
+        navigate("/homepage"); // Chuyển hướng về trang homepage sau khi đăng ký thành công
+      }
     } catch (error) {
       console.log(error);
     }
   };
+
   return (
     <section>
       <div className="relative grid min-h-screen grid-cols-1 items-stretch justify-center overflow-auto lg:grid-cols-2">
@@ -97,7 +134,7 @@ export const VisitorSignUp = (props: Signup7Props) => {
                 <Input
                   type="text"
                   id="text"
-                  value={FullName}
+                  value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                   required
                 />
@@ -111,21 +148,29 @@ export const VisitorSignUp = (props: Signup7Props) => {
                   type="password"
                   id="password"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={handlePasswordChange}
                   required
                 />
+                {passwordError && (
+                  <p className="text-red-500 text-sm mt-1">{passwordError}</p>
+                )}
               </div>
               <div className="grid w-full items-center text-left">
-                <Label htmlFor="password" className="mb-2">
+                <Label htmlFor="cpassword" className="mb-2">
                   Confirm Password*
                 </Label>
                 <Input
-                  type="cpassword"
+                  type="password"
                   id="cpassword"
                   value={cpassword}
-                  onChange={(e) => setcPassword(e.target.value)}
+                  onChange={handleConfirmPasswordChange}
                   required
                 />
+                {confirmPasswordError && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {confirmPasswordError}
+                  </p>
+                )}
               </div>
               <div className="grid-col-1 grid gap-4">
                 <Button
@@ -133,7 +178,7 @@ export const VisitorSignUp = (props: Signup7Props) => {
                   size={signUpButton.size}
                   iconLeft={signUpButton.iconLeft}
                   iconRight={signUpButton.iconRight}
-                  onClick={handleClick}
+                  type="submit"
                 >
                   {signUpButton.title}
                 </Button>
@@ -151,7 +196,7 @@ export const VisitorSignUp = (props: Signup7Props) => {
           </div>
         </div>
         <div className="h-screen w-full flex items-center justify-center">
-        <img
+          <img
             src={image.src}
             alt={image.alt}
             className="h-full w-full object-cover"

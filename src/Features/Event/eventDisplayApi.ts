@@ -3,7 +3,7 @@ import { Event } from "../../Types/event.type";
 export const eventDisplayApi = createApi({
   reducerPath: "eventDisplayApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://eventmanagementfu.azurewebsites.net/",
+    baseUrl: "http://localhost:7979/",
   }), // Replace with your API base URL
   endpoints: (builder) => ({
     getEventDetails: builder.query<Event, string>({

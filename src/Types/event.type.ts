@@ -97,6 +97,7 @@ export interface Event {
   name: string; 
   description: string;
   price: number;
+  email:string;
   timestart: string;
   timeend: string;
   timeopensale: string;
