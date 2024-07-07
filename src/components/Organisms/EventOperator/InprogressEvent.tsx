@@ -1,4 +1,4 @@
-import {BiTrash, BiAddToQueue, BiShow } from "react-icons/bi";
+import {BiTrash, BiAddToQueue, BiShow, BiCheck } from "react-icons/bi";
 // import { TableTemplate } from "../Dashboard/TableTemplate";
 import { Button} from "@relume_io/relume-ui";
 import { EventTable } from "../../../Types/event.type";
@@ -9,9 +9,10 @@ import { useDispatch } from "react-redux";
 import { TableTemplate } from "../Dashboard/TableTemplate";
 import { useDeleteEventMutation, useGetListEventQuery } from "../../../Features/EventManage/eventApi";
 import { addNotification } from "../../../Features/Utils/notificationsSlice";
+import { EventInprogress } from "../../../Types/eo.type";
 
 export const InprogressEvent = () => {
-  const tableHeaders = ["No", "Name", "Date", "Detail", "Delete"];
+  const tableHeaders = ["No", "Name", "Date","Attendance", "Detail", "Delete"];
 
   const { data: Events, isLoading, error } = useGetListEventQuery();
   console.log(Events)
@@ -40,10 +41,19 @@ export const InprogressEvent = () => {
       }
     };
   // const 
-  const tableRows: EventTable[] = publishEvents?.map((item, index) => ({
+  const tableRows: EventInprogress[] = publishEvents?.map((item, index) => ({
     No: index + 1, // Số thứ tự bắt đầu từ 1
     Name: item.name, // Tên sự kiện
     Date: new Date(item.timestart).toLocaleDateString(), // Ngày diễn ra sự kiện, chuyển đổi sang định dạng chuỗi
+    Attendance: (
+      <Link to={`/eventoperator/dashboard/visitor/${item.id}`} >
+        <Button size="icon" variant="link">
+        <BiCheck />        
+        </Button>
+      </Link>
+    )
+    
+    , // Biểu tượng đánh dấu đã điểm danh
     Detail: (
       <Link to={`/event/dashboard/analytics/${item.id}`}>
         <Button size="icon" variant="link">

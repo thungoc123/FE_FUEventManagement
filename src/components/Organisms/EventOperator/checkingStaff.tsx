@@ -45,7 +45,6 @@ export const AddCheckStaffTable: React.FC<Props> = (props) => {
   const { id } = useParams();
   // const Events = useSelector((state: RootState) => state.events.events);
   const { data, error, isLoading, isFetching } = useGetListEventQuery();
-
   const [deleleCheckingStaff] = useDeleleCheckingStaffMutation()
   const [fill, setFill] = useState("")
   const Staff = data?.find((event) => event.id === parseInt(id))?.eventCheckingStaffs || [];

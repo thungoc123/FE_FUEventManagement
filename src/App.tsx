@@ -39,6 +39,10 @@ import { useGetListFeedbackQuery } from "./Features/FeedbackManage/feedbackApi";
 import { QuestionManage } from "./components/Organisms/Dashboard/Question";
 import { InprogressEvent } from "./components/Organisms/EventOperator/InprogressEvent";
 import VisitorAnswerPage from "./components/Pages/Visitor/VistiorAnswerPage";
+import { AddEventToSponsor } from "./components/Organisms/Dashboard/AddEventToSponsor";
+import { UpdateProgram } from "./components/Organisms/Dashboard/UpdateSponsorProgram";
+import { Visitor } from "./components/Organisms/EventOperator/visitor";
+import { CheckingStaffDashboard } from "./components/Pages/CheckingStaff";
 
 function App() {
   ReactModal.setAppElement("#root");
@@ -120,6 +124,14 @@ function App() {
               </RequireAuth>
             }
           />
+          <Route
+            path="/sponsor/dashboard/program/update/:id"
+            element={
+              <RequireAuth role="ROLE_SPONSOR">
+                <UpdateProgram />
+              </RequireAuth>
+            }
+          />
           {/* event operator  */}
           {/* <Route
             path="/eventoperator/dashboard/question"
@@ -159,7 +171,7 @@ function App() {
             element={
               <RequireAuth role="ROLE_EO">
                 <ManageEvent component={<InprogressEvent />} />
-                </RequireAuth>
+              </RequireAuth>
             }
           />
           <Route
@@ -175,7 +187,7 @@ function App() {
             path="/eventoperator/dashboard/event/update/:id"
             element={
               <RequireAuth role="ROLE_EO">
-                <UpdateEvent />
+                <ManageEvent component={<InprogressEvent />} />              
               </RequireAuth>
             }
           />
@@ -185,6 +197,14 @@ function App() {
               <RequireAuth role="ROLE_EO">
                 <ManageFeedback />
               </RequireAuth>
+            }
+          />
+          <Route
+            path="/eventoperator/dashboard/visitor/:id"
+            element={
+              <RequireAuth role="ROLE_EO">
+                <ManageEvent component={<Visitor />} />              
+                </RequireAuth>
             }
           />
           <Route
@@ -263,9 +283,17 @@ function App() {
               </RequireAuth>
             }
           />
+          {/* Checking Staff  */}
 
-
-
+          <Route
+            path="/admin/checkingstaff"
+            element={
+              <RequireAuth role="ROLE_CHECKING_STAFF">
+                {/* <Admin Role="ROLE_CHECKING_STAFF" /> */}
+                <CheckingStaffDashboard />
+              </RequireAuth>
+            }
+          />
           <Route path="/sponsor" element={<SponsorSignUp />} />
           <Route path="/visitor" element={<VisitorSignUp />} />
           {/* <Route path="/survey" element={<SurveyForm />} /> */}

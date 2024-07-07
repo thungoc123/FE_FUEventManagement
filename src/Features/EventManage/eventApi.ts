@@ -120,10 +120,16 @@ export const eventApi = createApi({
         body: newData,
       }),
       invalidatesTags: (result, error, { eventId }) => [{ type: 'Event', id: eventId }], // Invalidates specific event by id
-
+    }),
+    deleteSponsor: builder.mutation({
+      query: ({ eventId, sponsorId }) => ({
+        url: `api-events/${eventId}/sponsor/${sponsorId}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: (result, error, { eventId }) => [{ type: 'Event', id: eventId }], // Invalidates specific event by id
     }),
   }),
 });
 
-export const { useAddSponsorToEventMutation , usePublishEventMutation,useDeleteEventMutation,useDeleteImageMutation ,useCreateEventMutation, useGetListEventQuery, useAddScheduleMutation, useAddImageMutation, useAddCheckingStaffMutation, useUpdateEventMutation, useDeleleCheckingStaffMutation } = eventApi;
+export const {useDeleteSponsorMutation ,useAddSponsorToEventMutation , usePublishEventMutation,useDeleteEventMutation,useDeleteImageMutation ,useCreateEventMutation, useGetListEventQuery, useAddScheduleMutation, useAddImageMutation, useAddCheckingStaffMutation, useUpdateEventMutation, useDeleleCheckingStaffMutation } = eventApi;
 

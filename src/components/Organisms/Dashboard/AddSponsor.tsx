@@ -21,11 +21,12 @@ import {
 import Modal from "react-modal";
 import { useGetListSponsorPersonQuery } from "../../../Features/Sponsor/sponsorApi";
 import { useParams } from "react-router-dom";
-import { useAddSponsorToEventMutation } from "../../../Features/EventManage/eventApi";
+import { useAddSponsorToEventMutation, useGetListEventQuery } from "../../../Features/EventManage/eventApi";
 import { useDispatch } from "react-redux";
 import { addNotification } from "../../../Features/Utils/notificationsSlice";
 import { setTab } from "../../../Features/Utils/tabSlice";
 import { Alert } from "../../Molecules/Alert";
+import { sponsorEvent } from "../../../Types/eo.type";
 
 
 
@@ -52,7 +53,25 @@ const AddSponsor: React.FC = () => {
     eventId: id,
     profitPercentage: profitPercentage,
   });
+  const handlePercentChange = (value) => {
+    setProfitPercentage(parseInt(value));
+    setSponsorData({
+      ...sponsorData,
+      profitPercentage: profitPercentage,
+    })
+  };
 
+  const { data, error, isFetching } = useGetListEventQuery();
+
+  const allSponsorEvents: sponsorEvent[] = [];
+
+  data?.filter(event => event.id === 1).forEach(event => {
+    allSponsorEvents.push(...event.sponsorEvents);
+  });
+
+  const checkSponsorId = (sponsorId: number) => {
+    return allSponsorEvents.some(sponsorEvent => sponsorEvent.sponsorId === sponsorId);
+  }
   const [addSponsorToEvent, {isLoading}] = useAddSponsorToEventMutation()
   const handleSubmit = async (e) => {
     // console.log(sponsorData);
@@ -62,12 +81,9 @@ const AddSponsor: React.FC = () => {
         sponsorData.sponsorId = sponsor.id;
       }
     },
-      setSponsorData({
-        ...sponsorData,
-        profitPercentage: profitPercentage,
-      })
-    )
-    // console.log(JSON.stringify(sponsorData));
+
+  ) 
+    console.log(JSON.stringify(sponsorData));
     try {
        await addSponsorToEvent({ eventId: id,newData:sponsorData }).unwrap()
        dispatch(
@@ -149,7 +165,10 @@ const AddSponsor: React.FC = () => {
               // value=""
               name="profitPercentage"
               // onChange={handleChange}
-              onChange={(e) => setProfitPercentage(parseInt(e.target.value))}
+              onChange={(e) => setSponsorData({
+                ...sponsorData,
+                profitPercentage: parseInt(e.target.value),
+              })}
             />
           </div>
           <div className="flex justify-between mt-4">

@@ -29,3 +29,17 @@ export interface role {
     roleName: string,
     accounts: [] | null
 }
+
+export interface visitor {
+    id: 3,
+    information: null,
+    account: account,
+}
+
+export interface visitorTable {
+    No: number,
+    Name: string,
+    Attendance: React.ReactNode,
+    SendFeedback: React.ReactNode,
+    // Delete: React.ReactNode,
+}

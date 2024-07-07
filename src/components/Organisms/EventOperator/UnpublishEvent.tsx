@@ -20,7 +20,7 @@ import { RootState } from "../../../Store/Store";
 import { addNotification } from "../../../Features/Utils/notificationsSlice";
 
 export const UnpublishEvent = () => {
-  const tableHeaders = ["No", "Name", "Date", "Detail", "Delete", "Publish"];
+  const tableHeaders = ["No", "Name", "Date", "Detail","Edit", "Delete", "Publish"];
   const { data: Events, refetch, isLoading, error } = useGetListEventQuery();
   const dispatch = useDispatch();
 
@@ -85,10 +85,12 @@ export const UnpublishEvent = () => {
       console.error("Failed to create the event:", err);
     }
   }
+  
   const tableRows: EventTable[] = unpublishEvents?.map((event, index) => ({
     No: index + 1, // Số thứ tự bắt đầu từ 1
     Name: event.name, // Tên sự kiện
     Date: new Date(event.timestart).toLocaleDateString(), // Ngày diễn ra sự kiện, chuyển đổi sang định dạng chuỗi
+   
     Detail: (
       <Link to={`/eventoperator/dashboard/event/${event.id}`}>
         <Button size="icon" variant="link">
@@ -96,6 +98,13 @@ export const UnpublishEvent = () => {
         </Button>
       </Link>
     ), // Nút chi tiết
+    Edit: (
+      <Link to={`/eventoperator/dashboard/event/update/${event.id}`}>
+      <Button size="icon" variant="link">
+        <BiEdit />
+      </Button>
+    </Link>
+    ),
     Delete: (
       <Button size="icon" variant="link" onClick={(e)=> handleDelete(e,event.id)}>
         <BiTrash />
@@ -115,6 +124,7 @@ export const UnpublishEvent = () => {
     "w-[200px] pr-4 xxl:w-[25px]",
     "w-[200px] pr-4 xxl:w-[150px]",
     "w-[128px] pr-4 xxl:w-[150px]",
+    "w-[200px] pr-4 xxl:w-[50px]",
     "w-[200px] pr-4 xxl:w-[50px]",
     "w-[200px] pr-4 xxl:w-[50px]",
     "w-[200px] pr-4 xxl:w-[50px]",

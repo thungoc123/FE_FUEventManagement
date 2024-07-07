@@ -33,7 +33,6 @@ export const roleName = (token : string) => {
 export const accountID = (token : string) => {
   let decoded = jwtDecode<JwtPayload>(token);
   return decoded.accountId
-  
 };
 
 const RequireAuth: React.FC<RequireAuthProps> = ({ children, role }) => {

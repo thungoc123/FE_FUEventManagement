@@ -205,7 +205,7 @@ export const Navbar2 = (props: Navbar2Props) => {
         navigate("/");
         break;
       case "ROLE_CHECKING_STAFF":
-        navigate("");
+        navigate("/admin/checkingstaff");
         break;
       case "ROLE_ADMIN":
         navigate("/admin");

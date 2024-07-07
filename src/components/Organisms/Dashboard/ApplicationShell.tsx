@@ -508,6 +508,13 @@ const NavigationAuth = (role: string) => {
       break;
     case "ROLE_CHECKING_STAFF":
       // navigate("");
+      NavigationProp = [
+        {
+          Name: "Attendance", 
+          Url: "",
+          icon: <BiNotepad className="size-6 shrink-0" />,
+        },
+      ];
       break;
     case "ROLE_ADMIN":
       NavigationProp = [

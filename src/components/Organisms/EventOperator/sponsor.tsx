@@ -8,14 +8,19 @@ import { TableTemplate } from "../Dashboard/TableTemplate";
 import AddFeedbackButton from "../Dashboard/AddFeedbackButton";
 import AddSponsor from "../Dashboard/AddSponsor";
 import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../Store/Store";
+import { useDeleteSponsorMutation, useGetListEventQuery } from "../../../Features/EventManage/eventApi";
+import { addNotification } from "../../../Features/Utils/notificationsSlice";
+import { setTab } from "../../../Features/Utils/tabSlice";
+import { Button } from "@relume_io/relume-ui";
 
 export const AddSponsorTable = () => {
   const { id } = useParams();
-  const Events = useSelector((state: RootState) => state.events.events);
-  
-  const sponsor = Events?.find((event) => event.id === parseInt(id))?.sponsorEvents || [];
+  // const Events = useSelector((state: RootState) => state.events.events);
+  const { data, error, isLoading, isFetching } = useGetListEventQuery();
+  const [deleteSponsor] = useDeleteSponsorMutation()
+  const sponsor = data?.find((event) => event.id === parseInt(id))?.sponsorEvents || [];
   console.log(sponsor)
   const tableHeaders = [
     "No",
@@ -25,13 +30,37 @@ export const AddSponsorTable = () => {
     "Edit",
     "Delete",
   ];
+  const dispatch = useDispatch();
+
+  const handleDelete = async (e: MouseEvent<HTMLButtonElement>, sponsorId: number) => {
+    e.preventDefault(); // Ngăn chặn hành vi mặc định của button nếu có
+
+    try {
+      await deleteSponsor({ eventId: id, sponsorId: sponsorId }).unwrap();
+      dispatch(
+        addNotification({
+          id: new Date().getTime(), // Sử dụng timestamp làm ID
+          message: "Sponsor deleted successfully",
+          type: "success",
+          timestamp: Date.now(), // Thời gian hiện tại
+        })
+      );
+      dispatch(setTab("sponsor"));
+      window.location.reload();
+    } catch (error) {
+      console.error('Failed to delete the staff:', error);
+      alert('Failed to delete the staff');
+    }
+  };
   const tableRows: SponsorTable[] = sponsor.map((item, index) => ({
     No: index + 1,
     Name: item.sponsor.companyName,
     StaffEmail: item.sponsor.fptStaffEmail,
     ProfitPercent: item.profitPercent,
     Edit: <BiEdit />,
-    Delete: <BiTrash />,
+    Delete: <Button size="icon" variant="link"  onClick={(e) => handleDelete(e,item.sponsorId)}>
+    <BiTrash />
+  </Button>,
   }));
 
   const tableHeaderClasses = [
@@ -43,6 +72,9 @@ export const AddSponsorTable = () => {
     "w-[96px] pr-4",
   ];
   const paginationItems = [1, 2, 3, 4, 5];
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
+  {isFetching && <div>Updating...</div>}
   return (
     <>
     {sponsor.length === 0 ? <div className="text-center">No sponsor</div> : (

@@ -55,3 +55,11 @@ export interface eventCheckingStaff {
     account: account
 }
 
+export interface EventInprogress {
+    No: number,
+    Name: string,
+    Date: string,
+    Attendance: React.ReactNode,
+    Detail: React.ReactNode,
+    Delete: React.ReactNode
+}

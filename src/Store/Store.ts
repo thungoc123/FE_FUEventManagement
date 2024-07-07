@@ -11,6 +11,7 @@ import tabReducer from '../Features/Utils/tabSlice';
 import {feedbackApi} from '../Features/FeedbackManage/feedbackApi'
 import { adminApi } from '../Features/Admin/AdminApi';
 import HeaderDisplayReducer from '../Features/Utils/HeaderDisplaySlice';
+import { visitorApi } from '../Features/Visitor/visitorApi';
 
 export const store = configureStore({
   reducer: {
@@ -23,13 +24,15 @@ export const store = configureStore({
     events: eventReducer,
     tab: tabReducer, // Thêm reducer của tab vào store
     [feedbackApi.reducerPath] : feedbackApi.reducer,
+    [visitorApi.reducerPath] : visitorApi.reducer,
+
     [adminApi.reducerPath]: adminApi.reducer,
     headerDisplay: HeaderDisplayReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
-    }).concat(authApi.middleware,adminApi.middleware ,eventApi.middleware, sponsorApi.middleware, feedbackApi.middleware),
+    }).concat(visitorApi.middleware,authApi.middleware,adminApi.middleware ,eventApi.middleware, sponsorApi.middleware, feedbackApi.middleware),
 });
 
 

@@ -20,9 +20,13 @@ export interface SponsorProgramWithEvent {
     description: string,
     state: string,
     account: account[],
-    events: EOevent[]
+    sponsorProgramEvents: sponsorProgramEvents[]
 }
 
+export interface sponsorProgramEvents {
+    eventId: number,
+    sponsorProgramId: number,
+}
 // [
 //     {
 //       "id": 0,
