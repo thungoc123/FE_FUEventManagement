@@ -10,6 +10,8 @@ interface EventDetailsProps {
   date: string;
   duration: string;
   location: string;
+  quantity:number;
+  price:number;
 }
 
 const EventDetails: React.FC<EventDetailsProps> = ({ 
@@ -20,7 +22,9 @@ const EventDetails: React.FC<EventDetailsProps> = ({
   client, 
   date, 
   duration, 
-  location 
+  location,
+  quantity,
+  price 
 }) => {
   return (
     <div className=''>
@@ -53,6 +57,14 @@ const EventDetails: React.FC<EventDetailsProps> = ({
           <div className="mb-2">
             <h2 className="text-gray-700 font-semibold">Location</h2>
             <p className="whitespace-pre-line">{location}</p>
+          </div>
+          <div className="mb-2">
+            <h2 className="text-gray-700 font-semibold">quantity</h2>
+            <p>{quantity}</p>
+          </div>
+          <div className="mb-2">
+            <h2 className="text-gray-700 font-semibold">Price</h2>
+            <p className="whitespace-pre-line">{price}</p>
           </div>
         </div>
       </div>

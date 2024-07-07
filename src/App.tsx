@@ -17,7 +17,7 @@ import { OrderHistory } from "./components/Pages/Visitor/OrderHistory";
 import SurveyForm from "./components/Pages/Dashboard/TestforCreateSurvey";
 import CreateEvent from "./components/Pages/Dashboard/EventOperator/CreateEvent";
 import ServiceTerm from "./components/Pages/Guest/AboutPage";
-import { Payment } from "./components/Pages/Visitor/Payment";
+// import { Payment } from "./components/Pages/Visitor/Payment";
 // import HomePage from "./components/Pages/Guest/HomePage";
 import EventDetail from "./components/Pages/Guest/EventDetail";
 import { ManageFeedbackDetail } from "./components/Pages/Dashboard/EventOperator/ManageFeedbackDetail";
@@ -38,12 +38,13 @@ import { useEffect } from "react";
 import { setEvents } from "./Features/EventManage/eventSlice";
 import { RootState } from "./Store/Store";
 import UpdateEvent from "./components/Pages/Dashboard/EventOperator/UpdateEvent";
-import { PaymentPage } from "./components/Pages/Visitor/PaymentPage";
+// import { PaymentPage } from "./components/Pages/Visitor/PaymentPage";
 import HomePage from "./components/Pages/HomePage";
 import SponsorProgram from "./components/Pages/Dashboard/Sponsor/SponsorProgram";
 import SponsorProgramDetail from "./components/Pages/Dashboard/Sponsor/SponsorProgramDetail";
 import Login1 from "./components/Pages/Login";
-
+import { Payment } from "./components/Pages/Visitor/Payment";
+import { PaymentPage } from "./components/Pages/Visitor/PaymentPage";
 
 function App() {
   const eventId = "1";
@@ -215,6 +216,7 @@ function App() {
           {/* Visitor  */}
           <Route
             path="/payment"
+            Component={Payment}
             element={
               <RequireAuth role="ROLE_VISITOR">
                 <Payment />

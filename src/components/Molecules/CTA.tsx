@@ -12,7 +12,7 @@ type Props = {
   description: string;
   buttons: ExtendedButtonProps[];
   eventId: string;
-  eventDetails: any; // Thêm thuộc tính eventDetails
+  eventDetails: any;
 };
 
 export type Cta7Props = React.ComponentPropsWithoutRef<"section"> & Partial<Props>;
@@ -27,7 +27,7 @@ export const Cta7 = (props: Cta7Props) => {
 
   const handleButtonClick = (url: string | undefined) => {
     if (url) {
-      navigate(url, { state: { eventDetails, eventId } }); // Truyền eventDetails qua state
+      navigate(url, { state: { eventDetails, eventId } });
     }
   };
 
@@ -50,7 +50,7 @@ export const Cta7 = (props: Cta7Props) => {
               size={button.size}
               iconRight={button.iconRight}
               iconLeft={button.iconLeft}
-              onClick={() => handleButtonClick(button.url)} // Sử dụng URL trực tiếp
+              onClick={() => handleButtonClick(button.url)}
             >
               {button.title}
             </Button>
@@ -66,7 +66,7 @@ export const Cta7Defaults: Cta7Props = {
   description: "Experience the Event of a Lifetime.",
   buttons: [{ title: "Buy Ticket", url: "/payment" }],
   eventId: "",
-  eventDetails: {}, // Giá trị mặc định cho eventDetails
+  eventDetails: {},
 };
 
 Cta7.displayName = "Cta7";

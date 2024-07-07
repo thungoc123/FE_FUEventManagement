@@ -45,13 +45,14 @@ function EventDetail() {
 
   const tags = data?.stateEvent ? [data.stateEvent.name] : [];
 
+ 
+  const quantity = typeof data?.quantity === 'string' ? Number(data.quantity) : data?.quantity ?? 0;
+  const price = typeof data?.price === 'string' ? Number(data.price) : data?.price ?? 0;
   const startDate = data?.timestart
     ? new Date(data.timestart).toLocaleDateString()
     : "No date available";
 
-  // const endDate = data?.timeend
-  //   ? new Date(data.timeend).toLocaleDateString()
-  //   : "No date available";
+
 
   const duration =
     data?.timestart && data?.timeend
@@ -113,6 +114,10 @@ function EventDetail() {
         date={startDate}
         duration={duration}
         location={location}
+        quantity={quantity}
+        price={price}
+
+
       />
 
       <Schedule days={formattedDays} />

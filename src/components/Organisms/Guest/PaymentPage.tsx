@@ -1,13 +1,23 @@
+// src/Organisms/Guest/PaymentPage.tsx
+
 import React, { useState } from 'react';
 import QRCode from 'qrcode.react'; // Make sure to install this package using `npm install qrcode.react`
+import { Button } from '@relume_io/relume-ui';
 
-function Payment1() {
+interface Payment1Props {
+  eventDetails: any;
+  quantity: number;
+}
+
+const Payment1: React.FC<Payment1Props> = ({ eventDetails, quantity }) => {
   const [showQRCode, setShowQRCode] = useState(false);
 
   const handleCheckboxChange = () => {
     setShowQRCode(!showQRCode);
   };
+  const handlePayment = () =>{ 
 
+  }
   return (
     <div className="min-h-screen bg-white p-4 flex">
       <div className="w-1/2 pr-4">
@@ -15,24 +25,24 @@ function Payment1() {
           <h2 className="text-xl font-semibold mb-2">Ticket</h2>
           <div className="bg-gray-100 p-4 rounded-lg shadow-inner">
             <div className="mb-2">
-              <h3 className="text-lg font-semibold">EventName</h3>
-              <p className="text-gray-700">Description of the event</p>
+              <h3 className="text-lg font-semibold">Event ID</h3>
+              <p className="text-gray-700">{eventDetails?.id}</p>
+            </div>
+            <div className="mb-2">
+              <h3 className="text-lg font-semibold">Event Name</h3>
+              <p className="text-gray-700">{eventDetails?.name}</p>
             </div>
             <div className="mb-2">
               <h3 className="text-lg font-semibold">Price</h3>
-              <p className="text-gray-700">$100</p>
+              <p className="text-gray-700">{eventDetails?.price}</p>
             </div>
             <div className="mb-2">
-              <h3 className="text-lg font-semibold">Date time buy</h3>
-              <p className="text-gray-700">01/01/2023 10:00 AM</p>
+              <h3 className="text-lg font-semibold">Date</h3>
+              <p className="text-gray-700">{new Date(eventDetails?.timestart).toLocaleString()}</p>
             </div>
             <div className="mb-2">
-              <h3 className="text-lg font-semibold">Date expired</h3>
-              <p className="text-gray-700">01/01/2024 10:00 AM</p>
-            </div>
-            <div className="mb-2">
-              <h3 className="text-lg font-semibold">Quantity &lt;= 5</h3>
-              <p className="text-gray-700">4</p>
+              <h3 className="text-lg font-semibold">Quantity</h3>
+              <p className="text-gray-700">{quantity}</p>
             </div>
           </div>
         </div>
@@ -50,12 +60,11 @@ function Payment1() {
             />
             <label htmlFor="vnpay" className="text-gray-700">VNpay</label>
           </div>
-          {showQRCode && (
-            <div className="mb-6">
-              <QRCode value="https://example.com" size={128} />
-            </div>
-          )}
-          <button className="w-full bg-blue-500 text-white p-3 rounded-lg font-semibold">Thanh toán</button>
+              
+          <Button 
+          onChange={handlePayment}
+          
+          className="w-full bg-blue-500 text-white p-3 rounded-lg font-semibold">Thanh toán</Button>
         </div>
       </div>
     </div>
