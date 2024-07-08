@@ -8,7 +8,11 @@ import { EOevent } from '../../Types/eo.type';
 
 
 const baseQuery = fetchBaseQuery({
+<<<<<<< HEAD
   baseUrl: 'http://localhost:7979/',
+=======
+  baseUrl: 'https://eventmanagementfu.azurewebsites.net/',
+>>>>>>> TienMerge
   prepareHeaders: (headers, { getState }) => {
     // Lấy token từ localStorage
     let token = sessionStorage.getItem('token')
@@ -23,8 +27,11 @@ const baseQuery = fetchBaseQuery({
 export const eventApi = createApi({
   reducerPath: 'event',
   baseQuery,
+<<<<<<< HEAD
   tagTypes: ['Events','Event'], // Định nghĩa tagTypes cho endpoint
 
+=======
+>>>>>>> TienMerge
   endpoints: (builder) => ({
     createEvent: builder.mutation({
       query: (newEvent) => ({
@@ -32,8 +39,11 @@ export const eventApi = createApi({
         method: 'POST',
         body: newEvent,
       }),
+<<<<<<< HEAD
       invalidatesTags: [{ type: 'Events', id: 'LIST' }], // Invalidates the list tag
 
+=======
+>>>>>>> TienMerge
     }),
     updateEvent: builder.mutation({
       query: ({ eventId, newEvent }) => ({
@@ -41,6 +51,7 @@ export const eventApi = createApi({
         method: 'PUT',
         body: newEvent,
       }),
+<<<<<<< HEAD
       invalidatesTags: (result, error, { eventId }) => [{ type: 'Event', id: eventId }], // Invalidates specific event by id
 
     }),
@@ -50,10 +61,13 @@ export const eventApi = createApi({
         method: 'DELETE',
       }),
       invalidatesTags: (result, error, { eventId }) => [{ type: 'Event', id: eventId }, { type: 'Events', id: 'LIST' }], // Invalidates specific event and list
+=======
+>>>>>>> TienMerge
     }),
     getListEvent: builder.query<EOevent[], void>({
       query: () => 'api-events/account',
       // keepUnusedDataFor: 3600,
+<<<<<<< HEAD
       providesTags: (result) =>
         result
           ? [
@@ -61,6 +75,8 @@ export const eventApi = createApi({
               { type: 'Events', id: 'LIST' },
             ]
           : [{ type: 'Events', id: 'LIST' }],
+=======
+>>>>>>> TienMerge
     }),
 
     addSchedule: builder.mutation({
@@ -69,23 +85,31 @@ export const eventApi = createApi({
         method: 'POST',
         body: newSchedule,
       }),
+<<<<<<< HEAD
       invalidatesTags: (result, error, { id }) => [{ type: 'Event', id }], // Invalidates specific event by id
 
+=======
+>>>>>>> TienMerge
     }),
     addImage: builder.mutation({
       query: ({id, newImage}) => ({
         url: `api-events/${id}/add-image`,
         method: 'POST',
         body: newImage,
+<<<<<<< HEAD
       }),
       invalidatesTags: (result, error, { id }) => [{ type: 'Event', id }], // Invalidates specific event by id
 
+=======
+      })
+>>>>>>> TienMerge
     }),
     addCheckingStaff: builder.mutation({
       query: ({id, newStaff}) => ({
         url: `api-events/${id}/create-staff`,
         method: 'POST',
         body: newStaff,
+<<<<<<< HEAD
       }),
       invalidatesTags: (result, error, { id }) => [{ type: 'Event', id }], // Invalidates specific event by id
     }),
@@ -132,4 +156,12 @@ export const eventApi = createApi({
 });
 
 export const {useDeleteSponsorMutation ,useAddSponsorToEventMutation , usePublishEventMutation,useDeleteEventMutation,useDeleteImageMutation ,useCreateEventMutation, useGetListEventQuery, useAddScheduleMutation, useAddImageMutation, useAddCheckingStaffMutation, useUpdateEventMutation, useDeleleCheckingStaffMutation } = eventApi;
+=======
+      })
+    })
+  }),
+});
+
+export const { useCreateEventMutation, useGetListEventQuery, useAddScheduleMutation, useAddImageMutation, useAddCheckingStaffMutation, useUpdateEventMutation } = eventApi;
+>>>>>>> TienMerge
 

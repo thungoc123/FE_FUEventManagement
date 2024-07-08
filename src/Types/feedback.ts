@@ -1,4 +1,5 @@
 import React from "react";
+<<<<<<< HEAD
 import { account } from "./account";
 
 export interface FeedbackTable {
@@ -8,14 +9,25 @@ export interface FeedbackTable {
     state: string,
     Detail: React.ReactNode,
     Publish: React.ReactNode,
+=======
+
+export interface FeedbackTable {
+    Name: string, 
+    Date: string,
+    Detail: React.ReactNode,
+    State: string,
+>>>>>>> TienMerge
     Delete: React.ReactNode
 }
 
 export interface Question {
     No: number,
     Question: string, 
+<<<<<<< HEAD
     // Type: string, 
     Answer: React.ReactNode,
+=======
+>>>>>>> TienMerge
     Edit: React.ReactNode,
     Delete: React.ReactNode
 }
@@ -26,6 +38,7 @@ export interface Answer {
     Question: string, 
     Edit : React.ReactNode,
     Delete: React.ReactNode,
+<<<<<<< HEAD
 }
 
 
@@ -76,4 +89,6 @@ export interface feedbackQuestionQuery {
     modifiedAt: null,
     answers: null,
     feedbackID: number
+=======
+>>>>>>> TienMerge
 }

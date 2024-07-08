@@ -6,26 +6,43 @@ import { Gallery5 } from '../EventOperator/image';
 import React from 'react';
 import { EOevent } from '../../../Types/eo.type';
 import { useSelector } from 'react-redux';
+<<<<<<< HEAD
+=======
+import { selectUnpublishEvents } from '../../../Features/EventManage/eventSelector';
+>>>>>>> TienMerge
 import { RootState } from '../../../Store/Store';
 
 type Props = {
   id: number
+<<<<<<< HEAD
   defaultDisplay: string
+=======
+>>>>>>> TienMerge
 }
 
 const Tabbar:React.FC<Props> = (prop) => {
   // const Events = useSelector(selectUnpublishEvents);
   const Events = useSelector((state: RootState) => state.events.events);
+<<<<<<< HEAD
   console.log(Events)
   console.log('prop.id:', prop.id);
   // console.l
+=======
+
+  console.log(Events)
+  console.log('prop.id:', prop.id);
+>>>>>>> TienMerge
 
   // const eventDetail= Events?.find(event => event.id === prop.id);
   const eventDetail = Events?.find(event => event.id === parseInt(prop.id));
 
   // console.log(eventDetail)
     return (
+<<<<<<< HEAD
       <Tabs defaultValue={prop.defaultDisplay}>
+=======
+        <Tabs defaultValue="schedule">
+>>>>>>> TienMerge
         <TabsList>
           <TabsTrigger value="img" className='border-t-0 border-r-0 border-b border-l-0 m-[2px]'>Image
           </TabsTrigger>

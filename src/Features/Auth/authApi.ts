@@ -22,8 +22,12 @@ interface VisitorRequest {
 }
 export const authApi = createApi({
     reducerPath: 'authApi',
+<<<<<<< HEAD
     // https://eventmanagementfu.azurewebsites.net
     baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:7979/' }),
+=======
+    baseQuery: fetchBaseQuery({ baseUrl: 'https://eventmanagementfu.azurewebsites.net' }),
+>>>>>>> TienMerge
     endpoints: (builder) => ({
       login: builder.mutation<LoginResponse, LoginRequest>({
         query: (credentials) => ({

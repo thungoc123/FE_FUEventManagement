@@ -7,10 +7,14 @@ import { useNavigate, useParams } from "react-router-dom";
 import { uploadImage } from "../../../ulities/s3Image";
 // import { useAddImageMutation } from "../../../Features/EventManage/eventApi";
 import { addNotification } from "../../../Features/Utils/notificationsSlice";
+<<<<<<< HEAD
 import { useAddImageMutation, useDeleteImageMutation } from "../../../Features/EventManage/eventApi";
 import { BiTrash, BiExport } from "react-icons/bi";
 import { setTab } from "../../../Features/Utils/tabSlice";
 import { Alert } from "../../Molecules/Alert";
+=======
+import { useAddImageMutation } from "../../../Features/EventManage/eventApi";
+>>>>>>> TienMerge
 
 
 
@@ -24,7 +28,10 @@ export const Gallery5 = () => {
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [fileAddress, setFileAddress] = useState("");
+<<<<<<< HEAD
   const [annouce, setAnnouce] = useState(Boolean);
+=======
+>>>>>>> TienMerge
   const dispatch = useDispatch();
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -40,6 +47,10 @@ export const Gallery5 = () => {
       return;
     }
 
+<<<<<<< HEAD
+=======
+    // const bucketName = 'your-s3-bucket-name';
+>>>>>>> TienMerge
     const key = `${selectedFile.name}`; // Ví dụ: path/in/s3/example.jpg
 
     try {
@@ -48,8 +59,11 @@ export const Gallery5 = () => {
         "https://swpproject.s3.ap-southeast-2.amazonaws.com/" +
           `${selectedFile.name}`
       );
+<<<<<<< HEAD
       // console.log("File uploaded successfully at", location)
       setAnnouce(location);
+=======
+>>>>>>> TienMerge
     } catch (error) {
       alert("Error uploading file");
     }
@@ -62,6 +76,7 @@ export const Gallery5 = () => {
     await handleUpload();
   };
   const newImage = {
+<<<<<<< HEAD
     eventId: id,
     imagesUrl: fileAddress 
   }
@@ -72,6 +87,17 @@ export const Gallery5 = () => {
     e.preventDefault();
     console.log(newImage);
     
+=======
+      eventId: id,
+      imagesUrl: fileAddress 
+    }
+  
+  const [addImage, { isLoading, isSuccess, isError, error }] = useAddImageMutation()
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log(newImage);
+>>>>>>> TienMerge
     try {
       await addImage({id, newImage}).unwrap();
       dispatch(addNotification({
@@ -80,9 +106,12 @@ export const Gallery5 = () => {
         type: 'success',
         timestamp: Date.now(), // Thời gian hiện tại
       }));
+<<<<<<< HEAD
       dispatch(setTab("img"));
       setAnnouce(false)
       // window.location.reload()
+=======
+>>>>>>> TienMerge
     } catch (err) {
       dispatch(addNotification({
         id: new Date().getTime(), // Sử dụng timestamp làm ID
@@ -90,6 +119,7 @@ export const Gallery5 = () => {
         type: 'error',
         timestamp: Date.now(), // Thời gian hiện tại
       }));
+<<<<<<< HEAD
     }
   };
   const handleDelete = async (e: MouseEvent<HTMLButtonElement>, imageId: string) => {
@@ -114,12 +144,16 @@ export const Gallery5 = () => {
       }));
       console.error('Failed to delete image:', error);
       alert('Failed to delete image');
+=======
+      console.error('Failed to create the event:', err);
+>>>>>>> TienMerge
     }
   };
   return (
     <section className="px-[5%] md:py-24 lg:py-28">
       <div className="container">
         <div className="grid grid-cols-2 items-start justify-center gap-6 md:gap-8 lg:grid-cols-3">
+<<<<<<< HEAD
           {images.length === 0 ? <div>There is no image</div> : (
             <>
             {images.map((image, index) => (
@@ -127,6 +161,9 @@ export const Gallery5 = () => {
              key={index}
              className="w-40 h-40 relative inline-block m-2"
            >
+=======
+          {images.map((image, index) => (
+>>>>>>> TienMerge
             <a
               key={index}
               href=""
@@ -136,6 +173,7 @@ export const Gallery5 = () => {
                 src={image.url}
                 
                 className="size-full object-cover"
+<<<<<<< HEAD
 
               />
       <Button size="icon" variant="link"  onClick={(e) => handleDelete(e,image.id)}>
@@ -150,10 +188,16 @@ export const Gallery5 = () => {
             </>
           )}
           
+=======
+              />
+            </a>
+          ))}
+>>>>>>> TienMerge
         </div>
         <form onSubmit={handleSubmit}>
         <div className="grid gap-y-5 m-5">
           <Label htmlFor="Image">Image</Label>
+<<<<<<< HEAD
           <p>Vui lòng click vào icon bên dưới trước khi click vào upload, xin lỗi vì sự bất tiện này. </p>
           <Input type="file" onChange={handleFileChange} />
           <Alert text={annouce ? "Upload Image successfully" : "Upload Image unsuccessfully"}/>
@@ -163,12 +207,27 @@ export const Gallery5 = () => {
           </a>
           <Button>
             {isLoading ? 'Uploading...' : 'Upload'}
+=======
+          <Input type="file" onChange={handleFileChange} />
+          <span
+                    className="focus-visible:ring-border-primary inline-flex gap-3 items-center justify-center whitespace-nowrap ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-border-primary bg-background-alternative text-text-alternative px-6 py-3"
+                    onClick={handleUpload}
+                  >
+                    Add
+                  </span>
+          <Button
+          >
+            Upload
+>>>>>>> TienMerge
           </Button>
         </div>
         </form>
       </div>
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> TienMerge
     </section>
   );
 ;

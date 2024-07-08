@@ -136,7 +136,11 @@ const UpdateEvent = () => {
         type: 'success',
         timestamp: Date.now(), // Thời gian hiện tại
       }));
+<<<<<<< HEAD
       navigate('/eventoperator/dashboard/')
+=======
+      navigate('/eventoperator/dashboard/event')
+>>>>>>> TienMerge
       // alert('Event created successfully!');
     } catch (err) {
       dispatch(addNotification({

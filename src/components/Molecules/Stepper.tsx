@@ -21,8 +21,11 @@ import { Time } from "../../Types/global.type";
 import { useDispatch } from "react-redux";
 import { addNotification } from "../../Features/Utils/notificationsSlice";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
+<<<<<<< HEAD
 import { toggleHeaderVisibility } from "../../Features/Utils/HeaderDisplaySlice";
 
+=======
+>>>>>>> TienMerge
 const steps = [
   { label: "Schedule" },
   { label: "Actor" },
@@ -37,7 +40,10 @@ const AddEventSchedule = () => {
 
   const navigate = useNavigate();
   const openModal = () => {
+<<<<<<< HEAD
     dispatch(toggleHeaderVisibility("sticky top-0 flex min-h-16 w-full items-center border-b border-border-primary bg-white px-4 md:min-h-18 md:px-8"))
+=======
+>>>>>>> TienMerge
     setModalIsOpen(true);
   };
 
@@ -70,13 +76,20 @@ const AddEventSchedule = () => {
     eventType: eventType,
     location: location,
 };
+<<<<<<< HEAD
 const [addSchedule, { isLoading, isSuccess, isError, error }
 ] = useAddScheduleMutation();
+=======
+const [addSchedule, { isLoading, isSuccess, isError, error }] = useAddScheduleMutation();
+>>>>>>> TienMerge
 
 
   const handleSubmit =  async (e) => {
     e.preventDefault();
+<<<<<<< HEAD
     console.log(JSON.stringify(ScheduleData))
+=======
+>>>>>>> TienMerge
     try {
         const response = await addSchedule({id: id, newSchedule: ScheduleData }).unwrap();
         console.log(response)
@@ -86,7 +99,10 @@ const [addSchedule, { isLoading, isSuccess, isError, error }
           type: 'success',
           timestamp: Date.now(), // Thời gian hiện tại
         }));
+<<<<<<< HEAD
         window.location.reload();
+=======
+>>>>>>> TienMerge
     } catch (err) {
       dispatch(addNotification({
         id: new Date().getTime(), // Sử dụng timestamp làm ID
@@ -263,11 +279,15 @@ const [addSchedule, { isLoading, isSuccess, isError, error }
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
                     varius enim in eros.
                   </p>
+<<<<<<< HEAD
                   <div className="editor-container">
+=======
+>>>>>>> TienMerge
                   <CKEditor
             editor={ClassicEditor}
             data="<p>Type your content here!</p>"
             // Sử dụng đối tượng cấu hình
+<<<<<<< HEAD
             config={{
               toolbar: [
                 'bold', 'italic', '|',
@@ -278,6 +298,9 @@ const [addSchedule, { isLoading, isSuccess, isError, error }
               ],
               // Include additional configuration options as needed
             }}
+=======
+
+>>>>>>> TienMerge
             onReady={(editor: any) => {
               console.log("Editor is ready to use!", editor);
             }}
@@ -293,7 +316,10 @@ const [addSchedule, { isLoading, isSuccess, isError, error }
               console.log("Focus.", editor);
             }}
           />
+<<<<<<< HEAD
           </div>
+=======
+>>>>>>> TienMerge
                 </>
               )}
               {currentStep === 3 && (

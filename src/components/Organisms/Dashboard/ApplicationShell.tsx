@@ -56,12 +56,17 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { clearToken } from "../../../Features/Auth/authSlice";
 import { JwtPayload, jwtDecode } from "jwt-decode";
+<<<<<<< HEAD
 import { createSelector } from "@reduxjs/toolkit";
+=======
+import { createSelector } from '@reduxjs/toolkit';
+>>>>>>> TienMerge
 
 import {
   NavigationComponentProps,
   NavigationProps,
 } from "../../../Types/global.type";
+<<<<<<< HEAD
 import {
   eventApi,
   useGetListEventQuery,
@@ -75,6 +80,14 @@ import {
 } from "../../../Features/EventManage/eventSelector";
 import { setEvents } from "../../../Features/EventManage/eventSlice";
 import { roleName } from "../../../ulities/ProtectedRoute";
+=======
+import { eventApi, useGetListEventQuery } from '../../../Features/EventManage/eventApi'
+import SurveyForm from "../../Pages/Dashboard/TestforCreateSurvey";
+import { RootState, persistor } from "../../../Store/Store";
+import CreateEvent from "../../Pages/Dashboard/EventOperator/CreateEvent";
+import { selectPublishEvents, selectUnpublishEvents } from "../../../Features/EventManage/eventSelector";
+import { setEvents } from "../../../Features/EventManage/eventSlice";
+>>>>>>> TienMerge
 
 type ParentComponentProps = {
   MainComponent: React.ReactNode;
@@ -90,8 +103,12 @@ export const ApplicationShell4: React.FC<ParentComponentProps> = ({
     useState<boolean>(false);
   const [isRole, setRole] = useState("");
   const email = sessionStorage.getItem("email");
+<<<<<<< HEAD
   let token = sessionStorage.getItem("token");
   const role = roleName(token);
+=======
+  const role = useSelector((state: RootState) => state.auth.role);
+>>>>>>> TienMerge
 
   console.log(isRole);
   NavigationAuth(isRole);
@@ -112,6 +129,7 @@ export const ApplicationShell4: React.FC<ParentComponentProps> = ({
   const handleLogout = () => {
     sessionStorage.removeItem("token");
     sessionStorage.removeItem("email");
+<<<<<<< HEAD
     localStorage.setItem("notifications", JSON.stringify([]));
     dispatch(clearToken());
     // persistor.purge();
@@ -120,6 +138,25 @@ export const ApplicationShell4: React.FC<ParentComponentProps> = ({
 
   const notifications = JSON.parse(localStorage.getItem("notifications"));
 
+=======
+    dispatch(clearToken());
+    persistor.purge();
+    navigate("/");
+  };
+
+  const notifications = useSelector(
+    (state: RootState) => state.notifications || []
+  );
+  console.log("Notifications state after rehydrate:", notifications);
+
+  if (!Array.isArray(notifications)) {
+    console.error(
+      "Expected notifications to be an array, but got:",
+      notifications
+    );
+    return null;
+  }
+>>>>>>> TienMerge
   const NavigationAuthLink = (role: string) => {
     switch (role) {
       case "ROLE_EO":
@@ -139,11 +176,18 @@ export const ApplicationShell4: React.FC<ParentComponentProps> = ({
         break;
     }
   };
+<<<<<<< HEAD
   const isHeaderVisible = useSelector((state: RootState) => state.headerDisplay.isHeaderVisible);
   return (
     <section>
       {/* Topbar */}
       <div className={isHeaderVisible}>
+=======
+  return (
+    <section>
+      {/* Topbar */}
+      <div className="sticky top-0 flex min-h-16 w-full items-center border-b border-border-primary bg-white px-4 md:min-h-18 md:px-8 z-[100]">
+>>>>>>> TienMerge
         <div className="mx-auto grid size-full grid-cols-2 items-center justify-between gap-4 lg:grid-cols-[1fr_1.5fr_1fr]">
           <a href="#" className="ml-14 justify-self-start lg:ml-0">
             <img
@@ -279,6 +323,7 @@ export const ApplicationShell4: React.FC<ParentComponentProps> = ({
                   </DropdownMenuItem>
                   {isRole === "ROLE_SPONSOR" && (
                     <>
+<<<<<<< HEAD
                       <DropdownMenuItem>
                         <a href="/sponsor/dashboard/manage">Profile Settings</a>
                       </DropdownMenuItem>
@@ -286,6 +331,15 @@ export const ApplicationShell4: React.FC<ParentComponentProps> = ({
                      <a href="/sponsor/dashboard/list"></a>
                    </DropdownMenuItem> */}
                     </>
+=======
+                    <DropdownMenuItem>
+                      <a href="/sponsor/dashboard/manage">Profile Settings</a>
+                    </DropdownMenuItem>
+                     {/* <DropdownMenuItem>
+                     <a href="/sponsor/dashboard/list"></a>
+                   </DropdownMenuItem> */}
+                   </>
+>>>>>>> TienMerge
                   )}
 
                   <DropdownMenuSeparator className="mx-4" />
@@ -354,11 +408,24 @@ export const ApplicationShell4: React.FC<ParentComponentProps> = ({
 //   );
 
 // const unpublishEventCount =  events?.filter(event => event.stateEvent.name === "UNPUBLISH").length;
+<<<<<<< HEAD
 // const publishEventCount =  events?.filter(event => event.stateEvent.name === "HAPPENED").length;
 let NavigationProp: NavigationProps[] = [];
 const NavigationAuth = (role: string) => {
  
 
+=======
+  // const publishEventCount =  events?.filter(event => event.stateEvent.name === "HAPPENED").length;
+let NavigationProp: NavigationProps[] = [];
+const NavigationAuth = (role: string) => {
+
+  // const Events = useSelector((state: RootState) => state.events.events);
+  // const { data: Events, isLoading, error } = useGetListEventQuery();
+  // const Events = useSelector(selectUnpublishEvents);
+
+  // const unpublishEvents = Events.filter(event => event.stateEvent.name === 'UNPUBLISH')
+  // const publishEvent = Events.filter(event => event.stateEvent.name === "PUBLISH")  
+>>>>>>> TienMerge
   switch (role) {
     case "ROLE_EO":
       NavigationProp = [
@@ -369,20 +436,33 @@ const NavigationAuth = (role: string) => {
           State: [
             {
               name: "Event Analytics",
+<<<<<<< HEAD
               url: '/eventoperator/event/publish/analytics/',
               // number: 2,
+=======
+              url: "",
+              number: 2,
+>>>>>>> TienMerge
               icon: <BiBarChartAlt2 className="size-6 shrink-0" />,
             },
             {
               name: "Feedback Analytics",
               url: "",
+<<<<<<< HEAD
               // number: 3,
+=======
+              number: 3,
+>>>>>>> TienMerge
               icon: <BiPieChartAlt2 className="size-6 shrink-0" />,
             },
             {
               name: "Attendance",
               url: "",
+<<<<<<< HEAD
               // number: 3,
+=======
+              number: 3,
+>>>>>>> TienMerge
               icon: <BiUserCheck className="size-6 shrink-0" />,
             },
           ],
@@ -395,21 +475,48 @@ const NavigationAuth = (role: string) => {
             {
               name: "Unpublish",
               url: "/eventoperator/dashboard/UnpublishEvent",
+<<<<<<< HEAD
               // number: 0,
+=======
+              number: 0,
+>>>>>>> TienMerge
               icon: <BiCalendarEdit className="size-6 shrink-0" />,
             },
             {
               name: "Happened",
               url: "/eventoperator/dashboard/PublishEvent",
+<<<<<<< HEAD
               // number: 0,
+=======
+              number: 0,
+>>>>>>> TienMerge
               icon: <BiCalendarCheck className="size-6 shrink-0" />,
             },
           ],
         },
         {
           Name: "Feedback",
+<<<<<<< HEAD
           Url: "/eventoperator/dashboard/feedback",
           icon: <BiFile className="size-6 shrink-0" />,
+=======
+          Url: "",
+          icon: <BiFile className="size-6 shrink-0" />,
+          State: [
+            {
+              name: "Unpublish",
+              url: "",
+              number: 2,
+              icon: <BiCalendarEdit className="size-6 shrink-0" />,
+            },
+            {
+              name: "Happened",
+              url: "",
+              number: 3,
+              icon: <BiCalendarCheck className="size-6 shrink-0" />,
+            },
+          ],
+>>>>>>> TienMerge
         },
         {
           Name: "Trash",
@@ -464,7 +571,24 @@ const NavigationAuth = (role: string) => {
           Name: "Sponsor Program",
           Url: "/sponsor/dashboard/program",
           icon: <BiNotepad className="size-6 shrink-0" />,
+<<<<<<< HEAD
        
+=======
+          // State: [
+          //   {
+          //     name: "Unpublish",
+          //     url: "",
+          //     number: 2,
+          //     icon: <BiCalendarEdit className="size-6 shrink-0" />,
+          //   },
+          //   {
+          //     name: "Happened",
+          //     url: "",
+          //     number: 3,
+          //     icon: <BiCalendarCheck className="size-6 shrink-0" />,
+          //   },
+          // ],
+>>>>>>> TienMerge
         },
         {
           Name: "Survey",
@@ -508,6 +632,7 @@ const NavigationAuth = (role: string) => {
       break;
     case "ROLE_CHECKING_STAFF":
       // navigate("");
+<<<<<<< HEAD
       NavigationProp = [
         {
           Name: "Attendance", 
@@ -534,6 +659,11 @@ const NavigationAuth = (role: string) => {
           icon: <BiFile className="size-6 shrink-0" />,
         },
       ];
+=======
+      break;
+    case "ROLE_ADMIN":
+      // navigate("/admin");
+>>>>>>> TienMerge
       break;
   }
 };
@@ -544,8 +674,12 @@ type Props = {
 
 const Navigation: React.FC<Props> = ({ navigationProps = NavigationProp }) => {
   const navigate = useNavigate();
+<<<<<<< HEAD
   let token = sessionStorage.getItem("token");
   const roleDisplay = roleName(token);
+=======
+
+>>>>>>> TienMerge
   const goToHome = () => {
     navigate("/");
   };
@@ -562,6 +696,7 @@ const Navigation: React.FC<Props> = ({ navigationProps = NavigationProp }) => {
           {navigationProps.map((nav, index) => (
             <Accordion type="single" collapsible>
               <AccordionItem value="item-1" className="border-none">
+<<<<<<< HEAD
                 {roleDisplay == "ROLE_ADMIN" ? (
                   <span className="flex items-center gap-3 p-2">
                     {nav.icon}
@@ -586,6 +721,20 @@ const Navigation: React.FC<Props> = ({ navigationProps = NavigationProp }) => {
                   </AccordionTrigger>
                 )}
 
+=======
+                <AccordionTrigger
+                  className="p-2 font-normal"
+                  icon={
+                    <RxChevronDown className="shrink-0 text-text-primary transition-transform duration-300" />
+                  }
+                >
+                  <span className="flex items-center gap-3">
+                    {nav.icon}
+
+                    <a href={nav.Url}><p>{nav.Name}</p></a>
+                  </span>
+                </AccordionTrigger>
+>>>>>>> TienMerge
                 {nav.State?.map((item, idx) => (
                   <AccordionContent className="flex items-center gap-x-2 p-2 pl-[2.75rem] text-center">
                     <a
@@ -596,9 +745,15 @@ const Navigation: React.FC<Props> = ({ navigationProps = NavigationProp }) => {
                         {item.icon}
                         <p>{item.name}</p>
                       </span>
+<<<<<<< HEAD
                       {/* <span className="">
                         <p className="text-sm">{item.number}</p>
                       </span> */}
+=======
+                      <span className="">
+                        <p className="text-sm">{item.number}</p>
+                      </span>
+>>>>>>> TienMerge
                     </a>
                   </AccordionContent>
                 ))}

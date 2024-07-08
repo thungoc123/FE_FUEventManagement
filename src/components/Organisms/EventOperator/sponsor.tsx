@@ -8,6 +8,7 @@ import { TableTemplate } from "../Dashboard/TableTemplate";
 import AddFeedbackButton from "../Dashboard/AddFeedbackButton";
 import AddSponsor from "../Dashboard/AddSponsor";
 import { useParams } from "react-router-dom";
+<<<<<<< HEAD
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../Store/Store";
 import { useDeleteSponsorMutation, useGetListEventQuery } from "../../../Features/EventManage/eventApi";
@@ -21,10 +22,21 @@ export const AddSponsorTable = () => {
   const { data, error, isLoading, isFetching } = useGetListEventQuery();
   const [deleteSponsor] = useDeleteSponsorMutation()
   const sponsor = data?.find((event) => event.id === parseInt(id))?.sponsorEvents || [];
+=======
+import { useSelector } from "react-redux";
+import { RootState } from "../../../Store/Store";
+
+export const AddSponsorTable = () => {
+  const { id } = useParams();
+  const Events = useSelector((state: RootState) => state.events.events);
+  
+  const sponsor = Events?.find((event) => event.id === parseInt(id))?.sponsor || [];
+>>>>>>> TienMerge
   console.log(sponsor)
   const tableHeaders = [
     "No",
     "Name",
+<<<<<<< HEAD
     "StaffEmail",
     "ProfitPercent",
     "Edit",
@@ -61,10 +73,24 @@ export const AddSponsorTable = () => {
     Delete: <Button size="icon" variant="link"  onClick={(e) => handleDelete(e,item.sponsorId)}>
     <BiTrash />
   </Button>,
+=======
+    "Sponsor",
+    "StaffEmail",
+    "Edit",
+    "Delete",
+  ];
+  const tableRows: SponsorTable[] = sponsor.map((item, index) => ({
+    No: index + 1,
+    Sponsor: item.companyName,
+    StaffEmail: item.fptStaffEmail,
+    Edit: <BiEdit />,
+    Delete: <BiTrash />,
+>>>>>>> TienMerge
   }));
 
   const tableHeaderClasses = [
     "w-[200px] pr-4 xxl:w-[25px]",
+<<<<<<< HEAD
     "w-[128px] pr-4 xxl:w-[150px]",
     "w-[200px] pr-4 xxl:w-[150px]",
     "w-[200px] pr-4 xxl:w-[100px]",
@@ -79,6 +105,17 @@ export const AddSponsorTable = () => {
     <>
     {sponsor.length === 0 ? <div className="text-center">No sponsor</div> : (
       <>
+=======
+    "w-[200px] pr-4 xxl:w-[250px]",
+    "w-[128px] pr-4 xxl:w-[250px]",
+    "w-[200px] pr-4 xxl:w-[250px]",
+    "w-[192px] pr-4 xxl:w-[150px]",
+    // "w-[96px] pr-4 text-center",
+  ];
+  const paginationItems = [1, 2, 3, 4, 5];
+  return (
+    <>
+>>>>>>> TienMerge
       <TableTemplate
         headerTitle="Sponsor"
         headerDescription="List of Sponsor"
@@ -94,10 +131,14 @@ export const AddSponsorTable = () => {
         // paginationItems={paginationItems}
         tableHeadersClasses={tableHeaderClasses}
       />
+<<<<<<< HEAD
       </>
     )}
           <AddSponsor />
       
+=======
+      <AddSponsor />
+>>>>>>> TienMerge
     </>
   );
 };

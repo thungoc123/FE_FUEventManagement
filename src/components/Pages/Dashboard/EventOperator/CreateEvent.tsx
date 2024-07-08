@@ -27,22 +27,31 @@ import { useCreateEventMutation } from "../../../../Features/EventManage/eventAp
 import { RootState } from "../../../../Store/Store";
 import { useDispatch, useSelector } from "react-redux";
 const steps = [{ label: "Schedule" }, { label: "Actor" }];
+<<<<<<< HEAD
 import { DateTime } from "luxon";
 import { useNavigate } from "react-router-dom";
 import { addNotification } from "../../../../Features/Utils/notificationsSlice";
 import { Alert } from "../../../Molecules/Alert";
 import { accountID } from "../../../../ulities/ProtectedRoute";
 
+=======
+import { DateTime } from 'luxon'
+import { useNavigate } from "react-router-dom";
+import { addNotification } from "../../../../Features/Utils/notificationsSlice";
+>>>>>>> TienMerge
 
 const CreateEvent = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [submitError, setSubmitError] = useState<string[]>([]);
+<<<<<<< HEAD
   const [errs, setErrs] = useState({
     eventName: "test",
   });
   const [fill, setFill] = useState("")
 
+=======
+>>>>>>> TienMerge
   const [createEvent, { isLoading, isSuccess, isError, error }] = useCreateEventMutation();
   const dispatch = useDispatch();
 
@@ -56,8 +65,13 @@ const CreateEvent = () => {
   const nextStep = () =>
     setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1));
   const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 0));
+<<<<<<< HEAD
   // const accountId = useSelector((state: RootState) => state.auth.accountId);
   const accountid = accountID(sessionStorage.getItem('token'))
+=======
+  const accountId = useSelector((state: RootState) => state.auth.accountId);
+
+>>>>>>> TienMerge
   const [eventData, setEventData] = useState({
     eventName: "",
     description: "",
@@ -66,7 +80,11 @@ const CreateEvent = () => {
     timeOpenSale: "",
     timeCloseSale: "",
     price: 0,
+<<<<<<< HEAD
     accountId: accountid,
+=======
+    accountId: accountId,
+>>>>>>> TienMerge
   });
 
   const handleChange = (
@@ -78,6 +96,7 @@ const CreateEvent = () => {
       [name]: value,
     });
     let newErrors: string[] = [];
+<<<<<<< HEAD
     if (!eventData.eventName.trim()) {
       newErrors.push("eventName is required.");
     }
@@ -103,6 +122,9 @@ const CreateEvent = () => {
     if (eventData.price <= 0) {
       newErrors.push("Price must be greater than zero.");
     }
+=======
+
+>>>>>>> TienMerge
     if (name === "timeEnd" && value <= eventData.timeStart) {
       newErrors.push("End time must be after start time.");
     }
@@ -119,6 +141,7 @@ const CreateEvent = () => {
         "Ticket open sale time must be before ticket close sale time."
       );
     }
+<<<<<<< HEAD
     if (name === "price" && +value <= -1) {
       newErrors.push("Price must be greater than 0.");
     }
@@ -138,6 +161,24 @@ const CreateEvent = () => {
       name === "timeOpenSale" ||
       name === "timeCloseSale"
     ) {
+=======
+    if(name === "price" && +value <= -1) {
+      newErrors.push(
+        "Price must be greater than 0."
+      );
+    }
+    if ((name === "eventName" || name === "description") && value.trim() === "") {
+      // Hiển thị lỗi hoặc xử lý logic phù hợp
+      newErrors.push(
+        "Name and description cannot be empty ! "
+      );
+      return; // Ngừng xử lý tiếp tục nếu có lỗi
+    }
+   
+
+    let formattedValue = value;
+    if (name === "timeStart" || name === "timeEnd" || name === "timeOpenSale" || name === "timeCloseSale") {
+>>>>>>> TienMerge
       const dateTime = DateTime.fromISO(value);
       formattedValue = dateTime.toFormat("yyyy-MM-dd'T'HH:mm:ss");
     }
@@ -146,6 +187,7 @@ const CreateEvent = () => {
       ...eventData,
       [name]: formattedValue,
     });
+<<<<<<< HEAD
     console.log(newErrors);
     setSubmitError(newErrors);
     setErrs(errs);
@@ -193,6 +235,39 @@ const CreateEvent = () => {
       }
     }
   };
+=======
+    console.log(newErrors)
+    setSubmitError(newErrors);
+    
+  };
+  
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log(eventData);
+    try {
+      await createEvent(eventData).unwrap();
+      dispatch(addNotification({
+        id: new Date().getTime(), // Sử dụng timestamp làm ID
+        message: 'Create event successfully!',
+        type: 'success',
+        timestamp: Date.now(), // Thời gian hiện tại
+      }));
+    //  window.location.reload(); // navigate('/eventoperator/dashboard/event')
+      // alert('Event created successfully!');
+    } catch (err) {
+      dispatch(addNotification({
+        id: new Date().getTime(), // Sử dụng timestamp làm ID
+        message: 'Create event unsuccessfully!',
+        type: 'error',
+        timestamp: Date.now(), // Thời gian hiện tại
+      }));
+      console.error('Failed to create the event:', err);
+    }
+  };
+
+ 
+
+>>>>>>> TienMerge
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -245,7 +320,10 @@ const CreateEvent = () => {
                       required
                       value={eventData.eventName}
                     />
+<<<<<<< HEAD
                     {errs.eventName}
+=======
+>>>>>>> TienMerge
                   </div>
                   <div className="grid items-center gap-2">
                     <Label htmlFor="Objectives">Objectives</Label>
@@ -311,6 +389,10 @@ const CreateEvent = () => {
                       value={eventData.timeEnd}
                       onChange={handleChange}
                     />
+<<<<<<< HEAD
+=======
+                   
+>>>>>>> TienMerge
                   </div>
                   <div className="grid items-center gap-2">
                     <Label htmlFor="Price">Price</Label>
@@ -324,10 +406,19 @@ const CreateEvent = () => {
                     />
                   </div>
                 </div>
+<<<<<<< HEAD
                 {submitError && <p>{submitError[submitError.length - 1]}</p>}
               </div>
             )}
             {fill && <Alert text={fill} />}
+=======
+                {submitError && (
+                      <p>{submitError[submitError.length - 1]}</p>
+                    )}
+              </div>
+            )}
+
+>>>>>>> TienMerge
             <DialogFooter>
               <div className="mt-6 flex w-full flex gap-4 md:mt-8 justify-between">
                 <Button
@@ -338,9 +429,13 @@ const CreateEvent = () => {
                   {currentStep === 0 ? "Cancel" : "Back"}
                 </Button>
                 {currentStep === steps.length - 1 ? (
+<<<<<<< HEAD
                   <Button type="submit">
                     {isLoading ? "Creating" : "Get Started"}{" "}
                   </Button>
+=======
+                  <Button type="submit">{isLoading ? 'Creating' : 'Get Started'} </Button>
+>>>>>>> TienMerge
                 ) : (
                   <span
                     className="focus-visible:ring-border-primary inline-flex gap-3 items-center justify-center whitespace-nowrap ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-border-primary bg-background-alternative text-text-alternative px-6 py-3"

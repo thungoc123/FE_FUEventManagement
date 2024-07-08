@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import React, { ChangeEvent, useState } from "react";
+=======
+import React, { useState } from "react";
+>>>>>>> TienMerge
 import {
   Dialog,
   DialogTrigger,
@@ -19,6 +23,7 @@ import {
   Input,
 } from "@relume_io/relume-ui";
 import Modal from "react-modal";
+<<<<<<< HEAD
 import { useGetListSponsorPersonQuery } from "../../../Features/Sponsor/sponsorApi";
 import { useParams } from "react-router-dom";
 import { useAddSponsorToEventMutation, useGetListEventQuery } from "../../../Features/EventManage/eventApi";
@@ -38,6 +43,11 @@ const AddSponsor: React.FC = () => {
   const [fill, setFill] = useState(false);
   const { id } = useParams();
   const dispatch = useDispatch();
+=======
+
+const AddSponsor: React.FC = () => {
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+>>>>>>> TienMerge
 
   const openModal = () => {
     setModalIsOpen(true);
@@ -47,6 +57,7 @@ const AddSponsor: React.FC = () => {
     setModalIsOpen(false);
   };
 
+<<<<<<< HEAD
   const { data: sponsors } = useGetListSponsorPersonQuery();
   const [sponsorData, setSponsorData] = useState({
     sponsorId: selectedSponsorId,
@@ -106,6 +117,8 @@ const AddSponsor: React.FC = () => {
   }
 
   // console.log(sponsors);
+=======
+>>>>>>> TienMerge
   return (
     <>
       <Button onClick={openModal}>Add Sponsor</Button>
@@ -131,6 +144,7 @@ const AddSponsor: React.FC = () => {
           },
         }}
       >
+<<<<<<< HEAD
         <form onSubmit={handleSubmit}>
 
           <h2 className="mb-4 text-2xl font-bold text-center">
@@ -180,6 +194,52 @@ const AddSponsor: React.FC = () => {
         </form>
 
       </Modal >
+=======
+        <h2 className="mb-4 text-2xl font-bold text-center">
+        Add Sponsor      </h2>
+        <p className="mb-8 text-center text-gray-600">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+          varius enim in eros.
+        </p>
+        <div className="mb-4">
+          <label
+            className="block mb-2 text-sm font-medium text-gray-700"
+            htmlFor="time"
+          >
+            Choose Sponsor
+          </label>
+          <Select>
+            <SelectTrigger>
+              <SelectValue placeholder="Select one..." />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="first-choice">Online</SelectItem>
+              <SelectItem value="second-choice">Offline</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="mb-4">
+        <Label htmlFor="profit">Add % Profit</Label>
+
+        <Input
+          type="text"
+          id="profit"
+          value=""
+          // onChange={(e) => setEmail(e.target.value)}
+        />
+      </div>
+        <div className="flex justify-between mt-4">
+          <Button variant="secondary">Back</Button>
+
+          <Button
+
+          // disabled={currentStep === steps.length - 1}
+          >
+            Next
+          </Button>
+        </div>
+      </Modal>
+>>>>>>> TienMerge
     </>
   );
 };

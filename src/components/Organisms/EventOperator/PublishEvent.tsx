@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import {BiTrash, BiAddToQueue, BiShow } from "react-icons/bi";
 import { TableTemplate } from "../Dashboard/TableTemplate";
 import { Button} from "@relume_io/relume-ui";
@@ -37,11 +38,40 @@ export const PublishEvent = () => {
       }
     };
   // const 
+=======
+import { BiEdit, BiShow, BiTrash, BiAddToQueue } from "react-icons/bi";
+// import { ApplicationShell4 } from "./AppModel";
+// import { TableTemplate } from "./Table1";
+// import AddFeedbackButton from "./AddFeedbackButton";
+import { SponsorTable } from "../../../Types/sponsor";
+import { TableTemplate } from "../Dashboard/TableTemplate";
+import AddFeedbackButton from "../Dashboard/AddFeedbackButton";
+import { FeedbackTable } from "../../../Types/feedback";
+import { Button, Input } from "@relume_io/relume-ui";
+import { EventTable } from "../../../Types/event.type";
+import { useGetListEventQuery } from "../../../Features/EventManage/eventApi";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../Store/Store";
+import { useState } from "react";
+import UpdateEvent from "../../Pages/Dashboard/EventOperator/UpdateEvent";
+// import { selectUnpublishEvents } from "../../../Features/EventManage/eventSelector";
+// import { selectPublishEvents } from "../../../Features/EventManage/eventSelector";
+
+export const PublishEvent = () => {
+  const tableHeaders = ["No", "Name", "Date", "Detail","Edit", "Delete", "Publish"];
+
+  const { data: Events, isLoading, error } = useGetListEventQuery();
+
+  const publishEvents =
+    Events?.filter((event) => event.stateEvent.name === "PUBLISH") || [];
+>>>>>>> TienMerge
   const tableRows: EventTable[] = publishEvents?.map((item, index) => ({
     No: index + 1, // Số thứ tự bắt đầu từ 1
     Name: item.name, // Tên sự kiện
     Date: new Date(item.timestart).toLocaleDateString(), // Ngày diễn ra sự kiện, chuyển đổi sang định dạng chuỗi
     Detail: (
+<<<<<<< HEAD
       <Link to={`/event/dashboard/analytics/${item.id}`}>
         <Button size="icon" variant="link">
           <BiShow />
@@ -55,6 +85,32 @@ export const PublishEvent = () => {
       </Button>
     ), // Nút xóa
    
+=======
+      <Link to={`/eventoperator/dashboard/event/${item.id}`}>
+        <Button size="icon" variant="link">
+          <BiAddToQueue />
+        </Button>
+      </Link>
+    ), // Nút chi tiết
+    Edit: (
+      <Link to={`/eventoperator/dashboard/event/update/${item.id}`}>
+        <Button size="icon" variant="link">
+          <BiEdit />
+        </Button>
+    </Link>
+
+    ),
+    Delete: (
+      <Button size="icon" variant="link">
+        <BiTrash />
+      </Button>
+    ), // Nút xóa
+    Publish: (
+      <Button size="icon" variant="link">
+        <BiShow />
+      </Button>
+    ), // Nút xuất bản
+>>>>>>> TienMerge
   }));
 
   const tableHeaderClasses = [
@@ -72,8 +128,20 @@ export const PublishEvent = () => {
         "Vui lòng đợi trong giây lát"
       ) : (
         <TableTemplate
+<<<<<<< HEAD
           headerTitle="Những sự kiện đã diễn ra"
           headerDescription="Danh sách những sự kiện đã diễn ra"
+=======
+          headerTitle="Publish Event"
+          headerDescription="List of unpublish event"
+          // buttons={[
+          //   {
+          //     children: <AddFeedbackButton />,
+
+          //     size: "sm",
+          //   },
+          // ]}
+>>>>>>> TienMerge
           tableHeaders={tableHeaders}
           tableRows={tableRows} // Truyền dữ liệu mới cho tableRows
           // paginationItems={paginationItems}

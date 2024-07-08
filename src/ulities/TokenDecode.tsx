@@ -6,11 +6,14 @@ interface JwtPayload {
   role?: string;
 }
 
+<<<<<<< HEAD
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { logout } from "../features/auth/authSlice"; // Adjust this import based on your auth slice
 
 
+=======
+>>>>>>> TienMerge
 const TokenDecode: React.FC = () => {
   const [userId, setUserId] = useState<string | null>(null);
   const [userRole, setUserRole] = useState<string | null>(null);

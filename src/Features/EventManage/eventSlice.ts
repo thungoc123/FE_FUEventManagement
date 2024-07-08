@@ -24,6 +24,7 @@ const eventSlice = createSlice({
     setEvents(state, action: PayloadAction<EOevent[]>) {
       state.events = action.payload;
     },
+<<<<<<< HEAD
     removeCheckingStaff: (state, action) => {
       const { eventId, checkingStaffId } = action.payload;
       const event = state.events.find((event) => event.id === eventId);
@@ -37,5 +38,12 @@ const eventSlice = createSlice({
 });
 
 export const { setEvents, removeCheckingStaff } = eventSlice.actions;
+=======
+    // Các action khác (nếu cần) có thể được thêm vào đây
+  },
+});
+
+export const { setEvents } = eventSlice.actions;
+>>>>>>> TienMerge
 
 export default eventSlice.reducer;

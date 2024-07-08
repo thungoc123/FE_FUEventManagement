@@ -20,6 +20,7 @@ export interface SponsorProgramWithEvent {
     description: string,
     state: string,
     account: account[],
+<<<<<<< HEAD
     sponsorProgramEvents: sponsorProgramEvents[]
 }
 
@@ -27,6 +28,11 @@ export interface sponsorProgramEvents {
     eventId: number,
     sponsorProgramId: number,
 }
+=======
+    events: EOevent[]
+}
+
+>>>>>>> TienMerge
 // [
 //     {
 //       "id": 0,

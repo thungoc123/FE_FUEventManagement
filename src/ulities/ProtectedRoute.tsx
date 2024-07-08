@@ -5,6 +5,7 @@ import { RootState } from '../Store/Store';
 import {jwtDecode} from 'jwt-decode';
 
 interface JwtPayload {
+<<<<<<< HEAD
   accountId: string,
   role: string,
   sub: number,
@@ -12,11 +13,18 @@ interface JwtPayload {
 }
 
 
+=======
+  sub: string;
+  role?: string;
+}
+
+>>>>>>> TienMerge
 interface RequireAuthProps {
   children: JSX.Element;
   role: string;
 }
 
+<<<<<<< HEAD
 
 const isTokenExpired = (token : string) => {
   let decoded = jwtDecode<JwtPayload>(token);
@@ -45,6 +53,14 @@ const RequireAuth: React.FC<RequireAuthProps> = ({ children, role }) => {
   if (roleName(token) === role && !isTokenExpired(token)) {
     return children;
   } else{
+=======
+const RequireAuth: React.FC<RequireAuthProps> = ({ children, role }) => {
+  const roleName = useSelector((state: RootState) => state.auth.role);
+
+  if (roleName === role) {
+    return children;
+  } else {
+>>>>>>> TienMerge
     return <Navigate to="/login" />;
   }
 };

@@ -1,6 +1,7 @@
 import React from "react";
 
 export interface AccountTable {
+<<<<<<< HEAD
     No: number,
     Name: string,
     Email:  string,
@@ -8,6 +9,14 @@ export interface AccountTable {
     Password: string,
     State: string,
     Edit: React.ReactNode,
+=======
+    Name: string, 
+    Email: string, 
+    Role: string,
+    Password: string, 
+    Edit: React.ReactNode,
+    Delete: React.ReactNode    
+>>>>>>> TienMerge
 }
 
 export interface account {
@@ -15,7 +24,10 @@ export interface account {
     role: role,
     email: string,
     password: string,
+<<<<<<< HEAD
     enabled: boolean,
+=======
+>>>>>>> TienMerge
     feedbacks: [] | null,
     visitors: [] | null,
     eventOperators: [] | null,
@@ -28,6 +40,7 @@ export interface role {
     id: number,
     roleName: string,
     accounts: [] | null
+<<<<<<< HEAD
 }
 
 export interface visitor {
@@ -42,4 +55,6 @@ export interface visitorTable {
     Attendance: React.ReactNode,
     SendFeedback: React.ReactNode,
     // Delete: React.ReactNode,
+=======
+>>>>>>> TienMerge
 }

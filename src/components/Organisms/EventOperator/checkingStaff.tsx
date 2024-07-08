@@ -29,6 +29,7 @@ import {
 import { eventCheckingStaff } from "../../../Types/eo.type";
 import React, { useState } from "react";
 import { RootState } from "../../../Store/Store";
+<<<<<<< HEAD
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useAddCheckingStaffMutation, useDeleleCheckingStaffMutation, useGetListEventQuery } from "../../../Features/EventManage/eventApi";
@@ -37,12 +38,19 @@ import { Alert } from "../../Molecules/Alert";
 import { removeCheckingStaff } from "../../../Features/EventManage/eventSlice";
 import { setTab } from "../../../Features/Utils/tabSlice";
 // import { Alert } from "../../../Molecules/Alert";
+=======
+import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useAddCheckingStaffMutation } from "../../../Features/EventManage/eventApi";
+import { addNotification } from "../../../Features/Utils/notificationsSlice";
+>>>>>>> TienMerge
 
 type Props = {
   Staff: eventCheckingStaff[];
 };
 export const AddCheckStaffTable: React.FC<Props> = (props) => {
   const { id } = useParams();
+<<<<<<< HEAD
   // const Events = useSelector((state: RootState) => state.events.events);
   const { data, error, isLoading, isFetching } = useGetListEventQuery();
   const [deleleCheckingStaff] = useDeleleCheckingStaffMutation()
@@ -80,6 +88,23 @@ export const AddCheckStaffTable: React.FC<Props> = (props) => {
     // Date: "01/01/2023",
     Delete: (
       <Button size="icon" variant="link"  onClick={(e) => handleDelete(e,item.id)}>
+=======
+  const Events = useSelector((state: RootState) => state.events.events);
+
+  const Staff = Events?.find(event => event.id === parseInt(id))?.eventCheckingStaffs || []
+  const tableHeaders = ["No", "Email", "Password", "Delete"];
+  const dispatch = useDispatch();
+
+  const navigate = useNavigate();
+  const tableRows: StaffTable[] = Staff.map((item, index) => ({
+    No: index +1,
+    Email: item.account.email,
+    Password: item.account.password,
+    // Date: "01/01/2023",
+    Delete: ( 
+      <Button size="icon" variant="link">
+        {" "}
+>>>>>>> TienMerge
         <BiTrash />
       </Button>
     ),
@@ -90,15 +115,22 @@ export const AddCheckStaffTable: React.FC<Props> = (props) => {
     "w-[200px] pr-4 xxl:w-[250px]",
     "w-[200px] pr-4 xxl:w-[250px]",
   ];
+<<<<<<< HEAD
 
   const accountId = useSelector((state: RootState) => state.auth.accountId);
   const [addCheckingStaff, {creating: isCreating}] =
     useAddCheckingStaffMutation();
   const [email, setEmail] = useState("");
+=======
+  const accountId = useSelector((state: RootState) => state.auth.accountId);
+  const [addCheckingStaff, { isLoading, isSuccess, isError, error }] = useAddCheckingStaffMutation();
+  const [email, setEmail] = useState("")
+>>>>>>> TienMerge
   const checkingStaff = {
     email: email,
     accountId: accountId,
     information: null,
+<<<<<<< HEAD
     eventId: id,
   };
   const handleSubmit = async (e) => {
@@ -146,6 +178,36 @@ export const AddCheckStaffTable: React.FC<Props> = (props) => {
     <>
     {Staff.length === 0 ? <div className="text-center">No checking staff</div> : (
       <>
+=======
+    eventId: id
+  }
+  const handleSubmit = async(e) => {
+    e.preventDefault();
+    // console.log(JSON.stringify(checkingStaff))
+    try {
+      await addCheckingStaff({id: id, newStaff: checkingStaff}).unwrap();
+      dispatch(addNotification({
+        id: new Date().getTime(), // Sử dụng timestamp làm ID
+        message: 'Create staff successfully!',
+        type: 'success',
+        timestamp: Date.now(), // Thời gian hiện tại
+      }));
+      navigate('/eventoperator/dashboard/event/')
+      // alert('Event created successfully!');
+    } catch (err) {
+      dispatch(addNotification({
+        id: new Date().getTime(), // Sử dụng timestamp làm ID
+        message: 'Create staff unsuccessfully!',
+        type: 'error',
+        timestamp: Date.now(), // Thời gian hiện tại
+      }));
+      console.error('Failed to create the event:', err);
+    }
+  }
+  const paginationItems = [1, 2, 3, 4];
+  return (
+    <>
+>>>>>>> TienMerge
       <TableTemplate
         headerTitle="Checking Staff"
         headerDescription="List of Checking Staff"
@@ -161,10 +223,14 @@ export const AddCheckStaffTable: React.FC<Props> = (props) => {
         paginationItems={paginationItems}
         tableHeadersClasses={tableHeaderClasses}
       />
+<<<<<<< HEAD
       
       </>
     )}
     <Dialog>
+=======
+      <Dialog>
+>>>>>>> TienMerge
         <DialogTrigger asChild>
           <Button>New</Button>
         </DialogTrigger>
@@ -176,6 +242,7 @@ export const AddCheckStaffTable: React.FC<Props> = (props) => {
               <DialogDescription>Modal Description</DialogDescription>
             </DialogHeader>
             <form onSubmit={handleSubmit}>
+<<<<<<< HEAD
               <div className="mb-4">
                 <label
                   // className="block mb-2 text-sm font-medium text-gray-700"
@@ -197,6 +264,29 @@ export const AddCheckStaffTable: React.FC<Props> = (props) => {
               <DialogFooter className="mt-4">
                 <Button size="sm">{isCreating ? "Creating" : "Done"}</Button>
               </DialogFooter>
+=======
+            <div className="mb-4">
+              <label
+                // className="block mb-2 text-sm font-medium text-gray-700"
+                htmlFor="objectives"
+              >
+                Enter your checking staff email *
+              </label>
+              {/* <DatePicker /> */}
+
+              <Input
+                className="h-1/2"
+                id="search"
+                placeholder="Search"
+                icon={<BiEnvelope className="size-6" />}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+            <DialogFooter className="mt-4">
+          
+              <Button size="sm">Done</Button>
+            </DialogFooter>
+>>>>>>> TienMerge
             </form>
           </DialogContent>
         </DialogPortal>

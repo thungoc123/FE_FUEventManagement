@@ -3,12 +3,20 @@ import { Label, Input, Button } from "@relume_io/relume-ui";
 import { uploadImage } from "../../../ulities/s3Image";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+<<<<<<< HEAD
 import { useCreateSponsorMutation } from "../../../Features/Sponsor/sponsorApi";
+=======
+// import { useCreateSponsorMutation } from "../../../Features/Sponsor/sponsorApi";
+>>>>>>> TienMerge
 import { useDispatch, useSelector } from "react-redux";
 import { addNotification } from "../../../Features/Utils/notificationsSlice";
 import { RootState } from "../../../Store/Store";
 import { useNavigate } from "react-router-dom";
+<<<<<<< HEAD
 import { accountID } from "../../../ulities/ProtectedRoute";
+=======
+import { useCreateSponsorMutation } from "../../../Features/Sponsor/sponsorDashboardApi";
+>>>>>>> TienMerge
 export const CreateProgram = () => {
   const [name, setName] = useState("");
   const [website, setWebsite] = useState("");
@@ -44,7 +52,11 @@ export const CreateProgram = () => {
       alert("Error uploading file");
     }
   };
+<<<<<<< HEAD
   const accountId = accountID(sessionStorage.getItem('token'));
+=======
+  const accountId = useSelector((state: RootState) => state.auth.accountId);
+>>>>>>> TienMerge
 
   const programData = {
     
@@ -59,7 +71,11 @@ export const CreateProgram = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
+<<<<<<< HEAD
     console.log(JSON.stringify(programData));
+=======
+    console.log(programData);
+>>>>>>> TienMerge
     try {
       await createSponsor(programData).unwrap();
       dispatch(addNotification({

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { RootState } from '../../Store/Store';
 import { useSelector } from 'react-redux';
@@ -64,9 +65,25 @@ export const sponsorApi = createApi({
         method: 'PUT',
         body: updateSponsorProgram,
       }),
+=======
+
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { Sponsor } from '../../Types/event.type';
+
+export const sponsorApi = createApi({
+  reducerPath: 'sponsorApi',
+  baseQuery: fetchBaseQuery({ baseUrl: 'https://eventmanagementfu.azurewebsites.net/' }), 
+  endpoints: (builder) => ({
+    getSponsor: builder.query<Sponsor[], void>({
+      query: () => `api-sponsor`,
+>>>>>>> TienMerge
     }),
   }),
 });
 
+<<<<<<< HEAD
 export const { useUpdateSponsorProgramMutation ,useDeleteEventFromSponsorProgramMutation,useDeleteSponsorProgramMutation ,useAddEventToSponsorProgramMutation , useGetEventByAccountQuery ,useGetListSponsorPersonQuery,useCreateSponsorMutation, useGetListSponsorProgramQuery } = sponsorApi;
 
+=======
+export const { useGetSponsorQuery } = sponsorApi;
+>>>>>>> TienMerge

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // import { Footer1 } from "../Organisms/Guest/Footer";
 // import { Header64 } from "../Organisms/Guest/HeaderNormal";
 // import { NavbarLogout } from "../Organisms/Guest/NavbarLogout";
@@ -6,12 +7,23 @@
 import { Footer1 } from "../../Organisms/Guest/Footer";
 import { Header64 } from "../../Organisms/Guest/HeaderNormal";
 import { NavbarLogout } from "../../Organisms/Guest/NavbarLogout";
+=======
+
+
+import { Footer1 } from "../../Organisms/Guest/Footer";
+import { Header64 } from "../../Organisms/Guest/HeaderNormal";
+import { Navbar2 } from "../../Organisms/Guest/Navbar";
+>>>>>>> TienMerge
 import { Faq7 } from "../../Organisms/Guest/Term";
 
 function ServiceTerm() {
     return (
       <>
+<<<<<<< HEAD
         <NavbarLogout/>
+=======
+        <Navbar2/>
+>>>>>>> TienMerge
         <Header64/>
         <Faq7/>
         <Footer1/>

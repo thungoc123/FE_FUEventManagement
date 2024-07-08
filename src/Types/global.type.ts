@@ -9,7 +9,11 @@ export interface Search {
 export interface State {
     name: string, 
     url: string,
+<<<<<<< HEAD
     number?: number,
+=======
+    number: number,
+>>>>>>> TienMerge
     icon: React.ReactNode
 }
 export interface Time {
