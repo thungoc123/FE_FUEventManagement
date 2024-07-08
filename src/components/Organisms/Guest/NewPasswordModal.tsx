@@ -1,27 +1,15 @@
-// components/NewPasswordModal.tsx
 import React, { useState, FormEvent } from "react";
-import {
-  Dialog,
-  DialogPortal,
-  DialogOverlay,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-  Label,
-  Input,
-  Button,
-} from "@relume_io/relume-ui";
+import { Dialog, DialogPortal, DialogOverlay, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, Label, Input, Button } from "@relume_io/relume-ui";
 import { useUpdatePasswordMutation } from "../../../Features/Password/resetPasswordApi";
 
 interface NewPasswordModalProps {
   isOpen: boolean;
   onClose: () => void;
   token: string;
+  email: string; // Add email prop
 }
 
-const NewPasswordModal: React.FC<NewPasswordModalProps> = ({ isOpen, onClose, token }) => {
+const NewPasswordModal: React.FC<NewPasswordModalProps> = ({ isOpen, onClose, token,  }) => {
   const [newPasswordData, setNewPasswordData] = useState({
     newPassword: "",
     confirmPassword: "",
@@ -35,7 +23,7 @@ const NewPasswordModal: React.FC<NewPasswordModalProps> = ({ isOpen, onClose, to
       return;
     }
     console.log("Setting new password", newPasswordData);
-
+  
     try {
       const response = await updatePassword({
         token,
@@ -43,8 +31,14 @@ const NewPasswordModal: React.FC<NewPasswordModalProps> = ({ isOpen, onClose, to
       }).unwrap();
       console.log("Password reset successful:", response);
       onClose();
-    } catch (error) {
-      console.error("Failed to set new password:", error);
+    } catch (error: any) {
+      if (error.status === 403) {
+        console.error("Failed to set new password: Access Forbidden. Please check if the token is valid and you have the necessary permissions.");
+      } else if (error.data) {
+        console.error("Failed to set new password:", error.data);
+      } else {
+        console.error("Failed to set new password:", error);
+      }
     }
   };
 

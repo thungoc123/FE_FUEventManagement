@@ -156,14 +156,17 @@ function App() {
             path="/sponsor-program"
             element={
               <RequireAuth role="ROLE_SPONSOR">
-                <SponsorProgram />
+                <UpdateProgram />
               </RequireAuth>
+=======
+            path="/sponsor-program"
+            element={
+                <SponsorProgram />
             }
           />
           <Route
             path="/sponsor-detail/:id"
             element={
-              <RequireAuth role="ROLE_SPONSOR">
                 <SponsorProgramDetail />
               </RequireAuth>
             }

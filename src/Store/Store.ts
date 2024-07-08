@@ -61,7 +61,8 @@ export const store = configureStore({
       createorderApi.middleware,
       sponsorDashboardApi.middleware,
       passwordApi.middleware,
-      paymentApi.middleware
+      paymentApi.middleware,
+      resetpasswordApi.middleware // Add resetpasswordApi middleware
     ),
 });
 
