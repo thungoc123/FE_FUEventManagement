@@ -155,17 +155,13 @@ function App() {
 
             path="/sponsor-program"
             element={
-              <RequireAuth role="ROLE_SPONSOR">
                 <SponsorProgram />
-              </RequireAuth>
             }
           />
           <Route
             path="/sponsor-detail/:id"
             element={
-              <RequireAuth role="ROLE_SPONSOR">
                 <SponsorProgramDetail />
-              </RequireAuth>
             }
           />
           {/* event operator  */}

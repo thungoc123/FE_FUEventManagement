@@ -8,7 +8,7 @@ import notificationsReducer from '../Features/Utils/notificationsSlice';
 import { sponsorApi } from '../Features/Sponsor/sponsorApi';
 import eventReducer from '../Features/EventManage/eventSlice'; // Import eventReducer
 import tabReducer from '../Features/Utils/tabSlice';
-import {feedbackApi} from '../Features/FeedbackManage/feedbackApi'
+import { feedbackApi } from '../Features/FeedbackManage/feedbackApi'
 import { adminApi } from '../Features/Admin/AdminApi';
 import HeaderDisplayReducer from '../Features/Utils/HeaderDisplaySlice';
 import { visitorApi } from '../Features/Visitor/visitorApi';
@@ -19,50 +19,56 @@ import { passwordApi } from '../Features/Password/passwordApi';
 import { sponsorDashboardApi } from '../Features/Sponsor/sponsorDashboardApi';
 import { ticketApi } from '../Features/Order/ticketApi';
 import { paymentApi } from '../Features/Payment/paymentApi';
+import resetpasswordApi from '../Features/Password/resetPasswordApi';
 
 export const store = configureStore({
   reducer: {
+    // [ticketApi.reducerPath]: ticketApi.reducer,
+    [paymentApi.reducerPath]: paymentApi.reducer,
+    [sponsorApi.reducerPath]: sponsorApi.reducer,
+    [eventDisplayApi.reducerPath]: eventDisplayApi.reducer,
+    [sponsor_programApi.reducerPath]: sponsor_programApi.reducer,
+    [createorderApi.reducerPath]: createorderApi.reducer,
+    [passwordApi.reducerPath]: passwordApi.reducer,
     [authApi.reducerPath]: authApi.reducer,
     // auth: persistedAuthReducer,
-    [paymentApi.reducerPath]: paymentApi.reducer,
-    [eventDisplayApi.reducerPath]: eventDisplayApi.reducer,
-    [createorderApi.reducerPath]: createorderApi.reducer,
-    [sponsor_programApi.reducerPath]: sponsor_programApi.reducer,
-    [sponsorDashboardApi.reducerPath]: sponsorDashboardApi.reducer,
     [eventApi.reducerPath]: eventApi.reducer,
     notifications: notificationsReducer,
-    [sponsorApi.reducerPath]: sponsorApi.reducer,
     auth: authReducer,
     events: eventReducer,
     tab: tabReducer, // Thêm reducer của tab vào store
-    [feedbackApi.reducerPath] : feedbackApi.reducer,
-    [visitorApi.reducerPath] : visitorApi.reducer,
+    [feedbackApi.reducerPath]: feedbackApi.reducer,
+    [visitorApi.reducerPath]: visitorApi.reducer,
 
     [adminApi.reducerPath]: adminApi.reducer,
     headerDisplay: HeaderDisplayReducer,
-// src/app/store.ts
+    // src/app/store.ts
+
+
+    [resetpasswordApi.reducerPath]: resetpasswordApi.reducer, // Add resetpasswordApi reducer
 
 
   },
-
-
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
     }).concat(
       visitorApi.middleware,
       authApi.middleware,
-      adminApi.middleware ,
-      eventApi.middleware, 
-      sponsorApi.middleware, 
+      adminApi.middleware,
+      eventApi.middleware,
+      sponsorApi.middleware,
       feedbackApi.middleware,
       eventDisplayApi.middleware,
       sponsor_programApi.middleware,
       createorderApi.middleware,
       sponsorDashboardApi.middleware,
       passwordApi.middleware,
-      paymentApi.middleware
+      paymentApi.middleware,
+      resetpasswordApi.middleware // Add resetpasswordApi middleware
     ),
+
+
 });
 
 export type RootState = ReturnType<typeof store.getState>;

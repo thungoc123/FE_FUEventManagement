@@ -396,10 +396,10 @@ export const Navbar2 = (props: Navbar2Props) => {
       </Dialog>
 
       {/* New Password Modal */}
-      <NewPasswordModal
+      {/* <NewPasswordModal
         isOpen={isNewPasswordOpen}
-        onClose={handleBackToLoginClick}
-      />
+        onClose={handleBackToLoginClick} */}
+      
 
       {/* Role Choosing with DialogContent  */}
       <RoleChoosingwithDialog
