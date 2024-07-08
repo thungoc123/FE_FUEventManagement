@@ -1,15 +1,25 @@
-import { Navbar2 } from "../Organisms/Guest/Navbar";
-import { Footer1 } from "../Organisms/Guest/Footer";
-import { Contact1 } from "../Organisms/Guest/Contact";
-import EventDetails from "../Organisms/Guest/EventDetail";
-import { Gallery3 } from "../Organisms/Guest/EventGallery";
-import { Testimonial1 } from "../Organisms/Guest/Testimonial";
-import Schedule from "../Organisms/Guest/Schedule";
-import { Header80 } from "../Molecules/EventHeader";
-import { Cta7 } from "../Molecules/CTA";
-import { useGetEventDetailsQuery } from "../../Features/Event/eventApi";
+// import { Navbar2 } from "../Organisms/Guest/Navbar";
+// import { Footer1 } from "../Organisms/Guest/Footer";
+// import { Contact1 } from "../Organisms/Guest/Contact";
+// import EventDetails from "../Organisms/Guest/EventDetail";
+// import { Gallery3 } from "../Organisms/Guest/EventGallery";
+// import { Testimonial1 } from "../Organisms/Guest/Testimonial";
+// import Schedule from "../Organisms/Guest/Schedule";
+// import { Header80 } from "../Molecules/EventHeader";
+// import { Cta7 } from "../Molecules/CTA";
+// import { useGetEventDetailsQuery } from "../../Features/Event/eventApi";
 import { useParams } from "react-router-dom";
-import { NavbarLogout } from "../Organisms/Guest/NavbarLogout";
+import { useGetEventDetailsQuery } from "../../../Features/Event/eventApi";
+import { NavbarLogout } from "../../Organisms/Guest/NavbarLogout";
+import { Header80 } from "../../Molecules/EventHeader";
+import EventDetails from "../../Organisms/Guest/EventDetail";
+import Schedule from "../../Organisms/Guest/Schedule";
+import Gallery3 from "../../Organisms/Guest/EventGallery";
+import { Cta7 } from "../../Molecules/CTA";
+import { Contact1 } from "../../Organisms/Guest/Contact";
+import { Testimonial1 } from "../../Organisms/Guest/Testimonial";
+import { Footer1 } from "../../Organisms/Guest/Footer";
+// import { NavbarLogout } from "../Organisms/Guest/NavbarLogout";
 
 function EventDetail() {
   const { id } = useParams<{ id: string }>();

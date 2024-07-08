@@ -2,7 +2,6 @@ import { useNavigate } from "react-router-dom"; // Import useNavigate
 import { useState } from "react";
 import { Button, Input, Label } from "@relume_io/relume-ui";
 import type { ImgProps, ButtonProps } from "@relume_io/relume-ui";
-import VAuthAPI from "../../config/axios/VAuthAPI";
 
 type Props = {
   logo: ImgProps;

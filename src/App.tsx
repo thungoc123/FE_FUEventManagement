@@ -17,7 +17,7 @@ import { OrderHistory } from "./components/Pages/Visitor/OrderHistory";
 import CreateEvent from "./components/Pages/Dashboard/EventOperator/CreateEvent";
 import ServiceTerm from "./components/Pages/Guest/AboutPage";
 import { Payment } from "./components/Pages/Visitor/Payment";
-import HomePage from "./components/Pages/Guest/HomePage";
+// import HomePage from "./components/Pages/Guest/HomePage";
 import EventDetail from "./components/Pages/Guest/EventDetail";
 import { ManageFeedbackDetail } from "./components/Pages/Dashboard/EventOperator/ManageFeedbackDetail";
 import { ManageFeedback } from "./components/Pages/Dashboard/EventOperator/ManageFeedback";
@@ -267,16 +267,16 @@ function App() {
               </RequireAuth >
             }
           />
-  < Route
-    path="/eventoperator/dashboard/FeedbackQuestionDetail/:id"
-    element={
-      < RequireAuth role="ROLE_EO" >
-        <QuestionManage />
-      </RequireAuth >
-    }
-  />
+          < Route
+            path="/eventoperator/dashboard/FeedbackQuestionDetail/:id"
+            element={
+              < RequireAuth role="ROLE_EO" >
+                <QuestionManage />
+              </RequireAuth >
+            }
+          />
 
-  {/* Visitor  */ }
+          {/* Visitor  */}
           <Route
             path="/payment"
             element={
@@ -294,7 +294,7 @@ function App() {
             }
           />
 
-  {/* Admin  */ }
+          {/* Admin  */}
           <Route
             path="/admin"
             element={
@@ -303,23 +303,23 @@ function App() {
               </RequireAuth >
             }
           />
-  < Route
-path = "/admin/visitor"
-element = {
-              < RequireAuth role = "ROLE_ADMIN" >
-  <Admin Role="ROLE_VISITOR" />
+          < Route
+            path="/admin/visitor"
+            element={
+              < RequireAuth role="ROLE_ADMIN" >
+                <Admin Role="ROLE_VISITOR" />
               </RequireAuth >
             }
           />
-  < Route
-path = "/admin/eventoperator"
-element = {
-              < RequireAuth role = "ROLE_ADMIN" >
-  <Admin Role="ROLE_EO" />
+          < Route
+            path="/admin/eventoperator"
+            element={
+              < RequireAuth role="ROLE_ADMIN" >
+                <Admin Role="ROLE_EO" />
               </RequireAuth >
             }
           />
-{/* Checking Staff  */ }
+          {/* Checking Staff  */}
 
           <Route
             path="/admin/checkingstaff"
@@ -332,8 +332,8 @@ element = {
           />
           <Route path="/sponsor" element={<SponsorSignUp />} />
           <Route path="/visitor" element={<VisitorSignUp />} />
-{/* <Route path="/survey" element={<SurveyForm />} /> */ }
-{/* <Route path="/question" element={<QuestionForm />} /> */ }
+          {/* <Route path="/survey" element={<SurveyForm />} /> */}
+          {/* <Route path="/question" element={<QuestionForm />} /> */}
           <Route path="/create-event" element={<CreateEvent />} />
           <Route path="/service-term" element={<ServiceTerm />} />
           <Route path="/test" element={<TokenDecode />} />
