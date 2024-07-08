@@ -12,7 +12,7 @@ export const eventDisplayApi = createApi({
 
     // PUBLISHED
     getPublishedEvents: builder.query<Event[], void>({
-      query: () => `api-events/state/1`,
+      query: () => `api-events/state/2`,
     }),
 
     // HAPPENED EVENTS

@@ -1,5 +1,3 @@
-// src/app/store.ts
-
 import { configureStore } from '@reduxjs/toolkit';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
@@ -16,6 +14,7 @@ import { sponsorDashboardApi } from '../Features/Sponsor/sponsorDashboardApi';
 import { eventApi } from '../Features/EventManage/eventApi';
 import { ticketApi } from '../Features/Order/ticketApi';
 import { paymentApi } from '../Features/Payment/paymentApi';
+import resetpasswordApi from '../Features/Password/resetPasswordApi';
 
 const authPersistConfig = {
   key: 'auth',
@@ -28,7 +27,6 @@ const persistedAuthReducer = persistReducer(authPersistConfig, authReducer);
 export const store = configureStore({
   reducer: {
     // [ticketApi.reducerPath]: ticketApi.reducer,
-  
     [paymentApi.reducerPath]: paymentApi.reducer,
     [sponsorApi.reducerPath]: sponsorApi.reducer,
     [eventDisplayApi.reducerPath]: eventDisplayApi.reducer,
@@ -41,6 +39,7 @@ export const store = configureStore({
     notifications: notificationsReducer,
     [sponsorDashboardApi.reducerPath]: sponsorDashboardApi.reducer,
     events: eventReducer,
+    [resetpasswordApi.reducerPath]: resetpasswordApi.reducer, // Add resetpasswordApi reducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -55,7 +54,8 @@ export const store = configureStore({
       sponsorDashboardApi.middleware,
       eventApi.middleware,
       passwordApi.middleware,
-      paymentApi.middleware
+      paymentApi.middleware,
+      resetpasswordApi.middleware // Add resetpasswordApi middleware
     ),
 });
 
