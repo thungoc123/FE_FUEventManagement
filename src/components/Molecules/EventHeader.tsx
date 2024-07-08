@@ -1,10 +1,9 @@
-"use client";
-
 import { Button } from "@relume_io/relume-ui";
 import type { ButtonProps } from "@relume_io/relume-ui";
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 import { useRef } from "react";
 import clsx from "clsx";
+import { useNavigate } from "react-router-dom";
 
 type ImageProps = {
   src: string;
@@ -14,14 +13,13 @@ type ImageProps = {
 type Props = {
   heading: string;
   description: string;
-  buttons: ButtonProps[];
-  images: ImageProps[];
+  eventImages: ImageProps[];
 };
 
 export type Header80Props = React.ComponentPropsWithoutRef<"section"> & Partial<Props>;
 
 export const Header80 = (props: Header80Props) => {
-  const { heading, description, buttons, images } = {
+  const { heading, description, eventImages } = {
     ...Header80Defaults,
     ...props,
   } as Props;
@@ -33,13 +31,23 @@ export const Header80 = (props: Header80Props) => {
   });
   const yFirst = useTransform(animatedScrollYProgress, [0, 1], ["0vh", "-87.5vh"]);
   const ySecond = useTransform(animatedScrollYProgress, [0, 1], ["0vh", "-39.6vh"]);
+  const navigator = useNavigate();
+  const buyTicketButton = () => {
+    navigator('/payment');
+  };
 
   return (
     <section ref={transformRef} className="relative h-[150vh] px-[5%] md:h-[300vh]">
       <div className="sticky top-0 h-[100vh] overflow-hidden">
+        <div className="container relative flex h-full max-w-lg items-center pb-24 pt-16 text-center md:pt-24 lg:py-28 z-30">
+          <div>
+            <h1 className="mb-5 text-6xl font-bold md:mb-6 md:text-9xl lg:text-10xl">{heading}</h1>
+            <p className="relative z-20 md:text-md">{description}</p>
+          </div>
+        </div>
         <div className="absolute bottom-0 left-0 right-auto top-0 z-10">
           <motion.div className="flex flex-col gap-[26vw] pt-[70vh]" style={{ y: yFirst }}>
-            {images.slice(0, 4).map((image, index) => (
+            {eventImages.slice(0, 4).map((image, index) => (
               <div
                 key={index}
                 className={clsx("relative h-[35vw] pt-[120%] sm:h-auto", {
@@ -64,7 +72,7 @@ export const Header80 = (props: Header80Props) => {
           style={{ y: ySecond }}
         >
           <div className="flex flex-col gap-[26vw] pt-[70vh]">
-            {images.slice(4).map((image, index) => (
+            {eventImages.slice(4).map((image, index) => (
               <div
                 key={index}
                 className={clsx("relative h-[35vw] pt-[120%] opacity-75 sm:h-auto", {
@@ -82,25 +90,6 @@ export const Header80 = (props: Header80Props) => {
             ))}
           </div>
         </motion.div>
-        <div className="container relative flex h-full max-w-lg items-center pb-24 pt-16 text-center md:pt-24 lg:py-28">
-          <div>
-            <h1 className="mb-5 text-6xl font-bold md:mb-6 md:text-9xl lg:text-10xl">{heading}</h1>
-            <p className="relative z-20 md:text-md ">{description}</p>
-            <div className="relative z-20 mt-6 flex items-center justify-center gap-x-4 md:mt-8">
-              {buttons.map((button, index) => (
-                <Button
-                  key={index}
-                  variant={button.variant}
-                  size={button.size}
-                  iconRight={button.iconRight}
-                  iconLeft={button.iconLeft}
-                >
-                  {button.title}
-                </Button>
-              ))}
-            </div>
-          </div>
-        </div>
         <div className="absolute inset-0 -z-10 mt-[35rem] md:mt-[100vh]" />
       </div>
     </section>
@@ -108,42 +97,12 @@ export const Header80 = (props: Header80Props) => {
 };
 
 export const Header80Defaults: Header80Props = {
-  heading: "Medium length hero heading goes here",
-  description:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat.",
-  buttons: [
+  heading: "",
+  description: "",
+  eventImages: [
     {
-      title: "Button",
-    },
-    {
-      title: "Button",
-      variant: "secondary",
-    },
-  ],
-  images: [
-    {
-      src: "https://relume-assets.s3.amazonaws.com/placeholder-image.svg",
-      alt: "Placeholder image 1",
-    },
-    {
-      src: "https://relume-assets.s3.amazonaws.com/placeholder-image.svg",
-      alt: "Placeholder image 2",
-    },
-    {
-      src: "https://relume-assets.s3.amazonaws.com/placeholder-image.svg",
-      alt: "Placeholder image 3",
-    },
-    {
-      src: "https://relume-assets.s3.amazonaws.com/placeholder-image.svg",
-      alt: "Placeholder image 4",
-    },
-    {
-      src: "https://relume-assets.s3.amazonaws.com/placeholder-image.svg",
-      alt: "Placeholder image 5",
-    },
-    {
-      src: "https://relume-assets.s3.amazonaws.com/placeholder-image.svg",
-      alt: "Placeholder image 6",
+      src: "",
+      alt: "",
     },
   ],
 };

@@ -1,17 +1,14 @@
-// import { Footer1 } from "../Organisms/Guest/Footer";
-// import { Header64 } from "../Organisms/Guest/HeaderNormal";
-// import { NavbarLogout } from "../Organisms/Guest/NavbarLogout";
-// import { Faq7 } from "../Organisms/Guest/Term";
+
 
 import { Footer1 } from "../../Organisms/Guest/Footer";
 import { Header64 } from "../../Organisms/Guest/HeaderNormal";
-import { NavbarLogout } from "../../Organisms/Guest/NavbarLogout";
+import { Navbar2 } from "../../Organisms/Guest/Navbar";
 import { Faq7 } from "../../Organisms/Guest/Term";
 
 function ServiceTerm() {
     return (
       <>
-        <NavbarLogout/>
+        <Navbar2/>
         <Header64/>
         <Faq7/>
         <Footer1/>

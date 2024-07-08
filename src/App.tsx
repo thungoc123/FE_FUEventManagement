@@ -4,6 +4,8 @@ import "./App.css";
 import "./index.css";
 import RoleChoosing from "./components/Pages/Guest/RoleChosing";
 import SponsorHomepage from "./components/Pages/Guest/SponsorProgramePage";
+import QuestionForm from "./components/Pages/Dashboard/EventOperator/Question";
+// import SponsorHomepage from "./components/Pages/Guest/SponsorProgramePage";
 import { Program } from "./components/Pages/Dashboard/Sponsor/Program";
 import { AddProgram } from "./components/Pages/Dashboard/Sponsor/CreateProgram";
 import { QuestionAnalyticsDashboard } from "./components/Pages/Dashboard/QuestionAnalyticsDashboard";
@@ -43,9 +45,13 @@ import { AddEventToSponsor } from "./components/Organisms/Dashboard/AddEventToSp
 import { UpdateProgram } from "./components/Organisms/Dashboard/UpdateSponsorProgram";
 import { Visitor } from "./components/Organisms/EventOperator/visitor";
 import { CheckingStaffDashboard } from "./components/Pages/CheckingStaff";
-
+// import { PaymentPage } from "./components/Pages/Visitor/PaymentPage";
+import SponsorProgram from "./components/Pages/Dashboard/Sponsor/SponsorProgram";
+import SponsorProgramDetail from "./components/Pages/Dashboard/Sponsor/SponsorProgramDetail";
+import { PaymentPage } from "./components/Pages/Visitor/PaymentPage";
 function App() {
   ReactModal.setAppElement("#root");
+  const eventId = "1";
   const { data: events, isLoading, error } = useGetListEventQuery();
   const dispatch = useDispatch();
   useGetListFeedbackQuery('1');
@@ -61,21 +67,34 @@ function App() {
     // Nếu không có, thiết lập `notifications` với một mảng rỗng
     localStorage.setItem('notifications', JSON.stringify([]));
   }
+
   // localStorage.setItem('notifications', JSON.stringify([]));
 
   const notifications = JSON.parse(localStorage.getItem('notifications'));
   console.log(notifications)
   const currentTab = sessionStorage.getItem('currentTab') // Lấy giá trị tab hiện tại từ Redux
+
   return (
     <>
       <Router>
         <Routes>
           {/* Guest  */}
+
+          {/* sponsor  */}
+
+          <Route
+            path="/EventDetail"
+            element={<EventDetail eventId={eventId} />}
+          />
+          {/* Guest  */}
           <Route path="/eventdetail" element={<EventDetail />} />
           <Route path="/" element={<HomePage />} />
-          <Route path="/sponsor-homepage" element={<SponsorHomepage />} />
+          {/* <Route path="/homepage" element={<HomePageLogout />} /> */}
+
           <Route path="/role-choosing" element={<RoleChoosing />} />
+
           {/* sponsor  */}
+
           <Route
             path="/sponsor/dashboard/"
             element={
@@ -129,6 +148,23 @@ function App() {
             element={
               <RequireAuth role="ROLE_SPONSOR">
                 <UpdateProgram />
+
+              </RequireAuth>}
+          />
+          <Route
+
+            path="/sponsor-program"
+            element={
+              <RequireAuth role="ROLE_SPONSOR">
+                <SponsorProgram />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/sponsor-detail/:id"
+            element={
+              <RequireAuth role="ROLE_SPONSOR">
+                <SponsorProgramDetail />
               </RequireAuth>
             }
           />
@@ -187,60 +223,60 @@ function App() {
             path="/eventoperator/dashboard/event/update/:id"
             element={
               <RequireAuth role="ROLE_EO">
-                <ManageEvent component={<InprogressEvent />} />              
-              </RequireAuth>
+                <ManageEvent component={<InprogressEvent />} />
+              </RequireAuth >
             }
           />
-          <Route
+          < Route
             path="/eventoperator/dashboard/feedback"
             element={
-              <RequireAuth role="ROLE_EO">
+              < RequireAuth role="ROLE_EO" >
                 <ManageFeedback />
-              </RequireAuth>
+              </RequireAuth >
             }
           />
-          <Route
+          < Route
             path="/eventoperator/dashboard/visitor/:id"
             element={
-              <RequireAuth role="ROLE_EO">
-                <ManageEvent component={<Visitor />} />              
-                </RequireAuth>
+              < RequireAuth role="ROLE_EO" >
+                <ManageEvent component={<Visitor />} />
+              </RequireAuth >
             }
           />
-          <Route
+          < Route
             path="/eventoperator/dashboard/UnpublishEvent"
             element={
-              <RequireAuth role="ROLE_EO">
+              < RequireAuth role="ROLE_EO" >
                 <ManageEvent component={<UnpublishEvent />} />
-              </RequireAuth>
+              </RequireAuth >
             }
           />
-          <Route
+          < Route
             path="/eventoperator/dashboard/PublishEvent"
             element={
-              <RequireAuth role="ROLE_EO">
+              < RequireAuth role="ROLE_EO" >
                 <ManageEvent component={<PublishEvent />} />
-              </RequireAuth>
+              </RequireAuth >
             }
           />
-          <Route
+          < Route
             path="/eventoperator/dashboard/FeedbackDetail/:id"
             element={
-              <RequireAuth role="ROLE_EO">
+              < RequireAuth role="ROLE_EO" >
                 <ManageFeedbackDetail />
-              </RequireAuth>
+              </RequireAuth >
             }
           />
-          <Route
-            path="/eventoperator/dashboard/FeedbackQuestionDetail/:id"
-            element={
-              <RequireAuth role="ROLE_EO">
-                <QuestionManage />
-              </RequireAuth>
-            }
-          />
+  < Route
+    path="/eventoperator/dashboard/FeedbackQuestionDetail/:id"
+    element={
+      < RequireAuth role="ROLE_EO" >
+        <QuestionManage />
+      </RequireAuth >
+    }
+  />
 
-          {/* Visitor  */}
+  {/* Visitor  */ }
           <Route
             path="/payment"
             element={
@@ -258,32 +294,32 @@ function App() {
             }
           />
 
-          {/* Admin  */}
+  {/* Admin  */ }
           <Route
             path="/admin"
             element={
               <RequireAuth role="ROLE_ADMIN">
                 <Admin Role="ROLE_SPONSOR" />
-              </RequireAuth>
+              </RequireAuth >
             }
           />
-          <Route
-            path="/admin/visitor"
-            element={
-              <RequireAuth role="ROLE_ADMIN">
-                <Admin Role="ROLE_VISITOR" />
-              </RequireAuth>
+  < Route
+path = "/admin/visitor"
+element = {
+              < RequireAuth role = "ROLE_ADMIN" >
+  <Admin Role="ROLE_VISITOR" />
+              </RequireAuth >
             }
           />
-          <Route
-            path="/admin/eventoperator"
-            element={
-              <RequireAuth role="ROLE_ADMIN">
-                <Admin Role="ROLE_EO" />
-              </RequireAuth>
+  < Route
+path = "/admin/eventoperator"
+element = {
+              < RequireAuth role = "ROLE_ADMIN" >
+  <Admin Role="ROLE_EO" />
+              </RequireAuth >
             }
           />
-          {/* Checking Staff  */}
+{/* Checking Staff  */ }
 
           <Route
             path="/admin/checkingstaff"
@@ -296,16 +332,22 @@ function App() {
           />
           <Route path="/sponsor" element={<SponsorSignUp />} />
           <Route path="/visitor" element={<VisitorSignUp />} />
-          {/* <Route path="/survey" element={<SurveyForm />} /> */}
-          {/* <Route path="/question" element={<QuestionForm />} /> */}
+{/* <Route path="/survey" element={<SurveyForm />} /> */ }
+{/* <Route path="/question" element={<QuestionForm />} /> */ }
           <Route path="/create-event" element={<CreateEvent />} />
           <Route path="/service-term" element={<ServiceTerm />} />
           <Route path="/test" element={<TokenDecode />} />
           <Route path="/login" element={<Login1 />} />
           <Route path="/visitorAnswer" element={<VisitorAnswerPage />} />
+          {/* <Route path="/checkstaff" element={<AddCheckStaffTable />} />
+          <Route path="/sponsor-table" element={<AddSponsorTable />} />
+          <Route path="/event-table" element={<EventScheduleTable />} /> */}
+          <Route path="/event-detail/:id" element={<EventDetail />} />
 
-        </Routes>
-      </Router>
+          <Route path="/test" element={<TokenDecode />} />
+          <Route path="/login" element={<Login1 />} />
+        </Routes >
+      </Router >
     </>
   );
 }

@@ -65,8 +65,13 @@ export const sponsorApi = createApi({
         body: updateSponsorProgram,
       }),
     }),
-  }),
+    getSponsor: builder.query<Sponsor[], void>({
+      query: () => `api-sponsor`,
+    }),
+
+  })
+
 });
 
-export const { useUpdateSponsorProgramMutation ,useDeleteEventFromSponsorProgramMutation,useDeleteSponsorProgramMutation ,useAddEventToSponsorProgramMutation , useGetEventByAccountQuery ,useGetListSponsorPersonQuery,useCreateSponsorMutation, useGetListSponsorProgramQuery } = sponsorApi;
+export const { useGetSponsorQuery, useUpdateSponsorProgramMutation ,useDeleteEventFromSponsorProgramMutation,useDeleteSponsorProgramMutation ,useAddEventToSponsorProgramMutation , useGetEventByAccountQuery ,useGetListSponsorPersonQuery,useCreateSponsorMutation, useGetListSponsorProgramQuery } = sponsorApi;
 

@@ -1,9 +1,8 @@
 import { useNavigate } from "react-router-dom"; // Import useNavigate
-
-import { ChangeEvent, FormEvent, useState } from "react";
+import { useState } from "react";
 import { Button, Input, Label } from "@relume_io/relume-ui";
 import type { ImgProps, ButtonProps } from "@relume_io/relume-ui";
-import { useRegisterVisitorMutation } from "../../../Features/Auth/authApi";
+import VAuthAPI from "../../config/axios/VAuthAPI";
 
 type Props = {
   logo: ImgProps;
@@ -37,33 +36,68 @@ export const VisitorSignUp = (props: Signup7Props) => {
     ...Signup7Defaults,
     ...props,
   } as Props;
+  const [email, setEmail] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [password, setPassword] = useState("");
+  const [cpassword, setCPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const navigate = useNavigate();
-  const [visitorData, setVisitorData] = useState({
-    "email": '',
-    "password": '',
-    "confirmPassword": '',
-    "information": null
-  })
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setVisitorData({
-      ...visitorData,
-      [e.target.name]: e.target.value,
-    });
+
+  const validatePassword = (password: string) => {
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return regex.test(password);
   };
-  const [registerVisitor, { isLoading, isError, isSuccess, error }] = useRegisterVisitorMutation(); 
-  
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newPassword = e.target.value;
+    setPassword(newPassword);
+
+    if (!validatePassword(newPassword)) {
+      setPasswordError(
+        "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character."
+      );
+    } else {
+      setPasswordError("");
+    }
+  };
+
+  const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newConfirmPassword = e.target.value;
+    setCPassword(newConfirmPassword);
+
+    if (newConfirmPassword !== password) {
+      setConfirmPasswordError("Passwords do not match");
+    } else {
+      setConfirmPasswordError("");
+    }
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    console.log({ name: email, fullName, password });
+
+    if (passwordError || confirmPasswordError) {
+      alert("Please correct the errors before submitting");
+      return;
+    }
+
     try {
-        await registerVisitor(visitorData).unwrap();
-        navigate('/login')
-        
-      } catch (error) {
-      console.error('Registration failed:', error);
-    } 
+      const response = await VAuthAPI.post(`api-visitor/sign-up-visitor`, {
+        email,
+        fullName,
+        password,
+      });
+
+      if (response.status === 200) {
+        console.log(response);
+        navigate("/homepage"); // Chuyển hướng về trang homepage sau khi đăng ký thành công
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
-  
- 
+
   return (
     <section>
       <div className="relative grid min-h-screen grid-cols-1 items-stretch justify-center overflow-auto lg:grid-cols-2">
@@ -75,7 +109,9 @@ export const VisitorSignUp = (props: Signup7Props) => {
         <div className="relative mx-[5vw] flex items-center justify-center pb-16 pt-20 md:pb-20 md:pt-24 lg:py-20">
           <div className="container max-w-sm">
             <div className="container mb-6 max-w-lg text-center md:mb-8">
-              <h1 className="mb-5 text-5xl font-bold md:mb-6 md:text-7xl lg:text-8xl">{title}</h1>
+              <h1 className="mb-5 text-5xl font-bold md:mb-6 md:text-7xl lg:text-8xl">
+                {title}
+              </h1>
               <p className="md:text-md">{description}</p>
             </div>
             <form className="grid grid-cols-1 gap-6" onSubmit={handleSubmit}>
@@ -86,12 +122,24 @@ export const VisitorSignUp = (props: Signup7Props) => {
                 <Input
                   type="email"
                   id="email"
-                  name="email"
-                  // value={email}
-                  onChange={handleChange}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   required
                 />
               </div>
+              <div className="grid w-full items-center text-left">
+                <Label htmlFor="name" className="mb-2">
+                  Company Name/FullName*
+                </Label>
+                <Input
+                  type="text"
+                  id="text"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  required
+                />
+              </div>
+
               <div className="grid w-full items-center text-left">
                 <Label htmlFor="password" className="mb-2">
                   Password*
@@ -99,59 +147,60 @@ export const VisitorSignUp = (props: Signup7Props) => {
                 <Input
                   type="password"
                   id="password"
-                  name="password"
-                  // value={password}
-                  onChange={handleChange}
+                  value={password}
+                  onChange={handlePasswordChange}
                   required
                 />
+                {passwordError && (
+                  <p className="text-red-500 text-sm mt-1">{passwordError}</p>
+                )}
               </div>
               <div className="grid w-full items-center text-left">
-                <Label htmlFor="password" className="mb-2">
+                <Label htmlFor="cpassword" className="mb-2">
                   Confirm Password*
                 </Label>
                 <Input
-                  type="hidden"
-                  id="password"
-                  name="information"
-                  value=""
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-             
-              <Input
                   type="password"
-                  id="password"
-                  name="confirmPassword"
-                  // value={password}
-                  onChange={handleChange}
+                  id="cpassword"
+                  value={cpassword}
+                  onChange={handleConfirmPasswordChange}
                   required
                 />
+                {confirmPasswordError && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {confirmPasswordError}
+                  </p>
+                )}
+              </div>
               <div className="grid-col-1 grid gap-4">
                 <Button
                   variant={signUpButton.variant}
                   size={signUpButton.size}
                   iconLeft={signUpButton.iconLeft}
                   iconRight={signUpButton.iconRight}
-                  // onClick={handleClick}
+                  type="submit"
                 >
-                          {isLoading ? 'Signing in...' :  signUpButton.title}
-                 
+                  {signUpButton.title}
                 </Button>
-                
               </div>
-              {isError && <p style={{ color: 'red' }}>{error?.data || 'Sign up failed'}</p>}
             </form>
             <div className="mt-5 inline-flex w-full items-center justify-center gap-x-1 text-center md:mt-6">
               <p>{logInText}</p>
-              <a href={logInLink.url} className="underline focus-visible:outline-none">
+              <a
+                href={logInLink.url}
+                className="underline focus-visible:outline-none"
+              >
                 {logInLink.text}
               </a>
             </div>
           </div>
         </div>
-        <div className="hidden bg-background-secondary lg:block">
-          <img src={image.src} alt={image.alt} className="h-full w-full object-cover" />
+        <div className="h-screen w-full flex items-center justify-center">
+          <img
+            src={image.src}
+            alt={image.alt}
+            className="h-full w-full object-cover"
+          />
         </div>
         <footer className="absolute bottom-0 left-0 right-0 top-auto flex h-16 w-full items-center justify-center pr-[5%] md:h-18 lg:justify-start lg:px-[5%]">
           <p className="text-sm">{footerText}</p>
@@ -172,9 +221,9 @@ export const Signup7Defaults: Signup7Props = {
   signUpButton: {
     title: "Sign up",
   },
-  
+
   image: {
-    src: "src/assets/student.png",
+    src: "/src/assets/7.jpg",
     alt: "Placeholder image",
   },
   logInText: "Already have an account?",
@@ -182,6 +231,6 @@ export const Signup7Defaults: Signup7Props = {
     text: "Log in",
     url: "#",
   },
- 
+
   footerText: "© 2024 Relume",
 };

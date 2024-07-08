@@ -17,17 +17,7 @@ import { BiPencil, BiBookmark, BiDotsHorizontalRounded, BiMap, BiSearch } from "
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { sponsorApi, useDeleteEventFromSponsorProgramMutation, useDeleteSponsorProgramMutation, useGetEventByAccountQuery, useGetEventByStateQuery, useGetListSponsorProgramQuery } from "../../../Features/Sponsor/sponsorApi";
 import { truncateString } from "../../../ulities/Stringhandle";
-import {
-  Dialog,
-  DialogTrigger,
-  DialogPortal,
-  DialogOverlay,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from "@relume_io/relume-ui"
+
 import { BiLogoGoogle, BiX } from "react-icons/bi";
 import SearchFilterForm from "../../Atoms/SearchFilterForm";
 import { useDispatch, useSelector } from "react-redux";
@@ -166,6 +156,7 @@ export const GridList6 = () => {
 
                   </div>
                 </div>
+                <Button >Add Survey</Button>
               </div>
             ))}
           </div>

@@ -33,18 +33,7 @@ const DaySchedule: React.FC<DayScheduleProps> = ({ date, events }) => {
           </AccordionContent>
         </AccordionItem>
       </Accordion>
-      {/* <div className="my-4 flex items-center justify-between">
-        <div>
-          <h2 className="text-xl font-semibold mb-2 text-left">{date}</h2>
-        </div>
-        <ChevronDoubleDownIcon className="h-5 w-5 text-black" />
-      </div>
-
-      <div>
-        {events.map((event, index) => (
-          <EventItem key={index} {...event} />
-        ))}
-      </div> */}
+    
     </div>
   );
 };
