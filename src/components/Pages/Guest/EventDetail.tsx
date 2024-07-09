@@ -9,7 +9,7 @@
 // import { Cta7 } from "../Molecules/CTA";
 // import { useGetEventDetailsQuery } from "../../Features/Event/eventApi";
 import { useParams } from "react-router-dom";
-import { useGetEventDetailsQuery } from "../../../Features/Event/eventApi";
+// import { useGetEventDetailsQuery } from "../../../Features/Event/eventApi";
 import { NavbarLogout } from "../../Organisms/Guest/NavbarLogout";
 import { Header80 } from "../../Molecules/EventHeader";
 import EventDetails from "../../Organisms/Guest/EventDetail";
@@ -19,6 +19,8 @@ import { Cta7 } from "../../Molecules/CTA";
 import { Contact1 } from "../../Organisms/Guest/Contact";
 import { Testimonial1 } from "../../Organisms/Guest/Testimonial";
 import { Footer1 } from "../../Organisms/Guest/Footer";
+import { useGetEventDetailsQuery } from "../../../Features/Event/eventDisplayApi";
+import { Navbar2 } from "../../Organisms/Guest/Navbar";
 // import { NavbarLogout } from "../Organisms/Guest/NavbarLogout";
 
 function EventDetail() {
@@ -109,7 +111,7 @@ function EventDetail() {
   
   return (
     <>
-        <NavbarLogout/>
+        <Navbar2 />
         <Header80
         heading={eventName}
         description={summary}

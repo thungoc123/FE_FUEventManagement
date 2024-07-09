@@ -4,6 +4,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { authApi } from '../Features/Auth/authApi';
 import authReducer from '../Features/Auth/authSlice';
 import { eventApi } from '../Features/EventManage/eventApi';
+
 import notificationsReducer from '../Features/Utils/notificationsSlice';
 import { sponsorApi } from '../Features/Sponsor/sponsorApi';
 import eventReducer from '../Features/EventManage/eventSlice'; // Import eventReducer
@@ -19,6 +20,7 @@ import { passwordApi } from '../Features/Password/passwordApi';
 import { sponsorDashboardApi } from '../Features/Sponsor/sponsorDashboardApi';
 import { ticketApi } from '../Features/Order/ticketApi';
 import { paymentApi } from '../Features/Payment/paymentApi';
+import resetpasswordApi from '../Features/Password/resetPasswordApi';
 
 export const store = configureStore({
   reducer: {
@@ -30,6 +32,7 @@ export const store = configureStore({
     [sponsor_programApi.reducerPath]: sponsor_programApi.reducer,
     [sponsorDashboardApi.reducerPath]: sponsorDashboardApi.reducer,
     [eventApi.reducerPath]: eventApi.reducer,
+    // [eventApi.reducerPath]: eventApi.reducer,
     notifications: notificationsReducer,
     [sponsorApi.reducerPath]: sponsorApi.reducer,
     auth: authReducer,

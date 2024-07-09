@@ -39,8 +39,12 @@ const RequireAuth: React.FC<RequireAuthProps> = ({ children, role }) => {
   // const roleName = useSelector((state: RootState) => state.auth.role);
   // console.log(roleName)
   let token = sessionStorage.getItem('token') 
+
   // const token = localStorage.getItem('persist:auth') ? JSON.parse(localStorage.getItem('persist:auth')).token : null;
   // Check if the token is expired
+  if(!token){
+    return <Navigate to="/login" />;
+  }
   console.log(isTokenExpired(token))
   if (roleName(token) === role && !isTokenExpired(token)) {
     return children;

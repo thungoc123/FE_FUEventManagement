@@ -49,6 +49,7 @@ import { CheckingStaffDashboard } from "./components/Pages/CheckingStaff";
 import SponsorProgram from "./components/Pages/Dashboard/Sponsor/SponsorProgram";
 import SponsorProgramDetail from "./components/Pages/Dashboard/Sponsor/SponsorProgramDetail";
 import { PaymentPage } from "./components/Pages/Visitor/PaymentPage";
+import HomePage from "./components/Pages/HomePage";
 function App() {
   ReactModal.setAppElement("#root");
   const eventId = "1";
@@ -155,18 +156,21 @@ function App() {
 
             path="/sponsor-program"
             element={
-              <RequireAuth role="ROLE_SPONSOR">
-                <UpdateProgram />
-              </RequireAuth>
-=======
+              // <RequireAuth role="ROLE_SPONSOR">
+                <UpdateProgram /> }
+              // </RequireAuth>}
+          />
+          <Route
             path="/sponsor-program"
             element={
-                <SponsorProgram />
+              <SponsorProgram />
             }
           />
           <Route
             path="/sponsor-detail/:id"
             element={
+              <RequireAuth role="ROLE_SPONSOR">
+
                 <SponsorProgramDetail />
               </RequireAuth>
             }

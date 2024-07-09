@@ -6,7 +6,7 @@ import { useGetListFeedbackQuestionQuery } from "../../../Features/FeedbackManag
 const VisitorAnswerPage = () => {
   const [currentStep, setCurrentStep] = useState(1);
   // const visitorID = 1;
-  const { data, error, isLoading, isFetching } = useGetListFeedbackQuestionQuery(7);
+  const { data, error, isLoading, isFetching } = useGetListFeedbackQuestionQuery(9);
   console.log(data?.length)
   const totalSteps = parseInt(data?.length);
   useEffect(() => {

@@ -90,7 +90,7 @@ const Dropdown: React.FC<Props> = (props) => {
         navigate("/sponsor/dashboard/");
         break;
       case "ROLE_VISITOR":
-        navigate("/");
+        navigate("/payment");
         break;
       case "ROLE_CHECKING_STAFF":
         navigate("");
@@ -179,7 +179,7 @@ const Dropdown: React.FC<Props> = (props) => {
           <DropdownMenuGroup>
             <DropdownMenuItem>
               {role === "ROLE_VISITOR" ? (
-                <a href="#">My Cart</a>
+                <a href="/payment">My Cart</a>
               ) : (
                 <a
                   href=""

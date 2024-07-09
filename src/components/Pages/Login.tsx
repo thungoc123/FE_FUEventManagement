@@ -84,7 +84,7 @@ export const Login1 = (props: Login1Props) => {
         navigate("/sponsor/dashboard/");
         break;
       case "ROLE_VISITOR":
-        navigate("/");
+        navigate("/payment");
         break;
       case "ROLE_CHECKING_STAFF":
         navigate("");
@@ -182,7 +182,7 @@ export const Login1Defaults: Login1Props = {
   signUpText: "Don't have an account?",
   signUpLink: {
     text: "Sign up",
-    url: "/sponsor",
+    url: "/visitor",
   },
   title: "Log In",
   description: "Lorem ipsum dolor sit amet adipiscing elit.",
