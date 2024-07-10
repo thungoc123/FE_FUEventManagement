@@ -1,8 +1,7 @@
-// src/Organisms/Guest/PaymentPage.tsx
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@relume_io/relume-ui';
 import { useLazySendPaymentInfoQuery } from '../../../Features/Payment/paymentApi';
+import { useNavigate } from 'react-router-dom';
 
 interface Payment1Props {
   eventDetails: any;
@@ -10,9 +9,11 @@ interface Payment1Props {
 }
 
 const Payment1: React.FC<Payment1Props> = ({ eventDetails, quantity }) => {
-  const [email, setEmail] = useState<string>('tienntse171382@fpt.edu.vn'); // Đặt email mặc định
+  const [email, setEmail] = useState<string>('tienntse171382@fpt.edu.vn'); 
   const [amount, setAmount] = useState(0);
+  const [paymentSuccessful, setPaymentSuccessful] = useState(false);
   const [trigger, { isLoading, data, error }] = useLazySendPaymentInfoQuery();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (eventDetails) {
@@ -27,7 +28,7 @@ const Payment1: React.FC<Payment1Props> = ({ eventDetails, quantity }) => {
     }
 
     try {
-      await trigger({ amount, email }).unwrap();
+      await trigger({ amount, email, quantity, eventId: eventDetails.id }).unwrap();
     } catch (err: any) {
       console.error('Failed to send payment information:', err);
       alert(`Failed to send payment information: ${err.message || 'Unknown error occurred'}`);
@@ -38,14 +39,20 @@ const Payment1: React.FC<Payment1Props> = ({ eventDetails, quantity }) => {
     if (data) {
       console.log('Response from backend:', data);
       if (data.status === 'ok') {
-        alert('Payment information sent successfully!');
-        // Redirect to payment URL
+        setPaymentSuccessful(true);
+        // Redirect to payment URL and wait for the payment to complete
         window.location.href = data.url;
       } else {
         alert(`Payment failed: ${data.message}`);
       }
     }
   }, [data]);
+
+  useEffect(() => {
+    if (paymentSuccessful) {
+      navigate('/', { state: { message: 'Bạn đã đặt vé thành công!' } });
+    }
+  }, [paymentSuccessful, navigate]);
 
   const getErrorMessage = (error: any) => {
     if (error?.data?.message) {
@@ -98,8 +105,7 @@ const Payment1: React.FC<Payment1Props> = ({ eventDetails, quantity }) => {
           </Button>
         </div>
 
-        {error && <p>Error: {getErrorMessage(error)}</p>}
-        {data && data.status === 'ok' && <p>Payment information sent successfully!</p>}
+        {error && <p className="text-red-500">Error: {getErrorMessage(error)}</p>}
       </div>
     </div>
   );

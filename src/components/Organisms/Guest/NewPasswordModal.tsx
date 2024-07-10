@@ -26,7 +26,7 @@ const NewPasswordModal: React.FC<NewPasswordModalProps> = ({ isOpen, onClose, to
   
     try {
       const response = await updatePassword({
-        token,
+        token: resetData.token,
         newPassword: newPasswordData.newPassword,
       }).unwrap();
       console.log("Password reset successful:", response);

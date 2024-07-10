@@ -45,7 +45,7 @@ export const BlogPostHeader2 = (props: BlogPostHeader2Props) => {
   const { data: sponsorPrograms, error, isLoading } = useGetSponsorProgramQuery();
 
   if (isLoading) {
-    return <div className="loader">Loading...</div>;
+    return <div className="loader"></div>;
   }
 
   if (error) {

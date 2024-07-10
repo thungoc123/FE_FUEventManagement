@@ -17,6 +17,7 @@ const HeaderTable: React.FC<HeaderTableProps> = ({ eventId, eventDetails }) => {
   const [showDropdown, setShowDropdown] = useState<number | null>(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<string>("option1");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const navigate = useNavigate();
 
   const [createOrder] = useCreateOrderMutation();
@@ -54,6 +55,15 @@ const HeaderTable: React.FC<HeaderTableProps> = ({ eventId, eventDetails }) => {
   };
 
   const handleCreateOrder = async () => {
+    setErrorMessage(null);
+    const currentDate = new Date();
+    const eventStartDate = new Date(eventDetails.timeclosesale);
+
+    if (eventStartDate < currentDate) {
+      setErrorMessage("Cannot create ticket for expired event.");
+      return;
+    }
+
     try {
       const response = await createOrder({
         order: {
@@ -82,6 +92,7 @@ const HeaderTable: React.FC<HeaderTableProps> = ({ eventId, eventDetails }) => {
         </div>
         <Button onClick={handleCreateOrder}>Check out</Button>
       </div>
+      {errorMessage && <p className="text-red-500">{errorMessage}</p>}
       <table className="min-w-full bg-white border border-gray-200">
         <thead>
           <tr>

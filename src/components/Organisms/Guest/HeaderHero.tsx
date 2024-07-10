@@ -135,12 +135,12 @@ export const Header9 = (props: Header9Props) => {
 export const Header9Defaults: Header9Props = {
   heading: "Event Of The Month",
   description:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat.",
+    "",
   images: [],
   eventImages: [],
   carouselHeading: "Short heading goes here",
   carouselDescription:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    "Every Event Of This Month",
 };
 
 Header9.displayName = "Header9";

@@ -10,7 +10,7 @@ import { DisplayProgram } from "../../../Organisms/Sponsor/DisplaySponsorProgram
 function SponsorProgram() {
   const { data: sponsorPrograms = [], isLoading, isError } = useGetSponsorProgramQuery();
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <div className="loader"></div>;
   if (isError) return <div>Error loading sponsor programs</div>;
 
   const displayProgramProps = {

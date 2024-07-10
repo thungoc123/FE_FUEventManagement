@@ -5,10 +5,11 @@ import { Button, Input, Label } from "@relume_io/relume-ui";
 import type { ButtonProps } from "@relume_io/relume-ui";
 import { BiLogoGoogle } from "react-icons/bi";
 import { setToken } from "../../Features/Auth/authSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useLoginMutation } from "../../Features/Auth/authApi";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import { RootState } from "../../../Store/Store";
 
 type ImageProps = {
   url?: string;
@@ -51,29 +52,47 @@ export const Login1 = (props: Login1Props) => {
     ...Login1Defaults,
     ...props,
   } as Props;
+
   interface JwtPayload {
     sub: string;
     role?: string;
   }
-  const [login, {  isLoading, isError, isSuccess, error }] = useLoginMutation();
+
+  const [login, { isLoading, isError, error }] = useLoginMutation();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const token = useSelector((state: RootState) => state.auth.token);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
+  const [isLogin, setIsLogin] = useState(false);
+
+  useEffect(() => {
+    if (token) {
+      const storedEmail = localStorage.getItem("email") || "";
+      setEmail(storedEmail);
+      setIsLogin(true);
+      dispatch(setToken(token));
+    } else {
+      setIsLogin(false);
+    }
+  }, [token]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log(email, password);
     try {
       const result = await login({ email, password }).unwrap();
-      console.log(result.data);
+      dispatch(setToken(result.data));
+      setIsLogin(true);
+      NavigationAuth(result.data);
+      localStorage.setItem("email", email);
       sessionStorage.setItem("token", result.data);
       sessionStorage.setItem("email", email);
-      dispatch(setToken(result.data));
-      NavigationAuth(result.data);
     } catch (err) {
       console.error("Failed to login:");
     }
   };
+
   const NavigationAuth = (token: string) => {
     let decodedToken = jwtDecode<JwtPayload>(token);
     switch (decodedToken.role) {
@@ -94,6 +113,7 @@ export const Login1 = (props: Login1Props) => {
         break;
     }
   };
+
   return (
     <section className="px-[5%]">
       <div className="relative flex min-h-svh flex-col items-stretch justify-center overflow-auto py-24 lg:py-20">
@@ -155,7 +175,6 @@ export const Login1 = (props: Login1Props) => {
             </div>
           </form>
           {isError && <p style={{ color: 'red' }}>{error?.message || 'Invalid Email or Password'}</p>}
-
           <div className="mt-5 w-full text-center md:mt-6">
             <a
               href={forgotPassword.url}

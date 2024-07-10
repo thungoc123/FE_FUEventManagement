@@ -122,17 +122,10 @@ function App() {
               </RequireAuth>
             }
           />
-          <Route
-            path="/sponsor-program"
-            element={
-                <SponsorProgram />
-            }
-          />
+          <Route path="/sponsor-program" element={<SponsorProgram />} />
           <Route
             path="/sponsor-detail/:id"
-            element={
-                <SponsorProgramDetail />
-            }
+            element={<SponsorProgramDetail />}
           />
           {/* event operator  */}
           {/* <Route
@@ -255,7 +248,15 @@ function App() {
           {/* <Route path="/checkstaff" element={<AddCheckStaffTable />} />
           <Route path="/sponsor-table" element={<AddSponsorTable />} />
           <Route path="/event-table" element={<EventScheduleTable />} /> */}
-          <Route path="/event-detail/:id" element={<EventDetail />} />
+
+          <Route
+            path="/event-detail/:id"
+            element={
+              <RequireAuth role="ROLE_VISITOR">
+                <EventDetail />
+              </RequireAuth>
+            }
+          />
 
           <Route path="/test" element={<TokenDecode />} />
           <Route path="/login" element={<Login1 />} />

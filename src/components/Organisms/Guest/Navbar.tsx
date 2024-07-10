@@ -453,7 +453,7 @@ const NavItemDropdown = ({
 
 export const Navbar2Defaults = {
   logo: {
-    src: "",
+    src: "/src/assets/logo.png",
     alt: "Logo",
   },
   links: [

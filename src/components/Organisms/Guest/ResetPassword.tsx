@@ -11,8 +11,9 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ isOpen, onClose }) => {
   const [resetData, setResetData] = useState({ email: "", token: "" });
   const [newPasswordData, setNewPasswordData] = useState({ newPassword: "", confirmPassword: "" });
   const [isNewPassword, setIsNewPassword] = useState(false);
-  const [requestPasswordReset] = useRequestPasswordResetMutation(); // Use the correct mutation hook
-  const [updatePassword] = useUpdatePasswordMutation(); // Use the correct mutation hook
+  const [tokenEntered, setTokenEntered] = useState(false);
+  const [requestPasswordReset] = useRequestPasswordResetMutation(); // Correct mutation hook
+  const [updatePassword] = useUpdatePasswordMutation(); // Correct mutation hook
 
   const handleNewPasswordSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -21,6 +22,7 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ isOpen, onClose }) => {
       return;
     }
     console.log("Setting new password", newPasswordData);
+    console.log("Token:", resetData.token);
 
     try {
       const response = await updatePassword({
@@ -30,10 +32,10 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ isOpen, onClose }) => {
       console.log("Password reset successful:", response);
       onClose();
     } catch (error: any) {
-      if (error.status === 403) {
+      console.error("Error object:", error);
+      const status = error?.status ?? error?.data?.status;
+      if (status === 403) {
         console.error("Failed to set new password: Access Forbidden. Please check if the token is valid and you have the necessary permissions.");
-      } else if (error.data) {
-        console.error("Failed to set new password:", error.data);
       } else {
         console.error("Failed to set new password:", error);
       }
@@ -46,15 +48,20 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ isOpen, onClose }) => {
     try {
       const result = await requestPasswordReset({ email: resetData.email }).unwrap();
       console.log(result);
-      setResetData((prevData) => ({ ...prevData, token: result.token }));
-      setIsNewPassword(true);
+      setTokenEntered(true); // Set token entered to true
     } catch (err) {
       console.error("Failed to reset password:", err);
     }
   };
 
+  const handleTokenSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    setIsNewPassword(true);
+  };
+
   const handleBackToLoginClick = () => {
     setIsNewPassword(false);
+    setTokenEntered(false);
     onClose();
   };
 
@@ -65,15 +72,15 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ isOpen, onClose }) => {
         <DialogContent className="w-full max-w-md bg-white px-10 py-14 md:py-16 md:px-12">
           <DialogHeader>
             <DialogTitle className="mb-2">
-              {isNewPassword ? "New Password" : "Reset Password"}
+              {isNewPassword ? "New Password" : tokenEntered ? "Enter Token" : "Reset Password"}
             </DialogTitle>
             <DialogDescription>
-              {isNewPassword ? "Enter your new password" : "Enter your email to reset password"}
+              {isNewPassword ? "Enter your new password" : tokenEntered ? "Enter the token sent to your email" : "Enter your email to reset password"}
             </DialogDescription>
           </DialogHeader>
           <form
             className="grid gap-4 py-4"
-            onSubmit={isNewPassword ? handleNewPasswordSubmit : handleResetPasswordSubmit}
+            onSubmit={isNewPassword ? handleNewPasswordSubmit : tokenEntered ? handleTokenSubmit : handleResetPasswordSubmit}
           >
             {isNewPassword ? (
               <>
@@ -102,6 +109,19 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ isOpen, onClose }) => {
                   />
                 </div>
               </>
+            ) : tokenEntered ? (
+              <div className="grid items-center gap-2">
+                <Label htmlFor="token">Token</Label>
+                <Input
+                  id="token"
+                  type="text"
+                  value={resetData.token}
+                  required
+                  onChange={(e) =>
+                    setResetData({ ...resetData, token: e.target.value })
+                  }
+                />
+              </div>
             ) : (
               <div className="grid items-center gap-2">
                 <Label htmlFor="reset-email">Email</Label>
@@ -118,32 +138,13 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ isOpen, onClose }) => {
             )}
             <div className="mt-6 flex w-full flex-col gap-4 md:mt-8">
               <Button type="submit">
-                {isNewPassword ? "Set New Password" : "Reset Password"}
+                {isNewPassword ? "Set New Password" : tokenEntered ? "Submit Token" : "Reset Password"}
               </Button>
             </div>
             <DialogFooter className="mt-6">
-              {isNewPassword ? (
-                <Button
-                  asChild
-                  variant="link"
-                  size="link"
-                  onClick={handleBackToLoginClick}
-                >
-                  <a className="underline">Back to Log in</a>
-                </Button>
-              ) : (
-                <>
-                  <span>Forgot your password?</span>
-                  <Button
-                    asChild
-                    variant="link"
-                    size="link"
-                    onClick={() => setIsNewPassword(true)}
-                  >
-                    
-                  </Button>
-                </>
-              )}
+              <Button asChild variant="link" size="link" onClick={handleBackToLoginClick}>
+                <a className="underline">Back to Log in</a>
+              </Button>
             </DialogFooter>
           </form>
         </DialogContent>
