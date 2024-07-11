@@ -18,23 +18,17 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@relume_io/relume-ui";
-import { BiLogoGoogle } from "react-icons/bi";
 import {
-  BiCalendarAlt,
-  BiUser,
-  BiHourglass,
-  BiTime,
   BiEnvelope,
 } from "react-icons/bi";
 import { eventCheckingStaff } from "../../../Types/eo.type";
 import React, { useState } from "react";
 import { RootState } from "../../../Store/Store";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useAddCheckingStaffMutation, useDeleleCheckingStaffMutation, useGetListEventQuery } from "../../../Features/EventManage/eventApi";
 import { addNotification } from "../../../Features/Utils/notificationsSlice";
 import { Alert } from "../../Molecules/Alert";
-import { removeCheckingStaff } from "../../../Features/EventManage/eventSlice";
 import { setTab } from "../../../Features/Utils/tabSlice";
 // import { Alert } from "../../../Molecules/Alert";
 
@@ -92,7 +86,7 @@ export const AddCheckStaffTable: React.FC<Props> = (props) => {
   ];
 
   const accountId = useSelector((state: RootState) => state.auth.accountId);
-  const [addCheckingStaff, {creating: isCreating}] =
+  const [addCheckingStaff, {isLoading: isCreating}] =
     useAddCheckingStaffMutation();
   const [email, setEmail] = useState("");
   const checkingStaff = {
@@ -122,7 +116,7 @@ export const AddCheckStaffTable: React.FC<Props> = (props) => {
         })
       );
       dispatch(setTab("checking"));
-      window.location.reload();
+      // window.location.reload();
     } catch (err) {
       dispatch(
         addNotification({

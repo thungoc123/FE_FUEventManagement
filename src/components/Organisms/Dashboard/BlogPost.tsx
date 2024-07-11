@@ -6,6 +6,7 @@ import { RxChevronLeft } from "react-icons/rx";
 import Content31 from "./Content31";
 import { useGetSponsorProgramQuery } from "../../../Features/Sponsor/sponsor_programApi";
 import { useNavigate, useParams } from "react-router-dom";
+import EventTag from "../../Atoms/EventTag";
 
 type ImageProps = {
   src: string;
@@ -92,7 +93,7 @@ export const BlogPostHeader2 = (props: BlogPostHeader2Props) => {
             onClick={() => navigate("/sponsor-program")} // Navigate to Sponsor Program page on click
 
           >
-            <a>{button.title}</a>
+            <a style = {{cursor:"pointer"}}>{button.title}</a>
           </Button>
           <div className="mb-4 flex w-full items-center justify-start">
             <p className="mr-4 bg-background-secondary px-2 py-1 text-sm font-semibold">
@@ -105,6 +106,7 @@ export const BlogPostHeader2 = (props: BlogPostHeader2Props) => {
         <div className="mx-auto mb-8 w-full overflow-hidden md:mb-12 lg:mb-8">
           <img src={image.src} className="aspect-[5/2] size-full object-cover" alt={image.alt} />
         </div>
+        <EventTag text="Text"/>
         <div className="flex w-full flex-col items-start justify-between md:flex-row">
           <div className="mb-4 flex items-center sm:mb-8 md:mb-0">
             {postDetails.map((detail, index) => (

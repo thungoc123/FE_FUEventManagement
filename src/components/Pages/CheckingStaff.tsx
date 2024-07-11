@@ -1,19 +1,6 @@
 import {  BiMailSend, BiCheck } from "react-icons/bi";
-// import { TableTemplate } from "../Dashboard/TableTemplate";
-import { Button } from "@relume_io/relume-ui";
-import { EventTable } from "../../../Types/event.type";
-// import { useDeleteEventMutation, useGetListEventQuery } from "../../../Features/EventManage/eventApi";
-import { Link, useParams } from "react-router-dom";
-// import { addNotification } from "../../../Features/Utils/notificationsSlice";
-import { useDispatch } from "react-redux";
-import { useDeleteEventMutation, useGetListEventQuery } from "../../../Features/EventManage/eventApi";
-import { addNotification } from "../../../Features/Utils/notificationsSlice";
-import { EventInprogress } from "../../../Types/eo.type";
 import { ApplicationShell4 } from "../Organisms/Dashboard/ApplicationShell";
-import { useGetListVistiorsQuery } from "../../Features/Visitor/visitorApi";
-import { visitorTable } from "../../Types/account";
 import { TableTemplate } from "../Organisms/Dashboard/TableTemplate";
-import { accountID } from "../../ulities/ProtectedRoute";
 import { useGetAttendanceQuery, useGetEventDetailQuery } from "../../Features/CheckingStaff/checkingApi";
 import { StaffTable } from "../../Types/checkingstaff";
 
@@ -54,7 +41,6 @@ const attendancePaid = attendance?.filter((item) => item.ticket.status === "PAID
    ) : attendanceError ? "Event này không có visitor nào được ghi nhận " : (
     <ApplicationShell4
      MainComponent={
-
       <TableTemplate
        headerTitle="Event Attendances"
        headerDescription="Danh sách những người tham gia sự kiện"
@@ -63,7 +49,6 @@ const attendancePaid = attendance?.filter((item) => item.ticket.status === "PAID
        // paginationItems={paginationItems}
        tableHeadersClasses={tableHeaderClasses}
       />
-
      }
     />)}
 

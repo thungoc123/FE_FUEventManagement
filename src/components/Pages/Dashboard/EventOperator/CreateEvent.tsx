@@ -176,8 +176,8 @@ const CreateEvent = () => {
             timestamp: Date.now(), // Thời gian hiện tại
           })
         );
-        // navigate("/eventoperator/dashboard/UnpublishEvent");
-      window.location.reload()
+        navigate("/eventoperator/dashboard/UnpublishEvent");
+      // window.location.reload()
       
         // alert('Event created successfully!');
       } catch (err) {

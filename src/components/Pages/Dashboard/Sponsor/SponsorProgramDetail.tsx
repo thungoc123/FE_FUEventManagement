@@ -5,6 +5,8 @@ import { BlogPostHeader2 } from '../../../Organisms/Dashboard/BlogPost';
 import { Blog44 } from '../../../Organisms/Dashboard/Blog44';
 import { Footer1 } from '../../../Organisms/Guest/Footer';
 import { BiLinkAlt } from "react-icons/bi";
+import { useGetEventDetailsQuery, useGetPublishedEventsQuery } from '../../../../Features/Event/eventDisplayApi';
+import { useGetListEventQuery } from '../../../../Features/EventManage/eventApi';
 
 
 function SponsorProgramDetail() {
@@ -25,6 +27,19 @@ function SponsorProgramDetail() {
   if (!sponsorProgram) {
     return <div>Sponsor Program not found</div>;
   }
+  const eventId = sponsorProgram.sponsorProgramEvents.map((event) => event.eventId);
+  console.log(eventId);
+  // const { data: event } = useGetPublishedEventsQuery();
+
+  // const eventName: string[] = [];
+  // eventId.map((id) => {
+  //   event?.map((event) => {
+  //     if (event.id === Number(id)) {
+  //       eventName.push(event.title);
+  //     }
+  //   }
+  // )});
+  // console.log(eventName)
 
   const blogPosts = sponsorPrograms?.map((program) => ({
     url: `/sponsor-detail/${program.id}`, // Adjust the URL as needed

@@ -15,7 +15,7 @@ import {
   ButtonProps,
   Input,
 } from "@relume_io/relume-ui";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ButtonDashboard, Search } from "../../../Types/global.type";
 import { BiSearch } from "react-icons/bi";
@@ -58,7 +58,11 @@ export const TableTemplate = <T extends Record<string, any>>(
   // truyền vào type
   // truyền vào dữ liệu tương ứng với type đó
   const [filteredData, setFilteredData] = useState<T[]>(tableRows);
-
+  useEffect(() => {
+    // Cập nhật filteredData mỗi khi tableRows thay đổi
+    setFilteredData(tableRows);
+  }, [tableRows]); 
+  // Thêm tableRows vào mảng phụ thuộc để theo dõi sự thay đổi của nó
   // const handleSearchSubmit = (searchData: { searchTerm: string }) => {
   //   console.log("Search query:", searchData.searchTerm);
   //   // console.log(tableRows)

@@ -86,7 +86,6 @@ const [addSchedule, { isLoading, isSuccess, isError, error }
           type: 'success',
           timestamp: Date.now(), // Thời gian hiện tại
         }));
-        window.location.reload();
     } catch (err) {
       dispatch(addNotification({
         id: new Date().getTime(), // Sử dụng timestamp làm ID

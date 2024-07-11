@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import "./index.css";
 import RoleChoosing from "./components/Pages/Guest/RoleChosing";
-import SponsorHomepage from "./components/Pages/Guest/SponsorProgramePage";
+// import SponsorHomepage from "./components/Pages/Guest/SponsorProgramePage";
 import QuestionForm from "./components/Pages/Dashboard/EventOperator/Question";
 // import SponsorHomepage from "./components/Pages/Guest/SponsorProgramePage";
 import { Program } from "./components/Pages/Dashboard/Sponsor/Program";
@@ -50,6 +50,7 @@ import SponsorProgram from "./components/Pages/Dashboard/Sponsor/SponsorProgram"
 import SponsorProgramDetail from "./components/Pages/Dashboard/Sponsor/SponsorProgramDetail";
 import { PaymentPage } from "./components/Pages/Visitor/PaymentPage";
 import HomePage from "./components/Pages/HomePage";
+import SponsorHomepage from "./components/Pages/SponsorProgramePage";
 function App() {
   ReactModal.setAppElement("#root");
   const eventId = "1";
@@ -152,27 +153,25 @@ function App() {
 
               </RequireAuth>}
           />
-          <Route
+          {/* <Route
 
             path="/sponsor-program"
             element={
               // <RequireAuth role="ROLE_SPONSOR">
                 <UpdateProgram /> }
               // </RequireAuth>}
-          />
+          /> */}
           <Route
             path="/sponsor-program"
             element={
-              <SponsorProgram />
+              <SponsorHomepage />
             }
           />
           <Route
             path="/sponsor-detail/:id"
             element={
-              <RequireAuth role="ROLE_SPONSOR">
 
                 <SponsorProgramDetail />
-              </RequireAuth>
             }
           />
           {/* event operator  */}
@@ -230,7 +229,9 @@ function App() {
             path="/eventoperator/dashboard/event/update/:id"
             element={
               <RequireAuth role="ROLE_EO">
-                <ManageEvent component={<InprogressEvent />} />
+                {/* <ManageEvent component={<InprogressEvent />} />
+                 */}
+                 <UpdateEvent />
               </RequireAuth >
             }
           />

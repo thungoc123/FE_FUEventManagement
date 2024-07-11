@@ -40,7 +40,7 @@ export const Feedback = () => {
         })
       );
       // refetch();
-      window.location.reload();
+      // window.location.reload();
     } catch (err) {
       dispatch(
         addNotification({

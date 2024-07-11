@@ -95,7 +95,7 @@ const AddSponsor: React.FC = () => {
         }),
       );
       dispatch(setTab("sponsor"));
-      window.location.reload();
+      // window.location.reload();
 
     }catch (error) {
       setFill(true)

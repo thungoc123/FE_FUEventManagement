@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { EOevent } from "../../Types/eo.type";
 import { attendance, checkingStaff } from "../../Types/checkingstaff";
+import { FeedbackQuery } from "../../Types/feedback";
 const baseQuery = fetchBaseQuery({
      baseUrl: 'http://localhost:7979/',
      prepareHeaders: (headers, { getState }) => {
@@ -29,6 +29,11 @@ export const checkingApi = createApi({
                     url: `api-attendances-2/list/event/${eventId}`,
                }),
           }),
+          // getListFeedbackEvent: builder.query<FeedbackQuery[], string>({
+          //      query: () => `/api-feedback-questions-event/list-feedback-event/${accountId}`,
+          //      // keepUnusedDataFor: 3600,
+          //      providesTags: (result, error, accountId) => [{ type: 'Feedbacks', id: accountId }],
+          //  }),
      }),
 });
 

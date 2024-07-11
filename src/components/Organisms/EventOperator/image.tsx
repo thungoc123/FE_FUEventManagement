@@ -104,7 +104,7 @@ export const Gallery5 = () => {
         timestamp: Date.now(), // Thời gian hiện tại
       }));
       dispatch(setTab("img"));
-      window.location.reload()
+      // window.location.reload()
     } catch (error) {
       dispatch(addNotification({
         id: new Date().getTime(), // Sử dụng timestamp làm ID

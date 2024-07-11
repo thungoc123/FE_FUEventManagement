@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { SponsorProgram } from '../../Types/event.type';
+import { SponsorProgram } from '../../Types/sponsor';
+// import { SponsorProgram } from '../../Types/event.type';
 
 export const sponsor_programApi = createApi({
   reducerPath: 'sponsorProgramApi',

@@ -73,7 +73,7 @@ export const feedbackApi = createApi({
       }),
       invalidatesTags: (result, error, questionId) => [{ type: 'FeedbackQuestions', id: questionId }],
     }),
-    
+  
   }),
-});
+})
 export const { useDeleteFeedbackMutation,useDeleteFeedbackQuestionMutation,useGetListFeedbackQuestionQuery,useCreateQuestionMutation,useCreateFeedbackMutation, useGetListFeedbackQuery } = feedbackApi;

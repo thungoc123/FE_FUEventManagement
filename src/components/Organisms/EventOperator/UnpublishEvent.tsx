@@ -18,16 +18,26 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../Store/Store";
 import { addNotification } from "../../../Features/Utils/notificationsSlice";
+import { useEffect, useState } from "react";
+import { EOevent } from "../../../Types/eo.type";
 
 export const UnpublishEvent = () => {
   const tableHeaders = ["No", "Name", "Date", "Detail","Edit", "Delete", "Publish"];
   const { data: Events, refetch, isLoading, error } = useGetListEventQuery();
   const dispatch = useDispatch();
-
-  const unpublishEvents =
-    Events?.filter((event) => event.stateEvent.name === "UNPUBLISH") || [];
   const [deleteEvent] = useDeleteEventMutation();
   const [publishEvent] = usePublishEventMutation();
+  const [unpublishEvent, setUnpublishEvent] = useState<EOevent[]>([]);
+
+  useEffect(() => {
+    const unpublishEvents = Events?.filter((event) => event.stateEvent.name === "UNPUBLISH") || [];
+    setUnpublishEvent(unpublishEvents);
+  }, [Events]); // Phụ thuộc vào Events, cập nhật unpublishEvent mỗi khi Events thay đổi
+  const unpublishEvents =
+    Events?.filter((event) => event.stateEvent.name === "UNPUBLISH") || [];
+
+  console.log(unpublishEvent);
+  console.log(unpublishEvents);
   const handleDelete = async (
     e: MouseEvent<HTMLButtonElement>,
     eventId: number
@@ -90,7 +100,6 @@ export const UnpublishEvent = () => {
     No: index + 1, // Số thứ tự bắt đầu từ 1
     Name: event.name, // Tên sự kiện
     Date: new Date(event.timestart).toLocaleDateString(), // Ngày diễn ra sự kiện, chuyển đổi sang định dạng chuỗi
-   
     Detail: (
       <Link to={`/eventoperator/dashboard/event/${event.id}`}>
         <Button size="icon" variant="link">
@@ -117,9 +126,7 @@ export const UnpublishEvent = () => {
     ), // Nút xuất bản
   }));
 
-  
-
-
+  console.log(tableRows);
   const tableHeaderClasses = [
     "w-[200px] pr-4 xxl:w-[25px]",
     "w-[200px] pr-4 xxl:w-[150px]",

@@ -1,4 +1,5 @@
 import { account } from "./account"
+import { EOevent } from "./eo.type";
 
 export interface SponsorTable{
     No: number,
@@ -10,12 +11,14 @@ export interface SponsorTable{
     }
 
 export interface SponsorProgram {
+    id: number,
     title: String, 
     thumbnail: String, 
     link: String, 
     location: String, 
     description: String,
-    state: StateProgram | null
+    state: StateProgram | null,
+    sponsorProgramEvents: SponsorProgramEvent[]
 }
 enum StateProgram {
     PUBLISH,   // 0
@@ -39,3 +42,9 @@ export interface Sponsor {
     fptStaffEmail: string;
     account: account;
 };
+export interface SponsorProgramEvent {
+    eventId: number,
+        sponsorProgramId: number,
+        sponsorProgram: string,
+        event: EOevent
+}
