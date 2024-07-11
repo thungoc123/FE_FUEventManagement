@@ -1,0 +1,24 @@
+.header {
+   background: radial-gradient(circle at left, #402a6d 0%, #1e005a 23%, #1e005a 16%)
+   ;
+   min-height: 100vh;
+}
+.header h1 {
+/* color: rgb(170, 80, 196); */
+
+font-size: 48px; /* Kích thước chữ */
+font-weight: bold; /* Độ đậm của chữ */
+color: #fff; /* Màu chữ */
+text-shadow: 0 0 5px #00fff9, 0 0 10px #00fff9, 0 0 15px #00fff9, 0 0 20px #00fff9, 0 0 35px #00fff9, 0 0 40px #00fff9, 0 0 50px #00fff9, 0 0 75px #00fff9; /* Đổ bóng cho chữ */
+animation: neon-glow 1.5s infinite alternate; /* Animation hiệu ứng neon */
+}
+                       
+@keyframes neon-glow {
+to {
+text-shadow: 0 0 5px #00fff9, 0 0 10px #00fff9, 0 0 15px #00fff9, 0 0 20px #00fff9, 0 0 35px #00fff9, 0 0 40px #00fff9, 0 0 50px #00fff9, 0 0 75px #00fff9; /* Đổ bóng cho chữ */ /* Tăng độ mờ độ bóng */
+}
+                       
+}
+.header>div>p {
+   color: #00fff9;
+}

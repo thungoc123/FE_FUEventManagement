@@ -107,11 +107,11 @@ const Dropdown: React.FC<Props> = (props) => {
     <div className="flex items-center gap-2 justify-self-end md:gap-4">
    
           <DropdownMenu>
-              <DropdownMenuTrigger className="relative">
+              <DropdownMenuTrigger className="relative" style={{border: 'none'}}>
                 {notifications.length !== 0 && (
-                <div className="absolute bottom-auto left-auto right-2 top-2 size-2 rounded-full bg-black outline outline-[3px] outline-offset-0 outline-white" />
+                <div className="absolute bottom-auto left-auto right-2 top-2 size-2 rounded-full outline outline-[3px] outline-offset-0 " style={{color:'#00fff9', background:'#00fff9'}}/>
                 )}
-                <BiBell className="size-6" />
+                <BiBell className="size-6" style={{color:'#00fff9'}}/>
               </DropdownMenuTrigger>
               {notifications.length !== 0 && (
                 <DropdownMenuContent
@@ -163,7 +163,7 @@ const Dropdown: React.FC<Props> = (props) => {
               
             </DropdownMenu>
       <DropdownMenu>
-        <DropdownMenuTrigger className="flex items-center p-0">
+        <DropdownMenuTrigger  className="flex items-center p-0" style={{color:'#00fff9', border:'none'}}>
           {/* <img
                   src="https://relume-assets.s3.amazonaws.com/avatar-image.svg"
                   alt="Avatar"

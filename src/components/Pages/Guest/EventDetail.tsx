@@ -11,7 +11,7 @@
 import { useParams } from "react-router-dom";
 // import { useGetEventDetailsQuery } from "../../../Features/Event/eventApi";
 import { NavbarLogout } from "../../Organisms/Guest/NavbarLogout";
-import { Header80 } from "../../Molecules/EventHeader";
+import { Header3, Header80 } from "../../Molecules/EventHeader";
 import EventDetails from "../../Organisms/Guest/EventDetail";
 import Schedule from "../../Organisms/Guest/Schedule";
 import Gallery3 from "../../Organisms/Guest/EventGallery";
@@ -22,7 +22,7 @@ import { Footer1 } from "../../Organisms/Guest/Footer";
 import { useGetEventDetailsQuery } from "../../../Features/Event/eventDisplayApi";
 import { Navbar2 } from "../../Organisms/Guest/Navbar";
 // import { NavbarLogout } from "../Organisms/Guest/NavbarLogout";
-
+import '../../Organisms/Style/eventDetail.css'
 function EventDetail() {
   const { id } = useParams<{ id: string }>();
   if (!id) {
@@ -112,10 +112,15 @@ function EventDetail() {
   return (
     <>
         <Navbar2 />
-        <Header80
+        {/* <Header80
         heading={eventName}
         description={summary}
         eventImages={eventImages}
+      /> */}
+      <Header3 
+      heading={eventName}
+      description={summary}
+      eventImages={eventImages}
       />
       <EventDetails
         eventId={id}
@@ -134,8 +139,8 @@ function EventDetail() {
 
       <Schedule days={formattedDays} />
       <Gallery3 heading="Event Gallery" description="" images={eventImages} /> {/* Truyền eventImages vào Gallery3 */}
-      <Cta7 />
-      <Contact1 />
+      {/* <Cta7 /> */}
+      {/* <Contact1 /> */}
       <Testimonial1 />
       <Footer1 />
     </>

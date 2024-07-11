@@ -14,7 +14,7 @@ export type Gallery3Props = {
 
 const Gallery3: React.FC<Gallery3Props> = ({ heading, description, images }) => {
   return (
-    <section className="px-[5%] py-16 md:py-24 lg:py-28">
+    <section className="px-[5%] py-16 md:py-24 lg:py-28 gallery">
       <div className="container">
         <div className="mb-12 text-center md:mb-18 lg:mb-20">
           <h2 className="mb-5 text-5xl font-bold md:mb-6 md:text-7xl lg:text-8xl">{heading}</h2>

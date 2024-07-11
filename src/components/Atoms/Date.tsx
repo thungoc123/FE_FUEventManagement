@@ -17,8 +17,8 @@ const DateDisplay:React.FC<Props> = (props) => {
 
   return (
     <div className="flex items-center space-x-2">
-      <CalendarIcon className="h-5 w-5 text-black" />
-      <span className="text-black">{props.date}</span>
+      <CalendarIcon style={{color: '#00fff9'}} className="h-5 w-5 text-black" />
+      <span className="text-black" style={{color: '#00fff9'}}>{props.date}</span>
     </div>
   );
 };

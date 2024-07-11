@@ -20,7 +20,7 @@ type ImageProps = {
       ...props,
     } as Props;
     return (
-      <section className="px-[5%] py-16 md:py-24 lg:py-28">
+      <section className="px-[5%] py-16 md:py-24 lg:py-28 gallery">
         <div className="container mx-auto w-full max-w-lg">
           <div className="flex flex-col items-center text-center">
             <img src={logo.src} alt={logo.alt} className="max-h-14 w-full" />

@@ -21,6 +21,7 @@ import { sponsorDashboardApi } from '../Features/Sponsor/sponsorDashboardApi';
 import { ticketApi } from '../Features/Order/ticketApi';
 import { paymentApi } from '../Features/Payment/paymentApi';
 import resetpasswordApi from '../Features/Password/resetPasswordApi';
+import { checkingApi } from '../Features/CheckingStaff/checkingApi';
 
 export const store = configureStore({
   reducer: {
@@ -40,7 +41,7 @@ export const store = configureStore({
     tab: tabReducer, // Thêm reducer của tab vào store
     [feedbackApi.reducerPath] : feedbackApi.reducer,
     [visitorApi.reducerPath] : visitorApi.reducer,
-
+    [checkingApi.reducerPath]: checkingApi.reducer, // Thêm checkingApi.reducer vào store
     [adminApi.reducerPath]: adminApi.reducer,
     headerDisplay: HeaderDisplayReducer,
 // src/app/store.ts
@@ -65,6 +66,7 @@ export const store = configureStore({
       sponsorDashboardApi.middleware,
       passwordApi.middleware,
       paymentApi.middleware,
+      checkingApi.middleware, // Thêm middleware của checkingApi vào store
       resetpasswordApi.middleware // Add resetpasswordApi middleware
     ),
 });

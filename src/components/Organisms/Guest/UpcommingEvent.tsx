@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import { Button } from "@relume_io/relume-ui";
 import type { ButtonProps } from "@relume_io/relume-ui";
 import { RxChevronRight } from "react-icons/rx";
+
+import '../Style/eventBlogs.css'
 import DateDisplay from "../../Atoms/Date"; // Ensure this component exists or adjust accordingly
 import LocationDisplay from "../../Atoms/Location"; // Ensure this component exists or adjust accordingly
 import {
@@ -11,6 +13,7 @@ import {
   unstable_HistoryRouter,
   useNavigate,
 } from "react-router-dom";
+import { formatNumber, truncateString } from "../../../ulities/Stringhandle";
 
 type StateEvent = {
   id: number;
@@ -54,27 +57,28 @@ export const EventBlog = (props: EventBlogProps) => {
     ...EventBlogDefault,
     ...props,
   } as Props;
-
+  
   const history = useNavigate(); // Initialize useHistory
 
   const handleButtonClick = (eventId: number) => {
     history(`/event-detail/${eventId}`);
   };
 
-  const [visibleEvents, setVisibleEvents] = useState(3);
+  const [visibleEvents, setVisibleEvents] = useState(6);
   const handleViewAll = () => {
     setVisibleEvents(EventPosts?.length || 0);
   };
 
   return (
-    <section className="px-[5%] py-16 md:py-24 lg:py-28">
+    <section className="px-[5%] py-16 md:py-24 lg:py-28 eventblog">
       <div className="container">
         <div className="container mb-12 max-w-lg text-center md:mb-18 lg:mb-20">
           <p className="mb-3 font-semibold md:mb-4">{tagline}</p>
           <h2 className="mb-5 text-5xl font-bold md:mb-6 md:text-7xl lg:text-8xl">
             {heading}
           </h2>
-          <p className="md:text-md">{description}</p>
+          <p className="md:text-md">Explore the trending events happening with FPT event.
+          </p>
         </div>
         <div className="grid grid-cols-1 gap-x-8 gap-y-16 md:grid-cols-2 md:gap-y-12 lg:grid-cols-3">
           {EventPosts?.slice(0, visibleEvents).map((post, index) => {
@@ -85,7 +89,7 @@ export const EventBlog = (props: EventBlogProps) => {
                 : "https://relume-assets.s3.amazonaws.com/placeholder-image-landscape.svg";
 
             return (
-              <div key={post.id}>
+              <div key={post.id} className="eventCard flex flex-col justify-between h-full">
                 <a
                   href={post.url}
                   className="mb-3 inline-block w-full max-w-full focus-visible:outline-none"
@@ -106,21 +110,24 @@ export const EventBlog = (props: EventBlogProps) => {
                   <DateDisplay
                     date={new Date(post.timestart).toLocaleDateString()}
                   />
-                  <LocationDisplay location={post.location ?? "No location"} />{" "}
+                  {/* <LocationDisplay location={post.location ?? "No location"} />{" "} */}
                   {/* Sử dụng thuộc tính location */}
                 </div>
                 <a
                   href={post.url}
                   className="mb-2 block max-w-full focus-visible:outline-none"
                 >
-                  <h5 className="text-xl font-bold md:text-2xl">{post.name}</h5>
+                  <h5 className="text-xl font-bold md:text-2xl" style = {{minHeight:'70px'}}>{post.name}</h5>
                 </a>
-                <p>{post.description}</p>
-                <div className="mt-6 flex items-center justify-between">
-                  <div>
-                    <h6 className="text-sm font-semibold">
-                      Price: ${post.price}
+                <div style = {{minHeight:'40px'}}>
+                <p>{truncateString(post.description,70)}</p>
+                </div>
+                <div className="mt-6 flex-row items-center justify-between">
+                <div className="flex">
+                <h6 className="text-sm font-semibold price">
+                      Price: {formatNumber(post.price)} VND
                     </h6>
+                    {/* <img src="src/assets/output-onlinegiftools.gif" style={{fontSize:'12px'}} alt="img" /> */}
                     <div className="flex items-center">
                       <p className="text-sm">
                         Start: {new Date(post.timestart).toLocaleDateString()}
@@ -137,7 +144,7 @@ export const EventBlog = (props: EventBlogProps) => {
                     size={post.button?.size}
                     iconRight={post.button?.iconRight}
                     iconLeft={post.button?.iconLeft}
-                    className="mt-6 flex items-center justify-center gap-x-1"
+                    className="mt-6 flex items-center justify-center gap-x-1 button_card"
                     onClick={() => handleButtonClick(post.id)}
                   >
                     {post.button?.title}
@@ -170,7 +177,7 @@ export const EventBlog = (props: EventBlogProps) => {
 export const EventBlogDefault: EventBlogProps = {
   tagline: "Discover",
   heading: "Upcoming Events",
-  description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+  description: "Explore the trending events happening with FPT event.",
   button: { title: "View all", variant: "secondary" },
   EventPosts: [],
 };

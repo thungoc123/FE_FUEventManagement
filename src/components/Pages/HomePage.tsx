@@ -1,5 +1,5 @@
 import { Navbar2 } from "../Organisms/Guest/Navbar";
-import { Header9 } from "../Organisms/Guest/HeaderHero";
+import { Header76 } from "../Organisms/Guest/HeaderHero";
 import { Blog33 } from "../Organisms/Guest/Blog33";
 import { Logo1 } from "../Organisms/Guest/Logo1";
 import { Footer1 } from "../Organisms/Guest/Footer";
@@ -42,8 +42,9 @@ function HomePage() {
   return (
     <>
       <Navbar2 />
-      <Header9 {...headerData} />
-
+      {/* <Header9 {...headerData} />
+       */}
+      <Header76 />
       {/* RENDER THE UPCOMING EVENTS */}
       <EventBlog
         tagline="Discover"
@@ -61,7 +62,6 @@ function HomePage() {
         button={{ title: "View all", variant: "secondary" }}
         EventPosts={publishedEvents} // Truyền dữ liệu sự kiện vào Blog />
       />
-
       <Logo1 />
       <Footer1 />
     </>

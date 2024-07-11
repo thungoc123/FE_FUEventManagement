@@ -4,6 +4,7 @@ import { Button } from "@relume_io/relume-ui";
 import type { ImgProps, ButtonProps } from "@relume_io/relume-ui";
 import { AnimatePresence, motion } from "framer-motion";
 import { RxChevronDown } from "react-icons/rx";
+import '../Style/navbar.css'
 import {
   Dialog,
   DialogTrigger,
@@ -203,15 +204,19 @@ export const Navbar2 = (props: Navbar2Props) => {
   };
 
   return (
-    <nav className="flex w-full items-center border-b border-border-primary bg-white lg:min-h-18 lg:px-[5%]">
-      <div className="mx-auto size-full lg:grid lg:grid-cols-[0.375fr_1fr_0.375fr] lg:items-center lg:justify-between lg:gap-4">
-        <div className="flex min-h-16 items-center justify-between px-[5%] md:min-h-18 lg:min-h-full lg:px-0">
-          <img src={logo.src} alt={logo.alt} />
+    <div className="nav_wrapper">
+    <nav className="flex w-full items-center lg:min-h-18 lg:px-[5%]" style={{ background: 'linear-gradient(280deg, #1e005a 0%, #3c016c 30%, #1e005a 100%, #1e005a 100%);', borderRadius:'0 0 63px 63px' }}>
+      <div className="mx-auto size-full lg:grid lg:grid-cols-[0.375fr_1fr_0.375fr] lg:items-center lg:justify-between lg:gap-4"  >
+        <div className="flex min-h-16 items-center justify-between px-[5%] md:min-h-18 lg:min-h-full lg:px-0" 
+         
+        >
+          <img src={logo.src} alt={logo.alt} style={{ width: '50px' }} />
           <div className="flex items-center gap-4 lg:hidden">
             {isLogin ? (
               <Dropdown email={email} />
             ) : (
               buttons.map((button, index) => (
+                <div className="button_border">
                 <Button
                   key={`${button.title}-${index}`}
                   className="px-6 py-2 mx-2"
@@ -223,6 +228,7 @@ export const Navbar2 = (props: Navbar2Props) => {
                 >
                   {button.title}
                 </Button>
+                </div>
               ))
             )}
             <button
@@ -256,7 +262,7 @@ export const Navbar2 = (props: Navbar2Props) => {
           {links.map((link, index) => (
             <div
               key={`${link.title}-${index}`}
-              className="first:pt-4 lg:first:pt-0"
+              className="first:pt-4 lg:first:pt-0 menu"
             >
               {link.subLinks && link.subLinks.length > 0 ? (
                 <NavItemDropdown subLinks={link.subLinks} title={link.title} />
@@ -278,7 +284,7 @@ export const Navbar2 = (props: Navbar2Props) => {
             buttons.map((button, index) => (
               <Button
                 key={`${button.title}-${index}`}
-                className="px-6 py-2 mx-2"
+                className="px-6 py-2 mx-2 login_button"
                 variant={button.variant}
                 size={button.size}
                 onClick={() =>
@@ -407,6 +413,7 @@ export const Navbar2 = (props: Navbar2Props) => {
         setRoleChoosingOpen={setRoleChoosingOpen}
       />
     </nav>
+    </div>
   );
 };
 
@@ -456,7 +463,7 @@ const NavItemDropdown = ({
 
 export const Navbar2Defaults = {
   logo: {
-    src: "",
+    src: "/src/assets/logo-removebg-preview.png",
     alt: "Logo",
   },
   links: [

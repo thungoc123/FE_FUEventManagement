@@ -7,6 +7,7 @@ import SearchBar from "./SearchBar";
 import { useNavigate } from "react-router-dom";
 import { Button, Input } from "@relume_io/relume-ui";
 import type { ImgProps, ButtonProps } from "@relume_io/relume-ui";
+import { truncateString } from "../../../ulities/Stringhandle";
 
 type StateEvent = {
   id: number;
@@ -52,7 +53,7 @@ export const Blog33 = (props: Blog33Props) => {
   } as Props;
 
   const [searchValue, setSearchValue] = useState<string>("");
-  const [visibleEvents, setVisibleEvents] = useState(3);
+  const [visibleEvents, setVisibleEvents] = useState(6);
   const [filteredEvents, setFilteredEvents] = useState<EventPost[]>(EventPosts || []);
 
   const handleViewAll = () => {
@@ -81,14 +82,13 @@ export const Blog33 = (props: Blog33Props) => {
   }, [EventPosts]);
 
   return (
-    <section className="px-[5%] py-16 md:py-24 lg:py-28">
+    <section className="px-[5%] py-16 md:py-24 lg:py-28 eventblog" id="blog">
       <div className="container">
         <div className="container mb-12 max-w-lg text-center md:mb-18 lg:mb-20">
           {/* <SearchBar /> */}
           <p className="mb-3 font-semibold md:mb-4">{tagline}</p>
-          <SearchBar value={searchValue} onChange={handleSearch} />
-          <h2 className="mb-5 text-5xl font-bold md:mb-6 md:text-7xl lg:text-8xl">{heading}</h2>
-          <p className="md:text-md">{description}</p>
+          <h2 className="mb-5 text-5xl font-bold md:mb-6 md:text-7xl lg:text-8xl">Reminded Events</h2>
+          <p className="md:text-md">Let's list the remarkable events that have taken place.</p>
         </div>
         <div className="grid grid-cols-1 gap-x-8 gap-y-16 md:grid-cols-2 md:gap-y-12 lg:grid-cols-3">
           {filteredEvents.slice(0, visibleEvents).map((post) => {
@@ -99,7 +99,7 @@ export const Blog33 = (props: Blog33Props) => {
                 : "https://relume-assets.s3.amazonaws.com/placeholder-image-landscape.svg";
 
             return (
-              <div key={post.id}>
+              <div key={post.id} className="eventCard flex flex-col justify-between h-full">
                 <a href={post.url} className="mb-3 inline-block w-full max-w-full focus-visible:outline-none">
                   <div className="w-full overflow-hidden">
                     <img
@@ -111,15 +111,15 @@ export const Blog33 = (props: Blog33Props) => {
                 </a>
                 <div className="mt-3 flex items-center justify-between">
                   <DateDisplay date={new Date(post.timestart).toLocaleDateString()} />
-                  <LocationDisplay location={post.location ?? "No location"} />
+                  {/* <LocationDisplay location={post.location ?? "No location"} /> */}
                 </div>
                 <a href={post.url} className="mb-2 block max-w-full focus-visible:outline-none">
                   <h5 className="text-xl font-bold md:text-2xl">{post.name}</h5>
                 </a>
-                <p>{post.description}</p>
+                <p>{truncateString(post.description,70)}</p>
                 <div className="mt-6 flex items-center justify-between">
-                  <div>
-                    <h6 className="text-sm font-semibold">Price: ${post.price}</h6>
+                  <div className="flex">
+                    <h6 className="text-sm font-semibold price">Price: {post.price} VND</h6>
                     <div className="flex items-center">
                       <p className="text-sm">Start: {new Date(post.timestart).toLocaleDateString()}</p>
                       <span className="mx-2">•</span>
@@ -131,7 +131,7 @@ export const Blog33 = (props: Blog33Props) => {
                     size={post.button?.size}
                     iconRight={post.button?.iconRight}
                     iconLeft={post.button?.iconLeft}
-                    className="mt-6 flex items-center justify-center gap-x-1"
+                    className="mt-6 ml-2 button_blog_card"
                     onClick={() => handleButtonClick(post.id)}
                   >
                     {post.button?.title || "Detail"}

@@ -1,146 +1,198 @@
-import { useState, useEffect } from "react";
-import type { ButtonProps, CarouselApi } from "@relume_io/relume-ui";
-import clsx from "clsx";
-import Autoplay from "embla-carousel-autoplay";
-import {
-  Button,
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@relume_io/relume-ui";
+import { Button } from "@relume_io/relume-ui";
+import type { ButtonProps } from "@relume_io/relume-ui";
+import '../Style/header.css'
+import SearchBar from "./SearchBar";
+import { EventImage, StateEvent } from "../../../Types/eo.type";
+import { useEffect, useState } from "react";
 import { truncateString } from "../../../ulities/Stringhandle";
-
+import DateDisplay from "../../Atoms/Date";
+import { useNavigate } from "react-router-dom";
 type ImageProps = {
   src: string;
   alt?: string;
 };
 
-type EventImage = {
-  id: number;
-  url: string;
-  event: string;
-  name: string;
-  description: string;
-};
-
 type Props = {
   heading: string;
   description: string;
+  buttons: ButtonProps[];
   images: ImageProps[];
-  eventImages: EventImage[];
-  carouselHeading: string;
-  carouselDescription: string;
+  EventPosts?: EventPost[];
+};
+type EventPost = {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  timestart: string;
+  timeend: string;
+  timeopensale: string;
+  timeclosesale: string;
+  stateEvent?: StateEvent | null;
+  eventImages: EventImage[] | null;
+  url?: string;
+  button?: ButtonProps;
+  location?: string;
 };
 
-const options = {
-  loop: true,
-};
+export type Header76Props = React.ComponentPropsWithoutRef<"section"> & Partial<Props>;
 
-const plugins = [
-  Autoplay({
-    delay: 5000,
-  }),
-];
-
-export type Header9Props = React.ComponentPropsWithoutRef<"section"> &
-  Partial<Props>;
-
-export const Header9 = (props: Header9Props) => {
-  const [api, setApi] = useState<CarouselApi>();
-  const [current, setCurrent] = useState(0);
-  const {
-    heading,
-    description,
-    eventImages,
-    
-  } = {
-    ...Header9Defaults,
+export const Header76 = (props: Header76Props) => {
+  const { heading, description, buttons, images , EventPosts} = {
+    ...Header76Defaults,
     ...props,
   } as Props;
+  const [searchValue, setSearchValue] = useState<string>("");
+  const [filteredEvents, setFilteredEvents] = useState<EventPost[]>(EventPosts || []);
+
+  const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
+    const query = event.target.value;
+    setSearchValue(query);
+
+    if (!EventPosts) return;
+
+    const filtered = EventPosts.filter((post) =>
+      post.name.toLowerCase().includes(query.toLowerCase())
+    );
+    setFilteredEvents(filtered);
+  };
+  const [visibleEvents, setVisibleEvents] = useState(3);
 
   useEffect(() => {
-    if (!api) {
-      return;
-    }
-    setCurrent(api.selectedScrollSnap() + 1);
-    api.on("select", () => {
-      setCurrent(api.selectedScrollSnap() + 1);
-    });
-  }, [api]);
-
+    setFilteredEvents(EventPosts || []);
+  }, [EventPosts]);
+  const navigate = useNavigate();
+  const handleButtonClick = (eventId: number) => {
+    navigate(`/event-detail/${eventId}`);
+  };
   return (
-    <section className="grid grid-cols-1 items-center gap-y-16 overflow-hidden pt-16 sm:overflow-auto md:pt-24 lg:grid-cols-[50%_50%] lg:gap-y-0 lg:pt-0">
-      <div className="mx-[5%] max-w-md justify-self-start lg:ml-[5vw] lg:mr-20 lg:justify-self-end">
-        <h1 className="mb-5 text-6xl font-bold md:mb-6 md:text-9xl lg:text-10xl">
-          {heading}
-        </h1>
+    <header className="grid grid-cols-1 gap-y-16 pt-16 md:grid-flow-row md:pt-24 lg:grid-flow-col lg:grid-cols-2 lg:items-center lg:pt-0 header">
+      <div className="mx-[5%] max-w-[40rem] justify-self-start lg:ml-[5vw] lg:mr-20 lg:justify-self-end">
+        <h1 className="mb-5 text-6xl font-bold md:mb-6 md:text-9xl lg:text-10xl">{heading}</h1>
         <p className="md:text-md">{description}</p>
-      </div>
-      <div className="relative clear-both h-[300px] max-h-[60rem] min-h-screen w-full bg-[#ddd] text-center">
-        <Carousel
-          opts={options}
-          plugins={plugins}
-          setApi={setApi}
-          className="relative left-0 right-0 z-10 block h-full overflow-hidden whitespace-nowrap pl-4"
-        >
-          <CarouselContent>
-            {eventImages?.map((image, index) => (
-              <CarouselItem key={index} className="pl-0">
-                <div className="relative inline-block size-full whitespace-normal text-left align-top">
-                  <div className="flex h-screen flex-col">
-                    <div className="relative flex-1">
-                      <img
-                        className="absolute size-full object-cover"
-                        src={image.url}
-                        alt={`Event image ${index + 1}`}
-                      />
-                    </div>
-                    <div className="relative bg-background-secondary px-6 pb-32 pt-6 sm:px-8 sm:pt-8">
-                      <div className="w-full max-w-lg">
-                        <h2 className="mb-1 text-md font-bold leading-[1.4] md:text-xl">
-                          {image.name}
-                        </h2>
-                        <p>{image.description}</p>
-                      </div>
+        <div className="mt-6 flex gap-x-4 md:mt-8">
+          {/* {buttons.map((button, index) => (
+            <Button key={index} {...button}>
+              {button.title}
+            </Button>
+          ))} */}
+          <SearchBar value={searchValue} onChange={handleSearch} />
+          {filteredEvents.slice(0, visibleEvents).map((post) => {
+            const stateEventName = post.stateEvent?.name ?? "No location";
+            const eventImageUrl =
+              post.eventImages && post.eventImages.length > 0
+                ? post.eventImages[0].url
+                : "https://relume-assets.s3.amazonaws.com/placeholder-image-landscape.svg";
+
+            return (
+              <div key={post.id} className="eventCard flex flex-col justify-between h-full">
+                <a href={post.url} className="mb-3 inline-block w-full max-w-full focus-visible:outline-none">
+                  <div className="w-full overflow-hidden">
+                    <img
+                      src={eventImageUrl}
+                      alt={post.eventImages && post.eventImages.length > 0 ? post.eventImages[0].event : "Placeholder image"}
+                      className="aspect-[3/2] size-full object-cover"
+                    />
+                  </div>
+                </a>
+                <div className="mt-3 flex items-center justify-between">
+                  <DateDisplay date={new Date(post.timestart).toLocaleDateString()} />
+                  {/* <LocationDisplay location={post.location ?? "No location"} /> */}
+                </div>
+                <a href={post.url} className="mb-2 block max-w-full focus-visible:outline-none">
+                  <h5 className="text-xl font-bold md:text-2xl">{post.name}</h5>
+                </a>
+                <p>{truncateString(post.description,70)}</p>
+                <div className="mt-6 flex items-center justify-between">
+                  <div className="flex">
+                    <h6 className="text-sm font-semibold price">Price: {post.price} VND</h6>
+                    <div className="flex items-center">
+                      <p className="text-sm">Start: {new Date(post.timestart).toLocaleDateString()}</p>
+                      <span className="mx-2">•</span>
+                      <p className="text-sm">End: {new Date(post.timeend).toLocaleDateString()}</p>
                     </div>
                   </div>
+                  <Button
+                    variant={post.button?.variant}
+                    size={post.button?.size}
+                    iconRight={post.button?.iconRight}
+                    iconLeft={post.button?.iconLeft}
+                    className="mt-6 ml-2 button_blog_card"
+                    onClick={() => handleButtonClick(post.id)}
+                  >
+                    {post.button?.title || "Detail"}
+                  </Button>
                 </div>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <div className="flex items-center justify-between pl-4">
-            <div className="absolute bottom-[52px] left-8 right-auto top-auto flex w-full items-start justify-start">
-              {eventImages?.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => api?.scrollTo(index)}
-                  className={clsx("mx-[3px] inline-block size-2 rounded-full", {
-                    "bg-black": current === index + 1,
-                    "bg-neutral-light": current !== index + 1,
-                  })}
-                />
-              ))}
-            </div>
-            <CarouselPrevious className="bottom-2 left-auto right-[5.5rem] top-auto size-12 md:right-24" />
-            <CarouselNext className="bottom-2 left-auto right-8 top-auto size-12" />
-          </div>
-        </Carousel>
+              </div>
+            );
+          })}
+        </div>
       </div>
-    </section>
+      <div className="h-[30rem] overflow-hidden pl-[5vw] pr-[5vw] md:h-[40rem] lg:h-screen lg:pl-0">
+        <div className="grid w-full grid-cols-2 gap-x-4">
+          <div className="-mt-[120%] grid size-full animate-loop-vertically columns-2 grid-cols-1 gap-4 self-center">
+            {images.map((image, index) => (
+              <div key={index} className="grid size-full grid-cols-1 gap-4">
+                <div className="relative w-full pt-[120%]">
+                  <img
+                    className="absolute inset-0 size-full object-cover"
+                    src={image.src}
+                    alt={image.alt}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="grid size-full animate-loop-vertically grid-cols-1 gap-4">
+            {images.map((image, index) => (
+              <div key={index} className="grid size-full grid-cols-1 gap-4">
+                <div className="relative w-full pt-[120%]">
+                  <img
+                    className="absolute inset-0 size-full object-cover"
+                    src={image.src}
+                    alt={image.alt}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </header>
   );
 };
 
-export const Header9Defaults: Header9Props = {
-  heading: "Event Of The Month",
+export const Header76Defaults: Header76Props = {
+  heading: "Welcome to FPT event",
   description:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat.",
-  images: [],
-  eventImages: [],
-  carouselHeading: "Short heading goes here",
-  carouselDescription:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    "The ease of searching, filtering, and staying updated on the latest events is the core value we aim to deliver to you.",
+  buttons: [{ title: "Button" }, { title: "Button", variant: "secondary" }],
+  images: [
+    {
+      src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQpAkYjJsapdf0njIpv_qtjQsk5B6yvJqSIw&s",
+      alt: "Placeholder image 1",
+    },
+    {
+      src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT905pYr4ntcJippPGqDscDtu5TapUYCkD4rQ&s",
+      alt: "Placeholder image 2",
+    },
+    {
+      src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAc55TGWqEA4LsRUJrk43XSVm9UuotBo1omw&s",
+      alt: "Placeholder image 3",
+    },
+    {
+      src: "https://vsmart.com.vn/uploads/event-moi/banner-chinh.jpeg",
+      alt: "Placeholder image 4",
+    },
+    {
+      src: "https://relume-assets.s3.amazonaws.com/placeholder-image.svg",
+      alt: "Placeholder image 5",
+    },
+    {
+      src: "https://phucthanhnhan.com/contents_images/images/event-la-gi-3.jpg",
+      alt: "Placeholder image 6",
+    },
+  ],
 };
 
-Header9.displayName = "Header9";
+Header76.displayName = "Header76";

@@ -1,0 +1,77 @@
+.detail_header {
+                         background: radial-gradient(circle at center left, #402a6d 0%, #1e005a 20%, #1e005a 16%);
+}
+
+.detail_header h1,
+.shedule h1, .gallery h2 {
+                         font-size: 48px;
+                         /* Kích thước chữ */
+                         font-weight: bold;
+                         /* Độ đậm của chữ */
+                         color: #fff;
+                         /* Màu chữ */
+                         text-shadow: 0 0 5px #00fff9, 0 0 10px #00fff9, 0 0 15px #00fff9, 0 0 20px #00fff9, 0 0 35px #00fff9, 0 0 40px #00fff9, 0 0 50px #00fff9, 0 0 75px #00fff9;
+                         /* Đổ bóng cho chữ */
+                         animation: neon-glow 1.5s infinite alternate;
+                         /* Animation hiệu ứng neon */
+
+}
+
+.detail_header p {
+                         color: #ffffff;
+
+}
+
+.detail_header .buy {
+                         background: #e2d281;
+                         color: #1e005a;
+                         font-weight: 700;
+}
+
+.event_infor {
+                         background: radial-gradient(circle at right, #402a6d 0%, #1e005a 30%, #1e005a 36%);
+}
+
+.event_infor .event_detail {
+                         max-width: 1280px;
+                         margin: 0 auto;
+                         background: #743ae760;
+                         padding: 20px;
+                         border-radius: 10px;
+}
+
+.event_infor .event_detail h2 {
+                         color: #cb965e;
+                         font-size: 25px;
+}
+
+.event_infor .event_detail p {
+                         color: #00fff9;
+}
+
+.shedule {
+                         background: radial-gradient(circle at center bottom, #402a6d 0%, #1e005a 30%, #1e005a 36%);
+}
+
+
+.shedule_header {
+                         background: #6ddfd8;
+}
+
+.date_infor {
+font-size: 34px;
+                         /* Kích thước chữ */
+font-weight: bold;
+                         /* Độ đậm của chữ */
+color: #fff;
+                         /* Màu chữ */
+text-shadow: 0 0 5px #00fff9, 0 0 10px #00fff9, 0 0 15px #00fff9, 0 0 20px #00fff9, 0 0 35px #00fff9, 0 0 40px #00fff9, 0 0 50px #00fff9, 0 0 75px #00fff9;
+                         /* Đổ bóng cho chữ */
+animation: neon-glow 1.5s infinite alternate;
+                         /* Animation hiệu ứng neon */
+
+}
+.gallery {
+ background: radial-gradient(circle at center bottom, #402a6d 0%, #1e005a 30%, #1e005a 36%);
+                     
+}

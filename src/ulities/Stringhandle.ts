@@ -11,7 +11,9 @@ export function truncateString(input: string, maxLength: number, suffix: string 
     }
     return input.slice(0, maxLength) + suffix;
   }
-  
+export function formatNumber(number:number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  }
   // Ví dụ sử dụng
 //   const originalString = "This is a long string that needs to be truncated.";
 //   const truncated = truncateString(originalString, 20);
