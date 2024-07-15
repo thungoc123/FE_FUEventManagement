@@ -1,6 +1,18 @@
 import React, { useState, FormEvent } from "react";
-import { Button, Dialog, DialogPortal, DialogOverlay, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, Label, Input } from "@relume_io/relume-ui";
-import { useRequestPasswordResetMutation, useUpdatePasswordMutation } from "../../../Features/Password/resetPasswordApi"; // Correctly import both mutations
+import {
+  Button,
+  Dialog,
+  DialogPortal,
+  DialogOverlay,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  Label,
+  Input
+} from "@relume_io/relume-ui";
+import { useRequestPasswordResetMutation, useUpdatePasswordMutation } from "../../../Features/Password/resetPasswordApi"; 
 
 interface ResetPasswordProps {
   isOpen: boolean;
@@ -12,8 +24,8 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ isOpen, onClose }) => {
   const [newPasswordData, setNewPasswordData] = useState({ newPassword: "", confirmPassword: "" });
   const [isNewPassword, setIsNewPassword] = useState(false);
   const [tokenEntered, setTokenEntered] = useState(false);
-  const [requestPasswordReset] = useRequestPasswordResetMutation(); // Correct mutation hook
-  const [updatePassword] = useUpdatePasswordMutation(); // Correct mutation hook
+  const [requestPasswordReset] = useRequestPasswordResetMutation();
+  const [updatePassword] = useUpdatePasswordMutation();
 
   const handleNewPasswordSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -27,7 +39,7 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ isOpen, onClose }) => {
     try {
       const response = await updatePassword({
         token: resetData.token,
-        newPassword: newPasswordData.newPassword,
+        newPassword: newPasswordData.newPassword, // Gửi mật khẩu mới trong request
       }).unwrap();
       console.log("Password reset successful:", response);
       onClose();
@@ -48,7 +60,7 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ isOpen, onClose }) => {
     try {
       const result = await requestPasswordReset({ email: resetData.email }).unwrap();
       console.log(result);
-      setTokenEntered(true); // Set token entered to true
+      setTokenEntered(true);
     } catch (err) {
       console.error("Failed to reset password:", err);
     }

@@ -8,7 +8,7 @@ import { EOevent } from '../../Types/eo.type';
 
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: 'https://eventmanagementfu.azurewebsites.net/',
+  baseUrl: 'http://localhost:7979/',
   prepareHeaders: (headers, { getState }) => {
     // Lấy token từ localStorage
     let token = sessionStorage.getItem('token')

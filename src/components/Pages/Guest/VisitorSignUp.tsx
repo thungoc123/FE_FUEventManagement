@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom"; // Import useNavigate
-
 import { ChangeEvent, FormEvent, useState } from "react";
 import { Button, Input, Label } from "@relume_io/relume-ui";
 import type { ImgProps, ButtonProps } from "@relume_io/relume-ui";
@@ -40,31 +39,62 @@ export const VisitorSignUp = (props: Signup7Props) => {
   const navigate = useNavigate();
 
   const [visitorData, setVisitorData] = useState({
-    "email": '',
-    "password": '',
-    "confirmPassword": '',
-    "information": null
-  })
+    email: '',
+    password: '',
+    confirmPassword: '',
+  });
+  const [errors, setErrors] = useState({
+    password: '',
+    confirmPassword: '',
+  });
+
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setVisitorData({
       ...visitorData,
       [e.target.name]: e.target.value,
     });
   };
+
+  const validatePassword = (password: string) => {
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return passwordRegex.test(password);
+  };
+
+  const validatePasswordsMatch = (password: string, confirmPassword: string) => {
+    return password === confirmPassword;
+  };
+
   const [registerVisitor, { isLoading, isError, isSuccess, error }] = useRegisterVisitorMutation(); 
   
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try {
+    const { password, confirmPassword } = visitorData;
+
+    let valid = true;
+    const newErrors = { password: '', confirmPassword: '' };
+
+    if (!validatePassword(password)) {
+      newErrors.password = 'Mật khẩu phải có ít nhất 1 ký tự in hoa, 1 chữ số và 1 ký tự đặc biệt.';
+      valid = false;
+    }
+
+    if (!validatePasswordsMatch(password, confirmPassword)) {
+      newErrors.confirmPassword = 'Mật khẩu không khớp.';
+      valid = false;
+    }
+
+    setErrors(newErrors);
+
+    if (valid) {
+      try {
         await registerVisitor(visitorData).unwrap();
-        navigate('/login')
-        
+        navigate('/login');
       } catch (error) {
-      console.error('Registration failed:', error);
-    } 
+        console.error('Registration failed:', error);
+      }
+    }
   };
   
- 
   return (
     <section>
       <div className="relative grid min-h-screen grid-cols-1 items-stretch justify-center overflow-auto lg:grid-cols-2">
@@ -90,13 +120,11 @@ export const VisitorSignUp = (props: Signup7Props) => {
                   type="email"
                   id="email"
                   name="email"
-                  // value={email}
                   onChange={handleChange}
                   required
                 />
               </div>
               <div className="grid w-full items-center text-left">
-
                 <Label htmlFor="password" className="mb-2">
                   Password*
                 </Label>
@@ -104,43 +132,32 @@ export const VisitorSignUp = (props: Signup7Props) => {
                   type="password"
                   id="password"
                   name="password"
-                  // value={password}
                   onChange={handleChange}
                   required
                 />
+                {errors.password && <p style={{ color: 'red' }}>{errors.password}</p>}
               </div>
               <div className="grid w-full items-center text-left">
-                <Label htmlFor="password" className="mb-2">
+                <Label htmlFor="confirmPassword" className="mb-2">
                   Confirm Password*
                 </Label>
                 <Input
-                  type="hidden"
-                  id="password"
-                  name="information"
-                  value=""
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-             
-              <Input
                   type="password"
-                  id="password"
+                  id="confirmPassword"
                   name="confirmPassword"
-                  // value={password}
                   onChange={handleChange}
                   required
                 />
+                {errors.confirmPassword && <p style={{ color: 'red' }}>{errors.confirmPassword}</p>}
+              </div>
               <div className="grid-col-1 grid gap-4">
                 <Button
                   variant={signUpButton.variant}
                   size={signUpButton.size}
                   iconLeft={signUpButton.iconLeft}
                   iconRight={signUpButton.iconRight}
-                  // onClick={handleClick}
                 >
-                          {isLoading ? 'Signing in...' :  signUpButton.title}
-                 
+                  {isLoading ? 'Signing in...' : signUpButton.title}
                 </Button>
               </div>
               {isError && <p style={{ color: 'red' }}>{error?.data || 'Sign up failed'}</p>}
@@ -157,7 +174,7 @@ export const VisitorSignUp = (props: Signup7Props) => {
           </div>
         </div>
         <div className="h-screen w-full flex items-center justify-center">
-        <img
+          <img
             src={image.src}
             alt={image.alt}
             className="h-full w-full object-cover"
@@ -182,9 +199,7 @@ export const Signup7Defaults: Signup7Props = {
   signUpButton: {
     title: "Sign up",
   },
-
   image: {
-
     src: "src/assets/student.png",
     alt: "Placeholder image",
   },
@@ -193,6 +208,5 @@ export const Signup7Defaults: Signup7Props = {
     text: "Log in",
     url: "#",
   },
-
   footerText: "© 2024 Relume",
 };

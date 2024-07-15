@@ -49,21 +49,54 @@ export const SponsorSignUp = (props: Signup7Props) => {
     fptStaffEmail: '',
     information: '',
   });
+  const [errors, setErrors] = useState({
+    password: '',
+    confirmPassword: '',
+  });
+
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSponsorData({
       ...sponsorData,
       [e.target.name]: e.target.value,
-    })
-  }
+    });
+  };
+
+  const validatePassword = (password: string) => {
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return passwordRegex.test(password);
+  };
+
+  const validatePasswordsMatch = (password: string, confirmPassword: string) => {
+    return password === confirmPassword;
+  };
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try {
+    const { password, confirmPassword } = sponsorData;
+
+    let valid = true;
+    const newErrors = { password: '', confirmPassword: '' };
+
+    if (!validatePassword(password)) {
+      newErrors.password = 'Mật khẩu phải có ít nhất 1 ký tự in hoa, 1 chữ số và 1 ký tự đặc biệt.';
+      valid = false;
+    }
+
+    if (!validatePasswordsMatch(password, confirmPassword)) {
+      newErrors.confirmPassword = 'Mật khẩu không khớp.';
+      valid = false;
+    }
+
+    setErrors(newErrors);
+
+    if (valid) {
+      try {
         await registerSponsor(sponsorData).unwrap();
-        navigate('/login')
-        
+        navigate('/login');
       } catch (error) {
-      console.error('Registration failed:', error);
-    } 
+        console.error('Registration failed:', error);
+      }
+    }
   };
 
   return (
@@ -93,7 +126,6 @@ export const SponsorSignUp = (props: Signup7Props) => {
                 <Input
                   type="email"
                   id="email"
-                  // value={email}
                   onChange={handleChange}
                   name="email"
                   required
@@ -105,8 +137,7 @@ export const SponsorSignUp = (props: Signup7Props) => {
                 </Label>
                 <Input
                   type="text"
-                  id="text"
-                  // value={companyName}
+                  id="companyName"
                   onChange={handleChange}
                   name="companyName"
                   required
@@ -118,22 +149,20 @@ export const SponsorSignUp = (props: Signup7Props) => {
                   Company ID/Personal ID*
                 </Label>
                 <Input
-                  type="companyID"
+                  type="text"
                   id="companyID"
-                  // value={companyID}
                   onChange={handleChange}
                   name="companyID"
                   required
                 />
               </div>
               <div className="grid w-full items-center text-left">
-                <Label htmlFor="companyID" className="mb-2">
+                <Label htmlFor="fptStaffEmail" className="mb-2">
                   FPT Staff Email*
                 </Label>
                 <Input
-                  type="StaffEmail"
-                  id="staffEmail"
-                  // value={staffEmail}
+                  type="email"
+                  id="fptStaffEmail"
                   onChange={handleChange}
                   name="fptStaffEmail"
                   required
@@ -146,24 +175,24 @@ export const SponsorSignUp = (props: Signup7Props) => {
                 <Input
                   type="password"
                   id="password"
-                  // value={password}
                   onChange={handleChange}
                   name="password"
                   required
                 />
+                {errors.password && <p style={{ color: 'red' }}>{errors.password}</p>}
               </div>
               <div className="grid w-full items-center text-left">
-                <Label htmlFor="password" className="mb-2">
+                <Label htmlFor="confirmPassword" className="mb-2">
                   Confirm Password*
                 </Label>
                 <Input
                   type="password"
-                  id="cpassword"
-                  // value={cpassword}
+                  id="confirmPassword"
                   onChange={handleChange}
-                  name="cpassword"
+                  name="confirmPassword"
                   required
                 />
+                {errors.confirmPassword && <p style={{ color: 'red' }}>{errors.confirmPassword}</p>}
               </div>
               <div className="grid-col-1 grid gap-4">
                 <Button
@@ -171,11 +200,10 @@ export const SponsorSignUp = (props: Signup7Props) => {
                   size={signUpButton.size}
                   iconLeft={signUpButton.iconLeft}
                   iconRight={signUpButton.iconRight}
-                  // onClick={e => handleClick}
                   type="submit"
                 >
-                          {isLoading ? 'Signing in...' :  signUpButton.title}
-                          </Button>
+                  {isLoading ? 'Signing in...' : signUpButton.title}
+                </Button>
               </div>
               {isError && <p style={{ color: 'red' }}>{error?.data || 'Sign up failed'}</p>}
 
@@ -217,7 +245,6 @@ export const Signup7Defaults: Signup7Props = {
   signUpButton: {
     title: "Sign up",
   },
-
   image: {
     src: "/src/assets/7.jpg",
     alt: "Placeholder image",

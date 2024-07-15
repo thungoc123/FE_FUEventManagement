@@ -22,7 +22,7 @@ interface VisitorRequest {
 }
 export const authApi = createApi({
     reducerPath: 'authApi',
-    baseQuery: fetchBaseQuery({ baseUrl: 'https://eventmanagementfu.azurewebsites.net' }),
+    baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:7979' }),
     endpoints: (builder) => ({
       login: builder.mutation<LoginResponse, LoginRequest>({
         query: (credentials) => ({

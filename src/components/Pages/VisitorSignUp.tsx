@@ -55,7 +55,7 @@ export const VisitorSignUp = (props: Signup7Props) => {
 
     if (!validatePassword(newPassword)) {
       setPasswordError(
-        "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character."
+        "Mật khẩu phải chứa ít nhất một chữ cái viết hoa, một chữ cái viết thường, một số và một ký tự đặc biệt."
       );
     } else {
       setPasswordError("");
@@ -67,7 +67,7 @@ export const VisitorSignUp = (props: Signup7Props) => {
     setCPassword(newConfirmPassword);
 
     if (newConfirmPassword !== password) {
-      setConfirmPasswordError("Passwords do not match");
+      setConfirmPasswordError("Mật khẩu xác nhận không khớp");
     } else {
       setConfirmPasswordError("");
     }
@@ -75,10 +75,21 @@ export const VisitorSignUp = (props: Signup7Props) => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log({ name: email, fullName, password });
+
+    if (!validatePassword(password)) {
+      setPasswordError("Mật khẩu phải chứa ít nhất một chữ cái viết hoa, một chữ cái viết thường, một số và một ký tự đặc biệt.");
+      return;
+    }
+
+    if (password !== cpassword) {
+      setConfirmPasswordError("Mật khẩu xác nhận không khớp");
+      return;
+    }
+
+    console.log({ email, fullName, password });
 
     if (passwordError || confirmPasswordError) {
-      alert("Please correct the errors before submitting");
+      alert("Vui lòng sửa các lỗi trước khi gửi");
       return;
     }
 
@@ -129,7 +140,7 @@ export const VisitorSignUp = (props: Signup7Props) => {
               </div>
               <div className="grid w-full items-center text-left">
                 <Label htmlFor="name" className="mb-2">
-                  Company Name/FullName*
+                  Tên công ty/Tên đầy đủ*
                 </Label>
                 <Input
                   type="text"
@@ -142,7 +153,7 @@ export const VisitorSignUp = (props: Signup7Props) => {
 
               <div className="grid w-full items-center text-left">
                 <Label htmlFor="password" className="mb-2">
-                  Password*
+                  Mật khẩu*
                 </Label>
                 <Input
                   type="password"
@@ -157,7 +168,7 @@ export const VisitorSignUp = (props: Signup7Props) => {
               </div>
               <div className="grid w-full items-center text-left">
                 <Label htmlFor="cpassword" className="mb-2">
-                  Confirm Password*
+                  Xác nhận mật khẩu*
                 </Label>
                 <Input
                   type="password"
@@ -216,19 +227,19 @@ export const Signup7Defaults: Signup7Props = {
     alt: "Logo text",
   },
   logoLink: "#",
-  title: "Sign Up",
+  title: "Đăng ký",
   description: "Lorem ipsum dolor sit amet adipiscing elit.",
   signUpButton: {
-    title: "Sign up",
+    title: "Đăng ký",
   },
 
   image: {
     src: "/src/assets/7.jpg",
     alt: "Placeholder image",
   },
-  logInText: "Already have an account?",
+  logInText: "Đã có tài khoản?",
   logInLink: {
-    text: "Log in",
+    text: "Đăng nhập",
     url: "#",
   },
 

@@ -45,6 +45,7 @@ import SponsorProgramDetail from "./components/Pages/Dashboard/Sponsor/SponsorPr
 import { Payment } from "./components/Pages/Visitor/Payment";
 import { PaymentPage } from "./components/Pages/Visitor/PaymentPage";
 import { Login1 } from "./components/Pages/Login";
+import { EventProfit } from "./components/Organisms/EventOperator/EventProfit";
 
 function App() {
   const eventId = "1";
@@ -190,6 +191,14 @@ function App() {
             element={
               <RequireAuth role="ROLE_EO">
                 <ManageEvent component={<PublishEvent />} />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/eventoperator/dashboard/event-profit"
+            element={
+              <RequireAuth role="ROLE_EO">
+                <ManageEvent component={<EventProfit />} />
               </RequireAuth>
             }
           />

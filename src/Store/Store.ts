@@ -26,7 +26,7 @@ const persistedAuthReducer = persistReducer(authPersistConfig, authReducer);
 
 export const store = configureStore({
   reducer: {
-    // [ticketApi.reducerPath]: ticketApi.reducer,
+    [ticketApi.reducerPath]: ticketApi.reducer,
     [paymentApi.reducerPath]: paymentApi.reducer,
     [sponsorApi.reducerPath]: sponsorApi.reducer,
     [eventDisplayApi.reducerPath]: eventDisplayApi.reducer,
@@ -39,13 +39,13 @@ export const store = configureStore({
     notifications: notificationsReducer,
     [sponsorDashboardApi.reducerPath]: sponsorDashboardApi.reducer,
     events: eventReducer,
-    [resetpasswordApi.reducerPath]: resetpasswordApi.reducer, // Add resetpasswordApi reducer
+    [resetpasswordApi.reducerPath]: resetpasswordApi.reducer, // Thêm resetpasswordApi reducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
     }).concat(
-      // ticketApi.middleware,
+      ticketApi.middleware,
       sponsorApi.middleware,
       eventDisplayApi.middleware,
       sponsor_programApi.middleware,
@@ -55,7 +55,7 @@ export const store = configureStore({
       eventApi.middleware,
       passwordApi.middleware,
       paymentApi.middleware,
-      resetpasswordApi.middleware // Add resetpasswordApi middleware
+      resetpasswordApi.middleware // Thêm resetpasswordApi middleware
     ),
 });
 

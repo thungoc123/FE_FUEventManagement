@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export const createorderApi = createApi({
   reducerPath: 'orderApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'https://eventmanagementfu.azurewebsites.net/' }),
+  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:7979/' }),
   endpoints: (builder) => ({
     createOrder: builder.mutation({
     // CREATE ORDER-KHAI BAO BUILDER(KHI TAO ->MUTATION, LAY DU LIEU -> QUERY )  

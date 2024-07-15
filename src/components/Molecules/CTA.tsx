@@ -24,7 +24,7 @@ export const Cta7 = (props: Cta7Props) => {
   } as Props;
 
   const navigate = useNavigate();
-
+  
   const handleButtonClick = (url: string | undefined) => {
     if (url) {
       navigate(url, { state: { eventDetails, eventId } });

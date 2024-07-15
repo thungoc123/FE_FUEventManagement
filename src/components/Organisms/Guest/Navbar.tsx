@@ -176,6 +176,7 @@ export const Navbar2 = (props: Navbar2Props) => {
 
   const NavigationAuth = (token: string) => {
     let decodedToken = jwtDecode<JwtPayload>(token);
+    console.log(decodedToken);
     switch (decodedToken.role) {
       case "ROLE_EO":
         navigate("/eventoperator/dashboard/");

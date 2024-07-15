@@ -21,7 +21,8 @@ const HeaderTable: React.FC<HeaderTableProps> = ({ eventId, eventDetails }) => {
   const navigate = useNavigate();
 
   const [createOrder] = useCreateOrderMutation();
-  const userId = useSelector((state: RootState) => state.auth.accountId);
+  const visitorId = localStorage.getItem("visitorId"); // Lấy visitorId từ localStorage
+  const token = useSelector((state: RootState) => state.auth.token); // Lấy token từ state
 
   const handleQuantityChange = (index: number, value: number) => {
     if (value >= 0) {
@@ -64,14 +65,23 @@ const HeaderTable: React.FC<HeaderTableProps> = ({ eventId, eventDetails }) => {
       return;
     }
 
+    if (!visitorId) {
+      console.log("Visitor ID is missing.");
+      return;
+    }
+
     try {
       const response = await createOrder({
         order: {
-          cartId: 1,
+          visitorId: parseInt(visitorId, 10), // Đảm bảo visitorId là kiểu số
           eventId: eventDetails.id,
-          quantity: quantities[0],
+          statusCart: false,
           status: "PENDING",
+          quantity: quantities[0]
         },
+        headers: { // Thêm phần này để gửi token xác thực
+          Authorization: `Bearer ${token}`
+        }
       }).unwrap();
       if (response.message === "Ticket created successfully") {
         navigate("/paymentpage", { state: { eventDetails, quantity: quantities[0] } });
@@ -80,6 +90,7 @@ const HeaderTable: React.FC<HeaderTableProps> = ({ eventId, eventDetails }) => {
       }
     } catch (err) {
       console.error("Failed to create order: ", err);
+      setErrorMessage("Failed to create order.");
     }
   };
 

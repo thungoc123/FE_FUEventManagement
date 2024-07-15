@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export const passwordApi = createApi({
   reducerPath: 'passwordApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'https://eventmanagementfu.azurewebsites.net/' }),
+  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:7979/' }),
   endpoints: (builder) => ({
     resetPassword: builder.mutation({
       query: (email) => ({
