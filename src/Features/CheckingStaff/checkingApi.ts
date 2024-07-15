@@ -29,12 +29,12 @@ export const checkingApi = createApi({
                     url: `api-attendances-2/list/event/${eventId}`,
                }),
           }),
-          // getListFeedbackEvent: builder.query<FeedbackQuery[], string>({
-          //      query: () => `/api-feedback-questions-event/list-feedback-event/${accountId}`,
-          //      // keepUnusedDataFor: 3600,
-          //      providesTags: (result, error, accountId) => [{ type: 'Feedbacks', id: accountId }],
-          //  }),
+          getListFeedbackEvent: builder.query<FeedbackQuery[], string>({
+               query: (eventId) => `/api-feedback-list-event/list-feedback/${eventId}`,
+               // keepUnusedDataFor: 3600,
+               providesTags: ['Checkings'],
+           }),
      }),
 });
 
-export const { useGetEventDetailQuery, useGetAttendanceQuery } = checkingApi;
+export const { useGetEventDetailQuery, useGetListFeedbackEventQuery ,useGetAttendanceQuery } = checkingApi;

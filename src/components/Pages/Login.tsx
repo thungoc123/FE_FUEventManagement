@@ -87,7 +87,7 @@ export const Login1 = (props: Login1Props) => {
         navigate("/payment");
         break;
       case "ROLE_CHECKING_STAFF":
-        navigate("");
+        navigate("/admin/checkingstaff");
         break;
       case "ROLE_ADMIN":
         navigate("/admin");

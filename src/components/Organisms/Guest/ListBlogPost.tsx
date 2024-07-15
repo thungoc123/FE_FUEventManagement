@@ -30,7 +30,6 @@ export const Layout192 = (props: Layout192Props) => {
   if (isLoading) {
     return <div>Loading...</div>;
   }
-
   if (error) {
     return <div>Error loading sponsor programs</div>;
   }
@@ -46,7 +45,7 @@ export const Layout192 = (props: Layout192Props) => {
               </div>
               <div className="order-1 lg:order-2">
                 <p className="mb-3 font-semibold md:mb-4">{program.title}</p>
-                <h2 className="mb-5 font-bold md:mb-6">{truncateString(program.description,100)}</h2>
+                <div className="mb-5 font-bold md:mb-6" dangerouslySetInnerHTML={{__html:truncateString(program.description,100)}}/>
                 <p className="md:text-md">{program.location}</p>
                 <div className="mt-6 flex gap-x-4 md:mt-8">
                   {buttons.map((button, index) => (

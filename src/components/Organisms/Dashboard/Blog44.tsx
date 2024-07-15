@@ -3,6 +3,7 @@ import { Button } from "@relume_io/relume-ui";
 import type { ButtonProps } from "@relume_io/relume-ui";
 import { FiArrowLeft, FiArrowRight } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
+import { truncateString } from '../../../ulities/Stringhandle';
 
 type ImageProps = {
   src: string;
@@ -56,7 +57,6 @@ export const Blog44 = (props: Blog44Props) => {
           <div className="w-full max-w-lg">
             <p className="mb-3 font-semibold md:mb-4">{tagline}</p>
             <h1 className="mb-3 text-5xl font-bold md:mb-4 md:text-7xl lg:text-8xl">{heading}</h1>
-            <p className="md:text-md">{description}</p>
           </div>
           <div className="hidden flex-wrap items-center justify-end md:block">
             <Button
@@ -94,7 +94,7 @@ export const Blog44 = (props: Blog44Props) => {
                   </div>
                   <div className="flex w-full flex-col items-start justify-start">
                     <h2 className="mb-2 text-xl font-bold md:text-2xl">{post.title}</h2>
-                    <p>{post.description}</p>
+                    <div className="font-medium" dangerouslySetInnerHTML={{__html:truncateString(post.description,100)}}></div>
                     <Button
                       variant={post.button.variant}
                       size={post.button.size}

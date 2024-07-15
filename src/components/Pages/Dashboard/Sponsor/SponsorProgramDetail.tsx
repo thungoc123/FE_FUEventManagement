@@ -27,8 +27,8 @@ function SponsorProgramDetail() {
   if (!sponsorProgram) {
     return <div>Sponsor Program not found</div>;
   }
-  const eventId = sponsorProgram.sponsorProgramEvents.map((event) => event.eventId);
-  console.log(eventId);
+  const event = sponsorProgram.sponsorProgramEvents
+  console.log(event);
   // const { data: event } = useGetPublishedEventsQuery();
 
   // const eventName: string[] = [];
@@ -73,6 +73,7 @@ function SponsorProgramDetail() {
         socialMediaLinks={[
           { url: sponsorProgram.link, icon: <BiLinkAlt className="size-6" /> },
         ]}
+        eventTag={event}
       />
       <Blog44 blogPosts={blogPosts} /> {/* Nếu cần hiển thị thêm blog posts */}
       <Footer1 />

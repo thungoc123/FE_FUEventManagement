@@ -5,6 +5,10 @@ import type { ImgProps, ButtonProps } from "@relume_io/relume-ui";
 import { AnimatePresence, motion } from "framer-motion";
 import { RxChevronDown } from "react-icons/rx";
 import '../Style/navbar.css'
+import {BiSearch } from "react-icons/bi";
+import Modal from 'react-modal';
+import { EventImage, StateEvent } from "../../../Types/eo.type";
+
 import {
   Dialog,
   DialogTrigger,
@@ -32,6 +36,8 @@ import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from "react-router-dom";
 import NewPasswordModal from "./NewPasswordModal";
 import ResetPassword from "./ResetPassword";
+import SearchBar from "./SearchBar";
+import { truncateString } from "../../../ulities/Stringhandle";
 
 
 type LinkProps = {
@@ -41,12 +47,30 @@ type LinkProps = {
 
 type MenuLinkProps = LinkProps & {
   subLinks?: LinkProps[];
-};
 
+};
+type EventPost = {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  timestart: string;
+  timeend: string;
+  timeopensale: string;
+  timeclosesale: string;
+  stateEvent?: StateEvent | null;
+  eventImages: EventImage[] | null;
+  url?: string;
+  button?: ButtonProps;
+  location?: string;
+
+};
 type Props = {
   logo?: ImgProps;
   links?: MenuLinkProps[];
   buttons?: ButtonProps[];
+  EventPosts?: EventPost[];
+
 };
 
 export type Navbar2Props = React.ComponentPropsWithoutRef<"section"> & Props;
@@ -106,7 +130,7 @@ const dropDownVariants = {
 };
 
 export const Navbar2 = (props: Navbar2Props) => {
-  const { logo, links, buttons } = {
+  const { logo, links, buttons, EventPosts } = {
     ...Navbar2Defaults,
     ...props,
   } as Props;
@@ -147,7 +171,10 @@ export const Navbar2 = (props: Navbar2Props) => {
     sub: string;
     role?: string;
   }
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
+  const openModal = () => setModalIsOpen(true);
+  const closeModal = () => setModalIsOpen(false);
   // login function with redux
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -202,6 +229,25 @@ export const Navbar2 = (props: Navbar2Props) => {
   const handleRoleChoosingClose = () => {
     setRoleChoosingOpen(false);
   };
+
+  const [searchValue, setSearchValue] = useState<string>("");
+  const [filteredEvents, setFilteredEvents] = useState<EventPost[]>(EventPosts || []);
+
+  const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
+    const query = event.target.value;
+    setSearchValue(query);
+
+    if (!EventPosts) return;
+
+    const filtered = EventPosts.filter((post) =>
+      post.name.toLowerCase().includes(query.toLowerCase())
+    );
+    setFilteredEvents(filtered);
+  };
+
+  useEffect(() => {
+    setFilteredEvents(EventPosts || []);
+  }, [EventPosts]);
 
   return (
     <div className="nav_wrapper">
@@ -278,6 +324,7 @@ export const Navbar2 = (props: Navbar2Props) => {
           ))}
         </motion.div>
         <div className="hidden lg:flex lg:items-center lg:justify-end">
+          <BiSearch className="text-white mr-2" style={{ fontSize: '20px', color:'#00fff9', fontWeight:'bold' }} onClick={openModal}/>
           {isLogin ? (
             <Dropdown email={email} />
           ) : (
@@ -413,6 +460,82 @@ export const Navbar2 = (props: Navbar2Props) => {
         setRoleChoosingOpen={setRoleChoosingOpen}
       />
     </nav>
+    
+    <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        contentLabel="Example Modal"
+        style={{
+          content: {
+            top: '50%',
+            left: '50%',
+            right: 'auto',
+            bottom: 'auto',
+            width: '70%',
+            height: '70%',
+            marginRight: '-50%',
+            transform: 'translate(-50%, -50%)'
+          }
+        }}
+        // className="scollbar-thin scollbar-webkit"
+      >
+
+
+
+      <SearchBar value={searchValue} onChange={handleSearch}/>
+      <section className="px-[5%] py-16 md:py-24 lg:py-28">
+      <div className="container grid grid-cols-1 items-start md:grid-flow-row md:gap-x-12 lg:gap-x-20">
+       
+g
+        <div className="grid grid-cols-1 gap-y-12 md:grid-cols-2 md:gap-x-8 lg:gap-16">
+          {filteredEvents.map((member, index) => {
+            
+            const eventImageUrl =
+              member.eventImages && member.eventImages.length > 0
+                ? member.eventImages[0].url
+                : "https://relume-assets.s3.amazonaws.com/placeholder-image-landscape.svg";
+            
+            return (
+            <div
+              className="grid grid-cols-1 items-start gap-5 sm:gap-y-6 md:grid-cols-2 md:gap-x-8"
+              key={index}
+            >
+              <div className="w-full overflow-hidden">
+                <img
+                  src={eventImageUrl}
+                  alt=""
+                  className="aspect-[1] size-full object-cover"
+                />
+              </div>
+              <div className="flex flex-col items-stretch justify-center">
+                <div className="mb-3 md:mb-4">
+                  <h5 className="text-md font-semibold md:text-lg">{member.name}</h5>
+                  <h6 className="md:text-md">{member.timestart}</h6>
+                </div>
+                <p>{truncateString(member.description,70)}</p>
+                <div className="mt-6 grid grid-flow-col grid-cols-[max-content] gap-[0.875rem] self-start">
+                  {/* {member.socialLinks.map((link, linkIndex) => (
+                    <a
+                      key={linkIndex}
+                      href={link.href}
+                      className="ring-offset-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-primary focus-visible:ring-offset-2"
+                    >
+                      {link.icon}
+                    </a>
+                  ))} */}
+                </div>
+              </div>
+            </div>
+          )})}
+        </div>
+
+       
+      </div>
+    </section>
+
+        <h2>Hello, I am a Modal</h2>
+        <button onClick={closeModal}>Close Modal</button>
+      </Modal>
     </div>
   );
 };

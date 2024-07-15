@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom"; // Import useNavigate
 import { useState } from "react";
 import { Button, Input, Label } from "@relume_io/relume-ui";
 import type { ImgProps, ButtonProps } from "@relume_io/relume-ui";
+import { useRegisterVisitorMutation } from "../../../Features/Auth/authApi";
 
 type Props = {
   logo: ImgProps;
@@ -36,7 +37,7 @@ export const VisitorSignUp = (props: Signup7Props) => {
     ...props,
   } as Props;
   const [email, setEmail] = useState("");
-  const [fullName, setFullName] = useState("");
+  // const [fullName, setFullName] = useState("");
   const [password, setPassword] = useState("");
   const [cpassword, setCPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
@@ -72,26 +73,24 @@ export const VisitorSignUp = (props: Signup7Props) => {
     }
   };
 
+  const [registerVisitor, isLoading] = useRegisterVisitorMutation();
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log({ name: email, fullName, password });
+    // console.log({ name: email, fullName, password });
 
     if (passwordError || confirmPasswordError) {
       alert("Please correct the errors before submitting");
       return;
     }
-
+    const data = { 
+      email: email, 
+      password: password, 
+      confirmPassword: cpassword, 
+      information: email
+    };
     try {
-      const response = await VAuthAPI.post(`api-visitor/sign-up-visitor`, {
-        email,
-        fullName,
-        password,
-      });
-
-      if (response.status === 200) {
-        console.log(response);
-        navigate("/homepage"); // Chuyển hướng về trang homepage sau khi đăng ký thành công
-      }
+      await registerVisitor(data).unwrap();
+      navigate("/");
     } catch (error) {
       console.log(error);
     }
@@ -126,7 +125,7 @@ export const VisitorSignUp = (props: Signup7Props) => {
                   required
                 />
               </div>
-              <div className="grid w-full items-center text-left">
+              {/* <div className="grid w-full items-center text-left">
                 <Label htmlFor="name" className="mb-2">
                   Company Name/FullName*
                 </Label>
@@ -137,7 +136,7 @@ export const VisitorSignUp = (props: Signup7Props) => {
                   onChange={(e) => setFullName(e.target.value)}
                   required
                 />
-              </div>
+              </div> */}
 
               <div className="grid w-full items-center text-left">
                 <Label htmlFor="password" className="mb-2">

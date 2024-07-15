@@ -18,7 +18,7 @@ interface VisitorRequest {
   email: string;
   password: string;
   confirmPassword: string
-  information: null
+  information: string
 }
 export const authApi = createApi({
     reducerPath: 'authApi',

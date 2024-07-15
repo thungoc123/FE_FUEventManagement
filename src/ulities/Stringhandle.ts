@@ -14,6 +14,12 @@ export function truncateString(input: string, maxLength: number, suffix: string 
 export function formatNumber(number:number) {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   }
+export function formatDate(date: string) {
+  const formattedDate: Date = new Date(date);
+
+  const formattedDateString: string = `${formattedDate.getDate()}/${formattedDate.getMonth() + 1}/${formattedDate.getFullYear()} ${formattedDate.getHours()}:${formattedDate.getMinutes()}`;
+  return formattedDateString;
+  }
   // Ví dụ sử dụng
 //   const originalString = "This is a long string that needs to be truncated.";
 //   const truncated = truncateString(originalString, 20);

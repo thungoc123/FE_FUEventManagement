@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { truncateString } from "../../../ulities/Stringhandle";
 import DateDisplay from "../../Atoms/Date";
 import { useNavigate } from "react-router-dom";
+
 type ImageProps = {
   src: string;
   alt?: string;
@@ -65,7 +66,10 @@ export const Header76 = (props: Header76Props) => {
   const handleButtonClick = (eventId: number) => {
     navigate(`/event-detail/${eventId}`);
   };
+
+  
   return (
+    <>
     <header className="grid grid-cols-1 gap-y-16 pt-16 md:grid-flow-row md:pt-24 lg:grid-flow-col lg:grid-cols-2 lg:items-center lg:pt-0 header">
       <div className="mx-[5%] max-w-[40rem] justify-self-start lg:ml-[5vw] lg:mr-20 lg:justify-self-end">
         <h1 className="mb-5 text-6xl font-bold md:mb-6 md:text-9xl lg:text-10xl">{heading}</h1>
@@ -76,7 +80,6 @@ export const Header76 = (props: Header76Props) => {
               {button.title}
             </Button>
           ))} */}
-          <SearchBar value={searchValue} onChange={handleSearch} />
           {filteredEvents.slice(0, visibleEvents).map((post) => {
             const stateEventName = post.stateEvent?.name ?? "No location";
             const eventImageUrl =
@@ -159,6 +162,9 @@ export const Header76 = (props: Header76Props) => {
         </div>
       </div>
     </header>
+            {/* Search display  */}
+
+    </>
   );
 };
 

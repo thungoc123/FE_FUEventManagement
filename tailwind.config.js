@@ -9,5 +9,23 @@ export default {
     extend: {},
   },
   presets: [require("@relume_io/relume-tailwind")],
-  plugins: [],
+  plugins: [
+    function({addUtilities}) {
+      const newUtilities = {
+        ".scollbar-thin": {
+          scrollbarWidth: "thin",
+          scrollbarColor: "#00fff9 #b9a1e4",
+        },
+        '&::-webkit-scrollbar-track': {
+          backgroundColor: 'red',
+        },
+        '&::-webkit-scrollbar-thumb': {
+          backgroundColor: 'blue',
+          borderRadius: '1rem',
+          border: '3px solid orange'
+        },
+      }
+      addUtilities(newUtilities, ['responsive', 'hover'])
+    }
+  ],
 }

@@ -216,6 +216,7 @@ function App() {
               </RequireAuth>
             }
           />
+
           <Route
             path="/eventoperator/dashboard/event/:id"
             element={
@@ -224,7 +225,6 @@ function App() {
               </RequireAuth>
             }
           />
-
           <Route
             path="/eventoperator/dashboard/event/update/:id"
             element={
@@ -301,7 +301,6 @@ function App() {
               </RequireAuth>
             }
           />
-
           {/* Admin  */}
           <Route
             path="/admin"
@@ -328,7 +327,6 @@ function App() {
             }
           />
           {/* Checking Staff  */}
-
           <Route
             path="/admin/checkingstaff"
             element={
@@ -351,7 +349,6 @@ function App() {
           <Route path="/sponsor-table" element={<AddSponsorTable />} />
           <Route path="/event-table" element={<EventScheduleTable />} /> */}
           <Route path="/event-detail/:id" element={<EventDetail />} />
-
           <Route path="/test" element={<TokenDecode />} />
           <Route path="/login" element={<Login1 />} />
         </Routes >

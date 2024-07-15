@@ -41,7 +41,8 @@ function HomePage() {
 
   return (
     <>
-      <Navbar2 />
+      <Navbar2   EventPosts={publishedEvents}
+      />
       {/* <Header9 {...headerData} />
        */}
       <Header76 />
@@ -60,7 +61,7 @@ function HomePage() {
         heading="Event On the Line"
         description="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
         button={{ title: "View all", variant: "secondary" }}
-        EventPosts={publishedEvents} // Truyền dữ liệu sự kiện vào Blog />
+        EventPosts={happendEvents} // Truyền dữ liệu sự kiện vào Blog />
       />
       <Logo1 />
       <Footer1 />

@@ -116,7 +116,7 @@ export const Blog33 = (props: Blog33Props) => {
                 <a href={post.url} className="mb-2 block max-w-full focus-visible:outline-none">
                   <h5 className="text-xl font-bold md:text-2xl">{post.name}</h5>
                 </a>
-                <p>{truncateString(post.description,70)}</p>
+                {/* <p>{truncateString(post.description,70)}</p> */}
                 <div className="mt-6 flex items-center justify-between">
                   <div className="flex">
                     <h6 className="text-sm font-semibold price">Price: {post.price} VND</h6>

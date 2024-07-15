@@ -3,10 +3,11 @@ import type { ButtonProps } from "@relume_io/relume-ui";
 import { FaXTwitter } from "react-icons/fa6";
 import { BiLinkAlt, BiLogoLinkedinSquare, BiLogoFacebookCircle } from "react-icons/bi";
 import { RxChevronLeft } from "react-icons/rx";
-import Content31 from "./Content31";
 import { useGetSponsorProgramQuery } from "../../../Features/Sponsor/sponsor_programApi";
 import { useNavigate, useParams } from "react-router-dom";
 import EventTag from "../../Atoms/EventTag";
+import { EOevent } from "../../../Types/eo.type";
+import { SponsorProgramEvent } from "../../../Types/sponsor";
 
 type ImageProps = {
   src: string;
@@ -31,6 +32,7 @@ type Props = {
   image: ImageProps;
   postDetails: PostDetails[];
   socialMediaLinks: SocialMediaLinksProps[];
+  eventTag: SponsorProgramEvent[];
 };
 
 export type BlogPostHeader2Props = React.ComponentPropsWithoutRef<"section"> & Partial<Props>;
@@ -39,7 +41,7 @@ export const BlogPostHeader2 = (props: BlogPostHeader2Props) => {
   const { id } = useParams<{ id: string }>(); // Lấy ID từ URL
   const navigate = useNavigate(); // Use navigate to programmatically navigate
 
-  const { button, category, readTime, heading, image, postDetails, socialMediaLinks } = {
+  const { button, category, readTime, heading, image, postDetails, socialMediaLinks, eventTag } = {
     ...BlogPostHeader2Defaults,
     ...props,
   } as Props;
@@ -106,13 +108,16 @@ export const BlogPostHeader2 = (props: BlogPostHeader2Props) => {
         <div className="mx-auto mb-8 w-full overflow-hidden md:mb-12 lg:mb-8">
           <img src={image.src} className="aspect-[5/2] size-full object-cover" alt={image.alt} />
         </div>
-        <EventTag text="Text"/>
+        {eventTag.map((event, index) => (
+          <EventTag key={index} text={event.event.name} />
+        ))}
+        {/* <EventTag text="Text"/> */}
         <div className="flex w-full flex-col items-start justify-between md:flex-row">
           <div className="mb-4 flex items-center sm:mb-8 md:mb-0">
             {postDetails.map((detail, index) => (
               <div key={index} className="mr-8 md:mr-10 lg:mr-12">
                 <p className="mb-2">{detail.title}</p>
-                <p className="font-medium">{detail.description}</p>
+                <div className="font-medium" dangerouslySetInnerHTML={{__html:detail.description}}/>
               </div>
             ))}
           </div>

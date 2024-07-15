@@ -21,6 +21,7 @@ type Props = {
   heading: string;
   description: string;
   eventImages: ImageProps[];
+  tags?: any[];
 };
 
 
@@ -28,10 +29,11 @@ export type Header3Props = React.ComponentPropsWithoutRef<"section"> & Partial<P
 
 export const Header3 = (props: Header3Props) => {
   const [isIframeLoaded, setIsIframeLoaded] = useState(false);
-  const { heading, description, eventImages } = {
+  const { heading, description, eventImages, tags } = {
     ...Header3Defaults,
     ...props,
   } as Props;
+  // console.log("Tags: ", tags);
   return (
     <header className="px-[5%] py-16 md:py-24 lg:py-28 detail_header">
       <div className="container">
@@ -40,11 +42,7 @@ export const Header3 = (props: Header3Props) => {
             <h1 className="mb-5 text-6xl font-bold md:mb-6 md:text-9xl lg:text-10xl">{heading}</h1>
             <p className="md:text-md">{description}</p>
             <div className="mt-6 flex gap-x-4 md:mt-8">
-            
-                <Button className="buy">
-                    Buy Ticket
-                </Button>
-             
+            {tags?.[0] === "PUBLISH" && <Button className="buy" variant="secondary">Buy Ticket</Button>}
             </div>
           </div>
           <Dialog>

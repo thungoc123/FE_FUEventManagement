@@ -56,15 +56,15 @@ function EventDetail() {
   const summary = data?.description ?? "No description available";
 
   const tags = data?.stateEvent ? [data.stateEvent.name] : [];
-
+  
+  const timeOpenSale = data?.timeopensale ?? "";
+  const timeCloseSale = data?.timeclosesale?? "";
  
   const quantity = typeof data?.quantity === 'string' ? Number(data.quantity) : data?.quantity ?? 0;
   const price = typeof data?.price === 'string' ? Number(data.price) : data?.price ?? 0;
   const startDate = data?.timestart
     ? new Date(data.timestart).toLocaleDateString()
     : "No date available";
-
-
 
   const duration =
     data?.timestart && data?.timeend
@@ -121,6 +121,7 @@ function EventDetail() {
       heading={eventName}
       description={summary}
       eventImages={eventImages}
+      tags={tags}
       />
       <EventDetails
         eventId={id}
@@ -133,7 +134,8 @@ function EventDetail() {
         location={location}
         quantity={quantity}
         price={price}
-
+        timeOpenSale={timeOpenSale}
+        timeCloseSale={timeCloseSale}
 
       />
 
