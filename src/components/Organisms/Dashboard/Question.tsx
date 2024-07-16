@@ -252,7 +252,7 @@ export const QuestionManage = () => {
         })
       );
       // refetch();
-      window.location.reload();
+      // window.location.reload();
     } catch (err) {
       dispatch(
         addNotification({
@@ -264,7 +264,7 @@ export const QuestionManage = () => {
       );
       console.error("Failed to create the event:", err);
     }
-    window.location.reload();
+    // window.location.reload();
 
   };
   if (isLoading) return <div>Loading...</div>;

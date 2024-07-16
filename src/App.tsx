@@ -171,7 +171,7 @@ function App() {
             path="/sponsor-detail/:id"
             element={
 
-                <SponsorProgramDetail />
+              <SponsorProgramDetail />
             }
           />
           {/* event operator  */}
@@ -231,7 +231,7 @@ function App() {
               <RequireAuth role="ROLE_EO">
                 {/* <ManageEvent component={<InprogressEvent />} />
                  */}
-                 <UpdateEvent />
+                <UpdateEvent />
               </RequireAuth >
             }
           />
@@ -301,6 +301,14 @@ function App() {
               </RequireAuth>
             }
           />
+
+          <Route path="/visitorAnswer/feedback/:id" element={
+            // <RequireAuth role="ROLE_VISITOR">
+              <VisitorAnswerPage />
+            // </RequireAuth>
+
+          } />
+
           {/* Admin  */}
           <Route
             path="/admin"
@@ -344,7 +352,6 @@ function App() {
           <Route path="/service-term" element={<ServiceTerm />} />
           <Route path="/test" element={<TokenDecode />} />
           <Route path="/login" element={<Login1 />} />
-          <Route path="/visitorAnswer" element={<VisitorAnswerPage />} />
           {/* <Route path="/checkstaff" element={<AddCheckStaffTable />} />
           <Route path="/sponsor-table" element={<AddSponsorTable />} />
           <Route path="/event-table" element={<EventScheduleTable />} /> */}

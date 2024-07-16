@@ -98,7 +98,7 @@ export const SurveyForm: React.FC = () => {
         })
       );
       // navigate("/eventoperator/dashboard/feedback");
-      window.location.reload();
+      // window.location.reload();
 
 
       // alert('Event created successfully!');

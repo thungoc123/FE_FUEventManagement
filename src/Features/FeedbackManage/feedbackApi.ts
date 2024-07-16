@@ -73,7 +73,14 @@ export const feedbackApi = createApi({
       }),
       invalidatesTags: (result, error, questionId) => [{ type: 'FeedbackQuestions', id: questionId }],
     }),
+    visitorAnswerFeedback: builder.mutation({
+      query: ({ accountId, visitorAnswer }) => ({
+        url: `api-visitor-answer/account/${accountId}`,
+        method: 'POST',
+        body: visitorAnswer,
+      }),
+    }),
   
   }),
 })
-export const { useDeleteFeedbackMutation,useDeleteFeedbackQuestionMutation,useGetListFeedbackQuestionQuery,useCreateQuestionMutation,useCreateFeedbackMutation, useGetListFeedbackQuery } = feedbackApi;
+export const { useVisitorAnswerFeedbackMutation ,useDeleteFeedbackMutation,useDeleteFeedbackQuestionMutation,useGetListFeedbackQuestionQuery,useCreateQuestionMutation,useCreateFeedbackMutation, useGetListFeedbackQuery } = feedbackApi;
