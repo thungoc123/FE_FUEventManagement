@@ -116,6 +116,7 @@ export const Navbar2 = (props: Navbar2Props) => {
 
   const [isResetPassword, setIsResetPassword] = useState(false);
   const [isNewPasswordOpen, setIsNewPasswordOpen] = useState(false);
+  const [resetToken, setResetToken] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLogin, setIsLogin] = useState(false);
@@ -139,6 +140,13 @@ export const Navbar2 = (props: Navbar2Props) => {
   const handleBackToLoginClick = () => {
     setIsResetPassword(false);
     setIsNewPasswordOpen(false);
+  };
+
+  const handleSetNewPasswordOpen = (email: string, token: string) => {
+    setEmail(email);
+    setResetToken(token);
+    setIsResetPassword(false);
+    setIsNewPasswordOpen(true);
   };
 
   interface JwtPayload {
@@ -334,6 +342,7 @@ export const Navbar2 = (props: Navbar2Props) => {
                     setIsResetPassword(false);
                     setIsNewPasswordOpen(true);
                   }}
+                  onSetNewPasswordOpen={handleSetNewPasswordOpen}
                 />
               ) : (
                 <>
@@ -394,10 +403,12 @@ export const Navbar2 = (props: Navbar2Props) => {
       </Dialog>
 
       {/* New Password Modal */}
-      {/* <NewPasswordModal
+     <NewPasswordModal
         isOpen={isNewPasswordOpen}
-        onClose={handleBackToLoginClick} */}
-      
+        onClose={handleBackToLoginClick}
+        token={resetToken}
+        email={email}
+      />
 
       {/* Role Choosing with DialogContent  */}
       <RoleChoosingwithDialog
@@ -497,7 +508,7 @@ export const Navbar2Defaults = {
     {
       title: "Sign Up",
       variant: "secondary",
-      size: "medium",
+      size:"medium",
     },
   ],
 };
