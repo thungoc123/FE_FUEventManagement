@@ -46,6 +46,7 @@ import { Payment } from "./components/Pages/Visitor/Payment";
 import { PaymentPage } from "./components/Pages/Visitor/PaymentPage";
 import { Login1 } from "./components/Pages/Login";
 import { EventProfit } from "./components/Organisms/EventOperator/EventProfit";
+import PaymentSuccessfullPage from "./components/Pages/Visitor/PaymentSuccessfullPage";
 
 function App() {
   const eventId = "1";
@@ -234,6 +235,14 @@ function App() {
             element={
               <RequireAuth role="ROLE_VISITOR">
                 <PaymentPage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/payment-successfull"
+            element={
+              <RequireAuth role="ROLE_VISITOR">
+                 <PaymentSuccessfullPage/> 
               </RequireAuth>
             }
           />

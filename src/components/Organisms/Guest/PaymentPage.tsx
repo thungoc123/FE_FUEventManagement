@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@relume_io/relume-ui";
 import { useLazySendPaymentInfoQuery } from "../../../Features/Payment/paymentApi";
+import { useUpdateTicketStatusMutation } from "../../../Features/Order/ticketApi";
 import { useNavigate, useLocation } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 interface Payment1Props {
   eventDetails: any;
@@ -11,8 +14,8 @@ interface Payment1Props {
 const Payment1: React.FC<Payment1Props> = ({ eventDetails, quantity }) => {
   const [email, setEmail] = useState<string>("tienntse171382@fpt.edu.vn");
   const [amount, setAmount] = useState(0);
-  const [paymentSuccessful, setPaymentSuccessful] = useState(false);
   const [trigger, { isLoading, data, error }] = useLazySendPaymentInfoQuery();
+  const [updateTicketStatus, { isLoading: isUpdating, isSuccess: isUpdateSuccess, isError: isUpdateError, error: updateError }] = useUpdateTicketStatusMutation();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -24,20 +27,30 @@ const Payment1: React.FC<Payment1Props> = ({ eventDetails, quantity }) => {
 
   const handlePayment = async () => {
     if (!email) {
-      alert("Email is not available");
+      toast.error("Email is not available");
       return;
     }
 
+    const requestBody = {
+      amount,
+      email,
+      quantity,
+      eventId: eventDetails.id,
+    };
+
+    toast.info("Sending payment information...");
+    console.log("Request body:", requestBody);
+
     try {
-      await trigger({
-        amount,
-        email,
-        quantity,
-        eventId: eventDetails.id,
-      }).unwrap();
+      await trigger(requestBody).unwrap();
+      toast.success("Payment information sent successfully");
+
+      // Update the ticket status to PAID
+      await updateTicketStatus({ id: 73, status: 'PAID' }).unwrap();
+      toast.success("Ticket status updated to PAID");
+
     } catch (err: any) {
-      console.error("Failed to send payment information:", err);
-      alert(
+      toast.error(
         `Failed to send payment information: ${
           err.message || "Unknown error occurred"
         }`
@@ -49,20 +62,12 @@ const Payment1: React.FC<Payment1Props> = ({ eventDetails, quantity }) => {
     if (data) {
       console.log("Response from backend:", data);
       if (data.status === "ok") {
-        setPaymentSuccessful(true);
-        // Redirect to payment URL and wait for the payment to complete
-        window.location.href = data.url;
+        // window.location.href = data.url;
       } else {
-        alert(`Payment failed: ${data.message}`);
+        toast.error(`Payment failed: ${data.message}`);
       }
     }
   }, [data]);
-
-  useEffect(() => {
-    if (paymentSuccessful) {
-      navigate("/", { state: { message: "Bạn đã đặt vé thành công!" } });
-    }
-  }, [paymentSuccessful, navigate]);
 
   const getErrorMessage = (error: any) => {
     if (error?.data?.message) {
@@ -111,9 +116,9 @@ const Payment1: React.FC<Payment1Props> = ({ eventDetails, quantity }) => {
             <Button
               onClick={handlePayment}
               className="w-1/2 bg-blue-500 text-white p-3 rounded-lg font-semibold"
-              disabled={isLoading}
+              disabled={isLoading || isUpdating}
             >
-              {isLoading ? "Đang xử lý..." : "Thanh toán"}
+              {isLoading || isUpdating ? "Đang xử lý..." : "Thanh toán"}
             </Button>
 
             <Button
@@ -125,9 +130,13 @@ const Payment1: React.FC<Payment1Props> = ({ eventDetails, quantity }) => {
             {error && (
               <p className="text-red-500">Error: {getErrorMessage(error)}</p>
             )}
+            {isUpdateError && (
+              <p className="text-red-500">Error: {getErrorMessage(updateError)}</p>
+            )}
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

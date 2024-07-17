@@ -3,9 +3,12 @@ import Modal from "react-modal";
 import { Button } from "@relume_io/relume-ui";
 import { useNavigate } from "react-router-dom";
 import { useCreateOrderMutation } from "../../../Features/Order/orderApi";
+import { useGetVisitorByAccountIdQuery } from "../../../Features/Order/ticketApi";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../app/store";
 import { Event } from "../../../Types/event.type";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface HeaderTableProps {
   eventId: string;
@@ -21,8 +24,17 @@ const HeaderTable: React.FC<HeaderTableProps> = ({ eventId, eventDetails }) => {
   const navigate = useNavigate();
 
   const [createOrder] = useCreateOrderMutation();
-  const visitorId = localStorage.getItem("visitorId"); // Lấy visitorId từ localStorage
-  const token = useSelector((state: RootState) => state.auth.token); // Lấy token từ state
+  const accountId = useSelector((state: RootState) => state.auth.accountId); // Get accountId from Redux store
+  const token = useSelector((state: RootState) => state.auth.token); // Get token from Redux store
+
+  // Use the useGetVisitorByAccountIdQuery hook to fetch visitorId
+  const { data: visitorData, error: visitorError, isLoading: isVisitorLoading } = useGetVisitorByAccountIdQuery(accountId, {
+    skip: !accountId, // Skip the query if accountId is not available
+  });
+
+  if (visitorError) {
+    toast.error("Error fetching visitor data: " + visitorError.message);
+  }
 
   const handleQuantityChange = (index: number, value: number) => {
     if (value >= 0) {
@@ -62,34 +74,41 @@ const HeaderTable: React.FC<HeaderTableProps> = ({ eventId, eventDetails }) => {
 
     if (eventStartDate < currentDate) {
       setErrorMessage("Cannot create ticket for expired event.");
+      toast.error("Cannot create ticket for expired event.");
       return;
     }
 
-    if (!visitorId) {
-      console.log("Visitor ID is missing.");
+    if (!accountId || !visitorData || !Array.isArray(visitorData) || visitorData.length === 0) {
+      toast.error("Account ID or Visitor ID is missing.");
       return;
     }
+
+    const visitorId = visitorData[0].visitorId; // Access the first element to get visitorId
+    const orderDetails = {
+      order: {
+        visitorId: parseInt(visitorId, 10), // Ensure visitorId is a number
+        eventId: eventDetails.id,
+        statusCart: false,
+        status: "PENDING",
+      },
+      headers: { // Include token in headers for authentication
+        Authorization: `Bearer ${token}`
+      }
+    };
+
+    console.log("Order details:", orderDetails); // Log the order details
 
     try {
-      const response = await createOrder({
-        order: {
-          visitorId: parseInt(visitorId, 10), // Đảm bảo visitorId là kiểu số
-          eventId: eventDetails.id,
-          statusCart: false,
-          status: "PENDING",
-          quantity: quantities[0]
-        },
-        headers: { // Thêm phần này để gửi token xác thực
-          Authorization: `Bearer ${token}`
-        }
-      }).unwrap();
+      const response = await createOrder(orderDetails).unwrap();
+      console.log("Order creation response:", response);
       if (response.message === "Ticket created successfully") {
+        toast.success("Ticket created successfully");
         navigate("/paymentpage", { state: { eventDetails, quantity: quantities[0] } });
       } else {
-        console.error("Order creation failed: ", response);
+        toast.error("Order creation failed: " + response.message);
       }
     } catch (err) {
-      console.error("Failed to create order: ", err);
+      toast.error("Failed to create order: " + err.message);
       setErrorMessage("Failed to create order.");
     }
   };
@@ -101,7 +120,7 @@ const HeaderTable: React.FC<HeaderTableProps> = ({ eventId, eventDetails }) => {
           <h2 className="text-xl font-bold text-left">Event Ticket</h2>
           <p className="text-sm text-gray-600"></p>
         </div>
-        <Button onClick={handleCreateOrder}>Check out</Button>
+        <Button onClick={handleCreateOrder} disabled={isVisitorLoading || !visitorData}>Check out</Button>
       </div>
       {errorMessage && <p className="text-red-500">{errorMessage}</p>}
       <table className="min-w-full bg-white border border-gray-200">
@@ -111,7 +130,6 @@ const HeaderTable: React.FC<HeaderTableProps> = ({ eventId, eventDetails }) => {
             <th className="px-4 py-2 border-b">Event Name</th>
             <th className="px-4 py-2 border-b">Price</th>
             <th className="px-4 py-2 border-b">Date</th>
-            <th className="px-4 py-2 border-b">Quantity</th>
             <th className="px-4 py-2 border-b">Status</th>
             <th className="px-4 py-2 border-b"></th>
           </tr>
@@ -123,17 +141,6 @@ const HeaderTable: React.FC<HeaderTableProps> = ({ eventId, eventDetails }) => {
             <td className="px-4 py-2 border-b text-center">{eventDetails.price}</td>
             <td className="px-4 py-2 border-b text-center">
               {new Date(eventDetails.timestart).toLocaleDateString()}
-            </td>
-            <td className="px-4 py-2 border-b text-center">
-              <input
-                className="w-16 px-2 py-1 border border-gray-300 rounded text-center"
-                type="number"
-                value={quantities[0]}
-                onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                  handleQuantityChange(0, Number(e.target.value))
-                }
-                min="0"
-              />
             </td>
             <td className="px-4 py-2 border-b text-center">PENDING</td>
             <td className="px-2 py-2 border-b">
@@ -178,6 +185,7 @@ const HeaderTable: React.FC<HeaderTableProps> = ({ eventId, eventDetails }) => {
           /> */}
         </div>
       </Modal>
+      <ToastContainer />
     </div>
   );
 };

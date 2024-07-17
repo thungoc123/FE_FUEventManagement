@@ -22,7 +22,7 @@ import RoleChoosingwithDialog from "../../Molecules/RoleChoosingWithDialog";
 // setToken
 import { useDispatch, useSelector } from "react-redux";
 import { useLoginMutation } from "../../../Features/Auth/authApi";
-import { setToken } from "../../../Features/Auth/authSlice";
+import { setAccountId, setToken } from "../../../Features/Auth/authSlice";
 import Dropdown from "../Visitor/Dropdown";
 // components/Navbar2.tsx
 import { jwtDecode } from 'jwt-decode';
@@ -152,6 +152,7 @@ export const Navbar2 = (props: Navbar2Props) => {
   interface JwtPayload {
     sub: string;
     role?: string;
+    accountId?: string;
   }
 
   // login function with redux
@@ -177,6 +178,10 @@ export const Navbar2 = (props: Navbar2Props) => {
       setEmail(storedEmail);
       setIsLogin(true);
       dispatch(setToken(token));
+      const decodedToken = jwtDecode<JwtPayload>(token);
+      if (decodedToken.accountId) {
+        dispatch(setAccountId(decodedToken.accountId)); // Dispatch accountId to the Redux store
+      }
     } else {
       setIsLogin(false);
     }
