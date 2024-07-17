@@ -85,7 +85,6 @@ const OrderHistoryTable: React.FC<Props> = (props) => {
             <th className="px-4 py-2 border-b">Price</th>
             <th className="px-4 py-2 border-b">Quantity</th>
             <th className="px-4 py-2 border-b">Status</th>
-            <th className="px-4 py-2 border-b"></th>
           </tr>
         </thead>
         <tbody>
@@ -102,29 +101,7 @@ const OrderHistoryTable: React.FC<Props> = (props) => {
               <td className="px-2 py-2 border-b text-center">
                 <span className="text-500 text-black bg-red-100 py-1 px-1"> Not complete</span>
               </td>
-              <td className="px-2 py-2 border-b">
-                <div className="relative">
-                  <button
-                    onClick={() => handleMenuClick(index)}
-                    className="px-2 py-1 bg-gray-200 rounded"
-                  >
-                    ...
-                  </button>
-                  {showDropdown === index && (
-                    <div className="absolute right-0 mt-2 w-32 bg-white border border-gray-200 rounded shadow-lg z-10">
-                      {options.map((option) => (
-                        <div
-                          key={option}
-                          className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                          onClick={() => handleOptionSelect(option, index)}
-                        >
-                          {option}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </td>
+             
             </tr>
           ))}
         </tbody>

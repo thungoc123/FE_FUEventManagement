@@ -90,6 +90,7 @@ const HeaderTable: React.FC<HeaderTableProps> = ({ eventId, eventDetails }) => {
         eventId: eventDetails.id,
         statusCart: false,
         status: "PENDING",
+        quantity: quantities[0]
       },
       headers: { // Include token in headers for authentication
         Authorization: `Bearer ${token}`
@@ -101,9 +102,12 @@ const HeaderTable: React.FC<HeaderTableProps> = ({ eventId, eventDetails }) => {
     try {
       const response = await createOrder(orderDetails).unwrap();
       console.log("Order creation response:", response);
-      if (response.message === "Ticket created successfully") {
+      const ticketId = response.TicketId; // Adjust according to your API response structure
+      console.log("Ticket ID:", ticketId);
+      if (response.message === "Ticket created successfully" && ticketId) {
         toast.success("Ticket created successfully");
-        navigate("/paymentpage", { state: { eventDetails, quantity: quantities[0] } });
+        navigate("/paymentpage", { state: { eventDetails, quantity: quantities[0], ticketId } });
+        console.log(ticketId);
       } else {
         toast.error("Order creation failed: " + response.message);
       }
@@ -130,6 +134,7 @@ const HeaderTable: React.FC<HeaderTableProps> = ({ eventId, eventDetails }) => {
             <th className="px-4 py-2 border-b">Event Name</th>
             <th className="px-4 py-2 border-b">Price</th>
             <th className="px-4 py-2 border-b">Date</th>
+            <th className="px-4 py-2 border-b">Quantity</th>
             <th className="px-4 py-2 border-b">Status</th>
             <th className="px-4 py-2 border-b"></th>
           </tr>
@@ -141,6 +146,17 @@ const HeaderTable: React.FC<HeaderTableProps> = ({ eventId, eventDetails }) => {
             <td className="px-4 py-2 border-b text-center">{eventDetails.price}</td>
             <td className="px-4 py-2 border-b text-center">
               {new Date(eventDetails.timestart).toLocaleDateString()}
+            </td>
+            <td className="px-4 py-2 border-b text-center">
+              <input
+                className="w-16 px-2 py-1 border border-gray-300 rounded text-center"
+                type="number"
+                value={quantities[0]}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  handleQuantityChange(0, Number(e.target.value))
+                }
+                min="0"
+              />
             </td>
             <td className="px-4 py-2 border-b text-center">PENDING</td>
             <td className="px-2 py-2 border-b">

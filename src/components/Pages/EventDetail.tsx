@@ -7,7 +7,7 @@ import { Testimonial1 } from "../Organisms/Guest/Testimonial";
 import Schedule from "../Organisms/Guest/Schedule";
 import { Header80 } from "../Molecules/EventHeader";
 import { Cta7 } from "../Molecules/CTA";
-import { useGetEventDetailsQuery } from "../../Features/Event/eventApi";
+import { useGetEventDetailsQuery } from "../../Features/Event/eventDisplayApi";
 import { useParams } from "react-router-dom";
 import { NavbarLogout } from "../Organisms/Guest/NavbarLogout";
 
