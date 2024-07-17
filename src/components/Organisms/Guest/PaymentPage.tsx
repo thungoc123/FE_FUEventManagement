@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@relume_io/relume-ui";
 import { useLazySendPaymentInfoQuery } from "../../../Features/Payment/paymentApi";
 import { useUpdateTicketStatusMutation } from "../../../Features/Order/ticketApi";
@@ -11,13 +11,30 @@ interface Payment1Props {
   quantity: number;
 }
 
-const Payment1: React.FC<Payment1Props> = ({ eventDetails, quantity }) => {
+const Payment1: React.FC<Payment1Props> = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [eventDetails, setEventDetails] = useState<any>(null);
+  const [quantity, setQuantity] = useState<number>(0);
+  const [ticketId, setTicketId] = useState<number | null>(null);
+  const locationRef = useRef(location);
+
+  useEffect(() => {
+    const state = locationRef.current.state;
+    if (state && state.eventDetails && state.quantity && state.ticketId) {
+      setEventDetails(state.eventDetails);
+      setQuantity(state.quantity);
+      setTicketId(state.ticketId);
+    } else {
+      // If state is missing, redirect to the main payment page
+      navigate("/paymentpage");
+    }
+  }, [navigate]);
+
   const [email, setEmail] = useState<string>("tienntse171382@fpt.edu.vn");
   const [amount, setAmount] = useState(0);
   const [trigger, { isLoading, data, error }] = useLazySendPaymentInfoQuery();
   const [updateTicketStatus, { isLoading: isUpdating, isSuccess: isUpdateSuccess, isError: isUpdateError, error: updateError }] = useUpdateTicketStatusMutation();
-  const navigate = useNavigate();
-  const location = useLocation();
 
   useEffect(() => {
     if (eventDetails) {
@@ -45,9 +62,11 @@ const Payment1: React.FC<Payment1Props> = ({ eventDetails, quantity }) => {
       await trigger(requestBody).unwrap();
       toast.success("Payment information sent successfully");
 
-      // Update the ticket status to PAID
-      await updateTicketStatus({ id: 73, status: 'PAID' }).unwrap();
-      toast.success("Ticket status updated to PAID");
+      // Update the ticket status to PAID using ticketId from location state
+      if (ticketId !== null) {
+        await updateTicketStatus({ id: ticketId, status: 'PAID' }).unwrap();
+        toast.success("Ticket status updated to PAID");
+      }
 
     } catch (err: any) {
       toast.error(
@@ -62,7 +81,7 @@ const Payment1: React.FC<Payment1Props> = ({ eventDetails, quantity }) => {
     if (data) {
       console.log("Response from backend:", data);
       if (data.status === "ok") {
-        // window.location.href = data.url;
+        window.location.href = data.url;
       } else {
         toast.error(`Payment failed: ${data.message}`);
       }
@@ -79,8 +98,21 @@ const Payment1: React.FC<Payment1Props> = ({ eventDetails, quantity }) => {
     return `Unknown error occurred: ${JSON.stringify(error)}`;
   };
 
-  const handleCancel = () => {
-    navigate("/paymentpage");
+  const handleCancel = async () => {
+    try {
+      if (ticketId !== null) {
+        await updateTicketStatus({ id: ticketId, status: 'CANCELLED' }).unwrap();
+        toast.success("Ticket status updated to CANCELLED");
+      }
+    } catch (err: any) {
+      toast.error(
+        `Failed to update ticket status to CANCELLED: ${
+          err.message || "Unknown error occurred"
+        }`
+      );
+    } finally {
+      navigate("/paymentpage");
+    }
   };
 
   return (
