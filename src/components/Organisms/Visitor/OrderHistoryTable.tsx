@@ -13,7 +13,6 @@ import { useGetCartQuery } from "../../../Features/Order/cartApi";
 import { useCreateOrderMutation } from "../../../Features/Order/orderApi";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useNavigate } from "react-router-dom";
 
 type Props = {
   paginationItems: number[];
@@ -22,11 +21,23 @@ type Props = {
 const OrderHistoryTable: React.FC<Props> = (props) => {
   const { data, error, isLoading } = useGetCartQuery("1");
   const [createOrder] = useCreateOrderMutation();
-  const navigate = useNavigate();
 
   const handlePaidClick = async (order: any) => {
     // Assuming you have an API endpoint to update the order status to 'PAID'
-    navigate('/paymentpage');
+    try {
+      const updatedOrder = {
+        ...order,
+        status: 'PAID'
+      };
+      const response = await createOrder(updatedOrder).unwrap();
+      if (response.message === "Order updated successfully") {
+        toast.success("Order marked as Paid successfully");
+      } else {
+        toast.error("Failed to update order: " + response.message);
+      }
+    } catch (err) {
+      toast.error("Failed to update order: " + err.message);
+    }
   };
 
   if (isLoading) {
@@ -45,10 +56,9 @@ const OrderHistoryTable: React.FC<Props> = (props) => {
     <div className="m-18 border border-b-0 border-border-primary p-10">
       <div className="flex justify-between items-center mb-6">
         <div className="sm:w-1/3 lg:w-1/3">
-          <h2 className="text-xl font-bold text-left">Heading goes here</h2>
+          <h2 className="text-xl font-bold text-left">Order History</h2>
           <p className="text-sm text-gray-600">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            varius enim in eros.
+            List of your past orders.
           </p>
         </div>
         <div className="lg:w-1/3 sm:w-1/2">
@@ -74,31 +84,31 @@ const OrderHistoryTable: React.FC<Props> = (props) => {
             </tr>
           </thead>
           <tbody>
-            {data
-              .filter((order: any) => order.status === 'PENDING')
-              .map((order: any, index: number) => (
-                <tr key={index}>
-                  <td className="px-4 py-2 border-b text-center">
-                    {order.event.id}
-                  </td>
-                  <td className="px-4 py-2 border-b text-center">
-                    {order.event.name}
-                  </td>
-                  <td className="px-4 py-2 border-b text-center">
-                    {order.price}
-                  </td>
-                  <td className="px-4 py-2 border-b text-center">
-                    {new Date(order.createdDate).toLocaleDateString()}
-                  </td>
-                  <td className="px-4 py-2 border-b text-center">1</td>
-                  <td className="px-4 py-2 border-b text-center">{order.status}</td>
-                  <td className="px-4 py-2 border-b text-center">
+            {data.map((order: any, index: number) => (
+              <tr key={index}>
+                <td className="px-4 py-2 border-b text-center">
+                  {order.event.id}
+                </td>
+                <td className="px-4 py-2 border-b text-center">
+                  {order.event.name}
+                </td>
+                <td className="px-4 py-2 border-b text-center">
+                  {order.price}
+                </td>
+                <td className="px-4 py-2 border-b text-center">
+                  {new Date(order.createdDate).toLocaleDateString()}
+                </td>
+                <td className="px-4 py-2 border-b text-center">1</td>
+                <td className="px-4 py-2 border-b text-center">{order.status}</td>
+                <td className="px-4 py-2 border-b text-center">
+                  {order.status === 'PENDING' && (
                     <button className="text-blue-500" onClick={() => handlePaidClick(order)}>
                       Paid
                     </button>
-                  </td>
-                </tr>
-              ))}
+                  )}
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
