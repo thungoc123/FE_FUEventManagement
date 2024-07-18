@@ -1,6 +1,4 @@
-import React, { useState } from "react";
 import "react-dropdown/style.css";
-
 import { Input } from "@relume_io/relume-ui";
 import {
   Pagination,
@@ -19,8 +17,8 @@ type Props = {
 
 const OrderHistoryTable: React.FC<Props> = (props) => {
   const { data, error, isLoading } = useGetCartQuery("1");
-  
-  if (isLoading) return <div>Loading...</div>;
+
+  if (isLoading) return <div className="loader"></div>;
   if (error) return <div>Error: {error.message}</div>;
 
   return (
@@ -57,53 +55,28 @@ const OrderHistoryTable: React.FC<Props> = (props) => {
             {data.map((order: any, index: number) => (
               <tr key={index}>
                 <td className="px-4 py-2 border-b text-center">
-                  {order.eventID}
+                  {order.event.id}
                 </td>
                 <td className="px-4 py-2 border-b text-center">
-                  {order.eventName}
+                  {order.event.name}
                 </td>
                 <td className="px-4 py-2 border-b text-center">
                   {order.price}
                 </td>
-                <td className="px-4 py-2 border-b text-center">{order.date}</td>
                 <td className="px-4 py-2 border-b text-center">
-                  {order.quantity}
+                  {new Date(order.createdDate).toLocaleDateString()}
                 </td>
+                <td className="px-4 py-2 border-b text-center">1</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
 
-      <Pagination className="mt-8">
-        <PaginationContent className="flex justify-center">
-          <PaginationItem>
-            <PaginationPrevious href="#" size="sm" variant="secondary" />
-          </PaginationItem>
-          <PaginationItem className="hidden md:block">
-            {props.paginationItems.map((item, index) => (
-              <PaginationLink
-                key={index}
-                href="#"
-                size="sm"
-                variant="link"
-                className="px-4 py-2"
-              >
-                {item}
-              </PaginationLink>
-            ))}
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationNext href="#" size="sm" variant="secondary" />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
-    </div>
+     </div> 
   );
 };
 
-OrderHistoryTable.defaultProps = {
-  paginationItems: [1, 2, 3, 4, 5],
-};
+
 
 export default OrderHistoryTable;

@@ -1,4 +1,3 @@
-import React from 'react';
 
 const SponsorEventProfit = () => {
   const data = [
@@ -9,7 +8,6 @@ const SponsorEventProfit = () => {
 
   const handleDetailClick = (id) => {
     alert(`Details for item ID: ${id}`);
-    // Implement your detail click handling logic here
   };
 
   return (
