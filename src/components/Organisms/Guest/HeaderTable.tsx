@@ -88,7 +88,7 @@ const HeaderTable: React.FC<HeaderTableProps> = ({ eventId, eventDetails }) => {
       order: {
         visitorId: parseInt(visitorId, 10), // Ensure visitorId is a number
         eventId: eventDetails.id,
-        statusCart: true,
+        statusCart: false,
         status: "PENDING",
         quantity: quantities[0]
       },

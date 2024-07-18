@@ -47,6 +47,7 @@ import { PaymentPage } from "./components/Pages/Visitor/PaymentPage";
 import { Login1 } from "./components/Pages/Login";
 import { EventProfit } from "./components/Organisms/EventOperator/EventProfit";
 import PaymentSuccessfullPage from "./components/Pages/Visitor/PaymentSuccessfullPage";
+import Cart from "./components/Pages/Dashboard/Cart/Cart";
 
 function App() {
   const eventId = "1";
