@@ -13,6 +13,7 @@ import { useGetCartQuery } from "../../../Features/Order/cartApi";
 import { useCreateOrderMutation } from "../../../Features/Order/orderApi";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   paginationItems: number[];
@@ -21,23 +22,11 @@ type Props = {
 const OrderHistoryTable: React.FC<Props> = (props) => {
   const { data, error, isLoading } = useGetCartQuery("1");
   const [createOrder] = useCreateOrderMutation();
+  const navigate = useNavigate();
 
   const handlePaidClick = async (order: any) => {
     // Assuming you have an API endpoint to update the order status to 'PAID'
-    try {
-      const updatedOrder = {
-        ...order,
-        status: 'PAID'
-      };
-      const response = await createOrder(updatedOrder).unwrap();
-      if (response.message === "Order updated successfully") {
-        toast.success("Order marked as Paid successfully");
-      } else {
-        toast.error("Failed to update order: " + response.message);
-      }
-    } catch (err) {
-      toast.error("Failed to update order: " + err.message);
-    }
+    navigate("/PaymentPage", { state: { eventDetails: order.event, quantity: 1, ticketId: order.id } });
   };
 
   if (isLoading) {
