@@ -1,17 +1,8 @@
 import "react-dropdown/style.css";
 import { Input } from "@relume_io/relume-ui";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@relume_io/relume-ui";
 import { BiSearch } from "react-icons/bi";
 import { useGetCartQuery } from "../../../Features/Order/cartApi";
-import { useCreateOrderMutation } from "../../../Features/Order/orderApi";
-import { toast, ToastContainer } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from "react-router-dom";
 
@@ -19,9 +10,8 @@ type Props = {
   paginationItems: number[];
 };
 
-const OrderHistoryTable: React.FC<Props> = (props) => {
+const OrderHistoryTable: React.FC<Props> = () => {
   const { data, error, isLoading } = useGetCartQuery("1");
-  const [createOrder] = useCreateOrderMutation();
   const navigate = useNavigate();
 
   const handlePaidClick = async (order: any) => {
