@@ -240,7 +240,7 @@ function App() {
             }
           />
           <Route
-            path="/order-history"
+            path="/cart"
             element={
               <RequireAuth role="ROLE_VISITOR">
                 <OrderHistory />
