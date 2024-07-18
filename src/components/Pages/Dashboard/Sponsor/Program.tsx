@@ -1,17 +1,10 @@
-import React from 'react'
-import { ApplicationShell4 } from '../../../Organisms/Dashboard/ApplicationShell'
-import { TableTemplate } from '../../../Organisms/Dashboard/TableTemplate'
-import { GridList6 } from '../../../Organisms/Sponsor/SponsorProgram'
+import { ApplicationShell4 } from "../../../Organisms/Dashboard/ApplicationShell";
+import SponsorEventProfit from "../../../Organisms/Sponsor/SponsorEventProfit";
 
 export const Program = () => {
   return (
     <div>
-        <ApplicationShell4
-        MainComponent={
-          < GridList6
-          />
-        }
-      />
+      <ApplicationShell4 MainComponent={<SponsorEventProfit/>} />
     </div>
-  )
-}
+  );
+};

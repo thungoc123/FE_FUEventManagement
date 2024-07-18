@@ -109,6 +109,14 @@ function App() {
             }
           />
           <Route
+            path="/sponsor/dashboard/program/detail"
+            element={
+              <RequireAuth role="ROLE_SPONSOR">
+                <SponsorProgramDetail />
+              </RequireAuth>
+            }
+          />
+          <Route
             path="/sponsor/dashboard/create"
             element={
               <RequireAuth role="ROLE_SPONSOR">
@@ -197,6 +205,14 @@ function App() {
           />
           <Route
             path="/eventoperator/dashboard/event-profit"
+            element={
+              <RequireAuth role="ROLE_EO">
+                <ManageEvent component={<EventProfit />} />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/sponsor/dashboard/event-profit"
             element={
               <RequireAuth role="ROLE_EO">
                 <ManageEvent component={<EventProfit />} />
