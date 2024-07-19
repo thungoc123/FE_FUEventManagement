@@ -1,4 +1,3 @@
-// src/app/store.js or wherever your store configuration is
 import { configureStore } from '@reduxjs/toolkit';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
@@ -17,6 +16,7 @@ import { ticketApi } from '../Features/Order/ticketApi';
 import { paymentApi } from '../Features/Payment/paymentApi';
 import resetpasswordApi from '../Features/Password/resetPasswordApi';
 import { cartApi } from '../Features/Order/cartApi';
+import { sponsorProfitApi } from '../Features/Sponsor/sponsorProfit'; // Correct import
 
 const authPersistConfig = {
   key: 'auth',
@@ -43,11 +43,13 @@ export const store = configureStore({
     events: eventReducer,
     [resetpasswordApi.reducerPath]: resetpasswordApi.reducer,
     [cartApi.reducerPath]: cartApi.reducer, // Add the cartApi reducer
+    [sponsorProfitApi.reducerPath]: sponsorProfitApi.reducer, // Correct usage
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
     }).concat(
+      sponsorProfitApi.middleware,
       ticketApi.middleware,
       sponsorApi.middleware,
       eventDisplayApi.middleware,
@@ -59,7 +61,7 @@ export const store = configureStore({
       passwordApi.middleware,
       paymentApi.middleware,
       resetpasswordApi.middleware,
-      cartApi.middleware // Add the cartApi middleware
+      cartApi.middleware, // Add the cartApi middleware
     ),
 });
 

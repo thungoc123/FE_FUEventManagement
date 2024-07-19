@@ -1,4 +1,3 @@
-
 export interface StateEvent {
   id: number;
   name: string;
@@ -83,27 +82,29 @@ export interface EventCheckingStaff {
 
 export interface SponsorProgram {
   id: number;
+  name:string;
   title: string;
   thumbnail: string;
   link: string;
   location: string;
   description: string;
   state: string;
+  profit: string; // Adjust the type according to your actual data structure
   events: string[];
 }
 
 export interface Event {
   id: number;
-  name: string; 
+  name: string;
   description: string;
   price: number;
-  email:string;
+  email: string;
   timestart: string;
   timeend: string;
   timeopensale: string;
   timeclosesale: string;
   stateEvent: StateEvent;
-  quantity:string;
+  quantity: string;
   eventImages: EventImage[];
   eventSchedules: EventSchedule[];
   eventCheckingStaffs: EventCheckingStaff[];

@@ -8,6 +8,7 @@ export interface SponsorProgram {
     state: String;
     thumbnail: string;
     tittle:string;
-    
+    profit: string; // Adjust the type according to your actual data structure
+
   }
   
