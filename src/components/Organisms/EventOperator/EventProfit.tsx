@@ -71,10 +71,10 @@ export const EventProfit = () => {
 
   const tableHeaderClasses = [
     "w-[200px] pr-4 xxl:w-[30px]",
-    "w-[200px] pr-4 xxl:w-[350px]",
+    "w-[200px] pr-4 xxl:w-[400px]",
     "w-[128px] pr-4 xxl:w-[250px]",
     "w-[200px] pr-4 xxl:w-[150px]",
-    "w-[200px] pr-4 xxl:w-[250px]",
+    "w-[200px] pr-4 xxl:w-[150px]",
   ];
 
   return (
