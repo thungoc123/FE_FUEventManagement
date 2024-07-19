@@ -152,7 +152,7 @@ export const Navbar2 = (props: Navbar2Props) => {
   interface JwtPayload {
     sub: string;
     role?: string;
-    accountId?: string;
+    accountId?: number;
   }
 
   // login function with redux

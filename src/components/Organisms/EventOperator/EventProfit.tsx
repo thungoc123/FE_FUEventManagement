@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import { useGetListEventQuery } from "../../../Features/EventManage/eventApi";
-import { Link } from "react-router-dom";
-import { BiEdit, BiShow, BiTrash, BiAddToQueue } from "react-icons/bi";
-import { Button } from "@relume_io/relume-ui";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+
 import { TableTemplate } from "../Dashboard/TableTemplate";
 import { EventTable } from "../../../Types/eventSchedule";
-import axios from "axios";
 
 export const EventProfit = () => {
   const tableHeaders = [
@@ -19,7 +18,9 @@ export const EventProfit = () => {
 
   const { data: Events, isLoading, error } = useGetListEventQuery();
   const [ticketIdList, setTicketIdList] = useState<string[]>([]);
-  const [paidTicketCounts, setPaidTicketCounts] = useState({});
+  const [paidTicketCounts, setPaidTicketCounts] = useState<{ [key: string]: number }>({});
+  const [eventProfits, setEventProfits] = useState<number[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {          
     if (Events) {
@@ -57,17 +58,28 @@ export const EventProfit = () => {
 
   }, [ticketIdList]);
 
+  useEffect(() => {
+    if (Events && Object.keys(paidTicketCounts).length > 0) {
+      const profits = Events.filter(event => event.stateEvent.name === "PUBLISH")
+        .map(event => (paidTicketCounts[event.id] || 0) * event.price);
+      setEventProfits(profits);
+    }
+  }, [Events, paidTicketCounts]);
+
   const publishEvents =
     Events?.filter((event) => event.stateEvent.name === "PUBLISH") || [];
 
-  const tableRows: EventTable[] = publishEvents.map((item, index) => ({
-    No: index + 1,
-    Name: item.name,
-    Date: new Date(item.timestart).toLocaleDateString(),
-    Price: item.price,
-    "Ticket Amount": paidTicketCounts[item.id] || 0,
-    "Event Profit": (paidTicketCounts[item.id] || 0) * item.price,
-  }));
+  const tableRows: EventTable[] = publishEvents.map((item, index) => {
+    const profit = (paidTicketCounts[item.id] || 0) * item.price;
+    return {
+      No: index + 1,
+      Name: item.name,
+      Date: new Date(item.timestart).toLocaleDateString(),
+      Price: item.price,
+      "Ticket Amount": paidTicketCounts[item.id] || 0,
+      "Event Profit": profit,
+    };
+  });
 
   const tableHeaderClasses = [
     "w-[200px] pr-4 xxl:w-[30px]",
@@ -77,18 +89,23 @@ export const EventProfit = () => {
     "w-[200px] pr-4 xxl:w-[150px]",
   ];
 
+  const handleNavigate = () => {
+    navigate('/event-profit-detail', { state: { eventProfits } });
+  };
+
   return (
     <>
       {isLoading ? (
         "Vui lòng đợi trong giây lát"
       ) : (
-        <TableTemplate
-          headerTitle="Publish Event"
-          headerDescription="List of unpublish event"
-          tableHeaders={tableHeaders}
-          tableRows={tableRows}
-          tableHeadersClasses={tableHeaderClasses}
-        />
+        <>
+          <TableTemplate
+            headerTitle="Publish Event"headerDescription="List of publish events"
+            tableHeaders={tableHeaders}
+            tableRows={tableRows}
+            tableHeadersClasses={tableHeaderClasses}
+          />
+        </>
       )}
     </>
   );
