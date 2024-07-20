@@ -48,6 +48,7 @@ import { Login1 } from "./components/Pages/Login";
 import { EventProfit } from "./components/Organisms/EventOperator/EventProfit";
 import PaymentSuccessfullPage from "./components/Pages/Visitor/PaymentSuccessfullPage";
 import Cart from "./components/Pages/Dashboard/Cart/Cart";
+import EventProfitDetail from "./components/Organisms/EventOperator/EventProfitDetail";
 
 function App() {
   const eventId = "1";
@@ -189,6 +190,14 @@ function App() {
             }
           />
           <Route
+            path="/eventoperator/dashboard/feedback"
+            element={
+              <RequireAuth role="ROLE_EO">
+                <ManageFeedback />
+              </RequireAuth>
+            }
+          />
+          <Route
             path="/eventoperator/dashboard/UnpublishEvent"
             element={
               <RequireAuth role="ROLE_EO">
@@ -205,7 +214,7 @@ function App() {
             }
           />
           <Route
-            path="/eventoperator/dashboard/event-profit"
+            path="/eventoperator/dashboard/analytics"
             element={
               <RequireAuth role="ROLE_EO">
                 <ManageEvent component={<EventProfit />} />
@@ -213,13 +222,21 @@ function App() {
             }
           />
           <Route
+            path="/eventoperator/dashboard/analytics/:id" 
+            element={
+              <RequireAuth role="ROLE_EO">
+                <ManageEvent component={<EventProfitDetail />} />
+              </RequireAuth>
+            }
+          />
+          {/* <Route
             path="/sponsor/dashboard/event-profit"
             element={
               <RequireAuth role="ROLE_EO">
                 <ManageEvent component={<EventProfit />} />
               </RequireAuth>
             }
-          />
+          /> */}
           <Route
             path="/eventoperator/dashboard/FeedbackDetail"
             element={
@@ -259,7 +276,7 @@ function App() {
             path="/payment-successfull"
             element={
               <RequireAuth role="ROLE_VISITOR">
-                 <PaymentSuccessfullPage/> 
+                <PaymentSuccessfullPage />
               </RequireAuth>
             }
           />

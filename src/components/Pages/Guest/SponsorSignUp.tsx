@@ -1,10 +1,8 @@
 import { useNavigate } from "react-router-dom"; // Import useNavigate
-
 import { ChangeEvent, FormEvent, useState } from "react";
 import { Button, Input, Label } from "@relume_io/relume-ui";
 import type { ImgProps, ButtonProps } from "@relume_io/relume-ui";
 import { useRegisterSponsorMutation } from "../../../Features/Auth/authApi";
-
 
 type Props = {
   logo: ImgProps;
@@ -39,7 +37,7 @@ export const SponsorSignUp = (props: Signup7Props) => {
     ...props,
   } as Props;
   const navigate = useNavigate();
-  const [registerSponsor, {isError, isLoading, isSuccess, error} ] = useRegisterSponsorMutation()
+  const [registerSponsor, { isError, isLoading, isSuccess, error }] = useRegisterSponsorMutation();
   const [sponsorData, setSponsorData] = useState({
     email: '',
     password: '',
@@ -92,7 +90,7 @@ export const SponsorSignUp = (props: Signup7Props) => {
     if (valid) {
       try {
         await registerSponsor(sponsorData).unwrap();
-        navigate('/login');
+        navigate('/'); // Điều hướng về trang chủ sau khi đăng ký thành công
       } catch (error) {
         console.error('Registration failed:', error);
       }
@@ -206,7 +204,6 @@ export const SponsorSignUp = (props: Signup7Props) => {
                 </Button>
               </div>
               {isError && <p style={{ color: 'red' }}>{error?.data || 'Sign up failed'}</p>}
-
             </form>
             <div className="mt-5 inline-flex w-full items-center justify-center gap-x-1 text-center md:mt-6">
               <p>{logInText}</p>

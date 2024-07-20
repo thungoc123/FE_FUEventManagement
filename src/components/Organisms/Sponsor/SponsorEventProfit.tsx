@@ -52,7 +52,7 @@ console.log(totalEventProfit)
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
-      {/* <div className="mb-6">
+      <div className="mb-6">
         <label className="block text-gray-700 text-sm font-bold mb-2">
           Event ID:
         </label>
@@ -74,7 +74,7 @@ console.log(totalEventProfit)
           onChange={(e) => setTotalEventProfit(e.target.value)}
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         />
-      </div> */}
+      </div>
 
       <button
         onClick={handleFetch}

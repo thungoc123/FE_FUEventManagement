@@ -88,7 +88,7 @@ export const VisitorSignUp = (props: Signup7Props) => {
     if (valid) {
       try {
         await registerVisitor(visitorData).unwrap();
-        navigate('/login');
+        navigate('/'); // Điều hướng về trang chủ sau khi đăng ký thành công
       } catch (error) {
         console.error('Registration failed:', error);
       }
@@ -157,7 +157,7 @@ export const VisitorSignUp = (props: Signup7Props) => {
                   iconLeft={signUpButton.iconLeft}
                   iconRight={signUpButton.iconRight}
                 >
-                  {isLoading ? 'Signing in...' : signUpButton.title}
+                  {isLoading ? 'Signing up...' : signUpButton.title}
                 </Button>
               </div>
               {isError && <p style={{ color: 'red' }}>{error?.data || 'Sign up failed'}</p>}
