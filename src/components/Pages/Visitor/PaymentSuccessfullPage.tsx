@@ -1,12 +1,32 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from "@relume_io/relume-ui"; // Assuming you're using relume-ui for buttons
+import { useUpdateTicketStatusMutation } from "../../../Features/Order/ticketApi";
+import { useDispatch } from 'react-redux';
+import { addNotification } from '../../../Features/Utils/notificationsSlice';
 
 const PaymentSuccessfullPage = () => {
   const navigate = useNavigate();
+  const ticketId = localStorage.getItem('ticketId');
+  const [updateTicketStatus, { isLoading: isUpdating, isSuccess: isUpdateSuccess, isError: isUpdateError, error: updateError }] = useUpdateTicketStatusMutation();
+  const dispatch = useDispatch();
 
-  const handleGoHome = () => {
-    navigate('/');
+  const handleGoHome = async() => {
+    try {
+      await updateTicketStatus({ id: ticketId, status: 'PAID' }).unwrap();
+      navigate('/');
+      dispatch(
+        addNotification({
+          id: new Date().getTime(), // Sử dụng timestamp làm ID
+          message: "Buy Ticket successfully!",
+          type: "success",
+          timestamp: Date.now(), // Thời gian hiện tại
+        })
+      );
+    }
+    catch (err: any) {
+      console.error(err.message || "Unknown error occurred");
+    }
   };
 
   return (

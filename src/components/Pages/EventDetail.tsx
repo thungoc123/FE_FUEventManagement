@@ -5,19 +5,17 @@ import EventDetails from "../Organisms/Guest/EventDetail";
 import { Gallery3 } from "../Organisms/Guest/EventGallery";
 import { Testimonial1 } from "../Organisms/Guest/Testimonial";
 import Schedule from "../Organisms/Guest/Schedule";
-import { Header3, Header80 } from "../Molecules/EventHeader";
+import { Header3 } from "../Molecules/EventHeader";
 import { Cta7 } from "../Molecules/CTA";
 import { useGetEventDetailsQuery } from "../../Features/Event/eventDisplayApi";
 import { useParams } from "react-router-dom";
-import { NavbarLogout } from "../Organisms/Guest/NavbarLogout";
-
+import '../Organisms/Style/eventDetail.css';
 function EventDetail() {
   const { id } = useParams<{ id: string }>();
   if (!id) {
     return <div>Error: Event ID is missing.</div>;
   }
   const { data, error, isLoading } = useGetEventDetailsQuery(id);
-
   if (isLoading) return <div className="loader"></div>;
   if (error) {
     let errorMessage;
@@ -45,15 +43,14 @@ function EventDetail() {
 
   const tags = data?.stateEvent ? [data.stateEvent.name] : [];
 
- 
+  
   const quantity = typeof data?.quantity === 'string' ? Number(data.quantity) : data?.quantity ?? 0;
   const price = typeof data?.price === 'string' ? Number(data.price) : data?.price ?? 0;
   const startDate = data?.timestart
     ? new Date(data.timestart).toLocaleDateString()
     : "No date available";
-
-
-
+  const timeOpenSale = data?.timeopensale
+  const timeCloseSale = data?.timeclosesale
   const duration =
     data?.timestart && data?.timeend
       ? `${Math.round(
@@ -117,15 +114,15 @@ function EventDetail() {
         location={location}
         quantity={quantity}
         price={price}
-
-
+        timeOpenSale={timeOpenSale}
+        timeCloseSale={timeCloseSale}
       />
 
       <Schedule days={formattedDays} />
       <Gallery3 heading="Event Gallery" description="" images={eventImages} /> {/* Truyền eventImages vào Gallery3 */}
-      <Cta7 eventDetails={data} eventId={id}/>
-      <Contact1 />
-      <Testimonial1 />
+      {data?.stateEvent.name === "PUBLISH" && <Cta7 eventDetails={data} eventId={id}/>} 
+      {/* <Contact1 /> */}
+      {/* <Testimonial1 /> */}
       <Footer1 />
     </>
   );

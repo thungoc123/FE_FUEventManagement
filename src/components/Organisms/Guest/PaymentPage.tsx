@@ -5,6 +5,8 @@ import { useUpdateTicketStatusMutation } from "../../../Features/Order/ticketApi
 import { useNavigate, useLocation } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import { addNotification } from "../../../Features/Utils/notificationsSlice";
+import { useDispatch } from "react-redux";
 
 interface Payment1Props {
   eventDetails?: any;
@@ -15,12 +17,14 @@ interface Payment1Props {
 const Payment1: React.FC<Payment1Props> = () => {
   const location = useLocation();
   console.log('location.state:', location.state); // Debug logging
+  const emailData = localStorage.getItem('email');
   const { eventDetails = {}, quantity = 0, ticketId = '' } = location.state || {};
-  const [email, setEmail] = useState<string>("tienntse171382@fpt.edu.vn");
+  const [email, setEmail] = useState<string>(emailData);
   const [amount, setAmount] = useState(0);
   const [trigger, { isLoading, data, error }] = useLazySendPaymentInfoQuery();
   const [updateTicketStatus, { isLoading: isUpdating, isSuccess: isUpdateSuccess, isError: isUpdateError, error: updateError }] = useUpdateTicketStatusMutation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (eventDetails) {
@@ -30,6 +34,7 @@ const Payment1: React.FC<Payment1Props> = () => {
 
   const handleAction = async (action: 'payment' | 'cancel') => {
     if (action === 'payment') {
+      localStorage.setItem('ticketId', ticketId);
       if (!email) {
         toast.error("Email is not available");
         return;
@@ -50,7 +55,7 @@ const Payment1: React.FC<Payment1Props> = () => {
         toast.success("Payment information sent successfully");
 
         // Update the ticket status to PAID using ticketId from location state
-        await updateTicketStatus({ id: ticketId, status: 'PAID' }).unwrap();
+        // await updateTicketStatus({ id: ticketId, status: 'PAID' }).unwrap();
         toast.success("Ticket status updated to PAID");
 
       } catch (err: any) {
@@ -65,6 +70,14 @@ const Payment1: React.FC<Payment1Props> = () => {
         console.log(ticketId);
         await updateTicketStatus({ id: ticketId, status: 'CANCELLED' }).unwrap();
         toast.success("Ticket status updated to CANCELLED");
+        dispatch(
+          addNotification({
+            id: new Date().getTime(), // Sử dụng timestamp làm ID
+            message: "Cancel payment successfully!",
+            type: "success",
+            timestamp: Date.now(), // Thời gian hiện tại
+          })
+        );
       } catch (err: any) {
         toast.error(
           `Failed to update ticket status to CANCELLED: ${
