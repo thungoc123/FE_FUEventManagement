@@ -28,17 +28,20 @@ import { setTab } from "../../../Features/Utils/tabSlice";
 import { Alert } from "../../Molecules/Alert";
 import { sponsorEvent } from "../../../Types/eo.type";
 
+type props = {
+  totalProfit: number;
+};
 
 
-const AddSponsor: React.FC = () => {
+const AddSponsor: React.FC<props> = (prop) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedSponsorId, setSelectedSponsorId] = useState(0)
   const [profitPercentage, setProfitPercentage] = useState(0);
   const [seletedSponsor, setSeletedSponsor] = useState('');
-  const [fill, setFill] = useState(false);
+  const [fill, setFill] = useState("");
   const { id } = useParams();
   const dispatch = useDispatch();
-
+  const lasted_profit = 100 - prop.totalProfit;
   const openModal = () => {
     setModalIsOpen(true);
   };
@@ -84,12 +87,13 @@ const AddSponsor: React.FC = () => {
 
   ) 
     console.log(JSON.stringify(sponsorData));
+    if(sponsorData.profitPercentage < lasted_profit) {
     try {
        await addSponsorToEvent({ eventId: id,newData:sponsorData }).unwrap()
        dispatch(
         addNotification({
           id: new Date().getTime(), // Sử dụng timestamp làm ID
-          message: "Create staff successfully!",
+          message: "Add Sponsor successfully!",
           type: "success",
           timestamp: Date.now(), // Thời gian hiện tại
         }),
@@ -98,11 +102,14 @@ const AddSponsor: React.FC = () => {
       // window.location.reload();
 
     }catch (error) {
-      setFill(true)
+      setFill("This sponsor has already been added !")
 
       // console.error('Failed to delete the staff:', error);
       // alert('Failed to delete the staff');
     }
+  } else {
+    setFill("Profit percentage must be less than " + lasted_profit + "%")
+  }
   }
 
   // console.log(sponsors);
@@ -176,7 +183,7 @@ const AddSponsor: React.FC = () => {
               {isLoading ? "Adding" : "Add"}
             </Button>
           </div>
-          {fill && <Alert text="This sponsor has already been added !" />}
+          {fill.length > 0  && <Alert text= {fill} />}
         </form>
 
       </Modal >

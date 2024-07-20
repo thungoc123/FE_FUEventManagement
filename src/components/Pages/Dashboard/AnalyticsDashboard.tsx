@@ -11,8 +11,8 @@ export const AnalyticsDashboard = () => {
   return (
     <>
       <ApplicationShell4
-        MainComponent={<LineChart labels={labels} views={views} sell={sell} />}
-        StateComponent={<Stat1 />}
+        MainComponent={<Stat1 />}
+        // StateComponent={<Stat1 />}
       />
     </>
   );

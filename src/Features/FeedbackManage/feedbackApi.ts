@@ -55,8 +55,8 @@ export const feedbackApi = createApi({
       ],
     }),
     updateFeedback: builder.mutation({
-      query: ({ feedbackId, feedback }) => ({
-        url: `api-feedbacks/update/${feedbackId}`,
+      query: ({ id, feedback }) => ({
+        url: `api-feedbacks/update/${id}`,
         method: 'PUT',  
         body: feedback,
       }),
@@ -80,7 +80,8 @@ export const feedbackApi = createApi({
         body: visitorAnswer,
       }),
     }),
+   
   
   }),
 })
-export const { useVisitorAnswerFeedbackMutation ,useDeleteFeedbackMutation,useDeleteFeedbackQuestionMutation,useGetListFeedbackQuestionQuery,useCreateQuestionMutation,useCreateFeedbackMutation, useGetListFeedbackQuery } = feedbackApi;
+export const { useUpdateFeedbackMutation,useVisitorAnswerFeedbackMutation ,useDeleteFeedbackMutation,useDeleteFeedbackQuestionMutation,useGetListFeedbackQuestionQuery,useCreateQuestionMutation,useCreateFeedbackMutation, useGetListFeedbackQuery } = feedbackApi;

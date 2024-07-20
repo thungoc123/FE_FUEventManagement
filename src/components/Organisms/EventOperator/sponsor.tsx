@@ -52,6 +52,8 @@ export const AddSponsorTable = () => {
       alert('Failed to delete the staff');
     }
   };
+  const total_profit = sponsor.reduce((total, item) => total + item.profitPercent, 0);
+  console.log(total_profit);
   const tableRows: SponsorTable[] = sponsor.map((item, index) => ({
     No: index + 1,
     Name: item.sponsor.companyName,
@@ -96,7 +98,8 @@ export const AddSponsorTable = () => {
       />
       </>
     )}
-          <AddSponsor />
+
+          <AddSponsor totalProfit={total_profit}/>
       
     </>
   );

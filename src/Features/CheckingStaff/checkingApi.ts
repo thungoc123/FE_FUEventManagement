@@ -28,13 +28,29 @@ export const checkingApi = createApi({
                query: (eventId) => ({
                     url: `api-attendances-2/list/event/${eventId}`,
                }),
+               providesTags: ['Checking'],
           }),
           getListFeedbackEvent: builder.query<FeedbackQuery[], string>({
                query: (eventId) => `/api-feedback-list-event/list-feedback/${eventId}`,
                // keepUnusedDataFor: 3600,
                providesTags: ['Checkings'],
            }),
+          sendMail: builder.mutation({
+               query: (emailBody) => ({
+                 url: `api-staff/send`,
+                 method: 'POST',
+                 body: emailBody,
+               }),
+          }),
+          checkAttendance: builder.mutation({
+               query: ({ ticketId, status }) => ({
+                   url: `api-attendance/update`,
+                   method: 'PUT',
+                   params: { ticketId, status },
+               }),
+               invalidatesTags: ['Checking'],
+           }),
      }),
 });
 
-export const { useGetEventDetailQuery, useGetListFeedbackEventQuery ,useGetAttendanceQuery } = checkingApi;
+export const { useCheckAttendanceMutation ,useSendMailMutation ,useGetEventDetailQuery, useGetListFeedbackEventQuery ,useGetAttendanceQuery } = checkingApi;

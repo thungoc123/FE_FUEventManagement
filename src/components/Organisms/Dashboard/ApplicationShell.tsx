@@ -77,7 +77,7 @@ import { setEvents } from "../../../Features/EventManage/eventSlice";
 import { roleName } from "../../../ulities/ProtectedRoute";
 
 type ParentComponentProps = {
-  MainComponent: React.ReactNode;
+  MainComponent?: React.ReactNode;
   StateComponent?: React.ReactNode;
 };
 

@@ -13,6 +13,8 @@ import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addNotification } from "../../../Features/Utils/notificationsSlice";
 import { useEffect, useState } from "react";
+import UpdateFeedback from "./updateFeedback";
+import { accountID } from "../../../ulities/ProtectedRoute";
 
 export const Feedback = () => {
   const tableHeaders = [
@@ -20,13 +22,16 @@ export const Feedback = () => {
     "Name",
     "Event",
     "state",
-    "Detail",
+    "Question",
+    "Edit",
     "Publish",
     "Delete",
   ];
-  const { data: Feedbacks, isLoading, error } = useGetListFeedbackQuery('1');
+  const accountId = accountID(sessionStorage.getItem("token"));
+  const { data: Feedbacks, isLoading, error } = useGetListFeedbackQuery(accountId);
   const [deleteFeedback] = useDeleteFeedbackMutation();
   const dispatch  = useDispatch();
+  
   const handleDeleteFeedback = async (e, fbid: number) => {
     e.preventDefault();
     try {
@@ -60,12 +65,13 @@ export const Feedback = () => {
     Name: item.title,
     Event: item.eventName,
     state: item.state.stateName,
-    Detail: 
+    Question: 
     <Link to={`/eventoperator/dashboard/FeedbackDetail/${item.feedbackID}`}>
     <Button size="icon" variant="link">
       <BiEdit />
     </Button>
-  </Link>,
+    </Link>,
+    Edit: <UpdateFeedback feedback={item}/>,
     Publish: item.state?.stateName === "UNPUBLISH" ? <Button size="icon" asChild variant="link"><BiShow /></Button>  : <Button size="icon" asChild variant="link"><BiHide/></Button>,
     Delete:  <Button size="icon" variant="link" onClick={(e) => handleDeleteFeedback(e,item.feedbackID)}>
       <BiTrash /></Button>,
@@ -76,6 +82,7 @@ export const Feedback = () => {
     "w-[200px] pr-4 xxl:w-[150px]",
     "w-[200px] pr-4 xxl:w-[150px]",
     "w-[128px] pr-4 xxl:w-[150px]",
+    "w-[128px] pr-4 xxl:w-[50px]",
     "w-[128px] pr-4 xxl:w-[50px]",
     "w-[128px] pr-4 xxl:w-[50px]",
     "w-[200px] pr-4 xxl:w-[50px]",

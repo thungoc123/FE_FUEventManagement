@@ -45,7 +45,7 @@ import {
               key={index}
               className="flex flex-col justify-between border border-border-primary p-6 md:justify-normal"
             >
-              <div className="mb-3 flex items-center justify-between gap-4 md:mb-4">
+              <div className="mb-3 flex items-center justify-between gap-3 md:mb-4">
                 <img src={stat.icon.src} alt={stat.icon.alt} className="size-8" />
                 <DropdownMenu>
                   <DropdownMenuTrigger>
@@ -105,8 +105,8 @@ import {
           src: "https://relume-assets.s3.amazonaws.com/relume-icon.svg",
           alt: "Relume icon 1",
         },
-        title: "Lorem ipsum",
-        description: "90,000",
+        title: "Tổng lợi nhuận của sự kiện ",
+        description: "1,000,000 VND",
         badge: "100%",
         options: ["View Report", "Add Report", "View all"],
       },
@@ -115,9 +115,19 @@ import {
           src: "https://relume-assets.s3.amazonaws.com/relume-icon.svg",
           alt: "Relume icon 1",
         },
-        title: "Lorem ipsum",
-        description: "90,000",
-        badge: "100%",
+        title: "Sponsor số 1 ",
+        description: "200, 000 VND",
+        badge: "20%",
+        options: ["View Report", "Add Report", "View all"],
+      },
+      {
+        icon: {
+          src: "https://relume-assets.s3.amazonaws.com/relume-icon.svg",
+          alt: "Relume icon 1",
+        },
+        title: "Sponsor số 2 ",
+        description: "1, 200, 000 VND",
+        badge: "20%",
         options: ["View Report", "Add Report", "View all"],
       },
     ],

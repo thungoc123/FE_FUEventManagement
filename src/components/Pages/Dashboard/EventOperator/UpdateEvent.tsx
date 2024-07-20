@@ -136,7 +136,7 @@ const UpdateEvent = () => {
         type: 'success',
         timestamp: Date.now(), // Thời gian hiện tại
       }));
-      navigate('/eventoperator/dashboard/')
+      navigate('/eventoperator/dashboard/UnpublishEvent');
       // alert('Event created successfully!');
     } catch (err) {
       dispatch(addNotification({
