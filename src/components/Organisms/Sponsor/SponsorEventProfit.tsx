@@ -1,46 +1,33 @@
-import React, { useState } from 'react';
-import { useGetSponsorProfitsQuery } from '../../../Features/Sponsor/sponsorProfit';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../Store/Store';
-import { EventProfit } from '../EventOperator/EventProfit';
+import { useGetSponsorProfitsQuery } from '../../../Features/Sponsor/sponsorProfit';
 
 const SponsorEventProfit = () => {
-  const accountIdString = useSelector((state: RootState) => state.auth.accountId);
-  const accountId = accountIdString !== null ? Number(accountIdString) : null;
-  const [totalEventProfit, setTotalEventProfit] = useState<number | string>('');
-  const [eventId, setEventId] = useState<number | string>('');
+  const accountId = useSelector((state: RootState) => state.auth.accountId)?? 8;
 
-  const { data: sponsorProfits, error, isLoading, refetch } = useGetSponsorProfitsQuery(
-    { eventId: Number(eventId), accountId: accountId!, totalEventProfit: Number(totalEventProfit) },
-    { skip: !totalEventProfit || accountId === null || !eventId }
-  );
+  // Chỉ gọi API khi accountId không phải null
+  const { data: sponsorProfits, error, isLoading } = useGetSponsorProfitsQuery(accountId, {
+    skip: accountId === null,
+  });
 
-  const navigate = useNavigate();
-
-  const handleFetch = () => {
-    if (eventId && accountId && totalEventProfit) {
-      refetch();
-    }
-  };
-console.log(accountId)
-console.log(eventId)
-console.log(totalEventProfit)
-
+  console.log(accountId);
 
   const tableHeaders = [
-    'Sponsor ID',
+    'Event Name',
     'Sponsor Name',
     'Profit Percentage',
     'Amount Received',
   ];
 
   const tableRows = sponsorProfits?.map((profit) => ({
-    'Sponsor ID': profit.sponsorId,
+    'Event Name': profit.eventName,
     'Sponsor Name': profit.companyName,
-    'Profit Percentage': profit.sponsorProfitPercent,
-    'Amount Received': profit.profitAmount  
+    'Profit Percentage':`${profit.sponsorProfitPercent} %`,
+
+    'Amount Received':`${ profit.profitAmount} VND`,
   })) || [];
+
   console.log(sponsorProfits);
 
   const tableHeaderClasses = [
@@ -52,41 +39,8 @@ console.log(totalEventProfit)
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
-      <div className="mb-6">
-        <label className="block text-gray-700 text-sm font-bold mb-2">
-          Event ID:
-        </label>
-        <input
-          type="number"
-          value={eventId}
-          onChange={(e) => setEventId(e.target.value)}
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        />
-      </div>
-
-      <div className="mb-6">
-        <label className="block text-gray-700 text-sm font-bold mb-2">
-          Total Event Profit:
-        </label>
-        <input
-          type="number"
-          value={totalEventProfit}
-          onChange={(e) => setTotalEventProfit(e.target.value)}
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        />
-      </div>
-
-      <button
-        onClick={handleFetch}
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-      >
-        Fetch Data
-      </button>
-
       {isLoading && <div className="loader"></div>}
-
       {error && <div>Error loading sponsor profits</div>}
-
       <div className="w-full bg-white shadow-md rounded-lg overflow-hidden px-4 py-4">
         <table className="min-w-full bg-white">
           <thead>

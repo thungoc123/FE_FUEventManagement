@@ -57,6 +57,7 @@ import Cart from "./components/Pages/Dashboard/Cart/Cart";
 import EventProfitDetail from "./components/Organisms/EventOperator/EventProfitDetail";
 import EventDetail from "./components/Pages/EventDetail";
 import { Program } from "./components/Pages/Dashboard/Sponsor/Program";
+import { Program2 } from "./components/Organisms/Sponsor/Program2";
 function App() {
   ReactModal.setAppElement("#root");
   const eventId = "1";
@@ -127,14 +128,14 @@ function App() {
               </RequireAuth>
             }
           />
-          {/* <Route
-            path="/sponsor/dashboard/program"
+          <Route
+            path="/sponsor/dashboard/3"
             element={
               <RequireAuth role="ROLE_SPONSOR">
-                <Program />
+                <Program2 />
               </RequireAuth>
             }
-          /> */}
+          />
           <Route
             path="/sponsor/dashboard/program"
             element={
