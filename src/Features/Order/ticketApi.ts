@@ -13,7 +13,7 @@ export const ticketApi = createApi({
     }),
     updateTicketStatus: builder.mutation({
       query: ({ id, status }) => ({
-        url: `api-ticket/update/${id}`,
+        url: `api-ticket/${id}/status`,
         method: "PUT",
         body: { status },
       }),
