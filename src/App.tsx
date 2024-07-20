@@ -6,7 +6,7 @@ import RoleChoosing from "./components/Pages/Guest/RoleChosing";
 // import SponsorHomepage from "./components/Pages/Guest/SponsorProgramePage";
 import QuestionForm from "./components/Pages/Dashboard/EventOperator/Question";
 // import SponsorHomepage from "./components/Pages/Guest/SponsorProgramePage";
-import { Program } from "./components/Pages/Dashboard/Sponsor/Program";
+// import { Program } from "./components/Pages/Dashboard/Sponsor/Program";
 import { AddProgram } from "./components/Pages/Dashboard/Sponsor/CreateProgram";
 import { QuestionAnalyticsDashboard } from "./components/Pages/Dashboard/QuestionAnalyticsDashboard";
 import { AnalyticsDashboard } from "./components/Pages/Dashboard/AnalyticsDashboard";
@@ -18,7 +18,7 @@ import CreateEvent from "./components/Pages/Dashboard/EventOperator/CreateEvent"
 import ServiceTerm from "./components/Pages/Guest/AboutPage";
 import { Payment } from "./components/Pages/Visitor/Payment";
 // import HomePage from "./components/Pages/Guest/HomePage";
-import EventDetail from "./components/Pages/Guest/EventDetail";
+// import EventDetail from "./components/Pages/Guest/EventDetail";
 import { ManageFeedbackDetail } from "./components/Pages/Dashboard/EventOperator/ManageFeedbackDetail";
 import { ManageFeedback } from "./components/Pages/Dashboard/EventOperator/ManageFeedback";
 import ReactModal from "react-modal";
@@ -55,6 +55,8 @@ import { EventProfit } from "./components/Organisms/EventOperator/EventProfit";
 import PaymentSuccessfullPage from "./components/Pages/Visitor/PaymentSuccessfullPage";
 import Cart from "./components/Pages/Dashboard/Cart/Cart";
 import EventProfitDetail from "./components/Organisms/EventOperator/EventProfitDetail";
+import EventDetail from "./components/Pages/EventDetail";
+import { Program } from "./components/Pages/Dashboard/Sponsor/Program";
 function App() {
   ReactModal.setAppElement("#root");
   const eventId = "1";
@@ -125,6 +127,14 @@ function App() {
               </RequireAuth>
             }
           />
+          {/* <Route
+            path="/sponsor/dashboard/program"
+            element={
+              <RequireAuth role="ROLE_SPONSOR">
+                <Program />
+              </RequireAuth>
+            }
+          /> */}
           <Route
             path="/sponsor/dashboard/program"
             element={
@@ -323,6 +333,7 @@ function App() {
           {/* Visitor  */}
           <Route
             path="/payment"
+            Component={Payment}
             element={
               <RequireAuth role="ROLE_VISITOR">
                 <Payment />
@@ -337,7 +348,14 @@ function App() {
               </RequireAuth>
             }
           />
-
+          <Route
+            path="/paymentpage"
+            element={
+              <RequireAuth role="ROLE_VISITOR">
+                <PaymentPage />
+              </RequireAuth>
+            }
+          />
           <Route path="/visitorAnswer/feedback/:id" element={
             // <RequireAuth role="ROLE_VISITOR">
               <VisitorAnswerPage />
@@ -347,7 +365,7 @@ function App() {
           <Route
             path="/payment-successfull"
             element={
-              <RequireAuth role="ROLE_VISITOR">
+            <RequireAuth role="ROLE_VISITOR">
                 <PaymentSuccessfullPage />
               </RequireAuth>
             }
@@ -399,7 +417,19 @@ function App() {
           {/* <Route path="/checkstaff" element={<AddCheckStaffTable />} />
           <Route path="/sponsor-table" element={<AddSponsorTable />} />
           <Route path="/event-table" element={<EventScheduleTable />} /> */}
-          <Route path="/event-detail/:id" element={<EventDetail />} />
+          <Route path="/event-detail/:id" 
+
+          element={
+            <RequireAuth role="ROLE_VISITOR">
+
+            <EventDetail />
+            </RequireAuth>
+
+            
+            } 
+
+          
+          />
           <Route path="/test" element={<TokenDecode />} />
           <Route path="/login" element={<Login1 />} />
         </Routes >

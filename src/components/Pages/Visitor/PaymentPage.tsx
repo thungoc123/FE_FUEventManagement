@@ -9,7 +9,7 @@ export const PaymentPage = () => {
   const location = useLocation();
   const eventDetails = location.state?.eventDetails;
   const quantity = location.state?.quantity;
-
+  
   return (
     <>
       <Navbar2 />

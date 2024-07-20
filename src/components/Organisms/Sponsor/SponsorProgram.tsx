@@ -34,7 +34,7 @@ import EventTag from "../../Atoms/EventTag";
 export const GridList6 = () => {
   const { data: sponsor, isLoading, error } = useGetListSponsorProgramQuery()
   const { data: events, isLoading: eventLoading, error: eventError } = useGetEventByAccountQuery()
-
+  console.log(events)
   console.log(sponsor)
   const sponsorwithEvent = events?.filter((event) => event.sponsorProgramEvents?.some(e => e.sponsorProgramId === 2))
   console.log(sponsorwithEvent)

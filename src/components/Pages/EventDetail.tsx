@@ -5,7 +5,7 @@ import EventDetails from "../Organisms/Guest/EventDetail";
 import { Gallery3 } from "../Organisms/Guest/EventGallery";
 import { Testimonial1 } from "../Organisms/Guest/Testimonial";
 import Schedule from "../Organisms/Guest/Schedule";
-import { Header80 } from "../Molecules/EventHeader";
+import { Header3, Header80 } from "../Molecules/EventHeader";
 import { Cta7 } from "../Molecules/CTA";
 import { useGetEventDetailsQuery } from "../../Features/Event/eventDisplayApi";
 import { useParams } from "react-router-dom";
@@ -99,8 +99,9 @@ function EventDetail() {
   
   return (
     <>
-        <NavbarLogout/>
-        <Header80
+        {/* <NavbarLogout/> */}
+      <Navbar2 />
+        <Header3
         heading={eventName}
         description={summary}
         eventImages={eventImages}
@@ -122,7 +123,7 @@ function EventDetail() {
 
       <Schedule days={formattedDays} />
       <Gallery3 heading="Event Gallery" description="" images={eventImages} /> {/* Truyền eventImages vào Gallery3 */}
-      <Cta7 />
+      <Cta7 eventDetails={data} eventId={id}/>
       <Contact1 />
       <Testimonial1 />
       <Footer1 />

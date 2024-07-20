@@ -141,7 +141,7 @@ function EventDetail() {
 
       <Schedule days={formattedDays} />
       <Gallery3 heading="Event Gallery" description="" images={eventImages} /> {/* Truyền eventImages vào Gallery3 */}
-      {/* <Cta7 /> */}
+      <Cta7 />
       {/* <Contact1 /> */}
       <Testimonial1 />
       <Footer1 />

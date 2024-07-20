@@ -38,7 +38,7 @@ const Dropdown: React.FC<Props> = (props) => {
     }
   }, [token, role]);
 
-  }, [token]);
+  // }, [token]);
   // const dispatch = useDispatch();
   const handleLogout = () => {
     // localStorage.removeItem("email");

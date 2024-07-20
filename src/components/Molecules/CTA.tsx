@@ -8,6 +8,7 @@ import { useCreateOrderMutation } from '../../Features/Order/orderApi';
 import { useGetVisitorByAccountIdQuery } from '../../Features/Order/ticketApi';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { accountID } from '../../ulities/ProtectedRoute';
 
 type ExtendedButtonProps = RelumeButtonProps & {
   url?: string;
@@ -31,9 +32,13 @@ export const Cta7 = (props: Cta7Props) => {
   } as Props;
 
   const navigate = useNavigate();
-  const accountId = useSelector((state: RootState) => state.auth.accountId); // Get accountId from Redux store
-  const token = useSelector((state: RootState) => state.auth.token); // Get token from Redux store
+  console.log("Event ID:", eventId);
+  console.log("Event Details:", eventDetails);
+  const accountId = accountID(sessionStorage.getItem('token')) // Get accountId from Redux store
+  const token = sessionStorage.getItem('token'); // Get token from Redux store
 
+  console.log("Account ID:", accountId);
+  console.log("Token:", token);
   // Fetch visitor data
   const { data: visitorData, error: visitorError, isLoading: isVisitorLoading } = useGetVisitorByAccountIdQuery(accountId, {
     skip: !accountId, // Skip the query if accountId is not available

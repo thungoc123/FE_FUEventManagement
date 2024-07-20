@@ -36,7 +36,6 @@ export const store = configureStore({
     [sponsor_programApi.reducerPath]: sponsor_programApi.reducer,
     [sponsorDashboardApi.reducerPath]: sponsorDashboardApi.reducer,
     [eventApi.reducerPath]: eventApi.reducer,
-    // [eventApi.reducerPath]: eventApi.reducer,
     notifications: notificationsReducer,
     [sponsorApi.reducerPath]: sponsorApi.reducer,
     auth: authReducer,
@@ -46,19 +45,13 @@ export const store = configureStore({
     [sponsorProfitApi.reducerPath]: sponsorProfitApi.reducer,
     [eventAmountApi.reducerPath]: eventAmountApi.reducer,
     [sponsorPercentApi.reducerPath]: sponsorPercentApi.reducer,
-  },
-    tab: tabReducer, // Thêm reducer của tab vào store
-    [feedbackApi.reducerPath] : feedbackApi.reducer,
-    [visitorApi.reducerPath] : visitorApi.reducer,
-    [checkingApi.reducerPath]: checkingApi.reducer, // Thêm checkingApi.reducer vào store
+    tab: tabReducer, // Correct placement inside reducer object
+    [feedbackApi.reducerPath]: feedbackApi.reducer,
+    [visitorApi.reducerPath]: visitorApi.reducer,
+    [checkingApi.reducerPath]: checkingApi.reducer,
     [adminApi.reducerPath]: adminApi.reducer,
     headerDisplay: HeaderDisplayReducer,
-// src/app/store.ts
-
-
   },
-
-
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
@@ -68,9 +61,8 @@ export const store = configureStore({
       sponsorApi.middleware,
       visitorApi.middleware,
       authApi.middleware,
-      adminApi.middleware ,
-      eventApi.middleware, 
-      sponsorApi.middleware, 
+      adminApi.middleware,
+      eventApi.middleware,
       feedbackApi.middleware,
       eventDisplayApi.middleware,
       sponsor_programApi.middleware,
@@ -82,10 +74,69 @@ export const store = configureStore({
       cartApi.middleware,
       eventAmountApi.middleware,
       sponsorPercentApi.middleware,
-      checkingApi.middleware, // Thêm middleware của checkingApi vào store
-      resetpasswordApi.middleware // Add resetpasswordApi middleware
+      checkingApi.middleware,
     ),
 });
+
+// export const store = configureStore({
+//   reducer: {
+//     [ticketApi.reducerPath]: ticketApi.reducer,
+//     [paymentApi.reducerPath]: paymentApi.reducer,
+//     [eventDisplayApi.reducerPath]: eventDisplayApi.reducer,
+//     [createorderApi.reducerPath]: createorderApi.reducer,
+//     [sponsor_programApi.reducerPath]: sponsor_programApi.reducer,
+//     [sponsorDashboardApi.reducerPath]: sponsorDashboardApi.reducer,
+//     [eventApi.reducerPath]: eventApi.reducer,
+//     // [eventApi.reducerPath]: eventApi.reducer,
+//     notifications: notificationsReducer,
+//     [sponsorApi.reducerPath]: sponsorApi.reducer,
+//     auth: authReducer,
+//     events: eventReducer,
+//     [resetpasswordApi.reducerPath]: resetpasswordApi.reducer,
+//     [cartApi.reducerPath]: cartApi.reducer,
+//     [sponsorProfitApi.reducerPath]: sponsorProfitApi.reducer,
+//     [eventAmountApi.reducerPath]: eventAmountApi.reducer,
+//     [sponsorPercentApi.reducerPath]: sponsorPercentApi.reducer,
+//   },
+//     tab: tabReducer, // Thêm reducer của tab vào store
+//     [feedbackApi.reducerPath] : feedbackApi.reducer,
+//     [visitorApi.reducerPath] : visitorApi.reducer,
+//     [checkingApi.reducerPath]: checkingApi.reducer, // Thêm checkingApi.reducer vào store
+//     [adminApi.reducerPath]: adminApi.reducer,
+//     headerDisplay: HeaderDisplayReducer,
+// // src/app/store.ts
+
+
+//   },
+
+
+//   middleware: (getDefaultMiddleware) =>
+//     getDefaultMiddleware({
+//       serializableCheck: false,
+//     }).concat(
+//       sponsorProfitApi.middleware,
+//       ticketApi.middleware,
+//       sponsorApi.middleware,
+//       visitorApi.middleware,
+//       authApi.middleware,
+//       adminApi.middleware ,
+//       eventApi.middleware, 
+//       sponsorApi.middleware, 
+//       feedbackApi.middleware,
+//       eventDisplayApi.middleware,
+//       sponsor_programApi.middleware,
+//       createorderApi.middleware,
+//       sponsorDashboardApi.middleware,
+//       passwordApi.middleware,
+//       paymentApi.middleware,
+//       resetpasswordApi.middleware,
+//       cartApi.middleware,
+//       eventAmountApi.middleware,
+//       sponsorPercentApi.middleware,
+//       checkingApi.middleware, // Thêm middleware của checkingApi vào store
+//       resetpasswordApi.middleware // Add resetpasswordApi middleware
+//     ),
+// });
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
