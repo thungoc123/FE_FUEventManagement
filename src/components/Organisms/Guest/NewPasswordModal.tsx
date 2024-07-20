@@ -1,37 +1,45 @@
 import React, { useState, FormEvent } from "react";
-import { Dialog, DialogPortal, DialogOverlay, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, Label, Input, Button } from "@relume_io/relume-ui";
+import {
+  Dialog,
+  DialogPortal,
+  DialogOverlay,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  Label,
+  Input,
+  Button
+} from "@relume_io/relume-ui";
 import { useUpdatePasswordMutation } from "../../../Features/Password/resetPasswordApi";
 
 interface NewPasswordModalProps {
   isOpen: boolean;
   onClose: () => void;
   token: string;
-  email: string; // Add email prop
+  email: string;
 }
 
-const NewPasswordModal: React.FC<NewPasswordModalProps> = ({ isOpen, onClose, token,  }) => {
+const NewPasswordModal: React.FC<NewPasswordModalProps> = ({ isOpen, onClose, token, email }) => {
   const [newPasswordData, setNewPasswordData] = useState({
     newPassword: "",
-    confirmPassword: "",
   });
   const [updatePassword] = useUpdatePasswordMutation();
 
   const handleNewPasswordSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (newPasswordData.newPassword !== newPasswordData.confirmPassword) {
-      console.log("Passwords do not match");
-      return;
-    }
     console.log("Setting new password", newPasswordData);
-  
+
     try {
       const response = await updatePassword({
-        token,
+        token: token,
         newPassword: newPasswordData.newPassword,
       }).unwrap();
       console.log("Password reset successful:", response);
       onClose();
     } catch (error: any) {
+      console.error("Error details:", error); // In thêm log chi tiết để debug
       if (error.status === 403) {
         console.error("Failed to set new password: Access Forbidden. Please check if the token is valid and you have the necessary permissions.");
       } else if (error.data) {
@@ -59,21 +67,7 @@ const NewPasswordModal: React.FC<NewPasswordModalProps> = ({ isOpen, onClose, to
                 type="password"
                 value={newPasswordData.newPassword}
                 required
-                onChange={(e) =>
-                  setNewPasswordData({ ...newPasswordData, newPassword: e.target.value })
-                }
-              />
-            </div>
-            <div className="grid items-center gap-2">
-              <Label htmlFor="confirm-password">Confirm New Password</Label>
-              <Input
-                id="confirm-password"
-                type="password"
-                value={newPasswordData.confirmPassword}
-                required
-                onChange={(e) =>
-                  setNewPasswordData({ ...newPasswordData, confirmPassword: e.target.value })
-                }
+                onChange={(e) => setNewPasswordData({ ...newPasswordData, newPassword: e.target.value })}
               />
             </div>
             <div className="mt-6 flex w-full flex-col gap-4 md:mt-8">

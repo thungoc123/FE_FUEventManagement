@@ -1,50 +1,19 @@
 import React, { useEffect, useState } from "react";
-
 import {
   Button,
   DropdownMenuGroup,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  Input,
-  SheetClose,
-  SheetOverlay,
-  SheetPortal,
 } from "@relume_io/relume-ui";
+import { BiBell } from "react-icons/bi";
 import {
-  BiArchive,
-  BiBarChartAlt2,
-  BiBell,
-  BiCog,
-  BiFile,
-  BiHelpCircle,
-  BiHome,
-  BiLayer,
-  BiPieChartAlt2,
-  BiSearch,
-  BiStar,
-} from "react-icons/bi";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-  Sheet,
-  SheetContent,
-  SheetTrigger,
 } from "@relume_io/relume-ui";
-import { MdTrendingUp } from "react-icons/md";
-import {
-  RxChevronDown,
-  RxChevronRight,
-  RxCross2,
-  RxHamburgerMenu,
-} from "react-icons/rx";
+import { RxChevronRight } from "react-icons/rx";
 import { useDispatch, useSelector } from "react-redux";
-import { useLoginMutation } from "../../../Features/Auth/authApi";
 import { clearToken } from "../../../Features/Auth/authSlice";
 import { useNavigate } from "react-router-dom";
 import { JwtPayload, jwtDecode } from "jwt-decode";
@@ -55,9 +24,8 @@ import { roleName } from "../../../ulities/ProtectedRoute";
 type Props = {
   email?: string | null;
 };
+
 const Dropdown: React.FC<Props> = (props) => {
-  // const [isLogout, setLogout] = useState(false)
-  // const { token } = useSelector((state: RootState) => state.auth)
   const [isRole, setRole] = useState("ROLE_VISITOR");
 
   const navigate = useNavigate();
@@ -65,9 +33,10 @@ const Dropdown: React.FC<Props> = (props) => {
   const role = roleName(token);
 
   useEffect(() => {
-    if(token) {
-      setRole(role)
+    if (token) {
+      setRole(role);
     }
+  }, [token, role]);
 
   }, [token]);
   // const dispatch = useDispatch();
@@ -90,13 +59,16 @@ const Dropdown: React.FC<Props> = (props) => {
         navigate("/sponsor/dashboard/");
         break;
       case "ROLE_VISITOR":
-        navigate("/payment");
+        navigate("/cart");
         break;
       case "ROLE_CHECKING_STAFF":
         navigate("/admin/checkingstaff");
         break;
       case "ROLE_ADMIN":
         navigate("/admin");
+        break;
+      default:
+        navigate("/");
         break;
     }
   };
@@ -178,8 +150,16 @@ const Dropdown: React.FC<Props> = (props) => {
         >
           <DropdownMenuGroup>
             <DropdownMenuItem>
-              {role === "ROLE_VISITOR" ? (
-                <a href="/payment">My Cart</a>
+              {isRole === "ROLE_VISITOR" ? (
+                <a
+                  href=""
+                  onClick={(e) => {
+                    e.preventDefault();
+                    NavigationAuth(isRole);
+                  }}
+                >
+                  My Cart
+                </a>
               ) : (
                 <a
                   href=""
@@ -192,9 +172,6 @@ const Dropdown: React.FC<Props> = (props) => {
                 </a>
               )}
             </DropdownMenuItem>
-            {/* <DropdownMenuItem>
-              <a href="#">Profile Settings</a>
-            </DropdownMenuItem> */}
             <DropdownMenuSeparator className="mx-4" />
             <DropdownMenuItem>
               <a href="" onClick={handleLogout}>

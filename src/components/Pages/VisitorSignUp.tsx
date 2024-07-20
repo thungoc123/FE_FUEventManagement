@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom"; // Import useNavigate
-import { ChangeEvent, FormEvent, useState } from "react";
+import { useState } from "react";
 import { Button, Input, Label } from "@relume_io/relume-ui";
 import type { ImgProps, ButtonProps } from "@relume_io/relume-ui";
-import { useRegisterSponsorMutation } from "../../../Features/Auth/authApi";
+import VAuthAPI from "../../config/axios/VAuthAPI";
 
 type Props = {
   logo: ImgProps;
@@ -21,7 +21,7 @@ type Props = {
 
 export type Signup7Props = React.ComponentPropsWithoutRef<"section"> & Props;
 
-export const SponsorSignUp = (props: Signup7Props) => {
+export const VisitorSignUp = (props: Signup7Props) => {
   const {
     logo,
     logoLink,
@@ -36,64 +36,76 @@ export const SponsorSignUp = (props: Signup7Props) => {
     ...Signup7Defaults,
     ...props,
   } as Props;
+  const [email, setEmail] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [password, setPassword] = useState("");
+  const [cpassword, setCPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const navigate = useNavigate();
-  const [registerSponsor, { isError, isLoading, isSuccess, error }] = useRegisterSponsorMutation();
-  const [sponsorData, setSponsorData] = useState({
-    email: '',
-    password: '',
-    confirmPassword: '',
-    companyName: '',
-    companyID: '',
-    fptStaffEmail: '',
-    information: '',
-  });
-  const [errors, setErrors] = useState({
-    password: '',
-    confirmPassword: '',
-  });
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setSponsorData({
-      ...sponsorData,
-      [e.target.name]: e.target.value,
-    });
-  };
 
   const validatePassword = (password: string) => {
-    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    return passwordRegex.test(password);
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return regex.test(password);
   };
 
-  const validatePasswordsMatch = (password: string, confirmPassword: string) => {
-    return password === confirmPassword;
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newPassword = e.target.value;
+    setPassword(newPassword);
+
+    if (!validatePassword(newPassword)) {
+      setPasswordError(
+        "Mật khẩu phải chứa ít nhất một chữ cái viết hoa, một chữ cái viết thường, một số và một ký tự đặc biệt."
+      );
+    } else {
+      setPasswordError("");
+    }
   };
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const { password, confirmPassword } = sponsorData;
+  const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newConfirmPassword = e.target.value;
+    setCPassword(newConfirmPassword);
 
-    let valid = true;
-    const newErrors = { password: '', confirmPassword: '' };
+    if (newConfirmPassword !== password) {
+      setConfirmPasswordError("Mật khẩu xác nhận không khớp");
+    } else {
+      setConfirmPasswordError("");
+    }
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
 
     if (!validatePassword(password)) {
-      newErrors.password = 'Mật khẩu phải có ít nhất 1 ký tự in hoa, 1 chữ số và 1 ký tự đặc biệt.';
-      valid = false;
+      setPasswordError("Mật khẩu phải chứa ít nhất một chữ cái viết hoa, một chữ cái viết thường, một số và một ký tự đặc biệt.");
+      return;
     }
 
-    if (!validatePasswordsMatch(password, confirmPassword)) {
-      newErrors.confirmPassword = 'Mật khẩu không khớp.';
-      valid = false;
+    if (password !== cpassword) {
+      setConfirmPasswordError("Mật khẩu xác nhận không khớp");
+      return;
     }
 
-    setErrors(newErrors);
+    console.log({ email, fullName, password });
 
-    if (valid) {
-      try {
-        await registerSponsor(sponsorData).unwrap();
-        navigate('/'); // Điều hướng về trang chủ sau khi đăng ký thành công
-      } catch (error) {
-        console.error('Registration failed:', error);
+    if (passwordError || confirmPasswordError) {
+      alert("Vui lòng sửa các lỗi trước khi gửi");
+      return;
+    }
+
+    try {
+      const response = await VAuthAPI.post(`api-visitor/sign-up-visitor`, {
+        email,
+        fullName,
+        password,
+      });
+
+      if (response.status === 200) {
+        console.log(response);
+        navigate("/homepage"); // Chuyển hướng về trang homepage sau khi đăng ký thành công
       }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -113,10 +125,7 @@ export const SponsorSignUp = (props: Signup7Props) => {
               </h1>
               <p className="md:text-md">{description}</p>
             </div>
-            <form
-              className="grid grid-cols-1 gap-6"
-              onSubmit={handleSubmit}
-            >
+            <form className="grid grid-cols-1 gap-6" onSubmit={handleSubmit}>
               <div className="grid w-full items-center text-left">
                 <Label htmlFor="email" className="mb-2">
                   Gmail*
@@ -124,73 +133,55 @@ export const SponsorSignUp = (props: Signup7Props) => {
                 <Input
                   type="email"
                   id="email"
-                  onChange={handleChange}
-                  name="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   required
                 />
               </div>
               <div className="grid w-full items-center text-left">
                 <Label htmlFor="name" className="mb-2">
-                  Company Name/FullName*
+                  Tên công ty/Tên đầy đủ*
                 </Label>
                 <Input
                   type="text"
-                  id="companyName"
-                  onChange={handleChange}
-                  name="companyName"
+                  id="text"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
                   required
                 />
               </div>
 
               <div className="grid w-full items-center text-left">
-                <Label htmlFor="companyID" className="mb-2">
-                  Company ID/Personal ID*
-                </Label>
-                <Input
-                  type="text"
-                  id="companyID"
-                  onChange={handleChange}
-                  name="companyID"
-                  required
-                />
-              </div>
-              <div className="grid w-full items-center text-left">
-                <Label htmlFor="fptStaffEmail" className="mb-2">
-                  FPT Staff Email*
-                </Label>
-                <Input
-                  type="email"
-                  id="fptStaffEmail"
-                  onChange={handleChange}
-                  name="fptStaffEmail"
-                  required
-                />
-              </div>
-              <div className="grid w-full items-center text-left">
                 <Label htmlFor="password" className="mb-2">
-                  Password*
+                  Mật khẩu*
                 </Label>
                 <Input
                   type="password"
                   id="password"
-                  onChange={handleChange}
-                  name="password"
+                  value={password}
+                  onChange={handlePasswordChange}
                   required
                 />
-                {errors.password && <p style={{ color: 'red' }}>{errors.password}</p>}
+                {passwordError && (
+                  <p className="text-red-500 text-sm mt-1">{passwordError}</p>
+                )}
               </div>
               <div className="grid w-full items-center text-left">
-                <Label htmlFor="confirmPassword" className="mb-2">
-                  Confirm Password*
+                <Label htmlFor="cpassword" className="mb-2">
+                  Xác nhận mật khẩu*
                 </Label>
                 <Input
                   type="password"
-                  id="confirmPassword"
-                  onChange={handleChange}
-                  name="confirmPassword"
+                  id="cpassword"
+                  value={cpassword}
+                  onChange={handleConfirmPasswordChange}
                   required
                 />
-                {errors.confirmPassword && <p style={{ color: 'red' }}>{errors.confirmPassword}</p>}
+                {confirmPasswordError && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {confirmPasswordError}
+                  </p>
+                )}
               </div>
               <div className="grid-col-1 grid gap-4">
                 <Button
@@ -200,10 +191,9 @@ export const SponsorSignUp = (props: Signup7Props) => {
                   iconRight={signUpButton.iconRight}
                   type="submit"
                 >
-                  {isLoading ? 'Signing in...' : signUpButton.title}
+                  {signUpButton.title}
                 </Button>
               </div>
-              {isError && <p style={{ color: 'red' }}>{error?.data || 'Sign up failed'}</p>}
             </form>
             <div className="mt-5 inline-flex w-full items-center justify-center gap-x-1 text-center md:mt-6">
               <p>{logInText}</p>
@@ -237,19 +227,21 @@ export const Signup7Defaults: Signup7Props = {
     alt: "Logo text",
   },
   logoLink: "#",
-  title: "Sign Up",
+  title: "Đăng ký",
   description: "Lorem ipsum dolor sit amet adipiscing elit.",
   signUpButton: {
-    title: "Sign up",
+    title: "Đăng ký",
   },
+
   image: {
     src: "/src/assets/7.jpg",
     alt: "Placeholder image",
   },
-  logInText: "Already have an account?",
+  logInText: "Đã có tài khoản?",
   logInLink: {
-    text: "Log in",
+    text: "Đăng nhập",
     url: "#",
   },
+
   footerText: "© 2024 Relume",
 };

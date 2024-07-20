@@ -2,9 +2,16 @@ import React from 'react';
 import { Button } from "@relume_io/relume-ui";
 import type { ButtonProps as RelumeButtonProps } from "@relume_io/relume-ui";
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../app/store';
+import { useCreateOrderMutation } from '../../Features/Order/orderApi';
+import { useGetVisitorByAccountIdQuery } from '../../Features/Order/ticketApi';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 type ExtendedButtonProps = RelumeButtonProps & {
   url?: string;
+  onClick?: () => void;  // Optional onClick handler for custom functionality
 };
 
 type Props = {
@@ -24,10 +31,65 @@ export const Cta7 = (props: Cta7Props) => {
   } as Props;
 
   const navigate = useNavigate();
+  const accountId = useSelector((state: RootState) => state.auth.accountId); // Get accountId from Redux store
+  const token = useSelector((state: RootState) => state.auth.token); // Get token from Redux store
 
-  const handleButtonClick = (url: string | undefined) => {
-    if (url) {
-      navigate(url, { state: { eventDetails, eventId } });
+  // Fetch visitor data
+  const { data: visitorData, error: visitorError, isLoading: isVisitorLoading } = useGetVisitorByAccountIdQuery(accountId, {
+    skip: !accountId, // Skip the query if accountId is not available
+  });
+
+  const [createOrder] = useCreateOrderMutation();
+
+  if (visitorError) {
+    toast.error("Error fetching visitor data: " + visitorError.message);
+  }
+
+  const handleButtonClick = async (url: string | undefined, onClick: (() => void) | undefined) => {
+    if (onClick) {
+      onClick();
+    } else if (url) {
+      if (url === "/order-history") {
+        // Handle "Add to Cart" button click
+        await handleAddToCart();
+      } else {
+        // Navigate for other URLs
+        navigate(url, { state: { eventDetails, eventId } });
+      }
+    }
+  };
+
+  const handleAddToCart = async () => {
+    if (!accountId || !visitorData || !Array.isArray(visitorData) || visitorData.length === 0) {
+      toast.error("Account ID or Visitor ID is missing.");
+      return;
+    }
+
+    const visitorId = visitorData[0].visitorId; // Access the first element to get visitorId
+    console.log("Visitor ID:", visitorId);
+
+    const orderDetails = {
+      order: {
+        visitorId: parseInt(visitorId, 10), // Ensure visitorId is a number
+        eventId: eventDetails.id,
+        statusCart: true, // Set statusCart to true for "Add to Cart"
+        status: "PENDING",
+      },
+      headers: { // Include token in headers for authentication
+        Authorization: `Bearer ${token}`
+      }
+    };
+    console.log("Order details:", orderDetails);
+
+    try {
+      const response = await createOrder(orderDetails).unwrap();
+      if (response.message === "Ticket created successfully") {
+        toast.success("Added to cart successfully");
+      } else {
+        toast.error("Order creation failed: " + response.message);
+      }
+    } catch (err) {
+      toast.error("Failed to create order: " + err.message);
     }
   };
 
@@ -50,13 +112,15 @@ export const Cta7 = (props: Cta7Props) => {
               size={button.size}
               iconRight={button.iconRight}
               iconLeft={button.iconLeft}
-              onClick={() => handleButtonClick(button.url)}
+              onClick={() => handleButtonClick(button.url, button.onClick)}
+              disabled={isVisitorLoading || !visitorData}
             >
               {button.title}
             </Button>
           ))}
         </div>
       </div>
+      <ToastContainer />
     </section>
   );
 };
@@ -64,7 +128,10 @@ export const Cta7 = (props: Cta7Props) => {
 export const Cta7Defaults: Cta7Props = {
   heading: "Get Your Tickets Now!",
   description: "Experience the Event of a Lifetime.",
-  buttons: [{ title: "Buy Ticket", url: "/payment" }],
+  buttons: [
+    { title: "Buy Ticket", url: "/payment" },
+    { title: "Add to Cart", url: "/order-history" }
+  ],
   eventId: "",
   eventDetails: {},
 };

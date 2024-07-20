@@ -1,13 +1,16 @@
-"use client";
-
 import { useEffect, useState } from "react";
 import { Button, Input, Label } from "@relume_io/relume-ui";
 import type { ButtonProps } from "@relume_io/relume-ui";
 import { BiLogoGoogle } from "react-icons/bi";
 import { setToken } from "../../Features/Auth/authSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useLoginMutation } from "../../Features/Auth/authApi";
 import { useNavigate } from "react-router-dom";
+import { RootState } from "../../../Store/Store";
+import RoleChoosingwithDialog from "../Molecules/RoleChoosingWithDialog";
+import ResetPassword from "../Organisms/Guest/ResetPassword";
+import NewPasswordModal from "../Organisms/Guest/NewPasswordModal";
+import { v4 as uuidv4 } from 'uuid'; // Nhập hàm uuidv4
 import { jwtDecode } from "jwt-decode";
 
 type ImageProps = {
@@ -51,29 +54,67 @@ export const Login1 = (props: Login1Props) => {
     ...Login1Defaults,
     ...props,
   } as Props;
+
   interface JwtPayload {
     sub: string;
     role?: string;
+    visitorId?: string;
   }
-  const [login, {  isLoading, isError, isSuccess, error }] = useLoginMutation();
+
+  const [login, { isLoading, isError, error }] = useLoginMutation();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const token = useSelector((state: RootState) => state.auth.token);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
+  const [isLogin, setIsLogin] = useState(false);
+  const [visitorId, setVisitorId] = useState<string | null>(null);
+
+  const [roleChoosingOpen, setRoleChoosingOpen] = useState(false);
+  const [isResetPassword, setIsResetPassword] = useState(false);
+  const [isNewPasswordOpen, setIsNewPasswordOpen] = useState(false);
+
+  useEffect(() => {
+    if (token) {
+      const storedEmail = localStorage.getItem("email") || "";
+      setEmail(storedEmail);
+      setIsLogin(true);
+      dispatch(setToken(token));
+      const storedVisitorId = localStorage.getItem("visitorId");
+      if (storedVisitorId) {
+        setVisitorId(storedVisitorId);
+      } else {
+        console.error("Visitor ID not found in localStorage");
+      }
+    } else {
+      setIsLogin(false);
+    }
+  }, [token]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log(email, password);
     try {
       const result = await login({ email, password }).unwrap();
-      console.log(result.data);
+      dispatch(setToken(result.data));
+      setIsLogin(true);
+      NavigationAuth(result.data);
+      localStorage.setItem("email", email);
       sessionStorage.setItem("token", result.data);
       sessionStorage.setItem("email", email);
-      dispatch(setToken(result.data));
-      NavigationAuth(result.data);
+
+      let visitorId = localStorage.getItem("visitorId");
+      if (!visitorId) {
+        visitorId = uuidv4(); // Tạo visitorId mới nếu không có
+        localStorage.setItem("visitorId", visitorId);
+      }
+      setVisitorId(visitorId);
+
     } catch (err) {
-      console.error("Failed to login:");
+      console.error("Failed to login:", err);
     }
   };
+
   const NavigationAuth = (token: string) => {
     let decodedToken = jwtDecode<JwtPayload>(token);
     switch (decodedToken.role) {
@@ -94,6 +135,16 @@ export const Login1 = (props: Login1Props) => {
         break;
     }
   };
+
+  const handleForgotPasswordClick = () => {
+    setIsResetPassword(true);
+  };
+
+  const handleBackToLoginClick = () => {
+    setIsResetPassword(false);
+    setIsNewPasswordOpen(false);
+  };
+
   return (
     <section className="px-[5%]">
       <div className="relative flex min-h-svh flex-col items-stretch justify-center overflow-auto py-24 lg:py-20">
@@ -104,8 +155,9 @@ export const Login1 = (props: Login1Props) => {
           <div className="inline-flex gap-x-1">
             <p className="hidden md:block">{signUpText}</p>
             <a
-              href={signUpLink.url}
+              href="#"
               className="underline ring-offset-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-primary focus-visible:ring-offset-2"
+              onClick={() => setRoleChoosingOpen(true)}
             >
               {signUpLink.text}
             </a>
@@ -150,16 +202,16 @@ export const Login1 = (props: Login1Props) => {
                 iconLeft={logInButton.iconLeft}
                 iconRight={logInButton.iconRight}
               >
-                {isLoading ? "Loging in..." : logInButton.title}
+                {isLoading ? "Logging in..." : logInButton.title}
               </Button>
             </div>
           </form>
           {isError && <p style={{ color: 'red' }}>{error?.message || 'Invalid Email or Password'}</p>}
-
           <div className="mt-5 w-full text-center md:mt-6">
             <a
-              href={forgotPassword.url}
+              href="#"
               className="underline ring-offset-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-primary focus-visible:ring-offset-2"
+              onClick={handleForgotPasswordClick}
             >
               {forgotPassword.text}
             </a>
@@ -169,6 +221,24 @@ export const Login1 = (props: Login1Props) => {
           <p className="text-sm">{footerText}</p>
         </footer>
       </div>
+
+      <RoleChoosingwithDialog
+        roleChoosingOpen={roleChoosingOpen}
+        setRoleChoosingOpen={setRoleChoosingOpen}
+      />
+
+      <ResetPassword
+        isOpen={isResetPassword}
+        onClose={() => {
+          setIsResetPassword(false);
+          setIsNewPasswordOpen(true);
+        }}
+      />
+
+      <NewPasswordModal
+        isOpen={isNewPasswordOpen}
+        onClose={handleBackToLoginClick}
+      />
     </section>
   );
 };

@@ -12,7 +12,7 @@ export const AddSponsorTable = () => {
   const { data: sponsors, error, isLoading } = useGetSponsorQuery();
 
   // Hiển thị thông báo tải
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <div className="loader"></div>;
 
   // Hiển thị thông báo lỗi
   if (error) {

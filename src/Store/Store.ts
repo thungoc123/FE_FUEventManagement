@@ -21,12 +21,15 @@ import { sponsorDashboardApi } from '../Features/Sponsor/sponsorDashboardApi';
 import { ticketApi } from '../Features/Order/ticketApi';
 import { paymentApi } from '../Features/Payment/paymentApi';
 import resetpasswordApi from '../Features/Password/resetPasswordApi';
+import { cartApi } from '../Features/Order/cartApi';
+import { sponsorPercentApi } from '../Features/Event/sponsorPercent';
+import { sponsorProfitApi } from '../Features/Sponsor/sponsorProfit';
+import { eventAmountApi } from '../Features/Event/eventAmoutApi';
 import { checkingApi } from '../Features/CheckingStaff/checkingApi';
 
 export const store = configureStore({
   reducer: {
-    [authApi.reducerPath]: authApi.reducer,
-    // auth: persistedAuthReducer,
+    [ticketApi.reducerPath]: ticketApi.reducer,
     [paymentApi.reducerPath]: paymentApi.reducer,
     [eventDisplayApi.reducerPath]: eventDisplayApi.reducer,
     [createorderApi.reducerPath]: createorderApi.reducer,
@@ -38,6 +41,12 @@ export const store = configureStore({
     [sponsorApi.reducerPath]: sponsorApi.reducer,
     auth: authReducer,
     events: eventReducer,
+    [resetpasswordApi.reducerPath]: resetpasswordApi.reducer,
+    [cartApi.reducerPath]: cartApi.reducer,
+    [sponsorProfitApi.reducerPath]: sponsorProfitApi.reducer,
+    [eventAmountApi.reducerPath]: eventAmountApi.reducer,
+    [sponsorPercentApi.reducerPath]: sponsorPercentApi.reducer,
+  },
     tab: tabReducer, // Thêm reducer của tab vào store
     [feedbackApi.reducerPath] : feedbackApi.reducer,
     [visitorApi.reducerPath] : visitorApi.reducer,
@@ -54,6 +63,9 @@ export const store = configureStore({
     getDefaultMiddleware({
       serializableCheck: false,
     }).concat(
+      sponsorProfitApi.middleware,
+      ticketApi.middleware,
+      sponsorApi.middleware,
       visitorApi.middleware,
       authApi.middleware,
       adminApi.middleware ,
@@ -66,6 +78,10 @@ export const store = configureStore({
       sponsorDashboardApi.middleware,
       passwordApi.middleware,
       paymentApi.middleware,
+      resetpasswordApi.middleware,
+      cartApi.middleware,
+      eventAmountApi.middleware,
+      sponsorPercentApi.middleware,
       checkingApi.middleware, // Thêm middleware của checkingApi vào store
       resetpasswordApi.middleware // Add resetpasswordApi middleware
     ),

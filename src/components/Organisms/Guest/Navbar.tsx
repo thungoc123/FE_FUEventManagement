@@ -27,7 +27,7 @@ import RoleChoosingwithDialog from "../../Molecules/RoleChoosingWithDialog";
 // setToken
 import { useDispatch, useSelector } from "react-redux";
 import { useLoginMutation } from "../../../Features/Auth/authApi";
-import { setToken } from "../../../Features/Auth/authSlice";
+import { setAccountId, setToken } from "../../../Features/Auth/authSlice";
 import Dropdown from "../Visitor/Dropdown";
 import { useAuth } from "../../../Contexts/AuthContext";
 // components/Navbar2.tsx
@@ -143,6 +143,7 @@ export const Navbar2 = (props: Navbar2Props) => {
   const [resetData, setResetData] = useState({ email: "", newPassword: "" });
   const [isNewPassword, setIsNewPassword] = useState(false);
   const [isNewPasswordOpen, setIsNewPasswordOpen] = useState(false);
+  const [resetToken, setResetToken] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLogin, setIsLogin] = useState(false);
@@ -167,9 +168,18 @@ export const Navbar2 = (props: Navbar2Props) => {
     setIsResetPassword(false);
     setIsNewPasswordOpen(false);
   };
+
+  const handleSetNewPasswordOpen = (email: string, token: string) => {
+    setEmail(email);
+    setResetToken(token);
+    setIsResetPassword(false);
+    setIsNewPasswordOpen(true);
+  };
+
   interface JwtPayload {
     sub: string;
     role?: string;
+    accountId?: number;
   }
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
@@ -199,6 +209,10 @@ export const Navbar2 = (props: Navbar2Props) => {
       setEmail(storedEmail);
       setIsLogin(true);
       dispatch(setToken(token));
+      const decodedToken = jwtDecode<JwtPayload>(token);
+      if (decodedToken.accountId) {
+        dispatch(setAccountId(decodedToken.accountId)); // Dispatch accountId to the Redux store
+      }
     } else {
       setIsLogin(false);
     }
@@ -207,6 +221,7 @@ export const Navbar2 = (props: Navbar2Props) => {
 
   const NavigationAuth = (token: string) => {
     let decodedToken = jwtDecode<JwtPayload>(token);
+    console.log(decodedToken);
     switch (decodedToken.role) {
       case "ROLE_EO":
         navigate("/eventoperator/dashboard/");
@@ -389,6 +404,7 @@ export const Navbar2 = (props: Navbar2Props) => {
                     setIsResetPassword(false);
                     setIsNewPasswordOpen(true);
                   }}
+                  onSetNewPasswordOpen={handleSetNewPasswordOpen}
                 />
               ) : (
                 <>
@@ -449,9 +465,11 @@ export const Navbar2 = (props: Navbar2Props) => {
       </Dialog>
 
       {/* New Password Modal */}
-      {/* <NewPasswordModal
+     <NewPasswordModal
         isOpen={isNewPasswordOpen}
         onClose={handleBackToLoginClick}
+        token={resetToken}
+        email={email}
       />
 
       {/* Role Choosing with DialogContent  */}
@@ -629,7 +647,7 @@ export const Navbar2Defaults = {
     {
       title: "Sign Up",
       variant: "secondary",
-      size: "medium",
+      size:"medium",
     },
   ],
 };

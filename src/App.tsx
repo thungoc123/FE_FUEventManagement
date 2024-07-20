@@ -51,6 +51,10 @@ import SponsorProgramDetail from "./components/Pages/Dashboard/Sponsor/SponsorPr
 import { PaymentPage } from "./components/Pages/Visitor/PaymentPage";
 import HomePage from "./components/Pages/HomePage";
 import SponsorHomepage from "./components/Pages/SponsorProgramePage";
+import { EventProfit } from "./components/Organisms/EventOperator/EventProfit";
+import PaymentSuccessfullPage from "./components/Pages/Visitor/PaymentSuccessfullPage";
+import Cart from "./components/Pages/Dashboard/Cart/Cart";
+import EventProfitDetail from "./components/Organisms/EventOperator/EventProfitDetail";
 function App() {
   ReactModal.setAppElement("#root");
   const eventId = "1";
@@ -126,6 +130,14 @@ function App() {
             element={
               <RequireAuth role="ROLE_SPONSOR">
                 <Program />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/sponsor/dashboard/program/detail"
+            element={
+              <RequireAuth role="ROLE_SPONSOR">
+                <SponsorProgramDetail />
               </RequireAuth>
             }
           />
@@ -251,7 +263,7 @@ function App() {
               </RequireAuth >
             }
           />
-          < Route
+          <Route
             path="/eventoperator/dashboard/UnpublishEvent"
             element={
               < RequireAuth role="ROLE_EO" >
@@ -267,6 +279,30 @@ function App() {
               </RequireAuth >
             }
           />
+          <Route
+            path="/eventoperator/dashboard/analytics"
+            element={
+              <RequireAuth role="ROLE_EO">
+                <ManageEvent component={<EventProfit />} />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/eventoperator/dashboard/analytics/:id" 
+            element={
+              <RequireAuth role="ROLE_EO">
+                <ManageEvent component={<EventProfitDetail />} />
+              </RequireAuth>
+            }
+          />
+          {/* <Route
+            path="/sponsor/dashboard/event-profit"
+            element={
+              <RequireAuth role="ROLE_EO">
+                <ManageEvent component={<EventProfit />} />
+              </RequireAuth>
+            }
+          /> */}
           < Route
             path="/eventoperator/dashboard/FeedbackDetail/:id"
             element={
@@ -294,7 +330,7 @@ function App() {
             }
           />
           <Route
-            path="/order-history"
+            path="/cart"
             element={
               <RequireAuth role="ROLE_VISITOR">
                 <OrderHistory />
@@ -308,6 +344,14 @@ function App() {
             // </RequireAuth>
 
           } />
+          <Route
+            path="/payment-successfull"
+            element={
+              <RequireAuth role="ROLE_VISITOR">
+                <PaymentSuccessfullPage />
+              </RequireAuth>
+            }
+          />
 
           {/* Admin  */}
           <Route

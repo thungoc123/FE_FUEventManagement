@@ -57,7 +57,7 @@ function SponsorHomepage() {
   const { data: sponsorPrograms, error, isLoading } = useGetSponsorProgramQuery();
   console.log(sponsorPrograms);
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div className="loader"></div>;
   }
 
   if (error) {
