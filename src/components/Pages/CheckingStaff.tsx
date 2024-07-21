@@ -54,7 +54,7 @@ export const CheckingStaffDashboard = () => {
     Name: item.ticket.visitor.information, // Tên sự kiện
     Status: item.status,
     Event: item.eventName,
-    Attendance: item.status === "ABSENT" && <Button onClick={() => handleCheckAttendance(item.ticket.id,"ATTENDANCE")} style={{ background: '#5321af', borderRadius: '10px' }}><BiCheck /></Button>, // Biểu tượng đánh dấu đã điểm danh
+    Attendance: item.status === "ABSENT" ? <Button onClick={() => handleCheckAttendance(item.ticket.id,"ATTENDANCE")} style={{ background: '#5321af', borderRadius: '10px' }}><BiCheck /></Button> : <Button onClick={() => handleCheckAttendance(item.ticket.id,"ABSENT")} style={{ background: '#5321af', borderRadius: '10px' }}><BiX /></Button>, // Biểu tượng đánh dấu đã điểm danh
     SendFeedback: item.status === "ATTENDANCE" && <Button style={{ background: isSuccess ? 'green' : 'blue', borderRadius: '10px' }} onClick={(e) => { setSelectedVisitor(item.ticket.visitor.information); openModal(); setEventName(item.eventName) }}><BiMailSend /></Button>,
   }));
 

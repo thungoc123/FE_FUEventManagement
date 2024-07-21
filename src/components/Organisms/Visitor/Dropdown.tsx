@@ -31,7 +31,8 @@ const Dropdown: React.FC<Props> = (props) => {
   const navigate = useNavigate();
   const  token = sessionStorage.getItem("token");
   const role = roleName(token);
-
+  console.log(token);
+  const email = sessionStorage.getItem("email");
   useEffect(() => {
     if (token) {
       setRole(role);
@@ -56,7 +57,7 @@ const Dropdown: React.FC<Props> = (props) => {
         navigate("/eventoperator/dashboard/analytics");
         break;
       case "ROLE_SPONSOR":
-        navigate("/sponsor/dashboard/");
+        navigate("/sponsor/dashboard/profit");
         break;
       case "ROLE_VISITOR":
         navigate("/cart");
@@ -141,7 +142,7 @@ const Dropdown: React.FC<Props> = (props) => {
                   alt="Avatar"
                   className="size-10 rounded-full object-cover"
                 /> */}
-          {props.email}
+          {email}
         </DropdownMenuTrigger>
         <DropdownMenuContent
           align="end"

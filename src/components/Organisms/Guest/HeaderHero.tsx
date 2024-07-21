@@ -175,23 +175,23 @@ export const Header76Defaults: Header76Props = {
   buttons: [{ title: "Button" }, { title: "Button", variant: "secondary" }],
   images: [
     {
-      src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQpAkYjJsapdf0njIpv_qtjQsk5B6yvJqSIw&s",
+      src: "https://images.pexels.com/photos/301987/pexels-photo-301987.jpeg?auto=compress&cs=tinysrgb&w=600",
       alt: "Placeholder image 1",
     },
     {
-      src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT905pYr4ntcJippPGqDscDtu5TapUYCkD4rQ&s",
+      src: "https://images.pexels.com/photos/431722/pexels-photo-431722.jpeg?auto=compress&cs=tinysrgb&w=600",
       alt: "Placeholder image 2",
     },
     {
-      src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAc55TGWqEA4LsRUJrk43XSVm9UuotBo1omw&s",
+      src: "https://images.pexels.com/photos/2608516/pexels-photo-2608516.jpeg?auto=compress&cs=tinysrgb&w=600",
       alt: "Placeholder image 3",
     },
     {
-      src: "https://vsmart.com.vn/uploads/event-moi/banner-chinh.jpeg",
+      src: "https://images.pexels.com/photos/2311713/pexels-photo-2311713.jpeg?auto=compress&cs=tinysrgb&w=600",
       alt: "Placeholder image 4",
     },
     {
-      src: "https://relume-assets.s3.amazonaws.com/placeholder-image.svg",
+      src: "https://images.pexels.com/photos/35880/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=600",
       alt: "Placeholder image 5",
     },
     {

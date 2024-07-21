@@ -93,7 +93,6 @@ function EventDetail() {
   }));
   //#endregion
   //EVENT GALLERY 
-  
   return (
     <>
         {/* <NavbarLogout/> */}
@@ -120,7 +119,7 @@ function EventDetail() {
 
       <Schedule days={formattedDays} />
       <Gallery3 heading="Event Gallery" description="" images={eventImages} /> {/* Truyền eventImages vào Gallery3 */}
-      {data?.stateEvent.name === "PUBLISH" && <Cta7 eventDetails={data} eventId={id}/>} 
+      {data?.stateEvent.name === "PUBLISH" && new Date(data?.timeopensale) < new Date() && <Cta7 eventDetails={data} eventId={id} />} 
       {/* <Contact1 /> */}
       {/* <Testimonial1 /> */}
       <Footer1 />

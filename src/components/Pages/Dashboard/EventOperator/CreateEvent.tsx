@@ -1,13 +1,8 @@
-import React, { ChangeEvent, ChangeEventHandler, useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import {
   Button,
   Input,
   Label,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
   Textarea,
 } from "@relume_io/relume-ui";
 import {
@@ -21,8 +16,6 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@relume_io/relume-ui";
-import { BiCalendarAlt, BiUser, BiHourglass, BiTime } from "react-icons/bi";
-import Modal from "react-modal";
 import { useCreateEventMutation } from "../../../../Features/EventManage/eventApi";
 import { RootState } from "../../../../Store/Store";
 import { useDispatch, useSelector } from "react-redux";
@@ -33,7 +26,6 @@ import { addNotification } from "../../../../Features/Utils/notificationsSlice";
 import { Alert } from "../../../Molecules/Alert";
 import { accountID } from "../../../../ulities/ProtectedRoute";
 
-
 const CreateEvent = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -41,7 +33,7 @@ const CreateEvent = () => {
   const [errs, setErrs] = useState({
     eventName: "",
   });
-  const [fill, setFill] = useState("")
+  const [fill, setFill] = useState("");
 
   const [createEvent, { isLoading, isSuccess, isError, error }] = useCreateEventMutation();
   const dispatch = useDispatch();
@@ -56,8 +48,7 @@ const CreateEvent = () => {
   const nextStep = () =>
     setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1));
   const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 0));
-  // const accountId = useSelector((state: RootState) => state.auth.accountId);
-  const accountid = accountID(sessionStorage.getItem('token'))
+  const accountid = accountID(sessionStorage.getItem('token'));
   const [eventData, setEventData] = useState({
     eventName: "",
     description: "",
@@ -73,10 +64,17 @@ const CreateEvent = () => {
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    setEventData({
-      ...eventData,
-      [name]: value,
-    });
+    const currentTime = DateTime.now();
+    const inputTime = DateTime.fromISO(value);
+
+    if (
+      (name === "timeStart" || name === "timeEnd" || name === "timeOpenSale" || name === "timeCloseSale") &&
+      inputTime < currentTime
+    ) {
+      setSubmitError(["Thời gian được chọn không được ở quá khứ."]);
+      return;
+    }
+
     let newErrors: string[] = [];
     if (!eventData.eventName.trim()) {
       newErrors.push("eventName is required.");
@@ -87,9 +85,8 @@ const CreateEvent = () => {
     if (!eventData.timeStart) {
       newErrors.push("Start time is required.");
     }
-    if(!eventData.price) {
+    if (!eventData.price) {
       newErrors.push("Price is required.");
-
     }
     if (!eventData.timeEnd) {
       newErrors.push("End time is required.");
@@ -126,9 +123,8 @@ const CreateEvent = () => {
       (name === "eventName" || name === "description") &&
       value.trim() === ""
     ) {
-      // Hiển thị lỗi hoặc xử lý logic phù hợp
-      newErrors.push("Name and description cannot be empty ! ");
-      return; // Ngừng xử lý tiếp tục nếu có lỗi
+      newErrors.push("Name and description cannot be empty!");
+      return;
     }
 
     let formattedValue = value;
@@ -146,6 +142,7 @@ const CreateEvent = () => {
       ...eventData,
       [name]: formattedValue,
     });
+
     console.log(newErrors);
     setSubmitError(newErrors);
     setErrs(errs);
@@ -153,8 +150,29 @@ const CreateEvent = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const currentYear = DateTime.now().year;
+    const errors = [];
+    
+    if (DateTime.fromISO(eventData.timeStart).year > currentYear + 1) {
+      errors.push("Thời gian tối đa 23:59 ngày 31/12/2025");
+    }
+    if (DateTime.fromISO(eventData.timeEnd).year > currentYear + 1) {
+      errors.push("Thời gian tối đa 23:59 ngày 31/12/2025");
+    }
+    if (DateTime.fromISO(eventData.timeOpenSale).year > currentYear + 1) {
+      errors.push("Thời gian tối đa 23:59 ngày 31/12/2025");
+    }
+    if (DateTime.fromISO(eventData.timeCloseSale).year > currentYear + 1) {
+      errors.push("Thời gian tối đa 23:59 ngày 31/12/2025");
+    }
+    
+    if (errors.length > 0) {
+      setSubmitError(errors);
+      return;
+    }
+
     console.log(JSON.stringify(eventData));
-    console.log(submitError); 
+    console.log(submitError);
     if (
       !eventData.eventName.trim() &&
       !eventData.description.trim() &&
@@ -164,35 +182,33 @@ const CreateEvent = () => {
       !eventData.timeCloseSale &&
       eventData.price >= 0
     ) {
-      setFill("Please fill all field")
+      setFill("Please fill all fields");
     } else {
       try {
         await createEvent(eventData).unwrap();
         dispatch(
           addNotification({
-            id: new Date().getTime(), // Sử dụng timestamp làm ID
+            id: new Date().getTime(),
             message: "Create event successfully!",
             type: "success",
-            timestamp: Date.now(), // Thời gian hiện tại
+            timestamp: Date.now(),
           })
         );
         navigate("/eventoperator/dashboard/UnpublishEvent");
-      // window.location.reload()
-      
-        // alert('Event created successfully!');
       } catch (err) {
         dispatch(
           addNotification({
-            id: new Date().getTime(), // Sử dụng timestamp làm ID
+            id: new Date().getTime(),
             message: "Create event unsuccessfully!",
             type: "error",
-            timestamp: Date.now(), // Thời gian hiện tại
+            timestamp: Date.now(),
           })
         );
         console.error("Failed to create the event:", err);
       }
     }
   };
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -223,13 +239,11 @@ const CreateEvent = () => {
                     ></div>
                   )}
                 </div>
-                {/* <p className="relative z-10">{step.label}</p */}
               </div>
             ))}
           </div>
           <form onSubmit={handleSubmit}>
             {currentStep === 0 && (
-              // <Step1  handleChange={handleChange} />
               <div>
                 <DialogHeader>
                   <DialogTitle>Let’s start with your event </DialogTitle>
@@ -349,9 +363,6 @@ const CreateEvent = () => {
                     Next
                   </span>
                 )}
-                {/* <Button type={currentStep === steps.length - 1 ? "submit" : "button"} onClick={currentStep === steps.length - 1 ? undefined : nextStep}>
-                {currentStep === steps.length - 1 ? "Get Started" : "Next"}
-              </Button> */}
               </div>
             </DialogFooter>
           </form>
@@ -360,16 +371,5 @@ const CreateEvent = () => {
     </Dialog>
   );
 };
-// type Step1Props = {
-//   handleChange: React.ChangeEventHandler<HTMLInputElement> | undefined;
-// };
 
-// const Step1:React.FC<{ handleChange: React.ChangeEventHandler<HTMLInputElement> | undefined }> = (handleChange) => (
-//   <>
-
-//   </>
-// );
-// const Step2: React.FC<{
-//   handleChange: React.ChangeEventHandler<HTMLInputElement> | undefined;
-// }> = (handleChange) => <></>;
 export default CreateEvent;

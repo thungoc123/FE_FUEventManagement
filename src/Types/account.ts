@@ -40,6 +40,6 @@ export interface visitorTable {
     No: number,
     Name: string,
     Attendance: React.ReactNode,
-    SendFeedback: React.ReactNode,
+    ViewFeedback: React.ReactNode,
     // Delete: React.ReactNode,
 }

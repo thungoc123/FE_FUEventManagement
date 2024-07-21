@@ -4,9 +4,9 @@ import type { ImageProps, ButtonProps } from "@relume_io/relume-ui";
 import { AnimatePresence, motion } from "framer-motion";
 import { RxChevronDown } from "react-icons/rx";
 import Modal from './Modal'; // Import the Modal component
-import RoleChoosing from "../../Pages/Guest/RoleChosing";
-import { Login1 } from "../../Pages/Test";
 import { useNavigate } from 'react-router-dom'; // Import useNavigate from react-router-dom
+import { useDispatch } from "react-redux";
+import { clearToken } from "../../../Features/Auth/authSlice";
 
 type LinkProps = {
   title?: string;
@@ -91,9 +91,15 @@ NavbarLogout = (props: Navbar2Props) => {
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [logoutModalOpen, setLogoutModalOpen] = useState(false);
   const navigate = useNavigate(); // useNavigate hook for redirection
+  const dispatch = useDispatch();
 
   const handleLogout = () => {
     // Logic for logging out the user, e.g., clearing auth tokens
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("email");
+    localStorage.setItem("notifications", JSON.stringify([]));
+    dispatch(clearToken());
+    // persistor.purge();
     navigate('/'); // Redirect to homepage
   };
 

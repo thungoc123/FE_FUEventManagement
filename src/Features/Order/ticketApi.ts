@@ -21,6 +21,12 @@ export const ticketApi = createApi({
         body: { status },
       }),
     }),
+    deleteTicket: builder.mutation({
+      query: (id: number) => ({
+        url: `api-ticket/${id}`,
+        method: "DELETE",
+      }),
+    }),
   }),
 });
 
@@ -29,4 +35,5 @@ export const {
   useGetVisitorByAccountIdQuery,
   useUpdateTicketStatusMutation,
   useGetNumberAttendancesQuery,
+  useDeleteTicketMutation
 } = ticketApi;

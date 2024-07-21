@@ -1,6 +1,6 @@
 #VisitorBackground {
      background: radial-gradient(circle at center bottom, #402a6d 0%, #1e005a 30%, #1e005a 36%);
-     min-height: 100vh;
+     min-height: 200vh;
 }
 
 #VisitorBackground h1 {
@@ -14,5 +14,17 @@
 
 
 .visitorCard {
-     background: #c1b0e283;
+     background: #431d9041;
+     border: 1px solid #00fff9;
+     border-radius: 5px;
+}
+
+#VisitorBackground .product {
+     border: 1px solid #00fff9;
+}
+
+.VisitorAnswerButton {
+     text-align: center; 
+     background: #00fff9;
+     color: #1e005a;
 }

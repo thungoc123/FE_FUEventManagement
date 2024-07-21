@@ -57,6 +57,7 @@ import Cart from "./components/Pages/Dashboard/Cart/Cart";
 import EventProfitDetail from "./components/Organisms/EventOperator/EventProfitDetail";
 import EventDetail from "./components/Pages/EventDetail";
 import { Program } from "./components/Pages/Dashboard/Sponsor/Program";
+import { Program2 } from "./components/Organisms/Sponsor/Program2";
 import { EOSignUp, Signup7 } from "./components/Organisms/EventOperator/EOSignUp";
 function App() {
   ReactModal.setAppElement("#root");
@@ -128,14 +129,14 @@ function App() {
               </RequireAuth>
             }
           />
-          {/* <Route
-            path="/sponsor/dashboard/program"
+          <Route
+            path="/sponsor/dashboard/profit"
             element={
               <RequireAuth role="ROLE_SPONSOR">
-                <Program />
+                <Program2 />
               </RequireAuth>
             }
-          /> */}
+          />
           <Route
             path="/sponsor/dashboard/program"
             element={

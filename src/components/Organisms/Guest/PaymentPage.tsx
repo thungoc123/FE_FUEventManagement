@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@relume_io/relume-ui";
 import { useLazySendPaymentInfoQuery } from "../../../Features/Payment/paymentApi";
-import { useUpdateTicketStatusMutation } from "../../../Features/Order/ticketApi";
+import { useDeleteTicketMutation, useUpdateTicketStatusMutation } from "../../../Features/Order/ticketApi";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
@@ -25,7 +25,7 @@ const Payment1: React.FC<Payment1Props> = () => {
   const [updateTicketStatus, { isLoading: isUpdating, isSuccess: isUpdateSuccess, isError: isUpdateError, error: updateError }] = useUpdateTicketStatusMutation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const [deleteTicket, { isLoading: isDeleting, isSuccess: isDeleteSuccess, isError: isDeleteError, error: DeleteError }] = useDeleteTicketMutation();
   useEffect(() => {
     if (eventDetails) {
       setAmount(eventDetails.price * quantity);
@@ -68,8 +68,8 @@ const Payment1: React.FC<Payment1Props> = () => {
     } else if (action === 'cancel') {
       try {
         console.log(ticketId);
-        await updateTicketStatus({ id: ticketId, status: 'CANCELLED' }).unwrap();
-        toast.success("Ticket status updated to CANCELLED");
+        await deleteTicket(ticketId).unwrap();
+        toast.success("Ticket status updated to DELELTED");
         dispatch(
           addNotification({
             id: new Date().getTime(), // Sử dụng timestamp làm ID
@@ -80,7 +80,7 @@ const Payment1: React.FC<Payment1Props> = () => {
         );
       } catch (err: any) {
         toast.error(
-          `Failed to update ticket status to CANCELLED: ${
+          `Failed to delete ticket status to CANCELLED: ${
             err.message || "Unknown error occurred"
           }`
         );

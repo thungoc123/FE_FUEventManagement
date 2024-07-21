@@ -92,8 +92,7 @@ export const ApplicationShell4: React.FC<ParentComponentProps> = ({
   const email = sessionStorage.getItem("email");
   let token = sessionStorage.getItem("token");
   const role = roleName(token);
-
-  console.log(isRole);
+  
   NavigationAuth(isRole);
   useEffect(() => {
     setRole(role);
@@ -126,7 +125,7 @@ export const ApplicationShell4: React.FC<ParentComponentProps> = ({
         navigate("/eventoperator/dashboard/");
         break;
       case "ROLE_SPONSOR":
-        navigate("/sponsor/dashboard/");
+        navigate("/sponsor/dashboard/profit");
         break;
       case "ROLE_VISITOR":
         navigate("/");
@@ -437,7 +436,7 @@ const NavigationAuth = (role: string) => {
       NavigationProp = [
         {
           Name: "Dashboard",
-          Url: "",
+          Url: "profit",
           icon: <BiPieChartAlt2 className="size-6 shrink-0" />,
           State: [
             {

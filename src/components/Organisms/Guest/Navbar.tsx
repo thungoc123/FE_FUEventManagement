@@ -218,7 +218,8 @@ export const Navbar2 = (props: Navbar2Props) => {
     }
   }, [token]); 
 
-
+  // console.log(token);
+  console.log(isLogin);
   const NavigationAuth = (token: string) => {
     let decodedToken = jwtDecode<JwtPayload>(token);
     console.log(decodedToken);
@@ -227,7 +228,7 @@ export const Navbar2 = (props: Navbar2Props) => {
         navigate("eventoperator/event/publish/analytics/");
         break;
       case "ROLE_SPONSOR":
-        navigate("/sponsor/dashboard/");
+        navigate("/sponsor/dashboard/profit");
         break;
       case "ROLE_VISITOR":
         navigate("/");
