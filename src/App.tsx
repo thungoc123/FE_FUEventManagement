@@ -129,7 +129,7 @@ function App() {
             }
           />
           <Route
-            path="/sponsor/dashboard/3"
+            path="/sponsor/dashboard/profit"
             element={
               <RequireAuth role="ROLE_SPONSOR">
                 <Program2 />

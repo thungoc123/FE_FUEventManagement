@@ -1,40 +1,48 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../Store/Store';
-import { useGetSponsorProfitsQuery } from '../../../Features/Sponsor/sponsorProfit';
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../Store/Store";
+import { useGetSponsorProfitsQuery } from "../../../Features/Sponsor/sponsorProfit";
+import { accountID } from "../../../ulities/ProtectedRoute";
 
 const SponsorEventProfit = () => {
-  const accountId = useSelector((state: RootState) => state.auth.accountId)?? 8;
+  const token = sessionStorage.getItem("token");
+  const accountId = token ? accountID(token) : null;
 
-  // Chỉ gọi API khi accountId không phải null
-  const { data: sponsorProfits, error, isLoading } = useGetSponsorProfitsQuery(accountId, {
+  console.log(typeof(accountId));
+
+  useEffect(() => {
+    console.log("Current accountId:", accountId);
+  }, [accountId]);
+
+  // Only call API if accountId is not null
+  const {
+    data: sponsorProfits,
+    error,
+    isLoading,
+  } = useGetSponsorProfitsQuery(accountId!, {
     skip: accountId === null,
   });
 
-  console.log(accountId);
-
   const tableHeaders = [
-    'Event Name',
-    'Sponsor Name',
-    'Profit Percentage',
-    'Amount Received',
+    "Event Name",
+    "Sponsor Name",
+    "Profit Percentage",
+    "Amount Received",
   ];
 
-  const tableRows = sponsorProfits?.map((profit) => ({
-    'Event Name': profit.eventName,
-    'Sponsor Name': profit.companyName,
-    'Profit Percentage':`${profit.sponsorProfitPercent} %`,
-
-    'Amount Received':`${ profit.profitAmount} VND`,
-  })) || [];
-
-  console.log(sponsorProfits);
+  const tableRows =
+    sponsorProfits?.map((profit) => ({
+      "Event Name": profit.eventName,
+      "Sponsor Name": profit.companyName,
+      "Profit Percentage": `${profit.sponsorProfitPercent} %`,
+      "Amount Received": `${profit.profitAmount} VND`,
+    })) || [];
 
   const tableHeaderClasses = [
-    'px-6 py-3 border-b-2 border-gray-300 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider',
-    'px-6 py-3 border-b-2 border-gray-300 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider',
-    'px-6 py-3 border-b-2 border-gray-300 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider',
-    'px-6 py-3 border-b-2 border-gray-300 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider',
+    "px-6 py-3 border-b-2 border-gray-300 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider",
+    "px-6 py-3 border-b-2 border-gray-300 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider",
+    "px-6 py-3 border-b-2 border-gray-300 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider",
+    "px-6 py-3 border-b-2 border-gray-300 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider",
   ];
 
   return (
@@ -56,8 +64,13 @@ const SponsorEventProfit = () => {
             {tableRows.map((row, index) => (
               <tr key={index}>
                 {Object.values(row).map((cell, cellIndex) => (
-                  <td key={cellIndex} className="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                    <div className="text-sm leading-5 text-gray-800">{cell}</div>
+                  <td
+                    key={cellIndex}
+                    className="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
+                  >
+                    <div className="text-sm leading-5 text-gray-800">
+                      {cell}
+                    </div>
                   </td>
                 ))}
               </tr>

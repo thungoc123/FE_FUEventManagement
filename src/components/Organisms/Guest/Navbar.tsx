@@ -123,6 +123,7 @@ export const Navbar2 = (props: Navbar2Props) => {
   const [login, { isLoading, error }] = useLoginMutation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const token = useSelector((state: RootState) => state.auth.token);
 
   const handleAuthButtonClick = (isLogin: boolean) => {
     if (isLogin) {
@@ -161,31 +162,43 @@ export const Navbar2 = (props: Navbar2Props) => {
     console.log(email, password);
     try {
       const result = await login({ email, password }).unwrap();
+      console.log("Login Result:", result); // Debugging log
+
       dispatch(setToken(result.data));
       setIsLogin(true);
       NavigationAuth(result.data);
-      localStorage.setItem("email", email);
-      sessionStorage.setItem("token", result.data);
-      sessionStorage.setItem("email", email);
+      localStorage.setItem('email', email);
+      sessionStorage.setItem('token', result.data);
+      sessionStorage.setItem('email', email);
     } catch (err) {
-      console.error("Failed to login:");
+      console.error('Failed to login:', err);
     }
   };
-  const token = useSelector((state: RootState) => state.auth.token);
+
   useEffect(() => {
     if (token) {
-      const storedEmail = localStorage.getItem("email") || "";
+      const storedEmail = localStorage.getItem('email') || '';
       setEmail(storedEmail);
       setIsLogin(true);
+
+      console.log("Token before dispatch:", token); // Debugging log
       dispatch(setToken(token));
-      const decodedToken = jwtDecode<JwtPayload>(token);
-      if (decodedToken.accountId) {
-        dispatch(setAccountId(decodedToken.accountId)); // Dispatch accountId to the Redux store
+
+      try {
+        const decodedToken = jwtDecode<JwtPayload>(token);
+        console.log("Decoded Token:", decodedToken); // Debugging log
+        if (decodedToken.accountId) {
+          dispatch(setAccountId(decodedToken.accountId));
+        } else {
+          console.warn('No accountId found in token');
+        }
+      } catch (error) {
+        console.error('Failed to decode token:', error);
       }
     } else {
       setIsLogin(false);
     }
-  }, [token]);
+  }, [token, dispatch]);
 
   const NavigationAuth = (token: string) => {
     let decodedToken = jwtDecode<JwtPayload>(token);

@@ -1,10 +1,10 @@
+// authSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 
 interface DecodedToken {
   role: string;
-  accountId: number;
-  // Add other properties as needed
+  accountId: number | string;
 }
 
 export interface AuthState {
@@ -16,7 +16,7 @@ export interface AuthState {
 const initialState: AuthState = {
   token: null,
   role: '',
-  accountId: null
+  accountId: null,
 };
 
 const decodeToken = (token: string): DecodedToken => {
@@ -25,7 +25,7 @@ const decodeToken = (token: string): DecodedToken => {
     return decoded;
   } catch (error) {
     console.error("Invalid token", error);
-    return { role: '', accountId: 0 }; // Default role and accountId if token is invalid
+    return { role: '', accountId: 0 };
   }
 };
 
@@ -49,7 +49,7 @@ const authSlice = createSlice({
     },
     setAccountId: (state, action: PayloadAction<number>) => {
       state.accountId = action.payload;
-    }
+    },
   },
 });
 

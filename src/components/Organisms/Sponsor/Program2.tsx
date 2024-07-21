@@ -4,8 +4,7 @@ import SponsorEventProfit from "./SponsorEventProfit";
 export const Program2 = () => {
   return (
     <div>
-      <ApplicationShell4 MainComponent={<SponsorEventProfit/>} />
-
+      <ApplicationShell4 MainComponent={<SponsorEventProfit />} />
     </div>
   );
 };

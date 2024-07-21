@@ -1,4 +1,4 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 interface SponsorProfit {
   sponsorId: number;
@@ -10,8 +10,8 @@ interface SponsorProfit {
 }
 
 export const sponsorProfitApi = createApi({
-  reducerPath: 'sponsorProfitApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:7979/' }),
+  reducerPath: "sponsorProfitApi",
+  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:7979/" }),
   endpoints: (builder) => ({
     getSponsorProfits: builder.query<SponsorProfit[], number>({
       query: (accountId) => `api-sponsor/profits/${accountId}`,
