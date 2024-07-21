@@ -31,7 +31,7 @@ type AdminProps = {
 export const AdminDetail: React.FC<AdminProps> = (prop) => {
   const tableHeaders = [
     "No",
-    "Name",
+   
     "Email",
     "Role",
     "Password",
@@ -42,7 +42,7 @@ export const AdminDetail: React.FC<AdminProps> = (prop) => {
   const { data: accounts, refetch, isLoading, error } = useGetAccountsQuery();
   const tableHeaderClasses = [
     "w-[200px] pr-4 xxl:w-[25px]",
-    "w-[200px] pr-4 xxl:w-[100px]",
+    // "w-[200px] pr-4 xxl:w-[100px]",
     "w-[128px] pr-4 xxl:w-[130px]",
     "w-[200px] pr-4 xxl:w-[100px]",
     "w-[192px] pr-4 xxl:w-[50px]",
@@ -153,7 +153,7 @@ export const AdminDetail: React.FC<AdminProps> = (prop) => {
   };
   const tableRows: AccountTable[] = sponsor?.map((account: account, index) => ({
     No: index + 1,
-    Name: account.email,
+    // Name: account.email,
     Email: account.email,
     Role: account.role.roleName,
     Password: account.password,
@@ -185,7 +185,7 @@ export const AdminDetail: React.FC<AdminProps> = (prop) => {
       ) : (
         <Button
           size="icon"
-          variant="link"
+          variant="primary"
           onClick={(e) => handleEnableSubmit(e, account.id)}
         >
           <BiUserCheck />

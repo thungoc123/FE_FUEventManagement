@@ -11,6 +11,9 @@ export const ticketApi = createApi({
       query: (accountId: string) =>
         `api-ticket/visitorId?accountId=${accountId}`,
     }),
+    getNumberAttendances: builder.query({
+      query: (eventId: number) => `api-ticket/total-participants/${eventId}`,
+    }),
     updateTicketStatus: builder.mutation({
       query: ({ id, status }) => ({
         url: `api-ticket/${id}/status`,
@@ -25,4 +28,5 @@ export const {
   useGetTicketByIdQuery,
   useGetVisitorByAccountIdQuery,
   useUpdateTicketStatusMutation,
+  useGetNumberAttendancesQuery,
 } = ticketApi;

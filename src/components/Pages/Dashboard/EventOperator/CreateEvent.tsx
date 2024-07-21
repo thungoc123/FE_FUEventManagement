@@ -39,7 +39,7 @@ const CreateEvent = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [submitError, setSubmitError] = useState<string[]>([]);
   const [errs, setErrs] = useState({
-    eventName: "test",
+    eventName: "",
   });
   const [fill, setFill] = useState("")
 

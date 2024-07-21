@@ -15,6 +15,8 @@ const RoleChoosing: React.FC<RoleChoosingProps> = ({ onClose, logo }) => {
       navigate("/visitor");
     } else if (role === "Sponsor") {
       navigate("/sponsor");
+    }else if (role === "EventOperator") {
+      navigate("/eventoperator");
     }
   };
 
@@ -74,6 +76,10 @@ RoleChoosing.defaultProps = {
     {
       src: "src/assets/investor.png",
       alt: "Sponsor",
+    },
+    {
+      src: "src/assets/investor.png",
+      alt: "EventOperator",
     },
   ],
 };

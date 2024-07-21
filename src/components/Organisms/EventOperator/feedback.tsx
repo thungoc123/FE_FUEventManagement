@@ -24,7 +24,7 @@ export const Feedback = () => {
     "state",
     "Question",
     "Edit",
-    "Publish",
+    // "Publish",
     "Delete",
   ];
   const accountId = accountID(sessionStorage.getItem("token"));
@@ -64,7 +64,7 @@ export const Feedback = () => {
     No: index+1,
     Name: item.title,
     Event: item.eventName,
-    state: item.state.stateName,
+    state: "PUBLISH",
     Question: 
     <Link to={`/eventoperator/dashboard/FeedbackDetail/${item.feedbackID}`}>
     <Button size="icon" variant="link">
@@ -72,7 +72,7 @@ export const Feedback = () => {
     </Button>
     </Link>,
     Edit: <UpdateFeedback feedback={item}/>,
-    Publish: item.state?.stateName === "UNPUBLISH" ? <Button size="icon" asChild variant="link"><BiShow /></Button>  : <Button size="icon" asChild variant="link"><BiHide/></Button>,
+    // Publish: item.state?.stateName === "UNPUBLISH" ? <Button size="icon" asChild variant="link"><BiShow /></Button>  : <Button size="icon" asChild variant="link"><BiHide/></Button>,
     Delete:  <Button size="icon" variant="link" onClick={(e) => handleDeleteFeedback(e,item.feedbackID)}>
       <BiTrash /></Button>,
   }));
@@ -92,6 +92,9 @@ export const Feedback = () => {
 
   return (
     <>
+    {Feedbacks.length === 0 ? (
+        "No feedback"
+      ) : (
           <TableTemplate
             headerTitle="Sponsor"
             headerDescription="List of Sponsor"
@@ -106,6 +109,8 @@ export const Feedback = () => {
             // paginationItems={paginationItems}
             tableHeadersClasses={tableHeaderClasses}
         />
+      )
+    }
     </>
   );
 };

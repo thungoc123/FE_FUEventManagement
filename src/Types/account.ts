@@ -2,7 +2,7 @@ import React from "react";
 
 export interface AccountTable {
     No: number,
-    Name: string,
+    // Name: string,
     Email:  string,
     Role: string,
     Password: string,

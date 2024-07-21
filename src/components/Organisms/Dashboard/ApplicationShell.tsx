@@ -373,18 +373,18 @@ const NavigationAuth = (role: string) => {
               // number: 2,
               icon: <BiBarChartAlt2 className="size-6 shrink-0" />,
             },
-            {
-              name: "Feedback Analytics",
-              url: "",
-              // number: 3,
-              icon: <BiPieChartAlt2 className="size-6 shrink-0" />,
-            },
-            {
-              name: "Attendance",
-              url: "",
-              // number: 3,
-              icon: <BiUserCheck className="size-6 shrink-0" />,
-            },
+            // {
+            //   name: "Feedback Analytics",
+            //   url: "",
+            //   // number: 3,
+            //   icon: <BiPieChartAlt2 className="size-6 shrink-0" />,
+            // },
+            // {
+            //   name: "Attendance",
+            //   url: "",
+            //   // number: 3,
+            //   icon: <BiUserCheck className="size-6 shrink-0" />,
+            // },
           ],
         },
         {

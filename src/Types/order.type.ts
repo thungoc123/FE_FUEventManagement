@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { EOevent } from './eo.type';
 
 
 
@@ -18,3 +19,13 @@ export const orderApi = createApi({
 });
 
 export const { usePlaceOrderMutation } = orderApi;
+
+
+interface Order {
+  attendances: [],
+  createdDate: string,
+  description: string,
+  event: EOevent,
+  
+
+}

@@ -16,7 +16,7 @@ import { visitorTable } from "../../../Types/account";
 export const Visitor = () => {
   const tableHeaders = ["No", "Name","Attendance","SendFeedback"];
   const {id} = useParams();
-const { data: Visitors, isLoading, isError,error } = useGetListVistiorsQuery(1);
+const { data: Visitors, isLoading, isError,error } = useGetListVistiorsQuery(id);
 console.log(Visitors)
   // const 
   const tableRows: visitorTable[] = 

@@ -57,6 +57,7 @@ import Cart from "./components/Pages/Dashboard/Cart/Cart";
 import EventProfitDetail from "./components/Organisms/EventOperator/EventProfitDetail";
 import EventDetail from "./components/Pages/EventDetail";
 import { Program } from "./components/Pages/Dashboard/Sponsor/Program";
+import { EOSignUp, Signup7 } from "./components/Organisms/EventOperator/EOSignUp";
 function App() {
   ReactModal.setAppElement("#root");
   const eventId = "1";
@@ -408,6 +409,8 @@ function App() {
           />
           <Route path="/sponsor" element={<SponsorSignUp />} />
           <Route path="/visitor" element={<VisitorSignUp />} />
+          <Route path="/eventoperator" element={<Signup7 />} />
+
           {/* <Route path="/survey" element={<SurveyForm />} /> */}
           {/* <Route path="/question" element={<QuestionForm />} /> */}
           <Route path="/create-event" element={<CreateEvent />} />

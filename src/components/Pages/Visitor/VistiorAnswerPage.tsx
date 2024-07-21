@@ -22,7 +22,7 @@ import { useLoginMutation } from "../../../Features/Auth/authApi";
 import { useDispatch } from "react-redux";
 import { accountID } from "../../../ulities/ProtectedRoute";
 import { addNotification } from "../../../Features/Utils/notificationsSlice";
-
+import "../../Organisms/Style/visitorAnswer.css";
 
 interface visitorAnswerFeedback {
   visitorAnswerFeedback: string;
@@ -138,7 +138,8 @@ const VisitorAnswerPage = () => {
 
   return (
     <>
-      <div className="w-3/4 mx-auto mt-4">
+    <div id = "VisitorBackground">
+      <div className="w-3/4 mx-auto mt-4 visitorAnswer">
         {/* <ProgressBar currentStep={currentStep} totalSteps={totalSteps} /> */}
         <form onSubmit={handleVisitorSubmit}>
           {currentStep === 1 && (
@@ -191,7 +192,7 @@ const VisitorAnswerPage = () => {
           )}
 
           {data?.map((question, index) => (
-            <div key={question.feedbackQuestionID} className="w-full h-full mx-auto p-8 border border-black shadow-md text-center m-20">
+            <div key={question.feedbackQuestionID} className="w-full h-full mx-auto p-8 border border-black shadow-md text-center m-20 visitorCard">
               <h1 className="text-2xl font-bold mb-4">{question.textQuestion}</h1>
               <div className="flex justify-center items-center space-x-4">
                 <Input
@@ -227,6 +228,7 @@ const VisitorAnswerPage = () => {
         Previous Step
       </button> */}
       </div>
+    </div>
     </>
   )
 };

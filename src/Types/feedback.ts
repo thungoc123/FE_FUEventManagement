@@ -8,7 +8,7 @@ export interface FeedbackTable {
     state: string,
     Question: React.ReactNode,
     Edit: React.ReactNode,
-    Publish: React.ReactNode,
+    // Publish: React.ReactNode,
     Delete: React.ReactNode
 }
 

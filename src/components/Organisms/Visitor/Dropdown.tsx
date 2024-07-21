@@ -53,7 +53,7 @@ const Dropdown: React.FC<Props> = (props) => {
   const NavigationAuth = (roleName: string) => {
     switch (roleName) {
       case "ROLE_EO":
-        navigate("/eventoperator/dashboard/");
+        navigate("/eventoperator/dashboard/analytics");
         break;
       case "ROLE_SPONSOR":
         navigate("/sponsor/dashboard/");

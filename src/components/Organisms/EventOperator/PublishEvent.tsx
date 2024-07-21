@@ -42,7 +42,7 @@ export const PublishEvent = () => {
     Name: item.name, // Tên sự kiện
     Date: new Date(item.timestart).toLocaleDateString(), // Ngày diễn ra sự kiện, chuyển đổi sang định dạng chuỗi
     Detail: (
-      <Link to={`/event/dashboard/analytics/${item.id}`}>
+      <Link to={`/eventoperator/dashboard/analytics/${item.id}`}>
         <Button size="icon" variant="link">
           <BiShow />
         </Button>
@@ -71,6 +71,9 @@ export const PublishEvent = () => {
       {isLoading ? (
         "Vui lòng đợi trong giây lát"
       ) : (
+        publishEvents.length === 0 ? (
+          "Không có sự kiện nào"
+        ) : (
         <TableTemplate
           headerTitle="Những sự kiện đã diễn ra"
           headerDescription="Danh sách những sự kiện đã diễn ra"
@@ -79,6 +82,7 @@ export const PublishEvent = () => {
           // paginationItems={paginationItems}
           tableHeadersClasses={tableHeaderClasses}
         />
+        )
       )}
     </>
   );

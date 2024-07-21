@@ -224,7 +224,7 @@ export const Navbar2 = (props: Navbar2Props) => {
     console.log(decodedToken);
     switch (decodedToken.role) {
       case "ROLE_EO":
-        navigate("/eventoperator/dashboard/");
+        navigate("eventoperator/event/publish/analytics/");
         break;
       case "ROLE_SPONSOR":
         navigate("/sponsor/dashboard/");
@@ -492,19 +492,32 @@ export const Navbar2 = (props: Navbar2Props) => {
             width: '70%',
             height: '70%',
             marginRight: '-50%',
-            transform: 'translate(-50%, -50%)'
+            transform: 'translate(-50%, -50%)',
+            background: 'radial-gradient(circle at center left, #402a6d 0%, #1e005a 20%, #1e005a 16%)',
+            // ".scollbar-thin": {
+            //   scrollbarWidth: "thin",
+            //   scrollbarColor: "#00fff9 #b9a1e4",
+            // },
+            // '&::-webkit-scrollbar-track': {
+            //   backgroundColor: 'red',
+            // },
+            // '&::-webkit-scrollbar-thumb': {
+            //   backgroundColor: 'blue',
+            //   borderRadius: '1rem',
+            //   border: '3px solid orange'
+            // },
           }
         }}
+        
+        // className="SearchModal"
         // className="scollbar-thin scollbar-webkit"
       >
 
 
 
       <SearchBar value={searchValue} onChange={handleSearch}/>
-      <section className="px-[5%] py-16 md:py-24 lg:py-28">
+      <section className="px-[5%] py-16 md:py-24 lg:py-28 scollbar-thin scollbar-webkit searchModel">
       <div className="container grid grid-cols-1 items-start md:grid-flow-row md:gap-x-12 lg:gap-x-20">
-       
-g
         <div className="grid grid-cols-1 gap-y-12 md:grid-cols-2 md:gap-x-8 lg:gap-16">
           {filteredEvents.map((member, index) => {
             
@@ -517,6 +530,10 @@ g
             <div
               className="grid grid-cols-1 items-start gap-5 sm:gap-y-6 md:grid-cols-2 md:gap-x-8"
               key={index}
+              style={{ cursor: "pointer" }}
+              onClick={() => {
+                navigate(`/event-detail/${member.id}`);
+              }}
             >
               <div className="w-full overflow-hidden">
                 <img
@@ -551,8 +568,8 @@ g
       </div>
     </section>
 
-        <h2>Hello, I am a Modal</h2>
-        <button onClick={closeModal}>Close Modal</button>
+        {/* <h2>Hello, I am a Modal</h2>
+        <button onClick={closeModal}>Close Modal</button> */}
       </Modal>
     </div>
   );

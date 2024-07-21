@@ -35,6 +35,8 @@ const RoleChoosingwithDialog: React.FC<RoleChoosingProps> = ({
       navigate("/visitor");
     } else if (role === "Sponsor") {
       navigate("/sponsor");
+    } else if (role === "Event Operator") {
+      navigate("/eventoperator");
     }
   };
 
@@ -60,7 +62,8 @@ const RoleChoosingwithDialog: React.FC<RoleChoosingProps> = ({
                   className="p-12"
                   onClick={() => handleRoleSelect(item.alt || "Visitor")}
                 >
-                  <img key={index} src={item.src} alt={item.alt} />
+                  {/* <img key={index} src={item.src} alt={item.alt} /> */}
+                  {item.alt}
                 </Button>
               ))}
             </div>
@@ -84,6 +87,10 @@ RoleChoosingwithDialog.defaultProps = {
     {
       src: "src/assets/investor.png",
       alt: "Sponsor",
+    },
+    {
+      src: "src/assets/investor.png",
+      alt: "Event Operator",
     },
   ],
 };

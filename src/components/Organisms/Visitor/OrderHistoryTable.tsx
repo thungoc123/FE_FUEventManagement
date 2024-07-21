@@ -5,6 +5,8 @@ import { useGetCartQuery } from "../../../Features/Order/cartApi";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from "react-router-dom";
+import { formatNumber } from "../../../ulities/Stringhandle";
+import { accountID } from "../../../ulities/ProtectedRoute";
 
 type Props = {
   paginationItems: number[];
@@ -12,7 +14,17 @@ type Props = {
 
 const OrderHistoryTable: React.FC<Props> = () => {
   const { data, error, isLoading } = useGetCartQuery("1");
+  // const visitorId = sessionStorage.getItem("visitorId");
+  console.log(data);
+  const accountId = accountID(sessionStorage.getItem("token"));
+  console.log(accountId);
+  const dataWithAccount =  data?.filter((order: any) =>  String(order.visitor.account.id) === String(accountId));
+  console.log(dataWithAccount);
   const navigate = useNavigate();
+  // {data.map((order: any, index: number) => (
+  //   console.log(order.event)
+  // ))}
+  console.log(data);
 
   const handlePaidClick = async (order: any) => {
     // Assuming you have an API endpoint to update the order status to 'PAID'
@@ -28,7 +40,7 @@ const OrderHistoryTable: React.FC<Props> = () => {
   }
 
   if (error) {
-    return <div>Error: {error.message}</div>;
+    return <div>Cart is empty</div>;
   }
 
   return (
@@ -53,7 +65,7 @@ const OrderHistoryTable: React.FC<Props> = () => {
         <table className="min-w-full bg-white border border-gray-200">
           <thead>
             <tr>
-              <th className="px-4 py-2 border-b">EventID</th>
+              <th className="px-4 py-2 border-b">TicketID</th>
               <th className="px-4 py-2 border-b">EventName</th>
               <th className="px-4 py-2 border-b">Price</th>
               <th className="px-4 py-2 border-b">Date</th>
@@ -63,16 +75,15 @@ const OrderHistoryTable: React.FC<Props> = () => {
             </tr>
           </thead>
           <tbody>
-            {data.map((order: any, index: number) => (
+            {dataWithAccount.map((order: any, index: number) => (
               <tr key={index}>
                 <td className="px-4 py-2 border-b text-center">
-                  {order.event.id}
+                  {order.id}
                 </td>
                 <td className="px-4 py-2 border-b text-center">
-                  {order.event.name}
-                </td>
+                <a href={`/event-detail/${order.event.id}`}>{order.eventName}</a>                </td>
                 <td className="px-4 py-2 border-b text-center">
-                  {order.price}
+                  {formatNumber(order.price)} VND / Person
                 </td>
                 <td className="px-4 py-2 border-b text-center">
                   {new Date(order.createdDate).toLocaleDateString()}

@@ -142,6 +142,9 @@ export const UnpublishEvent = () => {
       {isLoading ? (
         "Vui lòng đợi vài giây"
       ) : (
+        unpublishEvents.length === 0 ? (
+          "Không có sự kiện nào"
+        ) : (
         <TableTemplate
           headerTitle={"Unpublish Event"}
           headerDescription="List of unpublish event"
@@ -157,6 +160,7 @@ export const UnpublishEvent = () => {
           tableRows={tableRows} // Truyền dữ liệu mới cho tableRows
           tableHeadersClasses={tableHeaderClasses}
         />
+        )
       )}
     </>
   );

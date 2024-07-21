@@ -14,6 +14,8 @@ import {
   SelectTrigger,
   SelectValue
 } from '@relume_io/relume-ui';
+import { useDispatch } from "react-redux";
+import { addNotification } from "../../Features/Utils/notificationsSlice";
 
 export const CheckingStaffDashboard = () => {
   const tableHeaders = ["No", "Name", "Status", "Event", "Attendance", "SendFeedback"];
@@ -23,6 +25,7 @@ export const CheckingStaffDashboard = () => {
   const [selectedVisitor, setSelectedVisitor] = useState<string | null>(null);
   const [feedbackQuestionLink, setFeedbackQuestionLink] = useState('');
   const { data: event, isLoading: eventIsLoading, isError: eventIsError, error: eventError } = useGetEventDetailQuery();
+  const [eventName, setEventName] = useState('');
 
   console.log(event?.event.id)
   const { data: attendance, isLoading: attendanceIsLoading, isError: attendanceIsError, error: attendanceError } = useGetAttendanceQuery(event?.event.id ?? 0);
@@ -52,7 +55,7 @@ export const CheckingStaffDashboard = () => {
     Status: item.status,
     Event: item.eventName,
     Attendance: item.status === "ABSENT" && <Button onClick={() => handleCheckAttendance(item.ticket.id,"ATTENDANCE")} style={{ background: '#5321af', borderRadius: '10px' }}><BiCheck /></Button>, // Biểu tượng đánh dấu đã điểm danh
-    SendFeedback: item.status === "ATTENDANCE" && <Button style={{ background: isSuccess ? 'green' : 'blue', borderRadius: '10px' }} onClick={(e) => { setSelectedVisitor(item.ticket.visitor.information); openModal() }}><BiMailSend /></Button>,
+    SendFeedback: item.status === "ATTENDANCE" && <Button style={{ background: isSuccess ? 'green' : 'blue', borderRadius: '10px' }} onClick={(e) => { setSelectedVisitor(item.ticket.visitor.information); openModal(); setEventName(item.eventName) }}><BiMailSend /></Button>,
   }));
 
   console.log(selectedVisitor) 
@@ -68,7 +71,7 @@ export const CheckingStaffDashboard = () => {
 
   const emailInfor = {
     to: selectedVisitor,
-    subject: "[FU_Event Management System] Feedback",
+    subject: `[FEEDBACK] ${eventName}`,
     feedbackLink: feedbackQuestionLink,
   }
 
@@ -81,6 +84,7 @@ export const CheckingStaffDashboard = () => {
   function closeModal() {
     setIsOpen(false);
   }
+  const dispatch = useDispatch();
 
   const handleSubmit = async(e) => {
     e.preventDefault();
@@ -88,6 +92,14 @@ export const CheckingStaffDashboard = () => {
     console.log(JSON.stringify(emailInfor))
     try {
       await sendMail(emailInfor).unwrap();
+      dispatch(
+        addNotification({
+          id: new Date().getTime(), // Sử dụng timestamp làm ID
+          message: "Send email successfully!",
+          type: "success",
+          timestamp: Date.now(), // Thời gian hiện tại
+        })
+      );
       setIsOpen(false);
     }catch(err){
       console.error("Failed to send mail")

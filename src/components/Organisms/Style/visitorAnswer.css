@@ -1,0 +1,18 @@
+#VisitorBackground {
+     background: radial-gradient(circle at center bottom, #402a6d 0%, #1e005a 30%, #1e005a 36%);
+     min-height: 100vh;
+}
+
+#VisitorBackground h1 {
+     color: #00fff9;
+}
+
+
+#VisitorBackground p, #VisitorBackground span {
+     color: #00fff9;
+}
+
+
+.visitorCard {
+     background: #c1b0e283;
+}

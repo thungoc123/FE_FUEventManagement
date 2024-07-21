@@ -20,6 +20,7 @@ export const InprogressEvent = () => {
 
   const publishEvents =
     Events?.filter((event) => event.stateEvent.name === "PUBLISH") || [];
+    console.log(publishEvents)
   const [deleteEvent] = useDeleteEventMutation()
     const handleDelete = async (e: MouseEvent<HTMLButtonElement>, eventId: number) => {
       e.preventDefault(); // Ngăn chặn hành vi mặc định của button nếu có
@@ -55,7 +56,7 @@ export const InprogressEvent = () => {
     
     , // Biểu tượng đánh dấu đã điểm danh
     Detail: (
-      <Link to={`/event/dashboard/analytics/${item.id}`}>
+      <Link to={`/eventoperator/dashboard/analytics/${item.id}`}>
         <Button size="icon" variant="link">
           <BiShow />
         </Button>
@@ -84,6 +85,9 @@ export const InprogressEvent = () => {
       {isLoading ? (
         "Vui lòng đợi trong giây lát"
       ) : (
+        publishEvents.length === 0 ? (
+          "Không có sự kiện nào"
+        ) : (
         <TableTemplate
           headerTitle="In progress events"
           headerDescription="Danh sách những sự kiện đang diễn ra"
@@ -92,6 +96,7 @@ export const InprogressEvent = () => {
           // paginationItems={paginationItems}
           tableHeadersClasses={tableHeaderClasses}
         />
+        )
       )}
     </>
   );

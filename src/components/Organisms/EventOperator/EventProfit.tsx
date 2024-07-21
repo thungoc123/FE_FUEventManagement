@@ -86,6 +86,9 @@ export const EventProfit = () => {
       {isLoading ? (
         "Vui lòng đợi trong giây lát"
       ) : (
+        publishEvents.length === 0 ? (
+          "Không có sự kiện nào"
+        ) : (
         <TableTemplate
           headerTitle="Publish Event"
           headerDescription="List of publish event"
@@ -93,7 +96,9 @@ export const EventProfit = () => {
           tableRows={tableRows}
           tableHeadersClasses={tableHeaderClasses}
         />
+        )
       )}
+    
     </>
   );
 };

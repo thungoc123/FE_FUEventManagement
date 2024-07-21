@@ -1,57 +1,79 @@
 .menu {
-                         color: #00fff9;
-                         font-weight: 600;
+     color: #00fff9;
+     font-weight: 600;
 }
 
 .button_border {
-                         animation: snake 3s linear infinite;
+     animation: snake 3s linear infinite;
 
 }
 
 .login_button {
-                         background: #b9a1e4;
-                         border-radius: 5px;
-                         border: 1px solid #b9a1e4;
-                         font-weight: 600;
+     background: #b9a1e4;
+     border-radius: 5px;
+     border: 1px solid #b9a1e4;
+     font-weight: 600;
 }
 
 @keyframes snake {
-                         0% {
-                                                  border-color: transparent transparent #37b7dc transparent;
-                                                  /* Starting color (light blue) */
-                                                  transform: translateX(0) translateY(0);
-                         }
+     0% {
+          border-color: transparent transparent #37b7dc transparent;
+          /* Starting color (light blue) */
+          transform: translateX(0) translateY(0);
+     }
 
-                         25% {
-                                                  border-color: transparent #37b7dc transparent transparent;
-                                                  /* Moving right */
-                                                  transform: translateX(100%) translateY(0);
-                         }
+     25% {
+          border-color: transparent #37b7dc transparent transparent;
+          /* Moving right */
+          transform: translateX(100%) translateY(0);
+     }
 
-                         50% {
-                                                  border-color: #37b7dc transparent transparent transparent;
-                                                  /* Moving down */
-                                                  transform: translateX(100%) translateY(100%);
-                         }
+     50% {
+          border-color: #37b7dc transparent transparent transparent;
+          /* Moving down */
+          transform: translateX(100%) translateY(100%);
+     }
 
-                         75% {
-                                                  border-color: transparent transparent #37b7dc transparent;
-                                                  /* Moving left */
-                                                  transform: translateX(0) translateY(100%);
-                         }
+     75% {
+          border-color: transparent transparent #37b7dc transparent;
+          /* Moving left */
+          transform: translateX(0) translateY(100%);
+     }
 
-                         100% {
-                                                  border-color: transparent transparent transparent #37b7dc;
-                                                  /* Moving up */
-                                                  transform: translateX(0) translateY(0);
-                         }
+     100% {
+          border-color: transparent transparent transparent #37b7dc;
+          /* Moving up */
+          transform: translateX(0) translateY(0);
+     }
 }
 
 .snake-border:hover {
-                         animation: snake 3s linear infinite;
-                         /* Apply animation on hover (or any desired trigger) */
+     animation: snake 3s linear infinite;
+     /* Apply animation on hover (or any desired trigger) */
 }
 
 .nav_wrapper {
-                         background: #1e005a;
+     background: #1e005a;
 }
+.searchModel {
+     /* background: radial-gradient(circle at center left, #402a6d 0%, #1e005a 20%, #1e005a 16%); */
+
+}
+.searchModel h5, .searchModel h6, .searchModel p {
+     color: #00fff9;
+
+}
+.ReactModal__Content--after-open {
+     scrollbar-width: thin;
+     scrollbar-color: #00fff9 #b9a1e4;
+   }
+   
+   .ReactModal__Content--after-open::-webkit-scrollbar-track {
+     background-color: red !important;
+   }
+   
+   .ReactModal__Content--after-open::-webkit-scrollbar-thumb {
+     background-color: blue !important;
+     border-radius: 1rem !important;
+     border: 3px solid orange !important;
+   }
