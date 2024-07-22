@@ -123,7 +123,7 @@ export const VisitorSignUp = (props: Signup7Props) => {
               <h1 className="mb-5 text-5xl font-bold md:mb-6 md:text-7xl lg:text-8xl">
                 {title}
               </h1>
-              <p className="md:text-md">{description}</p>
+              {/* <p className="md:text-md">{description}</p> */}
             </div>
             <form className="grid grid-cols-1 gap-6" onSubmit={handleSubmit}>
               <div className="grid w-full items-center text-left">

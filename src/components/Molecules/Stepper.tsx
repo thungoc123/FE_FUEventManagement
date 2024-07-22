@@ -81,7 +81,7 @@ const [addSchedule, { isLoading, isSuccess, isError, error }
         const response = await addSchedule({id: id, newSchedule: ScheduleData }).unwrap();
         console.log(response)
         dispatch(addNotification({
-          id: new Date().getTime(), // Sử dụng timestamp làm ID
+          id: new Date().getTime(), // Sử dụpng timestamp làm ID
           message: 'Create event schedule successfully!',
           type: 'success',
           timestamp: Date.now(), // Thời gian hiện tại

@@ -582,7 +582,7 @@ const Navigation: React.FC<Props> = ({ navigationProps = NavigationProp }) => {
                         <p>{nav.Name}</p>
                       </a>
                     </span>
-                  </AccordionTrigger>
+                </AccordionTrigger>
                 )}
 
                 {nav.State?.map((item, idx) => (
@@ -606,20 +606,6 @@ const Navigation: React.FC<Props> = ({ navigationProps = NavigationProp }) => {
           ))}
         </div>
         <div className="flex flex-col gap-4 px-4 lg:gap-6">
-          <div className="flex flex-col">
-            <a href="#" className="flex items-center gap-x-2 p-2 text-center">
-              <span className="flex w-full items-center gap-3">
-                <BiHelpCircle className="size-6 shrink-0" />
-                <p>Support</p>
-              </span>
-            </a>
-            <a href="#" className="flex items-center gap-x-2 p-2 text-center">
-              <span className="flex w-full items-center gap-3">
-                <BiCog className="size-6 shrink-0" />
-                <p>Settings</p>
-              </span>
-            </a>
-          </div>
         </div>
       </div>
     </nav>

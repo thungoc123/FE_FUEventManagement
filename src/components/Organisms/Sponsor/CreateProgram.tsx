@@ -88,7 +88,7 @@ export const CreateProgram = () => {
           <Label htmlFor="email">Name</Label>
           <Input
             id="Name"
-            placeholder="Email"
+            placeholder="Name"
             onChange={(e) => setName(e.target.value)}
           />
         </div>

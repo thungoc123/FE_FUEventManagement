@@ -59,6 +59,7 @@ import EventDetail from "./components/Pages/EventDetail";
 import { Program } from "./components/Pages/Dashboard/Sponsor/Program";
 import { Program2 } from "./components/Organisms/Sponsor/Program2";
 import { EOSignUp, Signup7 } from "./components/Organisms/EventOperator/EOSignUp";
+import { EventAnalytics } from "./components/Pages/Dashboard/EventOperator/EventAnalytics";
 function App() {
   ReactModal.setAppElement("#root");
   const eventId = "1";
@@ -275,6 +276,7 @@ function App() {
               </RequireAuth >
             }
           />
+          
           <Route
             path="/eventoperator/dashboard/UnpublishEvent"
             element={
@@ -418,6 +420,8 @@ function App() {
           <Route path="/service-term" element={<ServiceTerm />} />
           <Route path="/test" element={<TokenDecode />} />
           <Route path="/login" element={<Login1 />} />
+          <Route path="/piechart" element={<EventAnalytics />} />
+
           {/* <Route path="/checkstaff" element={<AddCheckStaffTable />} />
           <Route path="/sponsor-table" element={<AddSponsorTable />} />
           <Route path="/event-table" element={<EventScheduleTable />} /> */}

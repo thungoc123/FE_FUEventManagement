@@ -28,7 +28,7 @@ const Payment1: React.FC<Payment1Props> = () => {
   const [deleteTicket, { isLoading: isDeleting, isSuccess: isDeleteSuccess, isError: isDeleteError, error: DeleteError }] = useDeleteTicketMutation();
   useEffect(() => {
     if (eventDetails) {
-      setAmount(eventDetails.price * quantity);
+      setAmount(eventDetails.price);
     }
   }, [eventDetails, quantity]);
 
@@ -135,10 +135,10 @@ const Payment1: React.FC<Payment1Props> = () => {
                 {new Date(eventDetails?.timestart).toLocaleString()}
               </p>
             </div>
-            <div className="mb-2">
+            {/* <div className="mb-2">
               <h3 className="text-lg font-semibold">Quantity</h3>
               <p className="text-gray-700">{quantity}</p>
-            </div>
+            </div> */}
           </div>
           <div className="flex space-x-4 mt-4">
             <Button
