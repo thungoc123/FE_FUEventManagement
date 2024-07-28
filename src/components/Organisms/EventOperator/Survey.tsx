@@ -1,7 +1,7 @@
 import { BiEdit, BiTrash } from "react-icons/bi";
 import { TableTemplate } from "../Dashboard/TableTemplate";
 import { Button } from "@relume_io/relume-ui";
-import { useDeleteFeedbackMutation, useGetListFeedbackQuery } from "../../../Features/FeedbackManage/feedbackApi";
+import { useDeleteFeedbackMutation } from "../../../Features/FeedbackManage/feedbackApi";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addNotification } from "../../../Features/Utils/notificationsSlice";

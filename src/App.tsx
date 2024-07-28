@@ -63,10 +63,10 @@ import {
   Signup7,
 } from "./components/Organisms/EventOperator/EOSignUp";
 import { EventAnalytics } from "./components/Pages/Dashboard/EventOperator/EventAnalytics";
+import { ManageSurvey } from "./components/Pages/Dashboard/EventOperator/ManageSurvey";
+import PaymentSuccessfullPage2 from "./components/Pages/Dashboard/Sponsor/PaymentSuccessfullPage";
 import CallCapital from "./components/Pages/Dashboard/Sponsor/CallCapital/CallCapital";
 import DetailCallCapital from "./components/Pages/Dashboard/Sponsor/CallCapital/DetailCallCapital";
-import PaymentCapital from "./components/Pages/Dashboard/Sponsor/CallCapital/PaymentCapital";
-import PaymentSuccessfullPage2 from "./components/Pages/Dashboard/Sponsor/PaymentSuccessfullPage";
 function App() {
   ReactModal.setAppElement("#root");
   const eventId = "1";
@@ -99,6 +99,20 @@ function App() {
           {/* Guest  */}
 
           {/* sponsor  */}
+
+          <Route
+            path="/EventDetail"
+            element={<EventDetail eventId={eventId} />}
+          />
+          {/* Guest  */}
+          <Route path="/eventdetail" element={<EventDetail />} />
+          <Route path="/" element={<HomePage />} />
+          {/* <Route path="/homepage" element={<HomePageLogout />} /> */}
+
+          <Route path="/role-choosing" element={<RoleChoosing />} />
+
+          {/* sponsor  */}
+
           <Route
             path="/sponsor/dashboard/program/call-capital"
             element={<CallCapital />}
@@ -115,19 +129,6 @@ function App() {
               </RequireAuth>
             }
           />
-          <Route
-            path="/EventDetail"
-            element={<EventDetail eventId={eventId} />}
-          />
-          {/* Guest  */}
-          <Route path="/eventdetail" element={<EventDetail />} />
-          <Route path="/" element={<HomePage />} />
-          {/* <Route path="/homepage" element={<HomePageLogout />} /> */}
-
-          <Route path="/role-choosing" element={<RoleChoosing />} />
-
-          {/* sponsor  */}
-          <Route path="/sponsor-program" element={<SponsorProgram />} />
           <Route
             path="/sponsor/dashboard/"
             element={
@@ -274,11 +275,53 @@ function App() {
               </RequireAuth>
             }
           />
+          {/* FEEDBACK ROUTE */}
           <Route
             path="/eventoperator/dashboard/feedback"
             element={
               <RequireAuth role="ROLE_EO">
                 <ManageFeedback />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/eventoperator/dashboard/FeedbackDetail/:id"
+            element={
+              <RequireAuth role="ROLE_EO">
+                <ManageFeedbackDetail />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/eventoperator/dashboard/FeedbackQuestionDetail/:id"
+            element={
+              <RequireAuth role="ROLE_EO">
+                <QuestionManage />
+              </RequireAuth>
+            }
+          />
+          {/* SURVEY ROUTE */}
+          <Route
+            path="/eventoperator/dashboard/survey"
+            element={
+              <RequireAuth role="ROLE_EO">
+                <ManageSurvey />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/eventoperator/dashboard/FeedbackDetail/:id"
+            element={
+              <RequireAuth role="ROLE_EO">
+                <ManageFeedbackDetail />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/eventoperator/dashboard/FeedbackQuestionDetail/:id"
+            element={
+              <RequireAuth role="ROLE_EO">
+                <QuestionManage />
               </RequireAuth>
             }
           />
@@ -331,22 +374,6 @@ function App() {
               </RequireAuth>
             }
           /> */}
-          <Route
-            path="/eventoperator/dashboard/FeedbackDetail/:id"
-            element={
-              <RequireAuth role="ROLE_EO">
-                <ManageFeedbackDetail />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="/eventoperator/dashboard/FeedbackQuestionDetail/:id"
-            element={
-              <RequireAuth role="ROLE_EO">
-                <QuestionManage />
-              </RequireAuth>
-            }
-          />
 
           {/* Visitor  */}
           <Route
