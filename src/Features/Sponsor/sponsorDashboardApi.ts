@@ -3,7 +3,7 @@ import { RootState } from '../../Store/Store';
 import { useSelector } from 'react-redux';
 import { SponsorProgramWithEvent } from '../../Types/dbsponsor.type';
 const baseQuery = fetchBaseQuery({
-  baseUrl: 'https://eventmanagementfu.azurewebsites.net/',
+  baseUrl: 'http://localhost:7979/',
   prepareHeaders: (headers, { getState }) => {
     // Lấy token từ localStorage
     let token = sessionStorage.getItem('token')

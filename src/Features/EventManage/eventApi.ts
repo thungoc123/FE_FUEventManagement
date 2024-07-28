@@ -1,19 +1,12 @@
-
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { RootState } from '../../Store/Store';
-import { useSelector } from 'react-redux';
 import { EOevent } from '../../Types/eo.type';
-
-
-
 
 const baseQuery = fetchBaseQuery({
   baseUrl: 'http://localhost:7979/',
   prepareHeaders: (headers, { getState }) => {
-    // Lấy token từ localStorage
-    let token = sessionStorage.getItem('token')
+    let token = sessionStorage.getItem('token');
     if (token) {
-      // Thêm Authorization header với giá trị token
       headers.set('Authorization', `Bearer ${token}`);
     }
     return headers;
@@ -23,7 +16,7 @@ const baseQuery = fetchBaseQuery({
 export const eventApi = createApi({
   reducerPath: 'event',
   baseQuery,
-  tagTypes: ['Events','Event'], // Định nghĩa tagTypes cho endpoint
+  tagTypes: ['Events', 'Event'],
 
   endpoints: (builder) => ({
     createEvent: builder.mutation({
@@ -32,8 +25,7 @@ export const eventApi = createApi({
         method: 'POST',
         body: newEvent,
       }),
-      invalidatesTags: [{ type: 'Events', id: 'LIST' }], // Invalidates the list tag
-
+      invalidatesTags: [{ type: 'Events', id: 'LIST' }],
     }),
     updateEvent: builder.mutation({
       query: ({ eventId, newEvent }) => ({
@@ -41,15 +33,14 @@ export const eventApi = createApi({
         method: 'PUT',
         body: newEvent,
       }),
-      invalidatesTags: (result, error, { eventId }) => [{ type: 'Event', id: eventId }], // Invalidates specific event by id
-
+      invalidatesTags: (result, error, { eventId }) => [{ type: 'Event', id: eventId }],
     }),
     deleteEvent: builder.mutation({
-      query: ({eventId}) => ({
+      query: ({ eventId }) => ({
         url: `api-events/event${eventId}`,
         method: 'DELETE',
       }),
-      invalidatesTags: (result, error, { eventId }) => [{ type: 'Event', id: eventId }, { type: 'Events', id: 'LIST' }], // Invalidates specific event and list
+      invalidatesTags: (result, error, { eventId }) => [{ type: 'Event', id: eventId }, { type: 'Events', id: 'LIST' }],
     }),
     getListEvent: builder.query<EOevent[], void>({
       query: () => 'api-events/account',
@@ -61,56 +52,64 @@ export const eventApi = createApi({
             ]
           : [{ type: 'Events', id: 'LIST' }],
     }),
-
+    getAllEvents: builder.query<EOevent[], void>({
+      query: () => 'api-events',
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.map(({ id }) => ({ type: 'Event', id } as const)),
+              { type: 'Events', id: 'LIST' },
+            ]
+          : [{ type: 'Events', id: 'LIST' }],
+    }),
+    getEventDetails: builder.query<EOevent, string>({
+      query: (id) => `api-events/${id}`,
+      providesTags: (result, error, id) => [{ type: 'Event', id }],
+    }),
     addSchedule: builder.mutation({
       query: ({ id, newSchedule }) => ({
         url: `api-events/${id}/create-schedule`,
         method: 'POST',
         body: newSchedule,
       }),
-      invalidatesTags: (result, error, { id }) => [{ type: 'Event', id }], // Invalidates specific event by id
-
+      invalidatesTags: (result, error, { id }) => [{ type: 'Event', id }],
     }),
     addImage: builder.mutation({
-      query: ({id, newImage}) => ({
+      query: ({ id, newImage }) => ({
         url: `api-events/${id}/add-image`,
         method: 'POST',
         body: newImage,
       }),
-      invalidatesTags: (result, error, { id }) => [{ type: 'Event', id }], // Invalidates specific event by id
-
+      invalidatesTags: (result, error, { id }) => [{ type: 'Event', id }],
     }),
     addCheckingStaff: builder.mutation({
-      query: ({id, newStaff}) => ({
+      query: ({ id, newStaff }) => ({
         url: `api-events/${id}/create-staff`,
         method: 'POST',
         body: newStaff,
       }),
-      invalidatesTags: (result, error, { id }) => [{ type: 'Event', id }], // Invalidates specific event by id
+      invalidatesTags: (result, error, { id }) => [{ type: 'Event', id }],
     }),
     deleleCheckingStaff: builder.mutation({
-      query: ({checkingStaffId, eventId}) => ({
+      query: ({ checkingStaffId, eventId }) => ({
         url: `api-events/staff${checkingStaffId}/event${eventId}`,
         method: 'DELETE',
-        // body: newStaff,
       }),
-      invalidatesTags: (result, error, { eventId }) => [{ type: 'Event', id: eventId }], // Invalidates specific event by id
-
+      invalidatesTags: (result, error, { eventId }) => [{ type: 'Event', id: eventId }],
     }),
     deleteImage: builder.mutation({
-      query: ({imageId}) => ({
+      query: ({ imageId }) => ({
         url: `api-events/image${imageId}`,
         method: 'DELETE',
       }),
-      invalidatesTags: (result, error, { imageId }) => [{ type: 'Event', id: imageId }], // Invalidates specific event by id
+      invalidatesTags: (result, error, { imageId }) => [{ type: 'Event', id: imageId }],
     }),
     publishEvent: builder.mutation({
       query: (eventId) => ({
         url: `api-events/event/${eventId}/publish`,
         method: 'PATCH',
       }),
-      invalidatesTags: (result, error, { eventId }) => [{ type: 'Event', id: eventId }], // Invalidates specific event by id
-
+      invalidatesTags: (result, error, { eventId }) => [{ type: 'Event', id: eventId }],
     }),
     addSponsorToEvent: builder.mutation({
       query: ({ eventId, newData }) => ({
@@ -118,17 +117,31 @@ export const eventApi = createApi({
         method: 'POST',
         body: newData,
       }),
-      invalidatesTags: (result, error, { eventId }) => [{ type: 'Event', id: eventId }], // Invalidates specific event by id
+      invalidatesTags: (result, error, { eventId }) => [{ type: 'Event', id: eventId }],
     }),
     deleteSponsor: builder.mutation({
       query: ({ eventId, sponsorId }) => ({
         url: `api-events/${eventId}/sponsor/${sponsorId}`,
         method: 'DELETE',
       }),
-      invalidatesTags: (result, error, { eventId }) => [{ type: 'Event', id: eventId }], // Invalidates specific event by id
+      invalidatesTags: (result, error, { eventId }) => [{ type: 'Event', id: eventId }],
     }),
   }),
 });
 
-export const {useDeleteSponsorMutation ,useAddSponsorToEventMutation , usePublishEventMutation,useDeleteEventMutation,useDeleteImageMutation ,useCreateEventMutation, useGetListEventQuery, useAddScheduleMutation, useAddImageMutation, useAddCheckingStaffMutation, useUpdateEventMutation, useDeleleCheckingStaffMutation } = eventApi;
-
+export const {
+  useDeleteSponsorMutation,
+  useAddSponsorToEventMutation,
+  usePublishEventMutation,
+  useDeleteEventMutation,
+  useDeleteImageMutation,
+  useCreateEventMutation,
+  useGetListEventQuery,
+  useGetAllEventsQuery, // Export the new hook
+  useGetEventDetailsQuery, // Export the new hook for event details
+  useAddScheduleMutation,
+  useAddImageMutation,
+  useAddCheckingStaffMutation,
+  useUpdateEventMutation,
+  useDeleleCheckingStaffMutation,
+} = eventApi;

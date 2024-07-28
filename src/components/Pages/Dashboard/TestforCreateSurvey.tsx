@@ -34,7 +34,7 @@ export const SurveyForm: React.FC = () => {
   const [answers, setAnswers] = useState([
     { answer: "", deletedAt: null, modifiedAt: null },
   ]);
-  const [createFeedback , {isLoading}] = useCreateFeedbackMutation();
+  const [createFeedback, { isLoading }] = useCreateFeedbackMutation();
   // const steps = [
   //   { label: "Survey" },
   //   { label: "Actor" },
@@ -83,12 +83,19 @@ export const SurveyForm: React.FC = () => {
       eventName: eventName,
     });
   };
-  
+
+  const handleDonateClick = () => {
+    navigate("/sponsor/dashboard/program/call-capital");
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(JSON.stringify(formData));
     try {
-      await createFeedback({eventId:formData.eventid,newFeedback:formData}).unwrap();
+      await createFeedback({
+        eventId: formData.eventid,
+        newFeedback: formData,
+      }).unwrap();
       dispatch(
         addNotification({
           id: new Date().getTime(), // Sử dụng timestamp làm ID
@@ -99,7 +106,6 @@ export const SurveyForm: React.FC = () => {
       );
       // navigate("/eventoperator/dashboard/feedback");
       // window.location.reload();
-
 
       // alert('Event created successfully!');
     } catch (err) {
@@ -114,9 +120,11 @@ export const SurveyForm: React.FC = () => {
       console.error("Failed to create the event:", err);
     }
   };
-  
+
   const Events = useSelector((state: RootState) => state.events.events);
-  const PublishEvent = Events.filter((event) => event.stateEvent.name !== "HAPPENED");
+  const PublishEvent = Events.filter(
+    (event) => event.stateEvent.name !== "HAPPENED"
+  );
 
   const [filteredEvents, setFilteredEvents] = useState<EOevent[]>(PublishEvent);
 
@@ -133,7 +141,11 @@ export const SurveyForm: React.FC = () => {
       }
     }
   };
-  const filteredEventList = filteredEvents.filter(event => event.name.toLowerCase().includes(eventData.eventName.toLowerCase()) && event.name !== eventData.eventName);
+  const filteredEventList = filteredEvents.filter(
+    (event) =>
+      event.name.toLowerCase().includes(eventData.eventName.toLowerCase()) &&
+      event.name !== eventData.eventName
+  );
 
   const handleSearchChange = (value: string) => {
     setEventData({ eventName: value });
@@ -145,6 +157,7 @@ export const SurveyForm: React.FC = () => {
         <DialogTrigger asChild>
           <Button>Create Feedback</Button>
         </DialogTrigger>
+        <Button onClick={() => handleDonateClick()}>Call Capital</Button>
         <DialogPortal>
           <DialogOverlay className="bg-black/25" />
           <DialogContent className="w-full max-w-md bg-white px-10 py-14 md:py-16 md:px-12 md:data-[state=open]:duration-300 md:data-[state=open]:animate-in md:data-[state=closed]:animate-out md:data-[state=closed]:fade-out-0 md:data-[state=open]:fade-in-0 md:data-[state=closed]:slide-out-to-left-1/2 md:data-[state=open]:slide-in-from-left-1/2">
@@ -160,55 +173,65 @@ export const SurveyForm: React.FC = () => {
             </>
             <form onSubmit={handleSubmit}>
               {/* {currentStep === 0 && ( */}
-                <>
-                  <div className="grid gap-4 py-4">
-                    <div className="grid items-center gap-2">
-                      <Label htmlFor="surveyname">Feedback title</Label>
-                      <Input
-                        id="surveyname"
-                        name="title"
-                        onChange={handleInputChange}
-                      />
-                    </div>
-                    <div className="grid items-center gap-2">
-                      <Label htmlFor="Objectives">Event</Label>
-                      <SearchFilterForm
-                        onSubmit={handleSearchSubmit}
-                        searchValue={eventData.eventName}
-                        onSearchChange={handleSearchChange}
-                      />
-                      <ul>
-                        {eventData.eventName.length > 0 && (
-                          <ul>
-                            {filteredEventList.slice(0, 5).map((event) => (
-                              <li
-                                className="p-4 mb-4 text-sm text-yellow-800 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300"
-                                key={event.id}
-                                data-event-id={event.id}
-                                data-event-name={event.name}
-                                onClick={handleEventChange}
-                              >
-                                {event.name}
-                              </li>
-                            ))}
-                          </ul>
-                        )}
-                      </ul>
-                    </div>
+              <>
+                <div className="grid gap-4 py-4">
+                  <div className="grid items-center gap-2">
+                    <Label htmlFor="surveyname">Feedback title</Label>
+                    <Input
+                      id="surveyname"
+                      name="title"
+                      onChange={handleInputChange}
+                    />
                   </div>
-                </>
-             
+                  <div className="grid items-center gap-2">
+                    <Label htmlFor="Objectives">Event</Label>
+                    <SearchFilterForm
+                      onSubmit={handleSearchSubmit}
+                      searchValue={eventData.eventName}
+                      onSearchChange={handleSearchChange}
+                    />
+                    <ul>
+                      {eventData.eventName.length > 0 && (
+                        <ul>
+                          {filteredEventList.slice(0, 5).map((event) => (
+                            <li
+                              className="p-4 mb-4 text-sm text-yellow-800 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300"
+                              key={event.id}
+                              data-event-id={event.id}
+                              data-event-name={event.name}
+                              onClick={handleEventChange}
+                            >
+                              {event.name}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </ul>
+                  </div>
+                </div>
+              </>
 
               {filteredEvents.length === 0 && <Alert text={fill} />}
 
               <DialogFooter className="mt-6">
                 <div className="mt-6 flex w-full flex gap-4 md:mt-8 justify-between">
-               
                   <Button type="submit">
-                      {isLoading ? "Creating" : "Get Started"}{" "}
-                      
+                    {isLoading ? "Creating" : "Get Started"}{" "}
+                  </Button>
+                  {/* {isLoading ? "Creating" : "Get Started"}{" "} */}
+
+                  {/* {currentStep === steps.length - 1 ? (
+                    <Button type="submit">
+                      submit
                     </Button>
-                   
+                  ) : (
+                    <span
+                      className="focus-visible:ring-border-primary inline-flex gap-3 items-center justify-center whitespace-nowrap ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-border-primary bg-background-alternative text-text-alternative px-6 py-3"
+                      onClick={nextStep}
+                    >
+                      Next
+                    </span>
+                  )} */}
                 </div>
               </DialogFooter>
             </form>
