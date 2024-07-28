@@ -143,7 +143,7 @@ export const ApplicationShell4: React.FC<ParentComponentProps> = ({
     <section>
       {/* Topbar */}
       <div className={isHeaderVisible}>
-        <div className="mx-auto grid size-full grid-cols-2 items-center justify-between gap-4 lg:grid-cols-[1fr_1.5fr_1fr]">
+      <div className="mx-auto grid size-full grid-cols-2 items-center justify-between gap-1 lg:grid-cols-[1fr_1.5fr_1.3fr]">
           <a href="#" className="ml-14 justify-self-start lg:ml-0">
             <img
               src="https://relume-assets.s3.amazonaws.com/logo-image.svg"

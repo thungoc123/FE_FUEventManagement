@@ -4,10 +4,11 @@ import { useSelector } from 'react-redux';
 import { SponsorProgramWithEvent } from '../../Types/dbsponsor.type';
 import { Sponsor } from '../../Types/sponsor';
 import { EOevent } from '../../Types/eo.type';
+
 const baseQuery = fetchBaseQuery({
   baseUrl: 'http://localhost:7979/',
   prepareHeaders: (headers, { getState }) => {
-    // Lấy token từ localStorage
+    // Lấy token từ sessionStorage
     let token = sessionStorage.getItem('token')
     if (token) {
       // Thêm Authorization header với giá trị token
@@ -37,10 +38,9 @@ export const sponsorApi = createApi({
     }),
     getEventByAccount: builder.query<EOevent[], void>({
       query: () => `/api-sponsor/account/event`,
-      // providesTags: (result, error, state) => [{ type: 'Event', id: state }],
     }),
     addEventToSponsorProgram: builder.mutation({
-      query: ({sponsorProgramId,newSponsorEvent}) => ({
+      query: ({sponsorProgramId, newSponsorEvent}) => ({
         url: `api-sponsor/sponsorProgram/${sponsorProgramId}/events`,
         method: 'POST',
         body: newSponsorEvent,
@@ -53,13 +53,13 @@ export const sponsorApi = createApi({
       }),
     }),
     deleteEventFromSponsorProgram: builder.mutation({
-      query: ({sponsorProgramId,eventId}) => ({
+      query: ({sponsorProgramId, eventId}) => ({
         url: `api-sponsor/program/${sponsorProgramId}/event/${eventId}`,
         method: 'DELETE',
       }),
     }),
     updateSponsorProgram: builder.mutation({
-      query: ({sponsorProgramId,updateSponsorProgram}) => ({
+      query: ({sponsorProgramId, updateSponsorProgram}) => ({
         url: `api-sponsor/program/${sponsorProgramId}`,
         method: 'PUT',
         body: updateSponsorProgram,
@@ -68,10 +68,22 @@ export const sponsorApi = createApi({
     getSponsor: builder.query<Sponsor[], void>({
       query: () => `api-sponsor`,
     }),
-
-  })
-
+    // New endpoint
+    getSponsorById: builder.query<Sponsor, string>({
+      query: (accountId) => `api-sponsor/sponsor/${accountId}`,
+    }),
+  }),
 });
 
-export const { useGetSponsorQuery, useUpdateSponsorProgramMutation ,useDeleteEventFromSponsorProgramMutation,useDeleteSponsorProgramMutation ,useAddEventToSponsorProgramMutation , useGetEventByAccountQuery ,useGetListSponsorPersonQuery,useCreateSponsorMutation, useGetListSponsorProgramQuery } = sponsorApi;
-
+export const {
+  useGetSponsorQuery,
+  useUpdateSponsorProgramMutation,
+  useDeleteEventFromSponsorProgramMutation,
+  useDeleteSponsorProgramMutation,
+  useAddEventToSponsorProgramMutation,
+  useGetEventByAccountQuery,
+  useGetListSponsorPersonQuery,
+  useCreateSponsorMutation,
+  useGetListSponsorProgramQuery,
+  useGetSponsorByIdQuery,  // Export the new hook
+} = sponsorApi;
