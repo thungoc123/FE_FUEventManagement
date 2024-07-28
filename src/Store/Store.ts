@@ -26,6 +26,7 @@ import { sponsorPercentApi } from '../Features/Event/sponsorPercent';
 import { sponsorProfitApi } from '../Features/Sponsor/sponsorProfit';
 import { eventAmountApi } from '../Features/Event/eventAmoutApi';
 import { checkingApi } from '../Features/CheckingStaff/checkingApi';
+import { surveyApi } from '../Features/Survey/survey';
 
 export const store = configureStore({
   reducer: {
@@ -50,6 +51,8 @@ export const store = configureStore({
     [visitorApi.reducerPath]: visitorApi.reducer,
     [checkingApi.reducerPath]: checkingApi.reducer,
     [adminApi.reducerPath]: adminApi.reducer,
+    [surveyApi.reducerPath]: surveyApi.reducer,
+
     headerDisplay: HeaderDisplayReducer,
   },
   middleware: (getDefaultMiddleware) =>
@@ -75,6 +78,7 @@ export const store = configureStore({
       eventAmountApi.middleware,
       sponsorPercentApi.middleware,
       checkingApi.middleware,
+      surveyApi.middleware,
     ),
 });
 

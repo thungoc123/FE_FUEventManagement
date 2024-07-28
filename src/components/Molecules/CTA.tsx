@@ -2,15 +2,14 @@ import React from 'react';
 import { Button } from "@relume_io/relume-ui";
 import type { ButtonProps as RelumeButtonProps } from "@relume_io/relume-ui";
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../app/store';
-import { useCreateOrderMutation } from '../../Features/Order/orderApi';
-import { useGetVisitorByAccountIdQuery } from '../../Features/Order/ticketApi';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useCreateOrderMutation } from '../../Features/Order/orderApi';
+import { useGetVisitorByAccountIdQuery } from '../../Features/Order/ticketApi';
 import { accountID } from '../../ulities/ProtectedRoute';
 
 type ExtendedButtonProps = RelumeButtonProps & {
+  title: string;
   url?: string;
   onClick?: () => void;  // Optional onClick handler for custom functionality
 };
@@ -32,14 +31,9 @@ export const Cta7 = (props: Cta7Props) => {
   } as Props;
 
   const navigate = useNavigate();
-  console.log("Event ID:", eventId);
-  console.log("Event Details:", eventDetails);
-  const accountId = accountID(sessionStorage.getItem('token')) // Get accountId from Redux store
-  const token = sessionStorage.getItem('token'); // Get token from Redux store
+  const accountId = accountID(sessionStorage.getItem('token'));
+  const token = sessionStorage.getItem('token');
 
-  console.log("Account ID:", accountId);
-  console.log("Token:", token);
-  // Fetch visitor data
   const { data: visitorData, error: visitorError, isLoading: isVisitorLoading } = useGetVisitorByAccountIdQuery(accountId, {
     skip: !accountId, // Skip the query if accountId is not available
   });
@@ -55,10 +49,8 @@ export const Cta7 = (props: Cta7Props) => {
       onClick();
     } else if (url) {
       if (url === "/order-history") {
-        // Handle "Add to Cart" button click
         await handleAddToCart();
       } else {
-        // Navigate for other URLs
         navigate(url, { state: { eventDetails, eventId } });
       }
     }
@@ -70,21 +62,18 @@ export const Cta7 = (props: Cta7Props) => {
       return;
     }
 
-    const visitorId = visitorData[0].visitorId; // Access the first element to get visitorId
-    console.log("Visitor ID:", visitorId);
-
+    const visitorId = visitorData[0].visitorId;
     const orderDetails = {
       order: {
-        visitorId: parseInt(visitorId, 10), // Ensure visitorId is a number
+        visitorId: parseInt(visitorId, 10),
         eventId: eventDetails.id,
-        statusCart: true, // Set statusCart to true for "Add to Cart"
+        statusCart: true,
         status: "PENDING",
       },
-      headers: { // Include token in headers for authentication
+      headers: {
         Authorization: `Bearer ${token}`
       }
     };
-    console.log("Order details:", orderDetails);
 
     try {
       const response = await createOrder(orderDetails).unwrap();

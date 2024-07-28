@@ -60,6 +60,7 @@ import { Program } from "./components/Pages/Dashboard/Sponsor/Program";
 import { Program2 } from "./components/Organisms/Sponsor/Program2";
 import { EOSignUp, Signup7 } from "./components/Organisms/EventOperator/EOSignUp";
 import { EventAnalytics } from "./components/Pages/Dashboard/EventOperator/EventAnalytics";
+import { ManageSurvey } from "./components/Pages/Dashboard/EventOperator/ManageSurvey";
 function App() {
   ReactModal.setAppElement("#root");
   const eventId = "1";
@@ -260,6 +261,7 @@ function App() {
               </RequireAuth >
             }
           />
+        {/* FEEDBACK ROUTE */}
           < Route
             path="/eventoperator/dashboard/feedback"
             element={
@@ -268,6 +270,47 @@ function App() {
               </RequireAuth >
             }
           />
+          < Route
+            path="/eventoperator/dashboard/FeedbackDetail/:id"
+            element={
+              < RequireAuth role="ROLE_EO" >
+                <ManageFeedbackDetail />
+              </RequireAuth >
+            }
+          />
+          < Route
+            path="/eventoperator/dashboard/FeedbackQuestionDetail/:id"
+            element={
+              < RequireAuth role="ROLE_EO" >
+                <QuestionManage />
+              </RequireAuth >
+            }
+          />
+          {/* SURVEY ROUTE */}
+          < Route
+            path="/eventoperator/dashboard/survey"
+            element={
+              < RequireAuth role="ROLE_EO" >
+                <ManageSurvey />
+              </RequireAuth >
+            }
+          />
+          < Route
+            path="/eventoperator/dashboard/FeedbackDetail/:id"
+            element={
+              < RequireAuth role="ROLE_EO" >
+                <ManageFeedbackDetail />
+              </RequireAuth >
+            }
+          />
+          < Route
+            path="/eventoperator/dashboard/FeedbackQuestionDetail/:id"
+            element={
+              < RequireAuth role="ROLE_EO" >
+                <QuestionManage />
+              </RequireAuth >
+            }
+            />
           < Route
             path="/eventoperator/dashboard/visitor/:id"
             element={
@@ -317,22 +360,7 @@ function App() {
               </RequireAuth>
             }
           /> */}
-          < Route
-            path="/eventoperator/dashboard/FeedbackDetail/:id"
-            element={
-              < RequireAuth role="ROLE_EO" >
-                <ManageFeedbackDetail />
-              </RequireAuth >
-            }
-          />
-          < Route
-            path="/eventoperator/dashboard/FeedbackQuestionDetail/:id"
-            element={
-              < RequireAuth role="ROLE_EO" >
-                <QuestionManage />
-              </RequireAuth >
-            }
-          />
+          
 
           {/* Visitor  */}
           <Route

@@ -42,7 +42,7 @@ export const Header3 = (props: Header3Props) => {
             <h1 className="mb-5 text-6xl font-bold md:mb-6 md:text-9xl lg:text-10xl">{heading}</h1>
             <p className="md:text-md">{description}</p>
             <div className="mt-6 flex gap-x-4 md:mt-8">
-            {tags?.[0] === "PUBLISH" && <Button className="buy" variant="secondary">Buy Ticket</Button>}
+            {tags?.[0] === "PUBLISHED" && <Button className="buy" variant="secondary">Buy Ticket</Button>}
             </div>
           </div>
           <Dialog>

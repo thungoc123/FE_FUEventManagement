@@ -13,7 +13,9 @@ function HomePage() {
     data: publishedEvents = [],
     error: publishedEventsError,
     isLoading: publishedEventsLoading,
-  } = useGetPublishedEventsQuery(); // Sử dụng hook để lấy dữ liệu
+  } = useGetPublishedEventsQuery();
+  
+  console.log(publishedEvents);
 
   // DATA OF HAPPENED EVENTS
   const {
@@ -21,47 +23,37 @@ function HomePage() {
     error: happenedEventsError,
     isLoading: happenedEventsLoading,
   } = useGetHappenedEventsQuery();
+  
+  console.log(happendEvents);
 
   if (publishedEventsLoading || happenedEventsLoading)
     return <div className="loader"></div>;
 
   if (publishedEventsError || happenedEventsError)
     return <div>Error loading events</div>;
-  // const eventImages = eventPosts.flatMap((event: Event) => event.eventImages);
-  const headerData = {
-    heading: "Event Of The Month",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    images: [],
-    eventImages: publishedEvents.flatMap((event: Event) => event.eventImages.map(img => ({
-      ...img,
-      name: event.name,
-      description: event.description
-    }))),
-  };
+
+  // Ensure that publishedEvents is an array and not null
+  const validPublishedEvents = Array.isArray(publishedEvents) ? publishedEvents : [];
+  const validHappendEvents = Array.isArray(happendEvents) ? happendEvents : [];
+
 
   return (
     <>
-      <Navbar2   EventPosts={publishedEvents}
-      />
-      {/* <Header9 {...headerData} />
-       */}
+      <Navbar2 EventPosts={validPublishedEvents} />
       <Header76 />
-      {/* RENDER THE UPCOMING EVENTS */}
       <EventBlog
         tagline="Discover"
         heading="Upcoming Events"
         description="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
         button={{ title: "View all", variant: "secondary" }}
-        EventPosts={publishedEvents}
+        EventPosts={validPublishedEvents}
       />
-
-      {/* RENDER THE HAPPENED EVENTS */}
       <Blog33
         tagline="Blog"
         heading="Event On the Line"
         description="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
         button={{ title: "View all", variant: "secondary" }}
-        EventPosts={happendEvents} // Truyền dữ liệu sự kiện vào Blog />
+        EventPosts={validHappendEvents}
       />
       <Logo1 />
       <Footer1 />

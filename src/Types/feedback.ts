@@ -1,5 +1,4 @@
 import React from "react";
-import { account } from "./account";
 
 export interface FeedbackTable {
     No: number ,

@@ -349,7 +349,7 @@ export const ApplicationShell4: React.FC<ParentComponentProps> = ({
 
 //   export const selectPublishedEvents = createSelector(
 //     selectEvents,
-//     (events) => events.filter(event => event.state === 'PUBLISHED')
+//     (events) => events.filter(event => event.state === 'password5ED')
 //   );
 
 // const unpublishEventCount =  events?.filter(event => event.stateEvent.name === "UNPUBLISH").length;
@@ -372,18 +372,6 @@ const NavigationAuth = (role: string) => {
               // number: 2,
               icon: <BiBarChartAlt2 className="size-6 shrink-0" />,
             },
-            // {
-            //   name: "Feedback Analytics",
-            //   url: "",
-            //   // number: 3,
-            //   icon: <BiPieChartAlt2 className="size-6 shrink-0" />,
-            // },
-            // {
-            //   name: "Attendance",
-            //   url: "",
-            //   // number: 3,
-            //   icon: <BiUserCheck className="size-6 shrink-0" />,
-            // },
           ],
         },
         {
@@ -397,17 +385,17 @@ const NavigationAuth = (role: string) => {
               // number: 0,
               icon: <BiCalendarEdit className="size-6 shrink-0" />,
             },
-            {
-              name: "Happened",
-              url: "/eventoperator/dashboard/PublishEvent",
-              // number: 0,
-              icon: <BiCalendarCheck className="size-6 shrink-0" />,
-            },
+              
           ],
         },
         {
           Name: "Feedback",
           Url: "/eventoperator/dashboard/feedback",
+          icon: <BiFile className="size-6 shrink-0" />,
+        },
+        {
+          Name: "Survey",
+          Url: "/eventoperator/dashboard/survey",
           icon: <BiFile className="size-6 shrink-0" />,
         },
         {
@@ -467,7 +455,7 @@ const NavigationAuth = (role: string) => {
         },
         {
           Name: "Survey",
-          Url: "",
+          Url: "/sponsor/dashboard/survey",
           icon: <BiFile className="size-6 shrink-0" />,
           State: [
             {

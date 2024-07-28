@@ -23,13 +23,11 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
   DialogFooter,
   Button,
   Input,
   Label,
 } from "@relume_io/relume-ui";
-import { Alert } from "../../Molecules/Alert";
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
@@ -39,7 +37,6 @@ import {
 } from "../../../Features/FeedbackManage/feedbackApi";
 import { addNotification } from "../../../Features/Utils/notificationsSlice";
 import { useDispatch } from "react-redux";
-import { ApplicationShell4 } from "./ApplicationShell";
 // type Props = {
 //   question: feedbackQuestionQuery[];
 // };
@@ -315,20 +312,7 @@ export const QuestionManage = () => {
                       onChange={handleInputChange}
                     />
                   </div>
-                  {/* <div className="grid items-center gap-2">
-                    <Label htmlFor="Question">Type Question</Label>
-
-                    <select
-                      name="typeQuestion"
-                      id=""
-                      value={formData.typeQuestion}
-                      className="block w-full px-4 py-2 pr-8 leading-tight bg-white border border-black py-2 shadow-sm"
-                      onChange={handleInputChange}
-                    >
-                      <option value="Text">Text</option>
-                      <option value="Multi-choice">Multi-choice</option>
-                    </select>
-                  </div> */}
+              
                 </div>
                 {/* {fill && <Alert text={fill} />} */}
                 <DialogFooter className="mt-4">
@@ -349,42 +333,4 @@ export const QuestionManage = () => {
   );
 };
 
-// const QuestionCreate = () => {
 
-//   // const
-
-//   // const addAnswer = (questionIndex: number) => {
-//   //   if (
-//   //     formData.feedbackQuestions[questionIndex].typeQuestion === "Multi-choice"
-//   //   ) {
-//   //     const newAnswer: feedbackAnswer = {
-//   //       answer: "",
-//   //       deletedAt: null,
-//   //       modifiedAt: null,
-//   //     };
-
-//   //     const updatedQuestions = formData.feedbackQuestions.map(
-//   //       (question, qIndex) =>
-//   //         qIndex === questionIndex
-//   //           ? {
-//   //               ...question,
-//   //               answers: question.answers
-//   //                 ? [...question.answers, newAnswer]
-//   //                 : [newAnswer],
-//   //             }
-//   //           : question
-//   //     );
-
-//   //     setFormData({
-//   //       ...formData,
-//   //       feedbackQuestions: updatedQuestions,
-//   //     });
-//   //   }
-//   // };
-
-//   return (
-//     <>
-
-//     </>
-//   )
-// }

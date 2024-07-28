@@ -24,7 +24,7 @@ export const EventProfit = () => {
   useEffect(() => {          
     if (Events) {
       const publishEventList = Events?.filter(    
-        (event) => event.stateEvent.name === "PUBLISH"
+        (event) => event.stateEvent.name === "PUBLISHED"
       ).map((event) => event.id);
 
       setTicketIdList(publishEventList);
@@ -62,7 +62,7 @@ export const EventProfit = () => {
   };
 
   const publishEvents =
-    Events?.filter((event) => event.stateEvent.name === "PUBLISH") || [];
+    Events?.filter((event) => event.stateEvent.name === "PUBLISHED") || [];
 
   const tableRows: EventTable[] = publishEvents.map((item, index) => ({
     No: index + 1,

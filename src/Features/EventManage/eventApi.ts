@@ -53,7 +53,6 @@ export const eventApi = createApi({
     }),
     getListEvent: builder.query<EOevent[], void>({
       query: () => 'api-events/account',
-      // keepUnusedDataFor: 3600,
       providesTags: (result) =>
         result
           ? [

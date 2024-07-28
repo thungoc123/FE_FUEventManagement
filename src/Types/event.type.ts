@@ -91,8 +91,7 @@ export interface SponsorProgram {
   state: string;
   profit: string; // Adjust the type according to your actual data structure
   events: string[];
-import React from "react"
-
+}
 export interface EventTable {
     No: number,
     Name: string, 
@@ -114,6 +113,8 @@ export interface Event {
     timestart: string,
     state: string,
     image: string
+    stateEvent: StateEvent,
+
 }
 
 

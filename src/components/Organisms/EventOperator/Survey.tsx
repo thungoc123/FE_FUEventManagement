@@ -1,16 +1,17 @@
 import { BiEdit, BiTrash } from "react-icons/bi";
 import { TableTemplate } from "../Dashboard/TableTemplate";
-import AddFeedbackButton from "../Dashboard/AddFeedbackButton";
 import { Button } from "@relume_io/relume-ui";
 import { useDeleteFeedbackMutation, useGetListFeedbackQuery } from "../../../Features/FeedbackManage/feedbackApi";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addNotification } from "../../../Features/Utils/notificationsSlice";
-import UpdateFeedback from "./updateFeedback";
 import { accountID } from "../../../ulities/ProtectedRoute";
-import { FeedbackTable } from "../../../Types/feedback";
+import { SurveyTable } from "../../../Types/survey";
+import UpdateSurvey from "./updateSurvey";
+import SurveyForm2 from "../../Pages/Dashboard/CreateSurvey";
+import { useListSurveyQuery } from "../../../Features/Survey/survey";
 
-export const Feedback = () => {
+export const Survey = () => {
   const tableHeaders = [
     "No",
     "Name",
@@ -20,20 +21,20 @@ export const Feedback = () => {
     "Edit",
     "Delete",
   ];
-  
+
   const accountId = accountID(sessionStorage.getItem("token"));
-  const { data: Feedbacks, isLoading, error } = useGetListFeedbackQuery(accountId);
+  const { data: Survey, isLoading, error } = useListSurveyQuery(accountId);
   const [deleteFeedback] = useDeleteFeedbackMutation();
   const dispatch = useDispatch();
   
-  const handleDeleteFeedback = async (e, fbid: number) => {
+  const handleDeleteSurvey = async (e, fbid: number) => {
     e.preventDefault();
     try {
       await deleteFeedback({ fbid }).unwrap();
       dispatch(
         addNotification({
           id: new Date().getTime(),
-          message: "Delete feedback successfully!",
+          message: "Delete Survey successfully!",
           type: "success",
           timestamp: Date.now(),
         })
@@ -42,39 +43,34 @@ export const Feedback = () => {
       dispatch(
         addNotification({
           id: new Date().getTime(),
-          message: "Delete feedback unsuccessfully!",
+          message: "Delete Survey unsuccessfully!",
           type: "error",
           timestamp: Date.now(),
         })
       );
-      console.error("Failed to delete the feedback:", err);
+      console.error("Failed to delete the survey:", err);
     }
   };
 
-  console.log("Fetched Feedbacks: ", Feedbacks);
-  
-  const tableRows: FeedbackTable[] = Feedbacks?.map((item, index) => ({
+  const tableRows: SurveyTable[] = Survey?.map((item, index) => ({
     No: index + 1,
     Name: item.title,
     Event: item.eventName,
     State: "PUBLISHED",
     Question: (
-      <Link to={`/eventoperator/dashboard/FeedbackDetail/${item.feedbackID}`}>
+      <Link to={`/eventoperator/dashboard/Survey/${item.surveyID}`}>
         <Button size="icon" variant="link">
           <BiEdit />
         </Button>
       </Link>
     ),
-    Edit: <UpdateFeedback feedback={item} />,
+    Edit: <UpdateSurvey feedback={item} />,
     Delete: (
-      <Button size="icon" variant="link" onClick={(e) => handleDeleteFeedback(e, item.feedbackID)}>
+      <Button size="icon" variant="link" onClick={(e) => handleDeleteSurvey(e, item.feedbackID)}>
         <BiTrash />
       </Button>
     ),
   }));
-
-  console.log("Table Rows: ", tableRows);
-  console.log("Is Feedbacks empty? ", Feedbacks?.length === 0);
 
   const tableHeaderClasses = [
     "w-[200px] pr-4 xxl:w-[25px]",
@@ -87,20 +83,20 @@ export const Feedback = () => {
     "w-[200px] pr-4 xxl:w-[50px]",
   ];
 
-  if (isLoading) return <div className="loader">Loading...</div>;
+  if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
 
   return (
     <>
-      {Feedbacks?.length === 0 ? (
-        "No feedback"
+      {Survey?.length === 0 ? (
+        "No Survey"
       ) : (
         <TableTemplate
-          headerTitle="Feedback"
-          headerDescription="List of Feedback"
+          headerTitle="Survey"
+          headerDescription="List of Surveys"
           buttons={[
             {
-              children: <AddFeedbackButton feedbacks={Feedbacks || []} />,
+              children: <SurveyForm2 />,
               size: "sm",
             },
           ]}

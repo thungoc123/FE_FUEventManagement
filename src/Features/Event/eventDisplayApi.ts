@@ -10,6 +10,10 @@ export const eventDisplayApi = createApi({
     getEventDetails: builder.query<EOevent, string>({
       query: (id) => `api-events/${id}`,
     }),
+    //UNPUBLISHED
+    getUnPublishedEvents: builder.query<Event[], void>({
+      query: () => `api-events/state/1`,
+    }),
     // PUBLISHED
     getPublishedEvents: builder.query<Event[], void>({
       query: () => `api-events/state/2`,
@@ -24,5 +28,6 @@ export const eventDisplayApi = createApi({
 export const {
   useGetEventDetailsQuery,
   useGetPublishedEventsQuery,
+  useGetUnPublishedEventsQuery,
   useGetHappenedEventsQuery,
 } = eventDisplayApi;

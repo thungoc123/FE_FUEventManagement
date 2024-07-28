@@ -26,7 +26,6 @@ export const VisitorSignUp = (props: Signup7Props) => {
     logo,
     logoLink,
     title,
-    description,
     signUpButton,
     image,
     logInText,

@@ -1,6 +1,6 @@
 import axios from "axios";
 const config = {
-    baseURL: "https://eventmanagementfu.azurewebsites.net/Auth/",
+    baseURL: "http://localhost:7979/",
     
 }
 

@@ -154,8 +154,8 @@ export const UpdateProgram = () => {
               <SelectValue placeholder="Select one..." />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="PUBLISH">PUBLISH</SelectItem>
-                <SelectItem value="UNPUBLISH">UNPUBLISH</SelectItem>
+                <SelectItem value="PUBLISHED">PUBLISH</SelectItem>
+                <SelectItem value="UNPUBLISHED">UNPUBLISH</SelectItem>
               </SelectContent>
           </Select>
         </div>

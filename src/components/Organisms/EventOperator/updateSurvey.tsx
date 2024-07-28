@@ -12,19 +12,23 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@relume_io/relume-ui";
-import { BiAddToQueue, BiTrash } from "react-icons/bi";
+import { BiAddToQueue, BiTrash, BiEdit } from "react-icons/bi";
 
-import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../Store/Store";
-import { useCreateFeedbackMutation } from "../../../Features/FeedbackManage/feedbackApi";
+import { useCreateFeedbackMutation, useUpdateFeedbackMutation } from "../../../Features/FeedbackManage/feedbackApi";
 import SearchFilterForm from "../../Atoms/SearchFilterForm";
 import { EOevent } from "../../../Types/eo.type";
 import { Alert } from "../../Molecules/Alert";
-import { feedbackAnswer, feedbackQuestions } from "../../../Types/feedback";
+import { feedbackAnswer, FeedbackQuery, feedbackQuestions } from "../../../Types/feedback";
 import { addNotification } from "../../../Features/Utils/notificationsSlice";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
-export const SurveyForm: React.FC = () => {
+type props = {
+     feedback: FeedbackQuery,
+}
+
+export const UpdateSurvey: React.FC<props> = (prop) => {
   const [isOpen, setIsOpen] = useState(true);
   const [isQuestion, setIsQuestion] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
@@ -34,25 +38,19 @@ export const SurveyForm: React.FC = () => {
   const [answers, setAnswers] = useState([
     { answer: "", deletedAt: null, modifiedAt: null },
   ]);
-  const [createFeedback , {isLoading}] = useCreateFeedbackMutation();
-  // const steps = [
-  //   { label: "Survey" },
-  //   { label: "Actor" },
-  //   { label: "Description" },
-  //   { label: "Finish" },
-  // ];
+  
+  console.log(prop.feedback);
+  const [updateFeedback , {isLoading}] = useUpdateFeedbackMutation();
+
+
 
   const [formData, setFormData] = useState({
-    title: "",
+    title: prop.feedback.title,
     deleteAt: null,
     modifiedAt: null,
     stateID: 2,
     feedbackQuestions: [
-      // {
-      //   typeQuestion: "",
-      //   textQuestion: "",
-      //   answers: [],
-      // },
+     
     ],
     eventid: 0,
   });
@@ -88,25 +86,21 @@ export const SurveyForm: React.FC = () => {
     e.preventDefault();
     console.log(JSON.stringify(formData));
     try {
-      await createFeedback({eventId:formData.eventid,newFeedback:formData}).unwrap();
+      await updateFeedback({id: prop.feedback.feedbackID,newFeedback:formData}).unwrap();
       dispatch(
         addNotification({
           id: new Date().getTime(), // Sử dụng timestamp làm ID
-          message: "Create feedback successfully!",
+          message: "Update feedback successfully!",
           type: "success",
           timestamp: Date.now(), // Thời gian hiện tại
         })
       );
-      // navigate("/eventoperator/dashboard/feedback");
-      // window.location.reload();
-
-
-      // alert('Event created successfully!');
+     
     } catch (err) {
       dispatch(
         addNotification({
           id: new Date().getTime(), // Sử dụng timestamp làm ID
-          message: "Create feedback unsuccessfully!",
+          message: "Update feedback unsuccessfully!",
           type: "error",
           timestamp: Date.now(), // Thời gian hiện tại
         })
@@ -143,7 +137,8 @@ export const SurveyForm: React.FC = () => {
     <>
       <Dialog onOpenChange={setIsOpen}>
         <DialogTrigger asChild>
-          <Button>Create Feedback</Button>
+          {/* <Button>Create Feedback</Button> */}
+          <BiEdit />
         </DialogTrigger>
         <DialogPortal>
           <DialogOverlay className="bg-black/25" />
@@ -168,6 +163,7 @@ export const SurveyForm: React.FC = () => {
                         id="surveyname"
                         name="title"
                         onChange={handleInputChange}
+                        value={formData.title}
                       />
                     </div>
                     <div className="grid items-center gap-2">
@@ -208,7 +204,8 @@ export const SurveyForm: React.FC = () => {
                       {isLoading ? "Creating" : "Get Started"}{" "}
                       
                     </Button>
-                   
+
+                
                 </div>
               </DialogFooter>
             </form>
@@ -219,4 +216,4 @@ export const SurveyForm: React.FC = () => {
   );
 };
 
-export default SurveyForm;
+export default UpdateSurvey;

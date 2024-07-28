@@ -53,7 +53,7 @@ export const CreateProgram = () => {
       location: location,
       thumbnail: fileAddress,
       description: editorData,
-      state: "UNPUBLISH",
+      state: "UNPUBLISHED",
       eventIds: [],
       accountId: accountId
   };

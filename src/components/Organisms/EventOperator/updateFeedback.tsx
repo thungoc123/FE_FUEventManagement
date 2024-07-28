@@ -15,18 +15,25 @@ import {
 import { BiAddToQueue, BiTrash, BiEdit } from "react-icons/bi";
 
 import { RootState } from "../../../Store/Store";
-import { useCreateFeedbackMutation, useUpdateFeedbackMutation } from "../../../Features/FeedbackManage/feedbackApi";
+import {
+  useCreateFeedbackMutation,
+  useUpdateFeedbackMutation,
+} from "../../../Features/FeedbackManage/feedbackApi";
 import SearchFilterForm from "../../Atoms/SearchFilterForm";
 import { EOevent } from "../../../Types/eo.type";
 import { Alert } from "../../Molecules/Alert";
-import { feedbackAnswer, FeedbackQuery, feedbackQuestions } from "../../../Types/feedback";
+import {
+  feedbackAnswer,
+  FeedbackQuery,
+  feedbackQuestions,
+} from "../../../Types/feedback";
 import { addNotification } from "../../../Features/Utils/notificationsSlice";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 type props = {
-     feedback: FeedbackQuery,
-}
+  feedback: FeedbackQuery;
+};
 
 export const UpdateFeedback: React.FC<props> = (prop) => {
   const [isOpen, setIsOpen] = useState(true);
@@ -38,29 +45,16 @@ export const UpdateFeedback: React.FC<props> = (prop) => {
   const [answers, setAnswers] = useState([
     { answer: "", deletedAt: null, modifiedAt: null },
   ]);
-  
-  console.log(prop.feedback);
-  const [updateFeedback , {isLoading}] = useUpdateFeedbackMutation();
 
-  // const steps = [
-  //   { label: "Survey" },
-  //   { label: "Actor" },
-  //   { label: "Description" },
-  //   { label: "Finish" },
-  // ];
+  console.log(prop.feedback);
+  const [updateFeedback, { isLoading }] = useUpdateFeedbackMutation();
 
   const [formData, setFormData] = useState({
     title: prop.feedback.title,
     deleteAt: null,
     modifiedAt: null,
     stateID: 2,
-    feedbackQuestions: [
-      // {
-      //   typeQuestion: "",
-      //   textQuestion: "",
-      //   answers: [],
-      // },
-    ],
+    feedbackQuestions: [],
     eventid: 0,
   });
   const [eventData, setEventData] = useState({
@@ -90,12 +84,15 @@ export const UpdateFeedback: React.FC<props> = (prop) => {
       eventName: eventName,
     });
   };
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(JSON.stringify(formData));
     try {
-      await updateFeedback({id: prop.feedback.feedbackID,newFeedback:formData}).unwrap();
+      await updateFeedback({
+        id: prop.feedback.feedbackID,
+        newFeedback: formData,
+      }).unwrap();
       dispatch(
         addNotification({
           id: new Date().getTime(), // Sử dụng timestamp làm ID
@@ -104,11 +101,6 @@ export const UpdateFeedback: React.FC<props> = (prop) => {
           timestamp: Date.now(), // Thời gian hiện tại
         })
       );
-      // navigate("/eventoperator/dashboard/feedback");
-      // window.location.reload();
-
-
-      // alert('Event created successfully!');
     } catch (err) {
       dispatch(
         addNotification({
@@ -121,9 +113,11 @@ export const UpdateFeedback: React.FC<props> = (prop) => {
       console.error("Failed to create the event:", err);
     }
   };
-  
+
   const Events = useSelector((state: RootState) => state.events.events);
-  const PublishEvent = Events.filter((event) => event.stateEvent.name !== "HAPPENED");
+  const PublishEvent = Events.filter(
+    (event) => event.stateEvent.name !== "HAPPENED"
+  );
 
   const [filteredEvents, setFilteredEvents] = useState<EOevent[]>(PublishEvent);
 
@@ -140,7 +134,11 @@ export const UpdateFeedback: React.FC<props> = (prop) => {
       }
     }
   };
-  const filteredEventList = filteredEvents.filter(event => event.name.toLowerCase().includes(eventData.eventName.toLowerCase()) && event.name !== eventData.eventName);
+  const filteredEventList = filteredEvents.filter(
+    (event) =>
+      event.name.toLowerCase().includes(eventData.eventName.toLowerCase()) &&
+      event.name !== eventData.eventName
+  );
 
   const handleSearchChange = (value: string) => {
     setEventData({ eventName: value });
@@ -168,69 +166,52 @@ export const UpdateFeedback: React.FC<props> = (prop) => {
             </>
             <form onSubmit={handleSubmit}>
               {/* {currentStep === 0 && ( */}
-                <>
-                  <div className="grid gap-4 py-4">
-                    <div className="grid items-center gap-2">
-                      <Label htmlFor="surveyname">Feedback title</Label>
-                      <Input
-                        id="surveyname"
-                        name="title"
-                        onChange={handleInputChange}
-                        value={formData.title}
-                      />
-                    </div>
-                    <div className="grid items-center gap-2">
-                      <Label htmlFor="Objectives">Event</Label>
-                      <SearchFilterForm
-                        onSubmit={handleSearchSubmit}
-                        searchValue={eventData.eventName}
-                        onSearchChange={handleSearchChange}
-                      />
-                      <ul>
-                        {eventData.eventName.length > 0 && (
-                          <ul>
-                            {filteredEventList.slice(0, 5).map((event) => (
-                              <li
-                                className="p-4 mb-4 text-sm text-yellow-800 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300"
-                                key={event.id}
-                                data-event-id={event.id}
-                                data-event-name={event.name}
-                                onClick={handleEventChange}
-                              >
-                                {event.name}
-                              </li>
-                            ))}
-                          </ul>
-                        )}
-                      </ul>
-                    </div>
+              <>
+                <div className="grid gap-4 py-4">
+                  <div className="grid items-center gap-2">
+                    <Label htmlFor="surveyname">Feedback title</Label>
+                    <Input
+                      id="surveyname"
+                      name="title"
+                      onChange={handleInputChange}
+                      value={formData.title}
+                    />
                   </div>
-                </>
-             
+                  <div className="grid items-center gap-2">
+                    <Label htmlFor="Objectives">Event</Label>
+                    <SearchFilterForm
+                      onSubmit={handleSearchSubmit}
+                      searchValue={eventData.eventName}
+                      onSearchChange={handleSearchChange}
+                    />
+                    <ul>
+                      {eventData.eventName.length > 0 && (
+                        <ul>
+                          {filteredEventList.slice(0, 5).map((event) => (
+                            <li
+                              className="p-4 mb-4 text-sm text-yellow-800 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300"
+                              key={event.id}
+                              data-event-id={event.id}
+                              data-event-name={event.name}
+                              onClick={handleEventChange}
+                            >
+                              {event.name}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </ul>
+                  </div>
+                </div>
+              </>
 
               {filteredEvents.length === 0 && <Alert text={fill} />}
 
               <DialogFooter className="mt-6">
                 <div className="mt-6 flex w-full flex gap-4 md:mt-8 justify-between">
-               
                   <Button type="submit">
-                      {isLoading ? "Creating" : "Get Started"}{" "}
-                      
-                    </Button>
-                                          {/* {isLoading ? "Creating" : "Get Started"}{" "} */}
-
-                  {/* {currentStep === steps.length - 1 ? (
-                    <Button type="submit">
-                      submit
-                    </Button>
-                  ) : (
-                    <span
-                      className="focus-visible:ring-border-primary inline-flex gap-3 items-center justify-center whitespace-nowrap ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-border-primary bg-background-alternative text-text-alternative px-6 py-3"
-                      onClick={nextStep}
-                    >
-                      Next
-                    </span>
-                  )} */}
+                    {isLoading ? "Creating" : "Get Started"}{" "}
+                  </Button>
                 </div>
               </DialogFooter>
             </form>

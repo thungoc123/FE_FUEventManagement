@@ -25,6 +25,9 @@ export const EO:React.FC<Props> = (prop) => {
               <p className="mt-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros.</p>
             </div>
             <div className="flex items-center justify-between gap-4 md:justify-normal">
+            <div className="flex items-center gap-4">
+                 <AddFeedbackButton />
+              </div>
               <div className="flex items-center gap-4">
                  <AddFeedbackButton />
               </div>

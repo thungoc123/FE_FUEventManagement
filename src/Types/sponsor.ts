@@ -21,8 +21,8 @@ export interface SponsorProgram {
     sponsorProgramEvents: SponsorProgramEvent[]
 }
 enum StateProgram {
-    PUBLISH,   // 0
-    UNPUBLISH  // 1
+    PUBLISHED,   // 0
+    UNPUBLISHED  // 1
   }
 
 export interface SponsorInformation {

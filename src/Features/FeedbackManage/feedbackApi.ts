@@ -31,6 +31,7 @@ export const feedbackApi = createApi({
       }),
       invalidatesTags: ['Feedbacks'],
     }),
+    
     deleteFeedback: builder.mutation({
       query: (feedbackId) => ({
         url: `api-feedbacks/${feedbackId}`,
@@ -41,9 +42,9 @@ export const feedbackApi = createApi({
 
     getListFeedback: builder.query<FeedbackQuery[], string>({
       query: (accountId) => `api-feedbacks/list-feedback-account/${accountId}`,
-      // keepUnusedDataFor: 3600,
       providesTags: (result, error, accountId) => [{ type: 'Feedbacks', id: accountId }],
     }),
+
     createQuestion: builder.mutation({
       query:({feedbackquestion,feedbackId}) => ({
         url: `feedbackQuestions/questions/${feedbackId}`,
@@ -79,6 +80,7 @@ export const feedbackApi = createApi({
         method: 'POST',
         body: visitorAnswer,
       }),
+      
     }),
    
   
