@@ -75,6 +75,7 @@ import {
 } from "../../../Features/EventManage/eventSelector";
 import { setEvents } from "../../../Features/EventManage/eventSlice";
 import { roleName } from "../../../ulities/ProtectedRoute";
+import CreateCallCapitalButton from "../../Pages/Dashboard/EventOperator/CreateCallCapital/CreateCallCapitalButton";
 
 type ParentComponentProps = {
   MainComponent?: React.ReactNode;
@@ -251,7 +252,8 @@ export const ApplicationShell4: React.FC<ParentComponentProps> = ({
             </DropdownMenu>
             <DropdownMenu>
               {isRole === "ROLE_SPONSOR" && <SurveyForm />}
-              {isRole === "ROLE_EO" && <CreateEvent />}
+              {isRole === "ROLE_EO" && <CreateEvent /> }
+              {isRole === "ROLE_EO" && <CreateCallCapitalButton />}
               {isRole === "ROLE_CHECKING_STAFF" && email}
               {isRole === "ROLE_ADMIN" && email}
               <DropdownMenuTrigger className="flex items-center p-0">

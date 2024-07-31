@@ -116,9 +116,6 @@ const CreateEvent = () => {
         "Ticket open sale time must be before ticket close sale time."
       );
     }
-    if (name === "price" && +value <= -1) {
-      newErrors.push("Price must be greater than 0.");
-    }
     if (
       (name === "eventName" || name === "description") &&
       value.trim() === ""
@@ -180,7 +177,7 @@ const CreateEvent = () => {
       !eventData.timeEnd &&
       !eventData.timeOpenSale &&
       !eventData.timeCloseSale &&
-      eventData.price >= 0
+      eventData.price == 0
     ) {
       setFill("Please fill all fields");
     } else {
@@ -194,7 +191,7 @@ const CreateEvent = () => {
             timestamp: Date.now(),
           })
         );
-        navigate("/eventoperator/dashboard/UnpublishEvent");
+        navigate("/eventoperator/dashboard/CreateCallCapital");
       } catch (err) {
         dispatch(
           addNotification({

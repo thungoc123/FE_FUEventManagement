@@ -192,7 +192,7 @@ const DetailCapitalCallOrganisms: React.FC = () => {
         )}
         <TransactionTerms isOpen={isModalOpen} onClose={handleModalClose} onTermsAccepted={handleTermsAccepted} />
 
-        <Payment isOpen={isPaymentModalOpen} onClose={handlePaymentModalClose} />
+        <Payment isOpen={isPaymentModalOpen} onClose={handlePaymentModalClose} eventId={eventId!} />
       </div>
     </>
   );
