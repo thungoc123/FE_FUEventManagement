@@ -67,6 +67,7 @@ import { ManageSurvey } from "./components/Pages/Dashboard/EventOperator/ManageS
 import PaymentSuccessfullPage2 from "./components/Pages/Dashboard/Sponsor/PaymentSuccessfullPage";
 import CallCapital from "./components/Pages/Dashboard/Sponsor/CallCapital/CallCapital";
 import DetailCallCapital from "./components/Pages/Dashboard/Sponsor/CallCapital/DetailCallCapital";
+import CreateCallCapital from "./components/Organisms/CreateCallCapitalOrganisms/CreateCallCapitalOrganisms";
 function App() {
   ReactModal.setAppElement("#root");
   const eventId = "1";
@@ -276,6 +277,14 @@ function App() {
             }
           />
           {/* FEEDBACK ROUTE */}
+          <Route
+            path="/eventoperator/dashboard/CreateCallCapital"
+            element={
+              <RequireAuth role="ROLE_EO">
+                <CreateCallCapital />
+              </RequireAuth>
+            }
+          />
           <Route
             path="/eventoperator/dashboard/feedback"
             element={

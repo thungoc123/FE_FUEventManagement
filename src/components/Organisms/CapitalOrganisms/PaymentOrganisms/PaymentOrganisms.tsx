@@ -7,16 +7,20 @@ import Modal from "../../../Atoms/Modal";
 
 const email = window.localStorage.getItem("email");
 
+interface PaymentProps {
+  isOpen: boolean;
+  onClose: () => void;
+  eventId: string;
+}
+
 const Payment = ({
   isOpen,
   onClose,
-}: {
-  isOpen: boolean;
-  onClose: () => void;
-}) => {
+  eventId,
+}: PaymentProps) => {
   const [amount, setAmount] = useState<string>("");
   const [trigger, { isLoading }] = useLazySendPaymentInfoQuery();
-
+ 
   const handleAction = async () => {
     if (!amount || isNaN(Number(amount))) {
       toast.error("Please enter a valid amount.");
@@ -24,7 +28,7 @@ const Payment = ({
     }
 
     try {
-      const result = await trigger({ amount, email }).unwrap();
+      const result = await trigger({ amount, email, eventId }).unwrap();
       // Handle the response data from the backend
       if (result.status === "ok") {
         toast.success(result.message || "Payment initiated successfully!");
@@ -48,7 +52,7 @@ const Payment = ({
         <div className="w-2/3">
           <div className="mb-6">
             <h2 className="text-md font-semibold mb-2 text-center">
-              To finished the capital please help us with your payment
+              To finish the capital, please help us with your payment
             </h2>
             <div className="bg-gray-100 p-4 rounded-lg shadow-inner">
               <div className="mb-2">
@@ -62,7 +66,7 @@ const Payment = ({
                 <input
                   className="text-gray-700"
                   type="text"
-                  placeholder="Enter your Money quantity for capital"
+                  placeholder="Enter your money quantity for capital"
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
                 />
