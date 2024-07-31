@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { SurveyQuestion, SurveyQuery, Survey, SurveyQuestionQuery } from '../types/surveyTypes'; // Đảm bảo import đúng các type
+import UpdateSurvey from '../../components/Organisms/EventOperator/updateSurvey';
 
 const baseQuery = fetchBaseQuery({
     baseUrl: 'http://localhost:7979/',
@@ -20,6 +21,7 @@ export const surveyApi = createApi({
     tagTypes: ['Surveys', 'SurveyQuestions'], // Định nghĩa tagTypes
 
     endpoints: (builder) => ({
+        //CREATE SURVEY 
         createSurvey: builder.mutation({
             query: ({ eventId, newSurvey }) => ({
                 url: `api-surveys/survey/${eventId}`,
@@ -28,6 +30,7 @@ export const surveyApi = createApi({
             }),
             invalidatesTags: ['Surveys'],
         }),
+                //CREATE SURVEY QUESTION
         createSurveyQuestion: builder.mutation({
             query: (newSurveyQuestion) => ({
                 url: `api-surveyQuestion/surveyquestion/1`,
@@ -36,23 +39,32 @@ export const surveyApi = createApi({
             }),
             invalidatesTags: ['SurveyQuestions'],
         }),
+        //GET LIST SURVEY QUESTION
         getSurveyQuestions: builder.query<SurveyQuestionQuery[], number>({
-            query: (surveyId) => `api-surveyQuestion/questions/${surveyId}`,
+            query: (surveyId) => `api-surveyQuestion/${surveyId}/questions`,
             providesTags: (result, error, surveyId) => [{ type: 'SurveyQuestions', id: surveyId }],
         }),
-        getSurveys: builder.query<SurveyQuery[], void>({
-            query: () => 'api-surveys',
-            providesTags: (result) =>
-                result
-                    ? result.map(({ surveyID }) => ({ type: 'Surveys', id: surveyID }))
-                    : ['Surveys'],
-        }),
-        listSurvey: builder.query<Survey[], string>({
+        // GET LIST SURVEY
+        listSurvey: builder.query<SurveyQuery[], string>({
             query: (accountId) => `api-surveys/list-survey/${accountId}`,
-            providesTags: (result, error, accountId) => 
-                result ? result.map(({ id }) => ({ type: 'Surveys', id })) : ['Surveys'],
+            providesTags: (result, error, accountId) => [{ type: 'Surveys', id: accountId }],
+        }),
+        // UPDATE SURVEY
+        updateSurvey: builder.mutation({
+            query: ({ id, survey }) => ({
+                url: `api-surveys/update/${id}`,
+                method: 'PUT',
+                body: survey,
+            }),
+            invalidatesTags: (result, error, { id }) => [{ type: 'Surveys', id }],
         }),
     }),
 });
 
-export const { useCreateSurveyMutation, useCreateSurveyQuestionMutation, useGetSurveyQuestionsQuery, useGetSurveysQuery, useListSurveyQuery } = surveyApi;
+export const { 
+    useCreateSurveyMutation, 
+    useCreateSurveyQuestionMutation, 
+    useGetSurveyQuestionsQuery, 
+    useListSurveyQuery,
+    useUpdateSurveyMutation  // Export the new hook
+} = surveyApi;

@@ -319,21 +319,14 @@ function App() {
             }
           />
           <Route
-            path="/eventoperator/dashboard/FeedbackDetail/:id"
+            path="/eventoperator/dashboard/Survey/:id"
             element={
               <RequireAuth role="ROLE_EO">
                 <ManageFeedbackDetail />
               </RequireAuth>
             }
           />
-          <Route
-            path="/eventoperator/dashboard/FeedbackQuestionDetail/:id"
-            element={
-              <RequireAuth role="ROLE_EO">
-                <QuestionManage />
-              </RequireAuth>
-            }
-          />
+         
           <Route
             path="/eventoperator/dashboard/visitor/:id"
             element={

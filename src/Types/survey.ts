@@ -1,5 +1,3 @@
-import React from "react";
-
 // This interface defines the structure of each survey question
 export interface SurveyQuestion {
     No: number,            // The question number
@@ -11,34 +9,23 @@ export interface SurveyQuestion {
 
 // This interface defines the structure of the survey table
 export interface SurveyTable {
-    No: number,            // The survey number
-    Survey: string,        // The survey name
-    State: string,         // The state of the survey
-    Question: React.ReactNode,  // The question element (could be a link to the list of questions)
-    Edit: React.ReactNode,    // The edit button or element
-    Delete: React.ReactNode   // The delete button or element
-}
-
-// This interface defines the structure of a complete survey
-export interface Survey {
-    title: string,          // The survey title
-    deleteAt: null,         // The deletion timestamp, if any
-    modifiedAt: null,       // The last modification timestamp, if any
-    state: number,          // The state of the survey (e.g., draft, published)
-    surveyQuestions: SurveyQuestion[],  // The list of questions in the survey
-    eventid: number         // The ID of the event associated with the survey
-}
-
+    No: number;
+    Name: string;
+    Event: string; // Đảm bảo rằng eventName được khai báo ở đây
+    State: string;
+    Question: React.ReactNode;
+    Edit: React.ReactNode;
+    Delete: React.ReactNode;
+  }
 // This interface defines the structure of a survey query
 export interface SurveyQuery {
-    surveyID: number,       // The survey ID
-    title: string,          // The survey title
-    eventName?: string,     // The event name, if available
-    deleteAt: null,         // The deletion timestamp, if any
-    modifiedAt: null,       // The last modification timestamp, if any
-    state: State | null,    // The state of the survey, or null if not set
-}
-
+    surveyId: number;
+    title: string;
+    eventName?: string; // Đảm bảo rằng eventName được khai báo ở đây
+    deleteAt: null;
+    modifiedAt: null;
+    state: State | null;
+  }
 // This interface defines the state structure
 export interface State {
     stateId: number,        // The state ID

@@ -1,5 +1,5 @@
-import React, { MouseEventHandler, useEffect, useState } from "react";
-import { Button, Checkbox, Input, Label, Textarea } from "@relume_io/relume-ui";
+import React, {  useState } from "react";
+import { Button,  Input, Label } from "@relume_io/relume-ui";
 // import EventTag from "../Atoms/EventTag";
 import {
   Dialog,
@@ -12,20 +12,20 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@relume_io/relume-ui";
-import { BiAddToQueue, BiTrash, BiEdit } from "react-icons/bi";
+import {  BiEdit } from "react-icons/bi";
 
 import { RootState } from "../../../Store/Store";
-import { useCreateFeedbackMutation, useUpdateFeedbackMutation } from "../../../Features/FeedbackManage/feedbackApi";
 import SearchFilterForm from "../../Atoms/SearchFilterForm";
 import { EOevent } from "../../../Types/eo.type";
 import { Alert } from "../../Molecules/Alert";
-import { feedbackAnswer, FeedbackQuery, feedbackQuestions } from "../../../Types/feedback";
 import { addNotification } from "../../../Features/Utils/notificationsSlice";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { useUpdateSurveyMutation } from "../../../Features/Survey/survey";
+import { SurveyQuery } from "../../../Types/survey";
 
 type props = {
-     feedback: FeedbackQuery,
+     survey:SurveyQuery,
 }
 
 export const UpdateSurvey: React.FC<props> = (prop) => {
@@ -39,17 +39,17 @@ export const UpdateSurvey: React.FC<props> = (prop) => {
     { answer: "", deletedAt: null, modifiedAt: null },
   ]);
   
-  console.log(prop.feedback);
-  const [updateFeedback , {isLoading}] = useUpdateFeedbackMutation();
+  console.log(prop.survey);
+  const [updateSurvey , {isLoading}] = useUpdateSurveyMutation();
 
 
 
   const [formData, setFormData] = useState({
-    title: prop.feedback.title,
+    title: prop.survey.title,
     deleteAt: null,
     modifiedAt: null,
     stateID: 2,
-    feedbackQuestions: [
+    updateSurveyQuestions: [
      
     ],
     eventid: 0,
@@ -86,11 +86,11 @@ export const UpdateSurvey: React.FC<props> = (prop) => {
     e.preventDefault();
     console.log(JSON.stringify(formData));
     try {
-      await updateFeedback({id: prop.feedback.feedbackID,newFeedback:formData}).unwrap();
+      await updateSurvey({id: prop.survey.surveyID,newSurvey:formData}).unwrap();
       dispatch(
         addNotification({
           id: new Date().getTime(), // Sử dụng timestamp làm ID
-          message: "Update feedback successfully!",
+          message: "Update Seedback successfully!",
           type: "success",
           timestamp: Date.now(), // Thời gian hiện tại
         })
@@ -146,10 +146,10 @@ export const UpdateSurvey: React.FC<props> = (prop) => {
             <>
               <DialogHeader>
                 <DialogTitle className="mb-2">
-                  Let's start with your Feedback
+                  Let's start with your Survey
                 </DialogTitle>
                 <DialogDescription>
-                  Create a feedback to get idea from customer
+                  Create a survey to get idea from customer
                 </DialogDescription>
               </DialogHeader>
             </>
@@ -158,7 +158,7 @@ export const UpdateSurvey: React.FC<props> = (prop) => {
                 <>
                   <div className="grid gap-4 py-4">
                     <div className="grid items-center gap-2">
-                      <Label htmlFor="surveyname">Feedback title</Label>
+                      <Label htmlFor="surveyname">Survey title</Label>
                       <Input
                         id="surveyname"
                         name="title"

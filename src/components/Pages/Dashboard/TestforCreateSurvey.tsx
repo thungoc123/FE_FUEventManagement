@@ -35,12 +35,7 @@ export const SurveyForm: React.FC = () => {
     { answer: "", deletedAt: null, modifiedAt: null },
   ]);
   const [createFeedback, { isLoading }] = useCreateFeedbackMutation();
-  // const steps = [
-  //   { label: "Survey" },
-  //   { label: "Actor" },
-  //   { label: "Description" },
-  //   { label: "Finish" },
-  // ];
+
 
   const [formData, setFormData] = useState({
     title: "",
@@ -48,11 +43,7 @@ export const SurveyForm: React.FC = () => {
     modifiedAt: null,
     stateID: 2,
     feedbackQuestions: [
-      // {
-      //   typeQuestion: "",
-      //   textQuestion: "",
-      //   answers: [],
-      // },
+   
     ],
     eventid: 0,
   });

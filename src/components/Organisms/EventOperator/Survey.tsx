@@ -1,3 +1,4 @@
+import React from "react";
 import { BiEdit, BiTrash } from "react-icons/bi";
 import { TableTemplate } from "../Dashboard/TableTemplate";
 import { Button } from "@relume_io/relume-ui";
@@ -6,10 +7,10 @@ import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addNotification } from "../../../Features/Utils/notificationsSlice";
 import { accountID } from "../../../ulities/ProtectedRoute";
-import { SurveyTable } from "../../../Types/survey";
-import UpdateSurvey from "./updateSurvey";
+import { SurveyTable, SurveyQuery } from "../../../Types/survey";
 import SurveyForm2 from "../../Pages/Dashboard/CreateSurvey";
 import { useListSurveyQuery } from "../../../Features/Survey/survey";
+import UpdateSurvey from "./updateSurvey";
 
 export const Survey = () => {
   const tableHeaders = [
@@ -23,14 +24,14 @@ export const Survey = () => {
   ];
 
   const accountId = accountID(sessionStorage.getItem("token"));
-  const { data: Survey, isLoading, error } = useListSurveyQuery(accountId);
+  const { data: surveys, isLoading, error } = useListSurveyQuery(accountId);
   const [deleteFeedback] = useDeleteFeedbackMutation();
   const dispatch = useDispatch();
-  
-  const handleDeleteSurvey = async (e, fbid: number) => {
+
+  const handleDeleteSurvey = async (e, surveyId: number) => {
     e.preventDefault();
     try {
-      await deleteFeedback({ fbid }).unwrap();
+      await deleteFeedback({ surveyId }).unwrap();
       dispatch(
         addNotification({
           id: new Date().getTime(),
@@ -52,25 +53,29 @@ export const Survey = () => {
     }
   };
 
-  const tableRows: SurveyTable[] = Survey?.map((item, index) => ({
+  console.log("Fetched Surveys: ", surveys); // Kiểm tra dữ liệu API
+
+  const tableRows: SurveyTable[] = surveys?.map((item: SurveyQuery, index: number) => ({
     No: index + 1,
     Name: item.title,
-    Event: item.eventName,
+    Event: item.eventName || "Unknown Event", // Sử dụng eventName từ API
     State: "PUBLISHED",
     Question: (
-      <Link to={`/eventoperator/dashboard/Survey/${item.surveyID}`}>
+      <Link to={`/eventoperator/dashboard/Survey/${item.surveyId}`}>
         <Button size="icon" variant="link">
           <BiEdit />
         </Button>
       </Link>
     ),
-    Edit: <UpdateSurvey feedback={item} />,
+    Edit: <UpdateSurvey survey={item} />,
     Delete: (
-      <Button size="icon" variant="link" onClick={(e) => handleDeleteSurvey(e, item.feedbackID)}>
+      <Button size="icon" variant="link" onClick={(e) => handleDeleteSurvey(e, item.surveyID)}>
         <BiTrash />
       </Button>
     ),
   }));
+
+  console.log("Table Rows: ", tableRows); // Kiểm tra dữ liệu tableRows
 
   const tableHeaderClasses = [
     "w-[200px] pr-4 xxl:w-[25px]",
@@ -88,7 +93,7 @@ export const Survey = () => {
 
   return (
     <>
-      {Survey?.length === 0 ? (
+      {surveys?.length === 0 ? (
         "No Survey"
       ) : (
         <TableTemplate

@@ -28,8 +28,8 @@ const SurveyForm2: React.FC = () => {
     deleteAt: null,
     modifiedAt: null,
     stateID: 2,
-    feedbackQuestions: [],
-    eventid: 0,
+    surveyQuestions: [],
+    eventid: null
   });
   const [eventData, setEventData] = useState({
     eventName: "",
@@ -59,31 +59,40 @@ const SurveyForm2: React.FC = () => {
     });
   };
 
-    const handleSubmit = async (e) => {
-      e.preventDefault();
-      console.log("Submitting form data:", JSON.stringify(formData));
-      try {
-          await createSurvey({ eventId: formData.eventid, newSurvey: formData.title}).unwrap();
-        dispatch(
-          addNotification({
-            id: new Date().getTime(),
-            message: "Create survey successfully!",
-            type: "success",
-            timestamp: Date.now(),
-          })
-        );
-      } catch (err) {
-        dispatch(
-          addNotification({
-            id: new Date().getTime(),
-            message: "Create survey unsuccessfully!",
-            type: "error",
-            timestamp: Date.now(),
-          })
-        );
-        console.error("Failed to create the event:", err);
-      }
-    };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log("Submitting form data:", JSON.stringify(formData));
+    try {
+      await createSurvey({
+        eventId: formData.eventid,
+        newSurvey: {
+          title: formData.title,
+          deleteAt: formData.deleteAt,
+          modifiedAt: formData.modifiedAt,
+          stateID: formData.stateID,
+          surveyQuestions: formData.surveyQuestions,
+        },
+      }).unwrap();
+      dispatch(
+        addNotification({
+          id: new Date().getTime(),
+          message: "Create survey successfully!",
+          type: "success",
+          timestamp: Date.now(),
+        })
+      );
+    } catch (err) {
+      dispatch(
+        addNotification({
+          id: new Date().getTime(),
+          message: "Create survey unsuccessfully!",
+          type: "error",
+          timestamp: Date.now(),
+        })
+      );
+      console.error("Failed to create the event:", err);
+    }
+  };
 
   const Events = useSelector((state: RootState) => state.events.events);
   const PublishEvent = Events.filter((event) => event.stateEvent.name !== "HAPPENED");
@@ -129,7 +138,7 @@ const SurveyForm2: React.FC = () => {
             <form onSubmit={handleSubmit}>
               <div className="grid gap-4 py-4">
                 <div className="grid items-center gap-2">
-                  <Label htmlFor="surveyname">Feedback title</Label>
+                  <Label htmlFor="surveyname">Survey title</Label>
                   <Input id="surveyname" name="title" onChange={handleInputChange} />
                 </div>
                 <div className="grid items-center gap-2">
