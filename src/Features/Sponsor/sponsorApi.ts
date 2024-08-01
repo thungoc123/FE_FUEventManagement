@@ -8,7 +8,7 @@ const baseQuery = fetchBaseQuery({
   baseUrl: 'http://localhost:7979/',
   prepareHeaders: (headers, { getState }) => {
     // Lấy token từ sessionStorage
-    let token = sessionStorage.getItem('token')
+    let token = sessionStorage.getItem('token');
     if (token) {
       // Thêm Authorization header với giá trị token
       headers.set('Authorization', `Bearer ${token}`);
@@ -72,7 +72,7 @@ export const sponsorApi = createApi({
       query: (accountId) => `api-sponsor/sponsor/${accountId}`,
     }),
     // New endpoint for getting contributed capital percentage
-    getContributedCapitalPercentage: builder.query<{ percentage: number }, string>({
+    getContributedCapitalPercentage: builder.query<{ fundraising: number; percentage: number }, string>({
       query: (eventId) => `api-sponsor/event/${eventId}/contributed-capital-percentage`,
     }),
   }),

@@ -119,6 +119,14 @@ export const eventApi = createApi({
       }),
       invalidatesTags: (result, error, { eventId }) => [{ type: 'Event', id: eventId }],
     }),
+    addSponsorWithProfitPercentage: builder.mutation({
+      query: ({ eventId, profitPercentage }) => ({
+        url: `api-events/${eventId}/add-sponsor`,
+        method: 'POST',
+        body: { eventId, profitPercentage },
+      }),
+      invalidatesTags: (result, error, { eventId }) => [{ type: 'Event', id: eventId }],
+    }),
     deleteSponsor: builder.mutation({
       query: ({ eventId, sponsorId }) => ({
         url: `api-events/${eventId}/sponsor/${sponsorId}`,
@@ -132,13 +140,14 @@ export const eventApi = createApi({
 export const {
   useDeleteSponsorMutation,
   useAddSponsorToEventMutation,
+  useAddSponsorWithProfitPercentageMutation, // Export the new hook
   usePublishEventMutation,
   useDeleteEventMutation,
   useDeleteImageMutation,
   useCreateEventMutation,
   useGetListEventQuery,
-  useGetAllEventsQuery, // Export the new hook
-  useGetEventDetailsQuery, // Export the new hook for event details
+  useGetAllEventsQuery,
+  useGetEventDetailsQuery,
   useAddScheduleMutation,
   useAddImageMutation,
   useAddCheckingStaffMutation,

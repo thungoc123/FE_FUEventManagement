@@ -6,6 +6,7 @@ import NavbarZZ from "../../../Molecules/NavbarZZ";
 import Payment from "../PaymentOrganisms/PaymentOrganisms";
 import TransactionTerms from "../TransactionTerms/TransactionTerms";
 import "react-toastify/dist/ReactToastify.css";
+import { accountID } from '../../../../ulities/ProtectedRoute';
 
 const formatDateTime = (dateTimeString: string): string => {
   const date = new Date(dateTimeString);
@@ -21,11 +22,12 @@ const formatDateTime = (dateTimeString: string): string => {
 const DetailCapitalCallOrganisms: React.FC = () => {
   const { eventId } = useParams<{ eventId: string }>();
   const { data: event, error, isLoading } = useGetEventDetailsQuery(eventId!);
-  const { data: capitalPercentage, error: capitalError, isLoading: isCapitalLoading } = useGetContributedCapitalPercentageQuery(eventId!);
+  const { data: capitalData, error: capitalError, isLoading: isCapitalLoading } = useGetContributedCapitalPercentageQuery(eventId!);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [hasReadTerms, setHasReadTerms] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  const accountId = accountID(sessionStorage.getItem('token') || "");
 
   if (isLoading || isCapitalLoading) {
     return <div>Loading...</div>;
@@ -72,8 +74,8 @@ const DetailCapitalCallOrganisms: React.FC = () => {
       }
       return "Error loading capital percentage.";
     }
-    if (capitalPercentage && capitalPercentage.percentage !== undefined) {
-      return `${capitalPercentage.percentage}%`;
+    if (capitalData && capitalData.percentage !== undefined) {
+      return `${Math.floor(capitalData?.percentage ?? 0)}%`;
     }
     return "This event has no capital percentage";
   };
@@ -162,11 +164,16 @@ const DetailCapitalCallOrganisms: React.FC = () => {
                 position: "absolute",
                 top: 0,
                 left: 0,
-                width: `${capitalPercentage?.percentage ?? 0}%`,
+                width: `${Math.floor(capitalData?.percentage ?? 0)}%`,
                 borderRadius: "20px 0 0 20px",
               }}
             ></div>
           </div>
+          {capitalData && (
+            <div>
+              <h2>Total Fundraising: {capitalData.fundraising} VND</h2>
+            </div>
+          )}
         </div>
         <div
           style={{
@@ -212,6 +219,9 @@ const DetailCapitalCallOrganisms: React.FC = () => {
           isOpen={isPaymentModalOpen}
           onClose={handlePaymentModalClose}
           eventId={eventId!}
+          accountId={accountId}
+          fundraising={capitalData?.fundraising ?? 0} // Pass fundraising as a prop
+          percentage={Math.floor(capitalData?.percentage ?? 0)} // Pass percentage as a prop
         />
       </div>
     </>
