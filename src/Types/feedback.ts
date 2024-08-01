@@ -60,7 +60,7 @@ export interface feedbackQuestions {
 
 export interface feedbackAnswer {
           answer: string,
-          deletedAt: null,
+          deleteAt: null,
           modifiedAt: null,
           question_id?: 0
 }
@@ -69,7 +69,7 @@ export interface feedbackQuestionQuery {
     feedbackQuestionID: number,
     typeQuestion: string,
     textQuestion: string,
-    deletedAt: null,
+    deleteAt: null,
     modifiedAt: null,
     answers: null,
     feedbackID: number

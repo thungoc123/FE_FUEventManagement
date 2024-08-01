@@ -185,6 +185,12 @@ export const Navbar2 = (props: Navbar2Props) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log(email, password);
+
+    if (/\s/.test(password)) {
+      toast.error("Mật khẩu không được có khoảng cách");
+      return;
+    }
+
     try {
       const result = await login({ email, password }).unwrap();
       dispatch(setToken(result.data));

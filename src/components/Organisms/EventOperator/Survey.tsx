@@ -53,12 +53,12 @@ export const Survey = () => {
     }
   };
 
-  console.log("Fetched Surveys: ", surveys); // Kiểm tra dữ liệu API
+  console.log("Fetched Surveys: ", surveys); 
 
   const tableRows: SurveyTable[] = surveys?.map((item: SurveyQuery, index: number) => ({
     No: index + 1,
     Name: item.title,
-    Event: item.eventName || "Unknown Event", // Sử dụng eventName từ API
+    Event: item.eventName || "Unknown Event", 
     State: "PUBLISHED",
     Question: (
       <Link to={`/eventoperator/dashboard/Survey/${item.surveyId}`}>

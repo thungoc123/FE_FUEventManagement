@@ -9,7 +9,10 @@ export const sponsor_programApi = createApi({
     getSponsorProgram: builder.query<SponsorProgram[], void>({
       query: () => `api-sponsor/program`,
     }),
+    getBill: builder.query<any, { eventId: number; sponsorId: number }>({
+      query: ({ eventId, sponsorId }) => `api-sponsor/bill/event/${eventId}/sponsor/${sponsorId}`,
+    }),
   }),
 });
 
-export const { useGetSponsorProgramQuery } = sponsor_programApi;
+export const { useGetSponsorProgramQuery, useGetBillQuery } = sponsor_programApi;

@@ -67,9 +67,10 @@ const CreateEvent = () => {
     const currentTime = DateTime.now();
     const inputTime = DateTime.fromISO(value);
 
+    // Chỉ cảnh báo cho các thời gian nhỏ hơn thời gian hiện tại
     if (
       (name === "timeStart" || name === "timeEnd" || name === "timeOpenSale" || name === "timeCloseSale") &&
-      inputTime < currentTime
+      inputTime < currentTime && name !== "timeOpenSale"
     ) {
       setSubmitError(["Thời gian được chọn không được ở quá khứ."]);
       return;

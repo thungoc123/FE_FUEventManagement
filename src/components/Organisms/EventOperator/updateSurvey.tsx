@@ -36,7 +36,7 @@ export const UpdateSurvey: React.FC<props> = (prop) => {
   const [number, setNumber] = useState(1);
   const [fill, setFill] = useState("");
   const [answers, setAnswers] = useState([
-    { answer: "", deletedAt: null, modifiedAt: null },
+    { answer: "", deleteAt: null, modifiedAt: null },
   ]);
   
   console.log(prop.survey);

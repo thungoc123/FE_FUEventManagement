@@ -6,6 +6,7 @@ import { AnswerManage } from '../../../Organisms/Dashboard/Answer'
 import { useParams } from 'react-router-dom'
 import { useGetListFeedbackQuestionQuery } from '../../../../Features/FeedbackManage/feedbackApi'
 import { useGetSurveyQuestionsQuery } from '../../../../Features/Survey/survey'
+import { SurveyQuestionManage } from '../../../Organisms/Dashboard/SurveyQuestion'
 
 export const ManageSurveyDetail = () => {
   const { id } = useParams();
@@ -24,7 +25,7 @@ export const ManageSurveyDetail = () => {
         </TabsList>
        
         <TabsContent className="mt-2" value="Question">
-         <QuestionManage />
+         <SurveyQuestionManage />
         </TabsContent>
 
       </Tabs>

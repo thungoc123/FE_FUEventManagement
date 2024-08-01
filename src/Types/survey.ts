@@ -1,4 +1,3 @@
-// This interface defines the structure of each survey question
 export interface SurveyQuestion {
     No: number,            // The question number
     Question: string,      // The question text
@@ -36,14 +35,14 @@ export interface State {
 // This interface defines the structure of survey questions
 export interface SurveyQuestions {
     typeQuestion: string | null,  // The type of question, if any
-    textQuestion: string | null,  // The text of the question, if any
+    // textQuestion: string | null,  // The text of the question, if any
     answers?: SurveyAnswer[]      // The list of answers for the question, if any
 }
 
 // This interface defines the structure of survey answers
 export interface SurveyAnswer {
     answer: string,        // The answer text
-    deletedAt: null,       // The deletion timestamp, if any
+    deleteAt: null,       // The deletion timestamp, if any
     modifiedAt: null,      // The last modification timestamp, if any
     question_id?: number   // The ID of the question this answer belongs to, if any
 }
@@ -52,8 +51,8 @@ export interface SurveyAnswer {
 export interface SurveyQuestionQuery {
     surveyQuestionID: number,  // The survey question ID
     typeQuestion: string,      // The type of question
-    textQuestion: string,      // The text of the question
-    deletedAt: null,           // The deletion timestamp, if any
+    // textQuestion: string,      // The text of the question
+    deleteAt: null,           // The deletion timestamp, if any
     modifiedAt: null,          // The last modification timestamp, if any
     answers: null,             // The list of answers, if any
     surveyID: number           // The ID of the survey this question belongs to

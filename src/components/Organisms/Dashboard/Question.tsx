@@ -56,7 +56,6 @@ export const QuestionManage = () => {
     isLoading,
     error,
   } = useGetListFeedbackQuestionQuery(id);
-  // console.log(id)
   console.log(feedbackQuestions);
 
   const [answerData, setAnswerData] = useState([
@@ -298,7 +297,7 @@ export const QuestionManage = () => {
             <DialogOverlay className="bg-black/50" />
             <DialogContent className="w-full max-w-md bg-white p-10 md:p-12">
               <DialogHeader>
-                <DialogTitle>Add Feedback Question</DialogTitle>
+                <DialogTitle>Add Feedback </DialogTitle>
                 {/* <DialogDescription>Modal Description</DialogDescription> */}
               </DialogHeader>
               <form onSubmit={handleSubmit}>

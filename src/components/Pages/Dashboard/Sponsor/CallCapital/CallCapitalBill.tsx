@@ -1,9 +1,9 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from "@relume_io/relume-ui"; // Assuming you're using relume-ui for buttons
-import { useUpdateTicketStatusMutation } from "../../../Features/Order/ticketApi";
 import { useDispatch } from 'react-redux';
-import { addNotification } from '../../../Features/Utils/notificationsSlice';
+import { useUpdateTicketStatusMutation } from '../../../../../Features/Order/ticketApi';
+import { addNotification } from '../../../../../Features/Utils/notificationsSlice';
 
 const PaymentSuccessfullPage: React.FC = () => {
   const navigate = useNavigate();
