@@ -52,7 +52,7 @@ const Payment = ({
         <div className="w-2/3">
           <div className="mb-6">
             <h2 className="text-md font-semibold mb-2 text-center">
-              To finish the capital, please help us with your payment
+              To finish the capital, please help us with your payment 
             </h2>
             <div className="bg-gray-100 p-4 rounded-lg shadow-inner">
               <div className="mb-2">

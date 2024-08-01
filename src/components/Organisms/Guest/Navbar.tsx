@@ -140,6 +140,7 @@ export const Navbar2 = (props: Navbar2Props) => {
   const [isNewPasswordOpen, setIsNewPasswordOpen] = useState(false);
   const [resetToken, setResetToken] = useState("");
   const [email, setEmail] = useState("");
+  const [role, setRole] = useState("");
   const [password, setPassword] = useState("");
   const [isLogin, setIsLogin] = useState(false);
   const [login, { isLoading }] = useLoginMutation();
@@ -220,6 +221,8 @@ export const Navbar2 = (props: Navbar2Props) => {
   const NavigationAuth = (token: string) => {
     let decodedToken = jwtDecode<JwtPayload>(token);
     console.log(decodedToken);
+    decodedToken.role && setRole(decodedToken.role);
+    console
     switch (decodedToken.role) {
       case "ROLE_EO":
         navigate("eventoperator/event/publish/analytics/");

@@ -64,7 +64,6 @@ import {
 } from "./components/Organisms/EventOperator/EOSignUp";
 import { EventAnalytics } from "./components/Pages/Dashboard/EventOperator/EventAnalytics";
 import { ManageSurvey } from "./components/Pages/Dashboard/EventOperator/ManageSurvey";
-import PaymentSuccessfullPage2 from "./components/Pages/Dashboard/Sponsor/PaymentSuccessfullPage";
 import CallCapital from "./components/Pages/Dashboard/Sponsor/CallCapital/CallCapital";
 import DetailCallCapital from "./components/Pages/Dashboard/Sponsor/CallCapital/DetailCallCapital";
 import CreateCallCapital from "./components/Organisms/CreateCallCapitalOrganisms/CreateCallCapitalOrganisms";
@@ -125,9 +124,7 @@ function App() {
           <Route
             path="/payment-successfull"
             element={
-              <RequireAuth role="ROLE_SPONSOR">
-                <PaymentSuccessfullPage2 />
-              </RequireAuth>
+                <PaymentSuccessfullPage />
             }
           />
           <Route
@@ -409,14 +406,6 @@ function App() {
               // <RequireAuth role="ROLE_VISITOR">
               <VisitorAnswerPage />
               // </RequireAuth>
-            }
-          />
-          <Route
-            path="/payment-successfull"
-            element={
-              <RequireAuth role="ROLE_VISITOR">
-                <PaymentSuccessfullPage />
-              </RequireAuth>
             }
           />
 

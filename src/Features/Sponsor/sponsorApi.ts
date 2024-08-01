@@ -1,6 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { RootState } from '../../Store/Store';
-import { useSelector } from 'react-redux';
 import { SponsorProgramWithEvent } from '../../Types/dbsponsor.type';
 import { Sponsor } from '../../Types/sponsor';
 import { EOevent } from '../../Types/eo.type';
@@ -68,9 +67,13 @@ export const sponsorApi = createApi({
     getSponsor: builder.query<Sponsor[], void>({
       query: () => `api-sponsor`,
     }),
-    // New endpoint
+    // New endpoint for getting sponsor by ID
     getSponsorById: builder.query<Sponsor, string>({
       query: (accountId) => `api-sponsor/sponsor/${accountId}`,
+    }),
+    // New endpoint for getting contributed capital percentage
+    getContributedCapitalPercentage: builder.query<{ percentage: number }, string>({
+      query: (eventId) => `api-sponsor/event/${eventId}/contributed-capital-percentage`,
     }),
   }),
 });
@@ -85,5 +88,6 @@ export const {
   useGetListSponsorPersonQuery,
   useCreateSponsorMutation,
   useGetListSponsorProgramQuery,
-  useGetSponsorByIdQuery,  // Export the new hook
+  useGetSponsorByIdQuery,
+  useGetContributedCapitalPercentageQuery,  // Export the new hook
 } = sponsorApi;

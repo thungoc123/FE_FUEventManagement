@@ -32,7 +32,7 @@ const NavbarZ = () => {
             <Link to="/sponsor/dashboard/manage" style={{ display: 'block', padding: '10px', borderBottom: '1px solid #ddd' }}>
               Profile
             </Link>
-            <Link to="/Login" style={{ display: 'block', padding: '10px', borderBottom: '1px solid #ddd' }}>
+            <Link to="/" style={{ display: 'block', padding: '10px', borderBottom: '1px solid #ddd' }}>
               Log Out
             </Link>
           </div>

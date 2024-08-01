@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useGetEventDetailsQuery } from "../../../../Features/Event/eventDisplayApi";
+import { useGetContributedCapitalPercentageQuery } from "../../../../Features/Sponsor/sponsorApi";
 import NavbarZZ from "../../../Molecules/NavbarZZ";
 import Payment from "../PaymentOrganisms/PaymentOrganisms";
-import TransactionTerms from "../TransactionTerms/TransactionTerms"; // Adjust the import path as needed
+import TransactionTerms from "../TransactionTerms/TransactionTerms";
 import "react-toastify/dist/ReactToastify.css";
 
 const formatDateTime = (dateTimeString: string): string => {
@@ -20,12 +21,13 @@ const formatDateTime = (dateTimeString: string): string => {
 const DetailCapitalCallOrganisms: React.FC = () => {
   const { eventId } = useParams<{ eventId: string }>();
   const { data: event, error, isLoading } = useGetEventDetailsQuery(eventId!);
+  const { data: capitalPercentage, error: capitalError, isLoading: isCapitalLoading } = useGetContributedCapitalPercentageQuery(eventId!);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [hasReadTerms, setHasReadTerms] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
 
-  if (isLoading) {
+  if (isLoading || isCapitalLoading) {
     return <div>Loading...</div>;
   }
 
@@ -63,6 +65,19 @@ const DetailCapitalCallOrganisms: React.FC = () => {
     setIsModalOpen(false);
   };
 
+  const displayCapitalPercentage = () => {
+    if (capitalError) {
+      if ("status" in capitalError && capitalError.status === 400 && (capitalError as { data: { error: string } }).data?.error) {
+        return "This event has no capital percentage";
+      }
+      return "Error loading capital percentage.";
+    }
+    if (capitalPercentage && capitalPercentage.percentage !== undefined) {
+      return `${capitalPercentage.percentage}%`;
+    }
+    return "This event has no capital percentage";
+  };
+
   return (
     <>
       <NavbarZZ />
@@ -75,28 +90,15 @@ const DetailCapitalCallOrganisms: React.FC = () => {
           gap: "20px",
         }}
       >
-        <div
-          style={{ width: "100%", display: "flex", justifyContent: "center" }}
-        >
+        <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
           <h1 style={{ fontSize: "30px" }}>Event Details</h1>
         </div>
-        <div
-          style={{
-            width: "100%",
-            display: "flex",
-            gap: "30px",
-            padding: "30px",
-          }}
-        >
+        <div style={{ width: "100%", display: "flex", gap: "30px", padding: "30px" }}>
           <div style={{ width: "60%" }}>
             {Array.isArray(event.eventImages) ? (
               event.eventImages.map((image, index) => (
                 <img
-                  style={{
-                    width: "80%",
-                    borderRadius: "10px",
-                    padding: "10px",
-                  }}
+                  style={{ width: "80%", borderRadius: "10px", padding: "10px" }}
                   key={index}
                   src={image.url}
                   alt={`Event Image ${index}`}
@@ -106,15 +108,7 @@ const DetailCapitalCallOrganisms: React.FC = () => {
               <p>No images available</p>
             )}
           </div>
-          <div
-            style={{
-              width: "40%",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              gap: "20px",
-            }}
-          >
+          <div style={{ width: "40%", display: "flex", flexDirection: "column", justifyContent: "center", gap: "20px" }}>
             <h3>Event name: {event.name}</h3>
             <p>Time open event: {formatDateTime(event.timestart)}</p>
             <p>Time closed event : {formatDateTime(event.timeend)}</p>
@@ -146,6 +140,34 @@ const DetailCapitalCallOrganisms: React.FC = () => {
             </div>
           </div>
         </div>
+        <div>
+          <div style={{ display: "flex", gap: "10px" }}>
+            <h1>View Capital percent of this event:</h1>
+            <h2 style={{ textAlign: "center" }}>{displayCapitalPercentage()}</h2>
+          </div>
+          <div
+            style={{
+              height: "50px",
+              border: "1px solid black",
+              borderRadius: "20px",
+              background: "#f0f0f0",
+              overflow: "hidden",
+              position: "relative",
+            }}
+          >
+            <div
+              style={{
+                height: "100%",
+                background: "linear-gradient(90deg, #ff7a18, #af002d 70%)",
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: `${capitalPercentage?.percentage ?? 0}%`,
+                borderRadius: "20px 0 0 20px",
+              }}
+            ></div>
+          </div>
+        </div>
         <div
           style={{
             width: "100%",
@@ -154,9 +176,7 @@ const DetailCapitalCallOrganisms: React.FC = () => {
           }}
         >
           <div style={{ display: "flex", gap: "10px" }}>
-            <span>
-              I have read and agree to the transaction terms and conditions
-            </span>
+            <span>I have read and agree to the transaction terms</span>
             <input
               type="checkbox"
               disabled={!hasReadTerms}
@@ -178,21 +198,21 @@ const DetailCapitalCallOrganisms: React.FC = () => {
           </div>
         </div>
         {hasReadTerms && isChecked && (
-          <div
-            style={{
-              width: "100%",
-              display: "flex",
-              justifyContent: "flex-end",
-            }}
-          >
-            <button onClick={handlePaymentClick}>
-              Pay for this event call capital
-            </button>
+          <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
+            <button onClick={handlePaymentClick}>Pay for this event call capital</button>
           </div>
         )}
-        <TransactionTerms isOpen={isModalOpen} onClose={handleModalClose} onTermsAccepted={handleTermsAccepted} />
+        <TransactionTerms
+          isOpen={isModalOpen}
+          onClose={handleModalClose}
+          onTermsAccepted={handleTermsAccepted}
+        />
 
-        <Payment isOpen={isPaymentModalOpen} onClose={handlePaymentModalClose} eventId={eventId!} />
+        <Payment
+          isOpen={isPaymentModalOpen}
+          onClose={handlePaymentModalClose}
+          eventId={eventId!}
+        />
       </div>
     </>
   );
