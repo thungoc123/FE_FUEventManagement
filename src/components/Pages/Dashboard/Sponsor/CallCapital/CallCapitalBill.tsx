@@ -1,67 +1,39 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button } from "@relume_io/relume-ui"; // Assuming you're using relume-ui for buttons
-import { useDispatch } from 'react-redux';
-import { useUpdateTicketStatusMutation } from '../../../../../Features/Order/ticketApi';
-import { addNotification } from '../../../../../Features/Utils/notificationsSlice';
 
-const PaymentSuccessfullPage: React.FC = () => {
+const CallCapitalBill: React.FC = () => {
   const navigate = useNavigate();
-  const ticketId = localStorage.getItem('ticketId');
-  const [updateTicketStatus, { isLoading: isUpdating, isSuccess: isUpdateSuccess, isError: isUpdateError, error: updateError }] = useUpdateTicketStatusMutation();
-  const dispatch = useDispatch();
 
-  const handleGoHomeWithTicket = async () => {
-    try {
-      await updateTicketStatus({ id: ticketId, status: 'PAID' }).unwrap();
-      navigate('/');
-      dispatch(
-        addNotification({
-          id: new Date().getTime(), // Use timestamp as ID
-          message: "Buy Ticket successfully!",
-          type: "success",
-          timestamp: Date.now(), // Current time
-        })
-      );
-    } catch (err: any) {
-      console.error(err.message || "Unknown error occurred");
-    }
-  };
-
-  const handleGoHomeWithoutTicket = () => {
-    navigate('/sponsor/dashboard/program/call-capital');
-  };
-
-  const handleShowBill = () => {
-    navigate('/paymentbill'); // Assuming this is the route for CallCapitalBill
+  const handleGoBack = () => {
+    navigate('/');
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-lg text-center">
-        <h1 className="text-3xl font-bold text-green-600 mb-4">Payment Successful!</h1>
-        <p className="text-gray-700 mb-6">
-          {ticketId ? "Thank you for your purchase. Your payment has been successfully processed." : "Thank you for your capital money. Your payment has been successfully processed."}
-        </p>
-        <div className="flex justify-center space-x-4">
-          <Button
-            onClick={ticketId ? handleGoHomeWithTicket : handleGoHomeWithoutTicket}
-            className="bg-blue-500 text-white p-3 rounded-lg font-semibold"
-          >
-            Go to Home
-          </Button>
-          {!ticketId && (
-            <Button
-              onClick={handleShowBill}
-              className="bg-gray-500 text-white p-3 rounded-lg font-semibold"
-            >
-              Show Bill
-            </Button>
-          )}
-        </div>
-      </div>
+    <div className="relative flex justify-center items-center min-h-screen bg-gray-100">
+      <button 
+        onClick={handleGoBack}
+        className="absolute top-4 left-4 bg-blue-500 text-white p-2 rounded-lg font-semibold"
+      >
+        Back
+      </button>
+      <Invoice />
     </div>
   );
-};
+}
 
-export default PaymentSuccessfullPage;
+const Invoice: React.FC = () => {
+  const recipient = "NGUYEN VAN A";
+  const amount = "$100";
+  const eventName = "Annual Conference";
+
+  return (
+    <div className="bg-white p-8 rounded-lg shadow-lg w-96 h-96">
+      <h1 className="text-2xl font-bold mb-4 text-center text-red-500">CALL CAPITAL BILL</h1>
+      <p className="mb-2"><strong>Người nhận:</strong> {recipient}</p>
+      <p className="mb-2"><strong>Số tiền:</strong> {amount}</p>
+      <p className="mb-2"><strong>Event Name:</strong> {eventName}</p>
+    </div>
+  );
+}
+
+export default CallCapitalBill;

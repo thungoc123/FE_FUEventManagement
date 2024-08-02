@@ -134,6 +134,14 @@ export const eventApi = createApi({
       }),
       invalidatesTags: (result, error, { eventId }) => [{ type: 'Event', id: eventId }],
     }),
+    updateSponsor: builder.mutation({
+      query: ({ eventId, sponsorId, profitPercentage }) => ({
+        url: `api-events/add-sponsor/`,
+        method: 'PUT',
+        body: { eventId, sponsorId, profitPercentage },
+      }),
+      invalidatesTags: (result, error, { eventId }) => [{ type: 'Event', id: eventId }],
+    }),
   }),
 });
 
@@ -153,4 +161,5 @@ export const {
   useAddCheckingStaffMutation,
   useUpdateEventMutation,
   useDeleleCheckingStaffMutation,
+  useUpdateSponsorMutation, // Export the new hook
 } = eventApi;
